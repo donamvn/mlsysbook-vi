@@ -1,0 +1,44 @@
+---
+number-sections: false
+---
+
+# Lời tác giả {.unnumbered}
+
+::: {style="font-style: italic;"}
+
+::: {.content-visible when-format="pdf"}
+
+```{=latex}
+\lettrine{T}{he world is rushing} to build AI systems; it is not yet engineering them. That sentence is the reason this book exists. A model that wins on a benchmark is not yet a system, and the distance between the two is not a detail of implementation. It is engineering: the work of making something hold up under constraints that do not negotiate. A demo answers to no one. A system answers to latency budgets, memory limits, power envelopes, and the cost of being wrong in front of real users.
+```
+
+:::
+
+::: {.content-visible unless-format="pdf"}
+
+Thế giới đang vội vã xây dựng các hệ thống AI; nhưng chưa thực sự thiết kế kỹ thuật chúng.
+
+Câu đó là lý do cuốn sách này ra đời. Một mô hình chiến thắng trên một benchmark chưa phải là một hệ thống, và khoảng cách giữa hai thứ này không phải là một chi tiết triển khai. Đó là kỹ thuật: công việc tạo ra thứ gì đó có thể chịu đựng được các ràng buộc không thể thỏa hiệp. Một bản demo không phải chịu trách nhiệm với ai. Một hệ thống phải đáp ứng các giới hạn độ trễ, giới hạn bộ nhớ, giới hạn công suất, và chi phí của việc mắc lỗi trước người dùng thực.
+
+:::
+
+Điều khiến đây trở thành một lĩnh vực riêng biệt là sự kết hợp bất thường. Một bộ xử lý phải tuân theo vật lý của máy, chu kỳ xung nhịp, dòng cache, và lượng nhiệt nó có thể tản ra. Một mô hình thống kê phải tuân theo toán học của học máy, độ chệch (bias), phương sai, và cách tổng quát hóa thay đổi theo dữ liệu và dung lượng mô hình. Một hệ thống machine learning phải đáp ứng cả hai điều này cùng lúc, trong cùng một quyết định, và hai điều này không phải lúc nào cũng đồng thuận. Một thay đổi làm hài lòng phần cứng có thể làm mô hình thiếu đi độ chính xác hoặc thông lượng cần thiết để hội tụ; một thay đổi giúp ích cho mô hình có thể yêu cầu silicon nhiều bộ nhớ hoặc băng thông hơn khả năng cung cấp. Hãy giữ sự căng thẳng đó trong tâm trí và lĩnh vực này sẽ không còn trông giống như một đống công cụ mà bắt đầu trông giống như một cấu trúc mà bạn có thể suy luận.
+
+Cuốn sách này sẽ cung cấp cho bạn cấu trúc đó. Không phải framework đang thịnh hành năm nay hay bộ tăng tốc nhanh nhất quý này, mà là cách tư duy tồn tại lâu hơn chúng. Các framework thay đổi, phần cứng được thay thế sau vài năm, và các benchmark được đặt lại; nhưng các lực lượng cơ bản vẫn giữ nguyên. Nếu cuốn sách này hữu ích, bạn sẽ hoàn thành nó với khả năng nhìn vào bất kỳ hệ thống machine learning nào, từ một cảm biến tiêu thụ microwatt đến một trang trại máy chủ tiêu thụ megawatt, và thấy cùng một tập hợp nhỏ các lực lượng quyết định điều gì là khả thi.
+
+Những cuốn sách giáo khoa đã thay đổi tôi khi tôi còn là sinh viên không cung cấp cho tôi các sự thật. Chúng đã cho tôi một cách nhìn, và các sự thật tự sắp xếp xung quanh nó. Đó là điều tôi đã cố gắng thực hiện ở đây.
+
+```{=latex}
+\vspace{2mm}
+\begingroup
+\raggedleft
+\rightskip=1pt
+```
+--- Vijay Janapa Reddi\
+Cambridge, Massachusetts\
+2026
+```{=latex}
+\endgroup
+```
+
+:::

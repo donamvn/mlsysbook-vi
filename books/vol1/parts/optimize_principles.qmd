@@ -1,0 +1,62 @@
+# Nguyên tắc Tối ưu hóa {.unnumbered}
+
+Một mô hình hoạt động hiếm khi là một mô hình hiệu quả. Phần II đã thiết lập cách xây dựng các hệ thống ML tuân thủ các ràng buộc vật lý; Phần III đề cập đến cách đáp ứng các yêu cầu thực tế về thời gian, bộ nhớ và năng lượng. Mọi tối ưu hóa đều liên quan đến việc điều hướng một ranh giới: cải thiện một chỉ số (độ chính xác, độ trễ, năng lượng) đồng thời quản lý chi phí cho các chỉ số khác. Mọi tối ưu hóa trong Phần III đều thực hiện đồng thiết kế thuật toán-máy bằng cách đánh đổi cấu trúc toán học lấy tính khả thi vật lý. Các nguyên tắc ở đây định nghĩa vật lý của hiệu quả—các quy luật xác định *tại sao* một số mô hình nhanh và phải chăng trong khi những mô hình khác chậm và đắt đỏ một cách cấm đoán.
+
+::: {#pri-pareto-frontier .callout-principle title="Ranh giới Pareto"}
+
+**Bất biến**: Sau khi các hướng mục tiêu được chuẩn hóa, một điểm khả thi nằm trên ranh giới Pareto chính xác khi không có điểm nào khác tốt hơn hoặc bằng trên mọi mục tiêu và tốt hơn hẳn trên một mục tiêu.
+
+- **Lượng tử hoá** đánh đổi độ chính xác số học để giảm dung lượng bộ nhớ.
+- **Tỉa (pruning)** đánh đổi dung lượng mô hình để có các biểu diễn nhỏ hơn và có thể cải thiện tốc độ khi độ thưa thớt hoặc các cấu trúc bị loại bỏ được phần cứng mục tiêu hỗ trợ.
+- **Chưng cất** đánh đổi tài nguyên tính toán huấn luyện để đạt hiệu quả suy luận.
+
+**Hàm ý**: Các kỹ sư hệ thống điều hướng ranh giới này để tìm điểm vận hành phù hợp với môi trường triển khai cụ thể. Không có một điểm tối ưu phổ quát nào.
+
+:::
+
+Điều hướng ranh giới Pareto đòi hỏi phải biết *nguồn lực nào* cần tối ưu hóa. Trước khi chọn một kỹ thuật, các kỹ sư phải chẩn đoán xem khối lượng công việc có bị giới hạn bởi tính toán, di chuyển bộ nhớ hay độ trễ điều phối hay không. Cường độ số học cung cấp thử nghiệm đầu tiên.
+
+::: {#pri-arithmetic-intensity .callout-principle title="Định luật cường độ số học"}
+
+**Bất biến**: Thông lượng ($R$) có thể đạt được không lớn hơn giá trị nhỏ nhất của hiệu năng tính toán đỉnh ($R_{\text{peak}}$) và băng thông DRAM ($\text{BW}$) nhân với cường độ hoạt động tại ranh giới cache–DRAM ($I$) [@williams2009]:
+$$ R \leq \min(R_{\text{peak}}, I \times \text{BW}) $$
+
+Cường độ hoạt động và băng thông DRAM đều phải được đo tại ranh giới cache–DRAM; giới hạn lý tưởng này loại trừ các chi phí cố định như khởi chạy, đồng bộ hóa và các chi phí khác.
+
+**Hàm ý**: Việc tăng hiệu năng tính toán đỉnh không làm tăng giới hạn roofline lý tưởng cho một kernel bị giới hạn băng thông. Các kỹ sư phải xác định xem nút thắt cổ chai là tính toán, băng thông hay một thuật ngữ hệ thống khác trước khi chọn một phương pháp tối ưu hóa.
+
+:::
+
+Nhiều kernel ML quan trọng nằm ở phía bị giới hạn bộ nhớ của điểm đỉnh, đặc biệt là các hoạt động ít tái sử dụng như tra cứu embedding, chuẩn hóa, softmax, tích chập theo chiều sâu và các đường dẫn suy luận batch nhỏ. Các phép nhân ma trận dày đặc và tích chập có thể bị giới hạn tính toán khi batching và mức độ sử dụng phần cứng cao. Sự phân chia này là hệ quả của bức tường bộ nhớ: tốc độ bộ xử lý trong lịch sử đã vượt xa băng thông bộ nhớ, và khoảng cách tích lũy đã nới rộng trong hơn ba thập kỷ [@wulf1995; @gholami2024]. Mạng nơ-ron, với các tensor trọng số khổng lồ và tính cục bộ thời gian không đồng đều, đặc biệt dễ bị tổn thương. Định luật cường độ số học chẩn đoán *vị trí* của một khối lượng công việc so với bức tường này. Chi phí di chuyển dữ liệu giải thích *tại sao* bức tường lại khắc nghiệt đến vậy. @Tbl-bottleneck-diagnostic ánh xạ từng loại nút thắt cổ chai với các tối ưu hóa đại diện để giải quyết nó và với những thay đổi không làm ảnh hưởng đến thuật ngữ chiếm ưu thế.
+
+| **If the workload is...** |              **Dominant Term**               | **Optimization That Works**                                                | **Optimization That is Wasted**  |
+|:--------------------------|:--------------------------------------------:|:---------------------------------------------------------------------------|:---------------------------------|
+| **Memory-Bound**          |          $D_{\text{vol}}/\text{BW}$          | Quantization, pruning, batching                                            | Faster accelerator (more FLOP/s) |
+| **Compute-Bound**         | $O/(R_{\text{peak}} \cdot \eta_{\text{hw}})$ | Better kernels, Tensor Cores, faster accelerator                           | More memory bandwidth            |
+| **Latency-Bound**         |               $L_{\text{lat}}$               | Kernel fusion, async dispatch, bounded microbatching under the latency SLO | More FLOP/s or bandwidth alone   |
+
+: **Chẩn đoán Nút thắt cổ chai**: Trước khi tối ưu hóa, hãy xác định thuật ngữ luật sắt nào chiếm ưu thế. Tối ưu hóa sai thuật ngữ sẽ khiến nút thắt cổ chai chiếm ưu thế không thay đổi và thường mang lại ít hoặc không có cải thiện tổng thể. {#tbl-bottleneck-diagnostic tbl-colwidths="[18,18,37,27]"}
+
+Hiệu suất chỉ là một chi phí của việc di chuyển bộ nhớ; năng lượng bộc lộ một ràng buộc thứ hai.
+
+::: {#pri-energy-movement .callout-principle title="Bất biến năng lượng-di chuyển"}
+
+**Bất biến**: Tổng năng lượng của khối lượng công việc phụ thuộc đồng thời vào năng lượng trên mỗi sự kiện và số lượng sự kiện. Trong tài liệu tham khảo 45 nm được trích dẫn, việc di chuyển một giá trị 32-bit từ DRAM có thể tốn năng lượng trên mỗi sự kiện gấp khoảng 100–1.000$\times$ so với một phép toán dấu phẩy động 32-bit, tùy thuộc vào loại phép toán [@horowitz2014]. Ở đây, $e_{\text{DRAM,32-bit}}$ biểu thị năng lượng của một truy cập DRAM 32-bit, và $e_{\text{arithmetic,32-bit}}$ biểu thị năng lượng của một sự kiện số học dấu phẩy động 32-bit trong công nghệ 45 nm được trích dẫn.
+$$ e_{\text{DRAM,32-bit}} \gg e_{\text{arithmetic,32-bit}} \quad \text{for the cited reference} $$
+
+**Hàm ý**: Khi việc di chuyển bộ nhớ chiếm ưu thế về năng lượng của khối lượng công việc, các chiến lược tối ưu hóa nên ưu tiên **hợp nhất kernel** (tránh lưu lượng ngoài chip trung gian) và **lượng tử hoá** (giảm kích thước dữ liệu); khi tính toán chiếm ưu thế, việc giảm số lượng phép toán và cải thiện các kernel số học vẫn là trọng tâm.
+
+:::
+
+Ngay cả với tính cục bộ dữ liệu hoàn hảo và việc nhắm mục tiêu nút thắt cổ chai tối ưu, một ràng buộc cuối cùng vẫn giới hạn mức độ tăng tốc mà bất kỳ tối ưu hóa nào có thể mang lại.
+
+::: {#pri-amdahl .callout-principle title="Định luật Amdahl"}
+
+**Bất biến**: Tốc độ tăng tối đa của một hệ thống bị giới hạn bởi phần khối lượng công việc không thể tăng tốc [@amdahl1967]. Ở đây, $f_{\text{parallel}}$ là phần thời gian thực thi cơ sở được tăng tốc và $S_{\text{parallel}}$ là tốc độ tăng của phần đó; mô hình công việc cố định giả định phần còn lại không thay đổi và việc tăng tốc không phát sinh thêm chi phí nào.
+$$ \text{Speedup} = \frac{1}{(1-f_{\text{parallel}}) + \frac{f_{\text{parallel}}}{S_{\text{parallel}}}} $$
+
+**Hàm ý**: Nếu 95 phần trăm của một mô hình chạy nhanh hơn 100$\times$ trên một GPU, tốc độ tăng tổng thể của hệ thống bị giới hạn ở mức khoảng 16.8$\times$. Điều này giải thích *tại sao* **tải dữ liệu** và **tiền xử lý** thường trở thành nút thắt cổ chai cuối cùng trong các hệ thống được tối ưu hóa cao.
+
+:::
+
+Phần III áp dụng các nguyên tắc này một cách có hệ thống thông qua phân loại D·A·M—Dữ liệu, Thuật toán, Máy—đầu tiên hỏi liệu công việc có cần thiết không, sau đó liệu nó có thể được đơn giản hóa không, và cuối cùng là làm thế nào để thực hiện nó nhanh hơn (xem @sec-appdx-dam-taxonomy để biết khung chẩn đoán đầy đủ). Benchmark khép lại vòng lặp bằng cách kiểm tra xem những tiết kiệm lý thuyết đó có tồn tại trong quá trình thực thi từ đầu đến cuối mà không vi phạm các ràng buộc chất lượng hay không.

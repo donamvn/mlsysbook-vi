@@ -1,0 +1,50 @@
+## Quy ước {#sec-about-conventions-1a2b .unlisted}
+
+Cuốn sách này sử dụng một tập hợp nhỏ các quy ước kiểu chữ để đánh dấu chức năng của từng đoạn văn.
+
+### Chữ **đậm** đánh dấu định nghĩa đầu tiên {#sec-about-bold-3c4d}
+
+Một thuật ngữ được in **đậm** trong văn bản là lần giới thiệu chính thức đầu tiên của nó trong cuốn sách. Mỗi thuật ngữ chỉ được xử lý theo cách này đúng một lần. Các lần xuất hiện sau đó sẽ không được in đậm; khi đó thuật ngữ đã trở thành một phần của vốn từ vựng làm việc mà chương tiếp tục sử dụng.
+
+> Mọi hệ thống machine learning đều có một **nhiệm vụ kép**: nó phải quản lý đồng thời sự bất định thống kê và các ràng buộc vật lý.
+
+Chữ đậm là một hợp đồng: hãy ghi nhớ thuật ngữ này vì nó sẽ lặp lại. Một mục chỉ mục tương ứng ở cuối sách sẽ chỉ đến lần xuất hiện định nghĩa (dưới mục con `definition`), cung cấp cách để quay lại nó. Các thuật ngữ kỹ thuật chính cũng được tổng hợp trong bảng chú giải.
+
+Chữ đậm cũng xuất hiện trong một vai trò cấu trúc thứ hai: như một nhãn chức năng ở đầu một mục bên trong hộp chú thích hoặc một dấu đầu dòng tóm tắt—ví dụ, **Khuyến nghị**, **Đánh đổi**, hoặc **Kết quả**. Trong ngữ cảnh đó, chữ đậm là một cấu trúc hỗ trợ chứ không phải là một định nghĩa đầu tiên.
+
+### Chữ *nghiêng* đảm nhiệm các vai trò tu từ cụ thể {#sec-about-italics-5e6f}
+
+Chữ nghiêng không được dùng để nhấn mạnh chung chung. Mọi đoạn chữ nghiêng trong cuốn sách này đều thực hiện một trong số ít các vai trò cụ thể sau:
+
+- **Đối lập trực tiếp**: *huấn luyện* so với *suy luận*, *logic* so với *vật lý*.
+- **Điều không thể, được nêu dưới dạng định luật vật lý, toán học hoặc logic**: 
+- **Từ được dùng như một từ**: 
+- **Tên tác phẩm**: *Computer Architecture: A Quantitative Approach*.
+- **Luận điểm chính**: Một câu in nghiêng duy nhất tóm tắt ý tưởng chủ đạo của một phần, ví dụ *Dữ liệu là Mã nguồn.*
+
+Một từ được in nghiêng đang thực hiện một trong các vai trò này. Một từ không được in nghiêng không mang ý nghĩa nhấn mạnh ngầm định nào.
+
+### Các hộp chú thích có đặc điểm hình ảnh phù hợp với chức năng của chúng {#sec-about-callouts-7a8b}
+
+Các hộp chú thích không phải là vật trang trí. Mỗi loại báo hiệu một loại nội dung cụ thể, vì vậy đặc điểm hình ảnh sẽ thông báo nội dung của hộp trước khi người đọc tìm hiểu.
+
+::: {tbl-colwidths="[17,85]"}
+
+| Callout                 | Contains                                                                                                                                                     |
+|:------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Definition**          | Formal definition of a key term, with its significance, distinction from the nearest neighbor concept, and a common pitfall                                  |
+| **Example**             | Historical case or concrete scenario, structured as context, insight, and systems lesson                                                                     |
+| **Systems Perspective** | Analytical observation or mathematical nuance that enriches the surrounding argument                                                                         |
+| **Napkin Math**         | Worked calculation walked through step by step, with values computed inline from the book's constants; intermediate tables and equations are the math itself |
+| **Checkpoint**          | Self-check questions to verify understanding of the preceding section                                                                                        |
+| **War Story**           | Documented engineering incident with a sourced failure mode, structured as context, failure, consequence, and lesson                                         |
+| **Lighthouse**          | Recurring workloads characterized by a profile (parameters, FLOPs, dominant constraint), used as anchored case studies across multiple chapters              |
+| **Principle**           | Canonical book principle or invariant referenced from later chapters                                                                                         |
+| **Theorem**             | Formal, equation-backed result or bound, stated with its conditions and applied in later quantitative analysis                                               |
+| **Key Takeaways**       | Four to seven most important results from a chapter, in summary form                                                                                         |
+| **Learning Objectives** | Skills and concepts that readers should be able to explain or apply after completing the chapter                                                             |
+| **What's Next**         | Bridge from the chapter just ended to the chapter beginning, naming the open question the next chapter addresses                                             |
+
+:::
+
+Khi một hộp chú thích chứa một bảng, hình hoặc phương trình, thì tạo phẩm đó là một phần của đơn vị sư phạm của hộp chú thích, chứ không phải là vật trang trí. Hồ sơ của một ngọn hải đăng *chính là* đặc điểm của nó. Các bảng trung gian của hộp tính toán nhanh *chính là* phép toán đã được thực hiện. Đọc những thứ này như các tạo phẩm riêng biệt sẽ làm mất đi mạch giảng dạy. Ngược lại, các bảng tham chiếu độc lập nằm giữa các đoạn văn dưới dạng các tạo phẩm được đánh số mà người đọc có thể quay lại thông qua các tham chiếu chéo. Cả hai hình thức đều hợp lệ; dấu hiệu trực quan (hộp chú thích so với độc lập) cho người đọc biết họ đang xem loại nào.

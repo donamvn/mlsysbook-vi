@@ -1,0 +1,695 @@
+---
+engine: jupyter
+---
+
+# Các nền tảng thuật toán {#sec-appdx-algorithm-foundations dropcap="chapter-opening"}
+
+Một hồ sơ cho thấy mức độ sử dụng thấp thường bị chẩn đoán nhầm là do giới hạn phần cứng trong khi nguyên nhân là do thuật toán: hình dạng phép nhân ma trận lãng phí các tensor core, một bố cục làm mất tính liên tục, hoặc bộ nhớ activation được giữ lại cho lan truyền ngược. Phụ lục này tập hợp các mô hình độ phức tạp tính toán và các dẫn xuất về dung lượng bộ nhớ mà các chương về hiệu năng của sách dựa vào, cho phép người đọc đánh giá các đánh đổi về thuật toán trước khi triển khai mã lên các bộ tăng tốc. Nó giả định người đọc đã quen thuộc với đại số tuyến tính và với quy luật sắt đã được giới thiệu ở đầu sách.
+
+## Cách sử dụng Phụ lục này {.unnumbered}
+
+Phụ lục này được thiết kế như một tài liệu tham khảo. Hãy tìm đến nó khi chuyển đổi một triệu chứng của trình phân tích hiệu năng ("matmul chậm," "không khớp hình dạng," "hết bộ nhớ (OOM) trong quá trình huấn luyện") thành một nguyên nhân cụ thể về tính toán hoặc bộ nhớ.
+
+Các quy ước được sử dụng ở đây tuân theo ký hiệu chung của sách (ví dụ, $B$ được dành cho kích thước batch và $\text{BW}$ biểu thị băng thông).
+
+- **Khi các kernel nhân ma trận tổng quát (GEMM) chậm**: Sử dụng @sec-appdx-algorithm-foundations-general-matrix-multiply-gemm-b55d và so sánh cường độ với điểm đỉnh của phần cứng.
+- **Khi bộ nhớ bị đầy trong quá trình huấn luyện**: Sử dụng @sec-appdx-algorithm-foundations-true-cost-training-memory-e54e và phân tách bộ nhớ huấn luyện.
+- **Khi mã tensor "đáng lẽ phải hoạt động" nhưng không**: Sử dụng @sec-appdx-algorithm-foundations-shapes-strides-1aea và @sec-appdx-algorithm-foundations-broadcasting-ec16.
+- **Khi tính thưa thớt được đề xuất như một giải pháp**: Sử dụng @sec-appdx-algorithm-foundations-sparse-matrix-formats-0bd0 để kiểm tra mật độ và chi phí siêu dữ liệu.
+- **Khi chứng minh các giới hạn tính toán gradient**: Sử dụng @sec-appdx-algorithm-baur-strassen cho định lý độ phức tạp của phép vi phân tự động (AD) chế độ ngược Baur–Strassen.
+- **Khi phân tích các nút thắt cổ chai về độ dài chuỗi**: Sử dụng @sec-appdx-algorithm-flash-attention cho công thức đệ quy softmax trực tuyến và bằng chứng giảm I/O bộ nhớ băng thông cao (HBM) của FlashAttention.
+- **Khi phân bổ tính toán giữa các tham số và token**: Sử dụng @sec-appdx-algorithm-chinchilla-derivation cho dẫn xuất luật tỷ lệ tối ưu tính toán của Kaplan và Chinchilla.
+
+```{=latex}
+\vspace*{-0.5ex}
+```
+Mạng nơ-ron biến đại số tuyến tính thành hành vi đã học: các ma trận biến đổi các activation, bố cục tensor xác định cách dữ liệu di chuyển trong bộ nhớ, và lan truyền ngược mang tín hiệu lỗi qua phép tính toán kết quả. Những nền tảng này hỗ trợ cách xử lý deep learning trong @sec-neural-computation, các thành phần bên trong framework trong @sec-ml-frameworks, và các chiến lược huấn luyện trong @sec-model-training. Các kiến trúc thay đổi, nhưng bộ máy toán học cơ bản vẫn không đổi.
+
+```{=latex}
+\vspace*{-1ex}
+```
+## Đại số tuyến tính {#sec-appdx-algorithm-foundations-linear-algebra-c937}
+
+Các hệ thống deep learning, về bản chất, là các công cụ để biến đổi các ma trận khổng lồ. Các framework như PyTorch trừu tượng hóa các phép toán thô, nhưng kỹ thuật hiệu năng vẫn phụ thuộc vào đại số tuyến tính cơ bản. Dựa trên cách các số được lưu trữ trong @sec-appdx-machine-foundations-numerical-representations-c889, phần này tập trung vào cách chúng được thao tác.
+
+```{=latex}
+\vspace*{-1ex}
+```
+::: {#psp-appendix-algorithm-linear-algebra-matters .callout-perspective title="Tại sao điều này quan trọng"}
+
+Nhiều mạng nơ-ron dày đặc, đặc biệt là các transformer và mạng nơ-ron tích chập lớn, dành phần lớn tính toán cho phép nhân ma trận hoặc các kernel giống GEMM. Một khối self-attention thực hiện các phép GEMM chiếu Q, K, V và đầu ra cộng với hai phép nhân ma trận attention: một cho điểm attention và một cho các giá trị được trọng số hóa theo attention. Khối feed-forward của lớp bổ sung thêm các phép GEMM. Hiểu các đặc tính hiệu năng của GEMM giải thích tại sao kích thước batch ảnh hưởng đến thông lượng, tại sao một số chiều lớp nhất định lại "tốt hơn" các chiều khác, và cách diễn giải đầu ra của trình phân tích hiệu năng. Lý luận về các chiều ma trận và cường độ số học dự đoán liệu một khối lượng công việc dày đặc bị giới hạn bởi tính toán hay giới hạn bởi bộ nhớ *trước khi* bất kỳ dấu vết phân tích hiệu năng nào chạy.
+
+:::
+
+### Các phép toán và ký hiệu tensor {#sec-appdx-algorithm-foundations-tensor-operations-notation-2758}
+
+Ký hiệu tổng Einstein[^fn-einsum-tensor-contraction] làm cho các phép toán phức tạp trở nên rõ ràng trong suốt cuốn sách này (được triển khai dưới dạng `torch.einsum` trong PyTorch và `np.einsum` trong NumPy). Phép nhân ma trận $\mathbf{C} = \mathbf{A}\mathbf{B}$ trở thành:
+$$ C_{ij} = \sum_k A_{ik} B_{kj} $$
+
+[^fn-einsum-tensor-contraction]: **Quy ước tổng Einstein**\index{Quy ước tổng Einstein!định nghĩa}: Các chỉ số lặp lại trong một tích được ngầm hiểu là tổng hợp, loại bỏ các dấu tổng tường minh. Các framework ML đã áp dụng quy ước này vì nó biểu thị một cách ngắn gọn các phép co tensor tùy ý trong một chuỗi duy nhất.
+
+Trong ký hiệu einsum, đây là `ik,kj->ij`. Ký hiệu này mở rộng một cách tự nhiên sang các phép toán đa chiều trong các cơ chế attention. Ví dụ, batched multi-head attention là `bhid,bhjd->bhij` (batch $b$, head $h$, chuỗi truy vấn $i$, chuỗi khóa $j$, và chiều head $d$).
+
+### Bố cục bộ nhớ và hiệu năng {#sec-appdx-algorithm-foundations-memory-layouts-performance-44d0}
+
+Bố cục dữ liệu trong bộ nhớ (row-major so với column-major) ảnh hưởng trực tiếp đến hiệu quả cache. Khi lặp qua một ma trận, việc truy cập các vị trí bộ nhớ liền kề nhanh hơn đáng kể so với truy cập theo bước nhảy.
+
+Một mẫu tối ưu hóa phổ biến là hiện thực hóa một tensor chuyển vị một lần trước các phép toán lặp lại để đảm bảo truy cập liền kề trong vòng lặp nóng. Chi phí sao chép một lần được phân bổ trên nhiều phép toán tiếp theo.
+
+### Tích vô hướng như một phép đo độ tương đồng {#sec-appdx-algorithm-foundations-dot-product-similarity-7957}
+
+Tích vô hướng\index{Tích vô hướng!ôn tập phụ lục} $\mathbf{a} \cdot \mathbf{b} = \sum a_i b_i$ tương đương về mặt hình học với $\|\mathbf{a}\| \|\mathbf{b}\| \cos \phi$, điều này làm cho nó trở thành một phép đo độ tương đồng tự nhiên giữa hai vectơ: đối với các vectơ khác không, dấu của nó phân biệt các góc nhọn, vuông và tù, trong khi độ lớn của nó cũng phụ thuộc vào chuẩn của cả hai vectơ.
+
+Giải thích hình học này là lý do tại sao tích vô hướng xuất hiện khắp nơi trong các kiến trúc hiện đại. Trong các cơ chế attention, các vectơ truy vấn ($Q$) và khóa ($K$) được tính tích vô hướng để tính điểm tương đồng, điểm này xác định mức độ mỗi token chú ý đến mọi token khác. Các trọng số attention kết quả sau đó được sử dụng để tạo thành một tổ hợp có trọng số của các vectơ giá trị ($V$)—làm cho tích vô hướng trở thành nền tảng cho khả năng của transformer trong việc mô hình hóa các phụ thuộc tầm xa.
+
+### Nhân ma trận tổng quát (GEMM) {#sec-appdx-algorithm-foundations-general-matrix-multiply-gemm-b55d}
+
+GEMM[^fn-gemm-blas-routines] là xương sống tính toán của deep learning. Đối với các ma trận kích thước $M{\times}K$ và $K{\times}N$, GEMM thực hiện $2MNK$ phép toán dấu phẩy động (phép nhân-tích lũy được tính là hai phép toán).
+
+[^fn-gemm-blas-routines]: **Nhân ma trận tổng quát (GEMM)**\index{GEMM!appendix refresher}: Họ BLAS (Các chương trình con đại số tuyến tính cơ bản) bắt đầu với các chương trình con vector được chuẩn hóa vào năm 1979 [@lawson1979]; GEMM được chuẩn hóa sau đó như một chương trình con Cấp 3 [@dongarra1988]. Tiền tố "GE" là viết tắt của "general" (tổng quát), trái ngược với các dạng đối xứng hoặc tam giác. GEMM tính toán $\mathbf{C} = \alpha \mathbf{A}\mathbf{B} + \beta \mathbf{C}$ và là một chương trình con quan trọng về hiệu suất trong deep learning. @Sec-model-training-matrix-operations-1f21 giải thích cách các hình dạng GEMM quyết định thông lượng huấn luyện.
+
+```{python}
+#| echo: false
+from mlsysim import *
+from mlsysim.core.units import *
+
+# ┌── LEGO ───────────────────────────────────────────────
+# │ Context: @sec-appdx-algorithm-foundations-general-matrix-multiply-gemm-b55d
+# │ Goal: GEMM intensity formula and small-matrix roofline example
+from mlsysim.fmt import fmt_int, fmt, check, fmt_arithmetic_intensity, fmt_display_math
+
+class GemmIntensityExample:
+    # ┌── 1. LOAD (Constants) ──────────────────────────────────────────────
+    n_small = 64
+
+    # ┌── 2. EXECUTE (The Compute) ────────────────────────────────────────
+    bytes_fp16 = int(BYTES_FP16.to(byte).magnitude)
+    small_intensity = n_small / 3
+    a100_ridge = int(
+        Hardware.Cloud.A100.compute.peak_flops.to(TFLOPs / second).magnitude / Hardware.Cloud.A100.memory.bandwidth.to(TB / second).magnitude
+    )
+    small_efficiency_pct = small_intensity / a100_ridge * 100
+
+    # ┌── 3. GUARD (Invariants) ──────────────────────────────────────────
+    check(a100_ridge > 150, f"A100 ridge point ({a100_ridge}) unexpectedly low.")
+
+    # ┌── 4. OUTPUT (Formatting) ─────────────────────────────────────────────
+    bytes_fp16_value_str = fmt_int(bytes_fp16, commas=False)
+    n_small_str = fmt(n_small, precision=0, commas=False)
+    small_intensity_str = fmt_arithmetic_intensity(small_intensity * flop / byte, unit=flop / byte, precision=1, commas=False)
+    small_efficiency_pct_str = fmt_percent(small_efficiency_pct / 100, precision=1, commas=False, style='prose')
+    a100_ridge_str = fmt_arithmetic_intensity(Hardware.Cloud.A100.ridge_point(), unit=flop / byte, precision=1, commas=False)
+    intensity_formula_math = fmt_display_math(
+        rf"\text{{Intensity}} = \frac{{O}}{{D_{{\text{{vol}}}}}} = "
+        rf"\frac{{2n^3}}{{3n^2 \times {bytes_fp16_value_str}}} = "
+        rf"\frac{{n}}{{3}}\text{{ FLOP/byte}}"
+    )
+```
+
+Cường độ số học\index{Arithmetic intensity!appendix refresher} của GEMM tỷ lệ tuyến tính với chiều ma trận. Đối với các ma trận vuông $n{\times}n$ trong FP16 (`{python} GemmIntensityExample.bytes_fp16_value_str` byte/phần tử), giới hạn lý tưởng khi $\beta=0$ đọc $\mathbf{A}$ và $\mathbf{B}$ một lần và ghi $\mathbf{C}$ một lần:
+`{python} GemmIntensityExample.intensity_formula_math`
+
+Việc đọc $\mathbf{C}$ cũ khi $\beta \ne 0$ thay đổi cường độ thành $n/4$ FLOP/byte. Điều này giải thích một số hiện tượng quan trọng:
+
+- **Các batch lớn hơn có thể cải thiện hiệu quả**: Việc tạo batch làm tăng các chiều ma trận hiệu quả khi nó tạo ra các GEMM lớn hơn hoặc cho phép tái sử dụng; việc chỉ đơn thuần xếp hàng các GEMM nhỏ độc lập không làm tăng cường độ.
+- **Các chiều được căn chỉnh giúp ích**: Các lõi tensor phần cứng được tối ưu hóa cho các bội số của ô (tile) cụ thể theo độ chính xác và kiến trúc. Các chiều căn chỉnh với các bội số này tránh chi phí đệm và cải thiện hiệu quả kernel, nhưng chúng không cần phải là lũy thừa của hai.
+- **Các ma trận nhỏ không hiệu quả**: Một GEMM vuông với $n =$ `{python} GemmIntensityExample.n_small_str` có cường độ `{python} GemmIntensityExample.n_small_str`/3 ≈ `{python} GemmIntensityExample.small_intensity_str`, thấp hơn nhiều so với điểm đỉnh (`{python} GemmIntensityExample.a100_ridge_str`). Giới hạn hiệu suất của nó là ~`{python} GemmIntensityExample.small_efficiency_pct_str` so với mức đỉnh; chi phí khởi tạo và phân ô có thể làm giảm thông lượng thực tế.
+
+### Các định dạng ma trận thưa {#sec-appdx-algorithm-foundations-sparse-matrix-formats-0bd0}
+
+Khi hầu hết các phần tử trong một ma trận là số không, các định dạng lưu trữ chuyên biệt sẽ tránh lãng phí bộ nhớ cho các số không và cho phép các phép tính bỏ qua hoàn toàn chúng. Định dạng **hàng thưa nén (CSR)**\index{Compressed sparse row!definition} sử dụng ba mảng:
+
+- `Values`: Các phần tử khác không, được lưu trữ theo thứ tự hàng
+- `Col_Idx`: Chỉ số cột của mỗi phần tử khác không
+- `Row_Ptr`: Vị trí bắt đầu trong `Values` cho mỗi hàng (độ dài = num_rows + 1)
+
+CSR hữu ích cho các ma trận đặc trưng thưa trong các pipeline khuyến nghị và cho các trọng số mô hình đã được tỉa. Đối với một ma trận có $N$ phần tử, $R$ hàng và $K$ phần tử khác không, CSR sử dụng bộ nhớ $\mathcal{O}(K + R)$ thay vì $\mathcal{O}(N)$; khi $K$ lớn so với $R$, điều này thường được tóm tắt là $\mathcal{O}(K)$.
+
+```{python}
+#| echo: false
+#| label: sparse-embedding-example
+# ┌── LEGO ───────────────────────────────────────────────
+# │ Context: @sec-appdx-algorithm-foundations-sparse-matrix-formats-0bd0 embedding example
+# │ Goal: Dense vs sparse vocabulary embedding footprint at 1% density
+from mlsysim.fmt import fmt_int, fmt, fmt_count, fmt_magnitude, fmt_memory, fmt_percent, fmt_qty
+
+class SparseEmbeddingExample:
+    # ┌── 1. LOAD (Constants) ──────────────────────────────────────────────
+    vocab_size = 100 * THOUSAND
+    embed_dim = 10 * THOUSAND
+    sparsity_pct = 1
+
+    # ┌── 2. EXECUTE (The Compute) ────────────────────────────────────────
+    total_elements = vocab_size * embed_dim
+    dense_bytes_q = total_elements * BYTES_FP32
+    dense_bytes = dense_bytes_q.to(byte).magnitude
+    nonzeros = int(total_elements * sparsity_pct / 100)
+    csr_bytes_per_nonzero_q = BYTES_FP32 + BYTES_INT32
+    csr_bytes_per_nonzero = csr_bytes_per_nonzero_q.to(byte).magnitude
+    sparse_bytes_q = nonzeros * csr_bytes_per_nonzero_q + (vocab_size + 1) * BYTES_INT32
+    sparse_bytes = sparse_bytes_q.to(byte).magnitude
+    reduction_factor = round(dense_bytes / sparse_bytes)
+
+    # ┌── 3. GUARD (Invariants) ──────────────────────────────────────────
+    check(sparse_bytes == 80_400_004, f"CSR footprint should include row pointers, got {sparse_bytes} bytes.")
+
+    # ┌── 4. OUTPUT (Formatting) ─────────────────────────────────────────────
+    vocab_size_str = fmt(vocab_size, precision=0)
+    embed_dim_str = fmt(embed_dim, precision=0)
+    total_elements_str = fmt_count(total_elements, scale="B", commas=False)
+    dense_gb_str = fmt_qty(dense_bytes_q, GB, precision=0, commas=False)
+    nonzeros_str = fmt_count(nonzeros, scale="M", commas=False)
+    sparse_mb_str = fmt_qty(sparse_bytes_q, MB, precision=1, commas=False)
+    bytes_fp32_value_str = fmt_magnitude(BYTES_FP32, unit=byte, precision=0, commas=False)
+    bytes_int32_value_str = fmt_magnitude(BYTES_INT32, unit=byte, precision=0, commas=False)
+    sparsity_pct_str = fmt_percent(sparsity_pct / 100, precision=0, commas=False, style='prose')
+    reduction_factor_mult_str = fmt_multiple(reduction_factor, precision=0, commas=False)
+```
+
+Để thấy rõ sự đánh đổi, hãy xem xét một ma trận embedding từ vựng với `{python} SparseEmbeddingExample.vocab_size_str` hàng và `{python} SparseEmbeddingExample.embed_dim_str` cột (`{python} SparseEmbeddingExample.total_elements_str` tham số):
+
+*   **Dày đặc (FP32)**: `{python} SparseEmbeddingExample.total_elements_str` tham số $\times$ `{python} SparseEmbeddingExample.bytes_fp32_value_str` byte mỗi cái = `{python} SparseEmbeddingExample.dense_gb_str`.
+*   **Thưa thớt** (mật độ `{python} SparseEmbeddingExample.sparsity_pct_str`): CSR lưu trữ khoảng `{python} SparseEmbeddingExample.nonzeros_str` mục $\times$ (giá trị `{python} SparseEmbeddingExample.bytes_fp32_value_str`-byte + chỉ số cột `{python} SparseEmbeddingExample.bytes_int32_value_str`-byte), cộng với một con trỏ hàng cho mỗi hàng và một con trỏ cuối cùng, tổng cộng ≈ `{python} SparseEmbeddingExample.sparse_mb_str`.
+*   *Kết quả*: Giảm `{python} SparseEmbeddingExample.reduction_factor_mult_str` dấu chân bộ nhớ, giúp phù hợp với một mô hình mà nếu không sẽ bị OOM (Hết bộ nhớ).
+
+Đại số tuyến tính cho chúng ta biết *cần* tính toán gì; câu hỏi tiếp theo là *làm thế nào* để biểu diễn các phép tính đó trong mã. Các nguyên thủy lập trình tensor—hình dạng, bước nhảy (strides) và broadcasting—bắc cầu khoảng cách giữa ký hiệu toán học và các phép toán mảng thực sự thực thi trên phần cứng.
+
+## Các nguyên thủy lập trình tensor {#sec-appdx-algorithm-foundations-tensor-programming-primitives-1400}
+
+Một lỗi sập do không khớp hình dạng, một broadcast sai mà không báo lỗi, một kernel chạy ở 5 phần trăm hiệu suất đỉnh do tensor không liên tục—những lỗi kỹ thuật ML phổ biến này đều bắt nguồn từ cùng một lớp trừu tượng. *Lập trình tensor* chuyển đổi toán học trừu tượng của đại số tuyến tính thành các thao tác mảng cụ thể chạy trên phần cứng.
+
+### Bảng tóm tắt nhanh độ phức tạp tính toán {#sec-appdx-algorithm-foundations-computational-complexity-cheat-sheet-0c6c}
+
+@Tbl-tensor-op-ref cung cấp một tài liệu tham khảo định lượng cho các khối xây dựng phổ biến nhất. Sử dụng các công thức này để ước tính nhanh kích thước mô hình và yêu cầu tính toán *trước khi* phần cứng được cấp phát. Với các chiều của lớp và hình dạng đầu vào, các công thức cung cấp ước tính tham số và tính toán bậc nhất. Hàng attention là cảnh báo chính: độ dài chuỗi đóng góp một số hạng $S^2$, trong khi chiều ẩn đóng góp công việc chiếu $d^2$, do đó các mô hình ngữ cảnh dài có thể thay đổi chi phí chiếm ưu thế mà không thay đổi số lượng tham số.
+
+```{=latex}
+\begingroup
+\renewcommand{\arraystretch}{1.6}
+```
+
+| **Layer Type**                |        **Output Shape**       |                                       **Parameters ($P$)**                                       |                              **FLOPs (per Forward Pass)**                              |
+|:------------------------------|:-----------------------------:|:------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------:|
+| **Linear**                    |     $(B, N_{\text{out}})$     |            $N_{\text{in}} \times N_{\text{out}} + N_{\text{out}}$ if bias is enabled             |                $2 \times B \times N_{\text{in}} \times N_{\text{out}}$                 |
+| **Conv2D**                    | $(B, C_{\text{out}}, H', W')$ |       $K^2 \times C_{\text{in}} \times C_{\text{out}} + C_{\text{out}}$ if bias is enabled       | $2 \times B \times H' \times W' \times K^2 \times C_{\text{in}} \times C_{\text{out}}$ |
+| **Multi-Head Self-Attention** |   $(B, S, d_{\text{model}})$  | $4 \times d_{\text{model}}^2$, plus $4 \times d_{\text{model}}$ if projection biases are enabled |              $B \times (4 S^2 d_{\text{model}} + 8 S d_{\text{model}}^2)$              |
+| **LayerNorm**                 |   $(B, S, d_{\text{model}})$  |                 $2 \times d_{\text{model}}$ if affine scale and bias are enabled                 |                   $\mathcal{O}(B \times S \times d_{\text{model}})$                    |
+
+: **Các nguyên thủy tensor trong Deep Learning**: Tóm tắt hình dạng, tham số và số lượng FLOP. Lưu ý: $B$ là kích thước batch, $S$ là độ dài chuỗi và $K$ là kích thước kernel. Số FLOP của attention bao gồm các phép chiếu QKV và các tương tác điểm số. Số hạng $S^2$ áp dụng cho huấn luyện toàn chuỗi và prefill, trong khi tạo sinh với KV-cache là tuyến tính trên mỗi token trong ngữ cảnh được cache; công việc chiếu $d^2$ chiếm ưu thế ở các chiều ẩn lớn. {#tbl-tensor-op-ref tbl-colwidths="[13,18,36,33]"}
+
+```{=latex}
+\endgroup
+```
+
+### Hình dạng và bước nhảy {#sec-appdx-algorithm-foundations-shapes-strides-1aea}
+
+Một tensor\index{Tensor!appendix refresher} là một khung nhìn trên một bộ đệm lưu trữ cơ bản, được mô tả bởi siêu dữ liệu về hình dạng, bước nhảy, dtype và offset. Chỉ các tensor liên tục mới sắp xếp các phần tử logic của chúng thành một khối liền kề.
+
+*   **Kích thước**: Các chiều của tensor (ví dụ, `(3, 4)`).
+*   **Stride**: Số lượng phần tử cần bỏ qua trong bộ nhớ để di chuyển đến phần tử tiếp theo trong một chiều.
+
+Các phép toán như `transpose()` hoặc `view()` thường chỉ thay đổi *strides*, chứ không phải dữ liệu trong bộ nhớ. Điều này nhanh ($\mathcal{O}(1)$) nhưng có thể dẫn đến các tensor không liên tục mà không hoạt động được trong các kernel yêu cầu dữ liệu liên tục. Trong những trường hợp như vậy, việc gọi `contiguous()` buộc phải sao chép bộ nhớ $\mathcal{O}(N)$ có thể chiếm ưu thế runtime nếu được kích hoạt lặp đi lặp lại bên trong một vòng lặp.
+
+### Broadcasting {#sec-appdx-algorithm-foundations-broadcasting-ec16}
+
+Broadcasting\index{Broadcasting!definition} cho phép các phép toán số học trên các tensor có kích thước khác nhau. So sánh các chiều từ cuối cùng đến đầu tiên. Hai chiều tương thích khi:
+
+1.  Chúng bằng nhau.
+2.  Một trong số chúng là 1.
+
+Chiều có kích thước bằng một được "kéo giãn" để khớp với chiều kia, như minh họa trong @fig-broadcasting-rules. Việc kéo giãn này là ảo: dữ liệu không được sao chép trong bộ nhớ. Thay vào đó, stride cho chiều đó được đặt thành 0, cho phép phần cứng đọc cùng một giá trị lặp đi lặp lại với chi phí bộ nhớ $\mathcal{O}(1)$.
+
+::: {#fig-broadcasting-rules fig-env="figure" fig-pos="htb" fig-cap="**Quy tắc Broadcasting Tensor**: Một cột (3,1) và một hàng (1,4) broadcast qua các chiều bổ sung, tạo ra các tổng cặp trong một kết quả (3,4)." fig-alt="Tensor A, một cột ba ô được gán nhãn từ A0 đến A2 với kích thước (3,1), cộng với tensor B, một hàng bốn ô được gán nhãn từ B0 đến B3 với kích thước (1,4), bằng một lưới (3,4) mà các ô của nó chứa mọi cặp Ai+Bj. Các ô gạch ngang và một chú thích cho biết sự mở rộng ảo thông qua stride 0 mà không cần cấp phát bộ nhớ."}
+![](images/svg/broadcasting_rules.svg)
+:::
+
+Hãy xem xét một trường hợp cụ thể: tensor A có kích thước `(32, 1, 64)` và tensor B có kích thước `(1, 128, 64)`. So sánh các chiều từ phải sang trái, 64 khớp với 64, sau đó 1 kéo giãn thành 128, sau đó 1 kéo giãn thành 32, tạo ra kích thước kết quả `(32, 128, 64)`. Việc hình dung sự mở rộng này giúp ngăn ngừa các lỗi logic âm thầm mà vô tình cấp phát một tensor lớn (ví dụ, một ma trận `(Batch, Batch)` thay vì một vector `(Batch)` theo từng phần tử).
+
+Kích thước, strides và broadcasting chi phối cách các tensor di chuyển qua lượt truyền xuôi của một mô hình. Huấn luyện bổ sung một yêu cầu thứ hai: *học hỏi từ các lỗi*. Lan truyền ngược giúp việc học đó trở nên khả thi và áp đặt các chi phí bộ nhớ được phát triển dưới đây.
+
+## Cơ chế học tập {#sec-appdx-algorithm-foundations-mechanics-learning-24f6}
+
+Các chương trình tensor hợp lệ giúp các vòng lặp huấn luyện trở nên khả thi. Lan truyền ngược điều phối các tensor này để tính toán đạo hàm, biến một dự đoán xuôi thành một tín hiệu học tập ngược.
+
+::: {#psp-appendix-algorithm-backpropagation-matters .callout-perspective title="Tại sao điều này quan trọng"}
+
+Khi huấn luyện thất bại—hàm mất mát trở thành NaN, đạo hàm bùng nổ, hoặc hết bộ nhớ—việc hiểu lan truyền ngược thực sự làm gì là rất cần thiết để chẩn đoán vấn đề. Đồ thị ngược cung cấp mô hình tư duy để lý giải về luồng đạo hàm và việc sử dụng bộ nhớ trong quá trình huấn luyện.
+
+:::
+
+### Quy tắc chuỗi và tự động vi phân {#sec-appdx-algorithm-foundations-chain-rule-automatic-differentiation-e0eb}
+
+Đối với một hàm hợp $y = f(g(x))$, đạo hàm là $\frac{dy}{dx} = \frac{dy}{dg} \cdot \frac{dg}{dx}$. Trong một mạng nơ-ron, $f$ và $g$ là các lớp, và phép hợp có thể sâu nhiều cấp. Đối với một mạng ba lớp $y = f_3(f_2(f_1(x)))$, quy tắc chuỗi\index{Chain rule!appendix refresher} mở rộng thành:
+$$ \frac{\partial y}{\partial x} = \frac{\partial f_3}{\partial f_2} \cdot \frac{\partial f_2}{\partial f_1} \cdot \frac{\partial f_1}{\partial x} $$
+
+Mỗi thừa số trong tích này là một đạo hàm *cục bộ*—được tính toán tại một lớp chỉ sử dụng đầu vào và đầu ra của lớp đó. Tính cục bộ này là điều làm cho thuật toán khả thi: toàn bộ mạng không bao giờ cần phải được vi phân như một hàm nguyên khối. Thay vào đó, mỗi lớp tính toán đạo hàm cục bộ của riêng nó trong lượt truyền ngược và nhân nó với đạo hàm chảy vào từ lớp phía trên.
+
+Các framework hiện đại sử dụng tự động vi phân chế độ ngược\index{Automatic differentiation!appendix refresher}, mà tính toán đạo hàm cho tất cả $P$ tham số trong một lượt truyền ngược duy nhất. Điểm mấu chốt là việc bắt đầu từ đầu ra và làm việc ngược lại (chế độ ngược) chỉ yêu cầu một lượt truyền bất kể số lượng tham số, trong khi việc bắt đầu từ mỗi đầu vào và làm việc xuôi (chế độ xuôi) sẽ yêu cầu $P$ lượt truyền—một lượt cho mỗi tham số. Đây là lý do tại sao một bước huấn luyện là một bội số hằng số nhỏ của suy luận, thường khoảng 2--3$\times$ một lượt truyền xuôi cho các mạng dày đặc, thay vì $P$ lượt truyền.
+
+### Thuật toán lan truyền ngược {#sec-appdx-algorithm-foundations-backpropagation-algorithm-93f7}
+
+Lan truyền ngược[^fn-backprop-chain-rule] triển khai quy tắc chuỗi một cách hiệu quả thông qua hai lượt truyền: truyền xuôi để tính toán đầu ra, truyền ngược để tính toán đạo hàm. @Fig-backprop-graph minh họa quá trình này cho một mạng hai lớp đơn giản, với lượt truyền xuôi (mũi tên màu xám) tính toán đầu ra và lượt truyền ngược (mũi tên đứt nét màu đỏ) lan truyền đạo hàm.
+
+[^fn-backprop-chain-rule]: **Lan truyền ngược**\index{Backpropagation!appendix refresher}: Viết tắt của "backward propagation of errors" (lan truyền ngược lỗi). Thuật toán này đã được phát hiện độc lập nhiều lần—bởi @werbos1974beyond và @linnainmaa1970representation cho vi phân chế độ ngược và bởi @rumelhart1986 cho huấn luyện mạng nơ-ron. Điểm mấu chốt của nó là việc tính toán đạo hàm cho *tất cả* các tham số chỉ yêu cầu một lượt truyền ngược qua đồ thị thay vì một lượt truyền cho mỗi tham số. @Sec-appdx-algorithm-baur-strassen suy ra giới hạn công việc hệ số hằng và chi phí lớp dày đặc đại diện.
+
+::: {#fig-backprop-graph fig-env="figure" fig-pos="htb" fig-cap="**Đồ thị tính toán lan truyền ngược**: Các mũi tên màu xám liền nét mang tính toán xuôi từ đầu vào $x$ đến hàm mất mát $\mathcal{L}$, trong khi các mũi tên đứt nét màu đỏ mang đạo hàm ngược theo cùng các phụ thuộc." fig-alt="Một đồ thị tính toán với bốn nút được gán nhãn x, h, y và một chữ L viết hoa biểu thị hàm mất mát, được kết nối từ trái sang phải. Các mũi tên màu xám liền nét thể hiện lượt truyền xuôi với các trọng số W1 và W2. Các mũi tên đứt nét màu đỏ cong ngược lại thể hiện luồng đạo hàm với ký hiệu đạo hàm riêng."}
+```{.tikz}
+\begin{tikzpicture}[font=\small\sffamily, node distance=3cm, auto, >=stealth, thick]
+  \tikzset{
+    Node/.style={circle, draw=BlueLine, fill=BlueFill, line width=0.8pt, minimum size=0.9cm, text=TextBlack},
+    Edge/.style={->, draw=GrayLine, line width=0.8pt},
+    BackEdge/.style={->, dashed, draw=RedLine, line width=0.8pt, bend right=30},
+    Label/.style={font=\footnotesize\sffamily, text=TextBlack}
+  }
+  \node[Node] (x) {x};
+  \node[Node, right of=x] (h) {h};
+  \node[Node, right of=h] (y) {y};
+  \node[Node, right of=y, fill=RedLine!10, draw=RedLine] (L) {$\mathcal{L}$};
+  \draw[Edge] (x) -- node[below, Label] {$W_1$} (h);
+  \draw[Edge] (h) -- node[below, Label] {$W_2$} (y);
+  \draw[Edge] (y) -- node[below, Label] {Loss} (L);
+  \draw[BackEdge,overlay] (L) to node[above, Label, text=RedLine] {$\frac{\partial \mathcal{L}}{\partial y}$} (y);
+  \draw[BackEdge,overlay] (y) to node[above, Label, text=RedLine] {$\frac{\partial \mathcal{L}}{\partial h}$} (h);
+  \draw[BackEdge,overlay] (h) to node[above, Label, text=RedLine] {$\frac{\partial \mathcal{L}}{\partial x}$} (x);
+ \path[use as bounding box] (-0.5,-0.55) rectangle (9.5,1.21);
+\end{tikzpicture}
+```
+:::
+
+Các cạnh đạo hàm truy ngược lại các phụ thuộc xuôi, vì vậy mỗi bước ngược yêu cầu các giá trị được giữ lại từ phép toán xuôi tương ứng.
+
+#### Lượt truyền xuôi {.unnumbered}
+
+Sử dụng các activation vector hàng, bỏ qua các độ chệch (bias), và giữ lại các activation trung gian cho lượt truyền ngược, bắt đầu tại $x$, đầu vào. Nhân với $W_1$ để có activation ẩn $h$. Cache $h$ vì lượt truyền ngược sẽ cần nó sau này. Nhân $h$ với $W_2$ để có đầu ra $y$. Cache $y$. So sánh $y$ với nhãn mục tiêu để tính hàm mất mát $\mathcal{L}$.
+
+Tại thời điểm này, mất mát đã được tính toán và bộ nhớ chứa đầu vào $x$, activation $h$ được cache, đầu ra $y$ được cache, và mất mát $\mathcal{L}$. Đối với một mô hình lớn, các activation được cache này có thể chiếm ưu thế trong việc sử dụng bộ nhớ.
+
+#### Lượt truyền ngược {.unnumbered}
+
+Bây giờ, hãy truy ngược từ $\mathcal{L}$. Hàm mất mát cung cấp $\frac{\partial \mathcal{L}}{\partial y}$, đạo hàm của mất mát theo dự đoán. Đây là nơi tín hiệu lỗi đi vào mạng.
+
+Vì $y = h \cdot W_2$, quy tắc chuỗi cho chúng ta hai đạo hàm tại lớp này:
+$$ \frac{\partial \mathcal{L}}{\partial W_2} = h^T \cdot \frac{\partial \mathcal{L}}{\partial y} \qquad \text{(weight gradient—used to update } W_2\text{)} $$
+$$ \frac{\partial \mathcal{L}}{\partial h} = \frac{\partial \mathcal{L}}{\partial y} \cdot W_2^T \qquad \text{(input gradient—passed backward to the previous layer)} $$
+
+Việc tính toán $\frac{\partial \mathcal{L}}{\partial W_2}$ yêu cầu activation $h$ được cache từ lượt truyền xuôi. Các activation phải luôn có sẵn trong quá trình truyền ngược vì đạo hàm trọng số của mỗi lớp phụ thuộc vào đầu vào của lớp đó.
+
+Bây giờ tiếp tục truyền ngược đến lớp đầu tiên. Vì $h = x \cdot W_1$, cùng một mẫu cho kết quả:
+$$ \frac{\partial \mathcal{L}}{\partial W_1} = x^T \cdot \frac{\partial \mathcal{L}}{\partial h} $$
+
+Mỗi bước truyền ngược yêu cầu hai thứ: đạo hàm chảy vào từ phía trên $\left(\frac{\partial \mathcal{L}}{\partial h}\right)$ và đầu vào của lớp đó ($x$), vốn phải có sẵn trong quá trình truyền ngược. Đây là lý do tại sao lượt truyền ngược tốn khoảng 2$\times$ lượt truyền xuôi về mặt tính toán: tại mỗi lớp, nó thực hiện hai phép nhân ma trận (một cho đạo hàm trọng số, một cho đạo hàm đầu vào) so với một trong lượt truyền xuôi.
+
+### Chi phí thực sự của bộ nhớ huấn luyện {#sec-appdx-algorithm-foundations-true-cost-training-memory-e54e}
+
+Một sai lầm phổ biến là cho rằng bộ nhớ huấn luyện bằng kích thước mô hình. Giả định này dẫn đến lỗi OOM ngay lập tức vì trọng số chỉ là một trong bốn thành phần. Bộ nhớ huấn luyện\index{Training!memory decomposition} bao gồm trọng số, đạo hàm, trạng thái optimizer và các activation được giữ lại:
+$$ M_{\text{total}} = M_{\text{weights}} + M_{\text{gradients}} + M_{\text{optimizer}} + M_{\text{activations}} $$
+
+Đối với một optimizer Adaptive Moment Estimation (Adam) tiêu chuẩn [@kingma2014adam] trong độ chính xác hỗn hợp [@micikevicius2017mixed]:
+
+```{python}
+#| echo: false
+#| label: training-memory-bytes
+# ┌── LEGO ───────────────────────────────────────────────
+# │ Context: @sec-appdx-algorithm-foundations-true-cost-training-memory-e54e
+# │ Goal: Per-parameter byte counts for mixed-precision Adam training
+from mlsysim.fmt import fmt_int, fmt, fmt_memory, fmt_range
+
+class TrainingMemoryBytes:
+    # ┌── 4. OUTPUT (Formatting) ─────────────────────────────────────────────
+    bytes_fp16_str = fmt_memory(BYTES_FP16, unit=byte, precision=0, commas=False)
+    bytes_fp32_str = fmt_memory(BYTES_FP32, unit=byte, precision=0, commas=False)
+    optimizer_overhead_min = int(BYTES_ADAM_STATE.to(byte).magnitude)
+    optimizer_overhead_max = optimizer_overhead_min + int(BYTES_FP32.to(byte).magnitude)
+    optimizer_overhead_min_str = fmt(optimizer_overhead_min, precision=0, commas=False)
+    optimizer_overhead_str = fmt_range(optimizer_overhead_min, optimizer_overhead_max, precision=0, commas=False)
+```
+
+*   **Trọng số**: `{python} TrainingMemoryBytes.bytes_fp16_str` (FP16/BF16) hoặc `{python} TrainingMemoryBytes.bytes_fp32_str` (FP32).
+*   **Đạo hàm**: Kích thước tương tự như trọng số.
+*   **Trạng thái Optimizer**: Các moment của Adam yêu cầu `{python} TrainingMemoryBytes.optimizer_overhead_min_str` byte cho mỗi tham số; một bản sao chính FP32 bổ sung thêm `{python} TrainingMemoryBytes.bytes_fp32_str`, cho tổng cộng `{python} TrainingMemoryBytes.optimizer_overhead_str` byte cho mỗi tham số.
+*   **Activations**: Gã khổng lồ ẩn mình. Một ước tính thân thiện với việc tính toán lại hoặc attention xếp lát có tỷ lệ $\mathcal{O}(B \times S \times N_L \times d)$; một triển khai attention đầy đủ không tính toán lại cũng hiện thực hóa các tensor điểm attention có tỷ lệ $S^2$.
+
+Để xem các thành phần này tương tác như thế nào trong thực tế, hãy xem xét một mô hình cụ thể.
+
+```{python}
+#| echo: false
+#| label: gpt2-training-memory
+# ┌─────────────────────────────────────────────────────────────────────────────
+# │ GPT-2 XL TRAINING MEMORY BREAKDOWN
+# ├─────────────────────────────────────────────────────────────────────────────
+# │ Context: Callout "Worked Example: GPT-2 (1.5B) Training Memory",
+# │          @sec-appdx-algorithm-foundations-true-cost-training-memory-e54e
+# │
+# │ Goal:    Compute memory breakdown (weights, gradients, optimizer, activations).
+# │ Show:    Per-component GB and total for two batch sizes.
+# │ How:     Scalar arithmetic from pint constants.
+# │
+# └─────────────────────────────────────────────────────────────────────────────
+from mlsysim.fmt import fmt_int, fmt, fmt_ratio, check, sci_latex, fmt_math, fmt_display_math, fmt_percent, fmt_memory, fmt_memory_capacity, fmt_qty
+from mlsysim.core.units import GiB, GB
+
+class GPT2TrainingMem:
+    # ┌── 1. LOAD ──────────────────────────────────────────
+    P = Models.Language.GPT2.parameters.to(param).magnitude
+    layers = Models.Language.GPT2.layers
+    d = Models.Language.GPT2.hidden_dim
+    bf16 = int(BYTES_FP16.to(byte).magnitude)
+    fp32 = int(BYTES_FP32.to(byte).magnitude)
+    accel_q = Hardware.Cloud.A100.memory.capacity
+    batch_small = 8
+    batch_large = 64
+    seq_len = 1024
+    optimizer_bytes_per_param = int((BYTES_ADAM_STATE + BYTES_FP32).to(byte).magnitude)  # FP32 master + momentum + variance
+
+    # ┌── 2. EXECUTE ───────────────────────────────────────
+    weights_q = P * bf16 * byte
+    grads_q = P * bf16 * byte
+    optim_q = P * optimizer_bytes_per_param * byte
+    model_state_q = weights_q + grads_q + optim_q
+    remaining_q = accel_q - model_state_q
+
+    # Per-layer retained activation estimate excluding full S^2 attention-score storage:
+    # input(1d) + QKV(3d) + attn_out(1d) + FFN(4d) + output(1d) + norms/masks(2d)
+    act_factor = 12
+    act_small_q = layers * act_factor * batch_small * seq_len * d * bf16 * byte
+    total_small_q = model_state_q + act_small_q
+
+    act_large_q = layers * act_factor * batch_large * seq_len * d * bf16 * byte
+
+    # ┌── 3. GUARD ─────────────────────────────────────────
+    check(model_state_q < accel_q, "Model state must fit on accelerator")
+    check(total_small_q < accel_q, "Small batch must fit on the accelerator")
+    check(act_large_q > remaining_q, "Large batch should exceed remaining capacity")
+
+    # ┌── 4. OUTPUT ────────────────────────────────────────
+    P_math = fmt_math(sci_latex(P, precision=1))  # LaTeX-safe: 1.5 \times 10^{9} (avoids 1.5e+09)
+    layers_str = fmt(layers, precision=0, commas=False)
+    d_str = fmt(d, precision=0, commas=False)
+    bf16_bytes_value_str = fmt(bf16, precision=0, commas=False)
+    weights_gb_str = fmt_qty(weights_q, GB, precision=0, commas=False)
+    grads_gb_str = fmt_qty(grads_q, GB, precision=0, commas=False)
+    optim_bytes_value_str = fmt(optimizer_bytes_per_param, precision=0, commas=False)
+    optim_gb_str = fmt_qty(optim_q, GB, precision=0, commas=False)
+    model_state_gb_str = fmt_qty(model_state_q, GB, precision=0, commas=False)
+    # the sentence glosses this as "in decimal units", so it must be the
+    # honest decimal conversion, not the branded nameplate
+    accel_gb_str = fmt_memory(accel_q, unit=GB, precision=1, commas=False)
+    remaining_gb_str = fmt_qty(remaining_q, GB, precision=1, commas=False)
+    batch_small_str = fmt(batch_small, precision=0, commas=False)
+    seq_len_str = fmt(seq_len, precision=0, commas=False)
+    act_small_gb_str = fmt_qty(act_small_q, unit=GB, precision=1, commas=False)
+    total_small_gb_str = fmt_qty(total_small_q, GB, precision=1, commas=False, approx=True)
+    batch_large_str = fmt(batch_large, precision=0, commas=False)
+    act_large_gb_str = fmt_qty(act_large_q, GB, precision=1, commas=False, approx=True)
+    act_factor_str = fmt_ratio(act_factor, precision=0, commas=False)
+    accel_class_gb_str = fmt_memory_capacity(accel_q, unit=GiB, precision=0, commas=False)
+    grad_ckpt_overhead_pct_str = fmt_percent(33 / 100, precision=0, commas=False, style='prose')
+    act_small_display_math = fmt_display_math(
+        rf"{layers_str} \times {act_factor_str} \times {batch_small_str} \times {seq_len_str} \times "
+        rf"{d_str} \times {bf16_bytes_value_str}\text{{ bytes }} \approx {act_small_gb_str}"
+    )
+```
+
+::: {#nbk-appendix-algorithm-gpt-2-training-memory .callout-notebook title="Ví dụ minh họa: Bộ nhớ huấn luyện GPT-2 (1.5B)"}
+
+**Mô hình**: GPT-2 XL có $P =$ `{python} GPT2TrainingMem.P_math` tham số, `{python} GPT2TrainingMem.layers_str` lớp, chiều ẩn $d =$ `{python} GPT2TrainingMem.d_str`.
+
+**Trạng thái mô hình (cố định theo từng bước)**:
+
+- Trọng số (BF16): `{python} GPT2TrainingMem.P_math` $\times$ `{python} GPT2TrainingMem.bf16_bytes_value_str` byte = `{python} GPT2TrainingMem.weights_gb_str`
+- Đạo hàm (BF16): `{python} GPT2TrainingMem.P_math` $\times$ `{python} GPT2TrainingMem.bf16_bytes_value_str` byte = `{python} GPT2TrainingMem.grads_gb_str`
+- Optimizer (chính FP32 + momentum + phương sai): `{python} GPT2TrainingMem.P_math` $\times$ `{python} GPT2TrainingMem.optim_bytes_value_str` byte = `{python} GPT2TrainingMem.optim_gb_str`
+- **Tổng trạng thái mô hình**: `{python} GPT2TrainingMem.model_state_gb_str`—vừa với một bộ tăng tốc A100/H100 loại `{python} GPT2TrainingMem.accel_class_gb_str` (`{python} GPT2TrainingMem.accel_gb_str` theo đơn vị thập phân), nhưng chỉ còn lại `{python} GPT2TrainingMem.remaining_gb_str` cho các activation.
+
+**Activations (tỷ lệ theo batch)**:
+
+Các activation được giữ lại trên mỗi lớp cho ước tính nhanh này xấp xỉ $12 \times B \times S \times d$ phần tử BF16, hoặc $12 \times B \times S \times d \times 2$ byte, trong đó $B$ là kích thước batch và $S$ là độ dài chuỗi. Hệ số mười hai tính đến các tensor trung gian chính được giữ lại cho lan truyền ngược: các activation đầu vào, các phép chiếu QKV ($3d$), đầu ra attention, trung gian FFN ($4d$) và các mask layer norm/dropout. Ước tính này giả định việc triển khai không giữ lại toàn bộ tensor điểm attention $B \times N_{\text{heads}} \times S^2$, như trong cách tính toán thân thiện với việc tính toán lại hoặc attention xếp lát. Với `{python} GPT2TrainingMem.layers_str` lớp, kích thước batch `{python} GPT2TrainingMem.batch_small_str` và độ dài chuỗi `{python} GPT2TrainingMem.seq_len_str`:
+
+`{python} GPT2TrainingMem.act_small_display_math`
+
+**Thông tin chuyên sâu về hệ thống**: `{python} GPT2TrainingMem.total_small_gb_str` theo quy ước tính toán activation này, vừa với một bộ tăng tốc `{python} GPT2TrainingMem.accel_gb_str`. Tuy nhiên, tăng batch lên `{python} GPT2TrainingMem.batch_large_str` và các activation sẽ tăng lên `{python} GPT2TrainingMem.act_large_gb_str`, vượt quá dung lượng còn lại. Đây là ngưỡng mà tại đó gradient checkpointing hoặc một phương pháp tiết kiệm bộ nhớ khác trở nên cần thiết; khả năng tiết kiệm và chi phí tính toán lại của nó phụ thuộc vào vị trí checkpoint và cách triển khai.
+
+:::
+
+#### Bùng nổ activation {#sec-appdx-algorithm-foundations-activation-explosion-1da5}
+
+Trong khi trọng số là cố định ($\mathcal{O}(P)$), các activation tăng tuyến tính theo kích thước batch và ít nhất là tuyến tính theo độ dài chuỗi; các triển khai hiện thực hóa điểm attention bổ sung một thành phần $\mathcal{O}(S^2)$. Như ví dụ minh họa cho thấy, bộ nhớ activation có thể nhanh chóng vượt quá dung lượng còn lại sau trạng thái mô hình. Gradient checkpointing[^fn-gradient-checkpointing-memory] giảm áp lực này bằng cách chỉ lưu trữ các activation được chọn và tính toán lại phần còn lại trong quá trình lan truyền ngược [@chen2016training]; các kỹ thuật như FlashAttention giải quyết các nút thắt cổ chai bộ nhớ attention liên quan bằng cách xếp lát attention để giảm các chuyến đi vòng bộ nhớ [@dao2022].
+
+[^fn-gradient-checkpointing-memory]: **Gradient checkpointing**\index{Gradient checkpointing!appendix refresher}: Đánh đổi tính toán lấy bộ nhớ. Thay vì lưu trữ tất cả các activation, chỉ một tập con (các checkpoint) được giữ lại, và những activation bị thiếu sẽ được tính toán lại trong quá trình lan truyền ngược. Điều này giảm mức sử dụng bộ nhớ từ việc lưu trữ activation của mọi lớp xuống xấp xỉ căn bậc hai của số lượng lớp, với chi phí tăng khoảng 33 phần trăm tính toán [@chen2016training].
+
+Sự phân tách tương tự cung cấp một kiểm tra khả thi nhanh chóng: tổng trạng thái mô hình trên mỗi tham số, cộng thêm số hạng activation được ngụ ý bởi kích thước batch và độ dài chuỗi, sau đó so sánh tổng đó với dung lượng của bộ tăng tốc.
+
+### Đồ thị tính toán và tối ưu hóa {#sec-appdx-algorithm-foundations-computational-graphs-optimization-ab43}
+
+Cấu trúc phụ thuộc được phơi bày bởi lan truyền ngược cũng cung cấp cho các trình biên dịch thứ gì đó để tối ưu hóa. Các trình biên dịch ML biểu diễn các mô hình dưới dạng đồ thị có hướng không chu trình (DAG), và biểu diễn đó cho phép các phép biến đổi độc lập với phần cứng.
+
+#### Gán đơn tĩnh {#sec-appdx-algorithm-foundations-static-single-assignment-9e88}
+
+Các trình biên dịch biến đổi đồ thị thành dạng gán đơn tĩnh (SSA)\index{Static single assignment!appendix refresher}, trong đó mỗi biến được gán chính xác một lần. Điều này làm cho các phụ thuộc dữ liệu trở nên rõ ràng, cho phép các tối ưu hóa an toàn—quan trọng nhất là, *hợp nhất toán tử*\index{Operator fusion!appendix refresher}.
+
+#### Hợp nhất toán tử {#sec-appdx-algorithm-foundations-operator-fusion-5d73}
+
+Nếu không có hợp nhất, mỗi phép toán trong một chuỗi như `MatMul → Add (bias) → ReLU` sẽ tạo ra một tensor trung gian được ghi vào HBM và sau đó được đọc lại cho phép toán tiếp theo. Đối với các phép toán theo phần tử như `Add` và `ReLU`, tính toán là tầm thường (một FLOP trên mỗi phần tử) nhưng lưu lượng bộ nhớ thì không (đọc tensor, ghi lại). Do đó, cường độ số học của các phép toán theo phần tử không được hợp nhất gần bằng 0—bị giới hạn sâu bởi bộ nhớ.
+
+Hợp nhất kết hợp các phép toán liên tiếp thành một kernel duy nhất đọc đầu vào một lần, áp dụng tất cả các phép toán trong các thanh ghi hoặc bộ nhớ dùng chung, và ghi kết quả cuối cùng một lần. Đối với một chuỗi $k$ phép toán theo phần tử trên một tensor có kích thước $N$ byte, hợp nhất giảm lưu lượng bộ nhớ từ $2kN$ byte (mỗi phép toán đọc và ghi) xuống còn $2N$ byte (một lần đọc, một lần ghi)—giảm $k\times$.
+
+FlashAttention\index{FlashAttention!appendix refresher} là một thuật toán attention xếp gạch nhận biết I/O: nó tính toán các giai đoạn điểm số, softmax và tích giá trị trong các ô SRAM mà không hiện thực hóa toàn bộ ma trận attention trong HBM, giảm lưu lượng HBM và bộ nhớ attention phụ trợ từ $\mathcal{O}(S^2)$ xuống $\mathcal{O}(S)$. Công trình gốc báo cáo tăng tốc đồng hồ thực lên tới 3$\times$ trên các khối lượng công việc (workload) được đánh giá [@dao2022]; lợi ích thực tế phụ thuộc vào hình dạng và phần cứng (xem @sec-appdx-algorithm-flash-attention để biết cách dẫn xuất từng bước). Cùng với nhau, các nền tảng đại số tuyến tính, cơ chế lập trình tensor và mô hình bộ nhớ huấn luyện được đề cập trong phụ lục này tạo thành nền tảng thuật toán mà trên đó tất cả các hệ thống ML được xây dựng.
+
+## Định lý độ phức tạp AD chế độ ngược Baur–Strassen {#sec-appdx-algorithm-baur-strassen}
+
+Deep learning hiện đại có thể mở rộng lên hàng trăm tỷ tham số vì việc đánh giá toàn bộ vector gradient $\nabla f(x)$ của một hàm mất mát vô hướng $f: \mathbb{R}^N \to \mathbb{R}$ đòi hỏi tính toán tỷ lệ thuận với việc đánh giá chính $f(x)$, với một giới hạn hệ số hằng số độc lập với chiều đầu vào $N$. Baur và Strassen đã chứng minh kết quả độ phức tạp này vào năm 1983 [@baur1983complexity].
+
+### Công thức toán học và phát biểu định lý {#sec-appdx-algorithm-baur-strassen-statement}
+
+Cho $f: \mathbb{R}^N \to \mathbb{R}$ là một hàm đa biến có giá trị vô hướng được biểu diễn dưới dạng đồ thị tính toán $G = (V, E)$ bao gồm $W(f)$ phép toán cơ bản (phép cộng, phép trừ, phép nhân, phép chia và các hàm một ngôi như $\exp, \ln, \sin, \sqrt{\cdot}$).
+
+::: {#thrm-appendix-algorithm-baur-strassen .callout-theorem title="Định lý độ phức tạp Baur–Strassen"}
+Nếu một hàm vô hướng $f: \mathbb{R}^N \to \mathbb{R}$ có thể được tính toán trong $W(f)$ phép toán cơ bản, thì toàn bộ vector gradient $\nabla f(x) = \left(\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \dots, \frac{\partial f}{\partial x_N}\right)^T \in \mathbb{R}^N$ có thể được đánh giá với tổng công việc $\text{Work}_{\text{Reverse}}(f, \nabla f)$ thỏa mãn:
+$$ \text{Work}_{\text{Reverse}}(f, \nabla f) \le C \cdot W(f) $$
+trong đó $C \le 5$ là một hằng số phổ quát độc lập với chiều đầu vào $N$. Hơn nữa, riêng lượt truyền ngược đòi hỏi công việc $\text{Work}_{\text{Backward}}(\nabla f) \le 4 \cdot W(f)$.
+:::
+
+### Chứng minh lan truyền đồ thị liên hợp quy tắc chuỗi từng bước {#sec-appdx-algorithm-baur-strassen-proof}
+
+Cho đồ thị tính toán $G = (V, E)$ được sắp xếp theo thứ tự tô-pô với các nút $v_{1-N}, \dots, v_0, v_1$, $v_2, \dots, v_W$, trong đó các biến đầu vào là $x_i = v_{i-N}$ với $i \in \{1, \dots, N\}$ và đầu ra cuối cùng là $f(x) = v_W$. Mỗi nút trung gian $v_j$ được đánh giá thông qua một phép toán nguyên thủy:
+$$ v_j = \phi_j\left( \{ v_k \mid k \in \text{Parents}(j) \} \right) $$
+
+Định nghĩa *biến liên hợp* $\bar{v}_i$ cho mỗi nút $v_i$ là đạo hàm riêng của đầu ra vô hướng $v_W$ đối với $v_i$:
+$$ \bar{v}_i \triangleq \frac{\partial f}{\partial v_i} = \frac{\partial v_W}{\partial v_i} $$
+
+Theo quy tắc chuỗi đa biến, liên hợp $\bar{v}_i$ là tổng các đạo hàm riêng được lan truyền từ tất cả các nút kế nhiệm (con) tiêu thụ $v_i$:
+$$ \bar{v}_i = \sum_{j \in \text{Children}(i)} \bar{v}_j \cdot \frac{\partial v_j}{\partial v_i} $$
+
+Vi phân tự động chế độ ngược khởi tạo $\bar{v}_W = 1$ và $\bar{v}_i = 0$ cho tất cả $i < W$, sau đó duyệt các nút theo thứ tự tô-pô ngược từ $v_W$ xuống $v_1$. Đối với mỗi nút nguyên thủy $v_j$, liên hợp $\bar{v}_j$ đã được tích lũy đầy đủ của nó sẽ lan truyền tín hiệu lỗi đến các nút cha $v_k$ ($k \in \text{Parents}(j)$) thông qua:
+$$ \bar{v}_k \gets \bar{v}_k + \bar{v}_j \cdot \frac{\partial v_j}{\partial v_k} $$
+
+Bây giờ chúng ta thực hiện tính toán chi phí vi mô từng phép toán cho tất cả các nút nguyên thủy để giới hạn công việc ngược:
+
+1. **Phép cộng/trừ ($v_j = v_i \pm v_k$)**:
+   - Đạo hàm cục bộ: $\frac{\partial v_j}{\partial v_i} = 1$, $\frac{\partial v_j}{\partial v_k} = \pm 1$.
+   - Cập nhật ngược: $\bar{v}_i \gets \bar{v}_i + \bar{v}_j$ và $\bar{v}_k \gets \bar{v}_k \pm \bar{v}_j$.
+   - Chi phí: 2 phép cộng trong lượt truyền ngược cho 1 phép toán xuôi. Tỷ lệ công việc: $\text{Fwd}(1) + \text{Bwd}(2) = 3 \text{ OPs} \le 5 \cdot 1$.
+2. **Phép nhân ($v_j = v_i \cdot v_k$)**:
+   - Đạo hàm cục bộ: $\frac{\partial v_j}{\partial v_i} = v_k$, $\frac{\partial v_j}{\partial v_k} = v_i$.
+   - Cập nhật ngược: $\bar{v}_i \gets \bar{v}_i + \bar{v}_j \cdot v_k$ và $\bar{v}_k \gets \bar{v}_k + \bar{v}_j \cdot v_i$.
+   - Chi phí: 2 phép nhân + 2 phép cộng = 4 phép toán trong lượt truyền ngược cho 1 phép toán truyền xuôi. Tỷ lệ công việc: $\text{Fwd}(1) + \text{Bwd}(4) = 5 \text{ OPs} \le 5 \cdot 1$.
+3. **Phép chia ($v_j = v_i/v_k$)**:
+   - Đạo hàm cục bộ: $\frac{\partial v_j}{\partial v_i} = \frac{1}{v_k}$, $\frac{\partial v_j}{\partial v_k} = -\frac{v_i}{v_k^2} = -\frac{v_j}{v_k}$.
+   - Cập nhật ngược: $\bar{v}_i \gets \bar{v}_i + \frac{\bar{v}_j}{v_k}$ và $\bar{v}_k \gets \bar{v}_k - \frac{\bar{v}_j \cdot v_j}{v_k}$.
+   - Chi phí: 2 phép nhân/chia + 2 phép cộng = 4 phép toán trong lượt truyền ngược cho 1 phép toán truyền xuôi. Tỷ lệ công việc: $\text{Fwd}(1) + \text{Bwd}(4) = 5 \text{ OPs} \le 5 \cdot 1$.
+4. **Các phép toán siêu việt một ngôi ($v_j = \phi(v_i)$)**:
+   - Đạo hàm cục bộ: $\frac{\partial v_j}{\partial v_i} = \phi'(v_i)$.
+   - Cập nhật ngược: $\bar{v}_i \gets \bar{v}_i + \bar{v}_j \cdot \phi'(v_i)$.
+   - Đối với $v_j = \exp(v_i)$, $\phi'(v_i) = v_j$, yêu cầu 1 phép nhân + 1 phép cộng = 2 OPs.
+   - Đối với $v_j = \ln(v_i)$, $\phi'(v_i) = 1/v_i$, yêu cầu 1 phép chia + 1 phép cộng = 2 OPs.
+
+Tổng hợp trên tất cả các nút nguyên thủy trong $G$, mỗi phép toán truyền xuôi tạo ra tối đa 4 phép toán truyền ngược:
+$$ \text{Work}_{\text{Backward}}(\nabla f) \le 4 \cdot W(f) $$
+
+Cộng thêm công việc của lượt truyền xuôi $W(f)$ cho ra cận trên của tổng công việc:
+$$ \text{Work}_{\text{Reverse}}(f, \nabla f) = W(f) + \text{Work}_{\text{Backward}}(\nabla f) \le 5 \cdot W(f) \qquad\blacksquare$$
+
+::: {#psp-appendix-algorithm-baur-strassen-llm-scaling .callout-perspective title="Tại sao các mô hình ngôn ngữ lớn 175B tham số có thể được huấn luyện"}
+
+Sự độc lập của $C \le 5$ với chiều đầu vào $N$ là lý do toán học khiến deep learning hoạt động hiệu quả. Hãy xem xét việc huấn luyện một mô hình transformer với $P = 175 \times 10^9$ tham số:
+
+* **Lượt truyền xuôi**: Phép nhân ma trận $Y = X W$ yêu cầu $2P$ FLOPs mỗi token.
+* **Lượt truyền ngược chế độ đảo**: Tính toán cả gradient trọng số $\frac{\partial \mathcal{L}}{\partial W} = X^T \frac{\partial \mathcal{L}}{\partial Y}$ ($2P$ FLOPs) và gradient activation đầu vào $\frac{\partial \mathcal{L}}{\partial X} = \frac{\partial \mathcal{L}}{\partial Y} W^T$ ($2P$ FLOPs), tổng cộng $4P$ FLOPs mỗi token.
+* **Tổng công việc huấn luyện**: $2P (\text{fwd}) + 4P (\text{bwd}) = 6P$ FLOPs mỗi token. Hệ số tính toán ngược chính xác là $\frac{4P}{2P} = 2$, nằm trong giới hạn lý thuyết Baur–Strassen là $C \le 5$.
+
+Nếu thay vào đó chúng ta sử dụng AD chế độ xuôi hoặc sai phân hữu hạn để tính toán $\nabla f \in \mathbb{R}^P$, việc đánh giá từng đạo hàm riêng biệt sẽ yêu cầu $P$ lượt truyền xuôi: $\text{Work}_{\text{ForwardMode}}(\nabla f) = \mathcal{O}(P \cdot W) = \mathcal{O}(P^2)$ FLOPs. Đối với $P = 175 \times 10^9$, phương pháp đó sẽ yêu cầu $2 \times (175 \times 10^9)^2 \approx 6.1 \times 10^{22}$ FLOPs mỗi token—gấp $P$ lần công việc của lượt truyền xuôi và do đó không khả thi ở quy mô này. AD chế độ đảo thu gọn yếu tố $\mathcal{O}(P)$ này thành một hệ số nhân hằng số là 2 cho tính toán lớp dày đặc ở trên.
+
+:::
+
+## Phân ô FlashAttention & Chứng minh công thức truy hồi Softmax trực tuyến {#sec-appdx-algorithm-flash-attention}
+
+Cơ chế tự chú ý tiêu chuẩn trong transformer yêu cầu hiện thực hóa một ma trận điểm chú ý $N \times N$ trong HBM, tạo ra một nút thắt cổ chai băng thông bộ nhớ $\mathcal{O}(N^2)$. FlashAttention [@dao2022] loại bỏ nút thắt cổ chai này bằng cách phân ô các ma trận query, key và value và tính toán lại cơ chế chú ý bằng cách sử dụng công thức truy hồi softmax trực tuyến mà không hiện thực hóa các điểm trung gian vào HBM.
+
+### Nút thắt cổ chai I/O HBM của softmax tiêu chuẩn {#sec-appdx-algorithm-flash-attention-hbm-bottleneck}
+
+Cho các query $\mathbf{Q} \in \mathbb{R}^{N \times d}$, các key $\mathbf{K} \in \mathbb{R}^{N \times d}$, và các value $\mathbf{V} \in \mathbb{R}^{N \times d}$ với độ dài chuỗi $N$ và chiều head $d$, cơ chế chú ý tiêu chuẩn đánh giá:
+$$ \mathbf{S} = \mathbf{Q} \mathbf{K}^T \in \mathbb{R}^{N \times N}, \qquad \mathbf{A} = \text{softmax}(\mathbf{S}) \in \mathbb{R}^{N \times N}, \qquad \mathbf{O} = \mathbf{A} \mathbf{V} \in \mathbb{R}^{N \times d} $$
+
+Để ngăn chặn tràn số, softmax theo hàng trừ đi giá trị lớn nhất theo hàng $m_i = \max_{1 \le j \le N} S_{ij}$:
+$$ A_{ij} = \frac{\exp(S_{ij} - m_i)}{\sum_{k=1}^N \exp(S_{ik} - m_i)} $$
+
+Các triển khai GPU tiêu chuẩn thực hiện điều này trong ba lần khởi chạy kernel riêng biệt:
+
+1. Tính toán $\mathbf{S} = \mathbf{Q}\mathbf{K}^T$ trong SRAM, sau đó ghi $\mathbf{S} \in \mathbb{R}^{N \times N}$ vào HBM ($\Theta(N^2)$ lượt ghi).
+2. Đọc $\mathbf{S}$ từ HBM, tính giá trị lớn nhất theo hàng $m$ và tổng theo hàng $d$, tính toán $\mathbf{A} = \text{softmax}(\mathbf{S})$, ghi $\mathbf{A} \in \mathbb{R}^{N \times N}$ vào HBM ($\Theta(N^2)$ lượt đọc + ghi).
+3. Đọc $\mathbf{A}$ và $\mathbf{V}$ từ HBM, tính toán $\mathbf{O} = \mathbf{A}\mathbf{V}$, ghi $\mathbf{O} \in \mathbb{R}^{N \times d}$ vào HBM ($\Theta(N^2 + Nd)$ lượt đọc + ghi).
+
+Tổng lưu lượng bộ nhớ HBM là $\Theta(N^2 + Nd)$ phần tử. Đối với $N = 8192$, $d = 128$ trong FP16, $\mathbf{S}$ yêu cầu $8192^2 \times 2 \text{ B} = 134 \text{ MB}$ mỗi head mỗi lớp. Bởi vì các GPU hiện đại có thông lượng tính toán khổng lồ so với băng thông HBM, việc đọc và ghi lặp đi lặp lại các ma trận trung gian $\mathbf{S}$ và $\mathbf{A}$ khiến các đơn vị thực thi GPU bị giới hạn bởi bộ nhớ.
+
+### Chứng minh công thức truy hồi softmax trực tuyến {#sec-appdx-algorithm-flash-attention-online-softmax-proof}
+
+Việc phân ô softmax rất khó bởi vì việc tính toán $d_i = \sum_{k=1}^N \exp(S_{ik} - m_i)$ yêu cầu giá trị lớn nhất toàn cục $m_i$ trên tất cả $N$ key. Công thức truy hồi softmax trực tuyến giải quyết vấn đề này bằng cách cập nhật tăng dần các thống kê chuẩn hóa khi các khối con đến.
+
+::: {#thrm-appendix-algorithm-online-softmax .callout-theorem title="Định lý công thức truy hồi softmax trực tuyến"}
+Cho một vector $x \in \mathbb{R}^N$ được phân chia thành hai vector con $x^{(1)} \in \mathbb{R}^{N_1}$ và $x^{(2)} \in \mathbb{R}^{N_2}$ với $N = N_1 + N_2$. Các thống kê cục bộ cho khối 1 là:
+$$ m^{(1)} = \max_{1 \le j \le N_1} x_j^{(1)}, \qquad d^{(1)} = \sum_{j=1}^{N_1} \exp\left(x_j^{(1)} - m^{(1)}\right) $$
+và cho khối 2 là:
+$$ m^{(2)} = \max_{1 \le j \le N_2} x_j^{(2)}, \qquad d^{(2)} = \sum_{j=1}^{N_2} \exp\left(x_j^{(2)} - m^{(2)}\right) $$
+
+Khi đó giá trị lớn nhất kết hợp $m^{\text{new}}$, tổng chuẩn hóa $d^{\text{new}}$, và vector đầu ra tích lũy $\mathbf{O}^{\text{new}}$ thỏa mãn các quan hệ truy hồi chính xác:
+$$ m^{\text{new}} = \max\left(m^{(1)}, m^{(2)}\right) $$
+$$ d^{\text{new}} = d^{(1)} e^{m^{(1)} - m^{\text{new}}} + d^{(2)} e^{m^{(2)} - m^{\text{new}}} $$
+$$ \mathbf{O}^{\text{new}} = \frac{d^{(1)} e^{m^{(1)} - m^{\text{new}}}}{d^{\text{new}}} \mathbf{O}^{(1)} + \frac{e^{m^{(2)} - m^{\text{new}}}}{d^{\text{new}}} \sum_{j=1}^{N_2} e^{x_j^{(2)} - m^{(2)}} \mathbf{V}_j^{(2)} $$
+trong đó $\mathbf{O}^{(1)} = \frac{1}{d^{(1)}} \sum_{j=1}^{N_1} e^{x_j^{(1)} - m^{(1)}} \mathbf{V}_j^{(1)}$ là đầu ra cục bộ được tích lũy từ khối 1.
+:::
+
+#### Đạo hàm của công thức truy hồi mẫu số {.unnumbered}
+
+Khai triển tổng kết hợp $d^{\text{new}} = \sum_{j=1}^N e^{x_j - m^{\text{new}}}$:
+$$ \begin{aligned} d^{\text{new}} &= \sum_{j=1}^{N_1} e^{x_j^{(1)} - m^{\text{new}}} + \sum_{j=1}^{N_2} e^{x_j^{(2)} - m^{\text{new}}} \\ &= \sum_{j=1}^{N_1} e^{\left(x_j^{(1)} - m^{(1)}\right) + \left(m^{(1)} - m^{\text{new}}\right)} + \sum_{j=1}^{N_2} e^{\left(x_j^{(2)} - m^{(2)}\right) + \left(m^{(2)} - m^{\text{new}}\right)} \\ &= e^{m^{(1)} - m^{\text{new}}} \underbrace{\sum_{j=1}^{N_1} e^{x_j^{(1)} - m^{(1)}}}_{d^{(1)}} + e^{m^{(2)} - m^{\text{new}}} \underbrace{\sum_{j=1}^{N_2} e^{x_j^{(2)} - m^{(2)}}}_{d^{(2)}} \\ &= d^{(1)} e^{m^{(1)} - m^{\text{new}}} + d^{(2)} e^{m^{(2)} - m^{\text{new}}}. \quad \blacksquare \end{aligned} $$
+
+####  {.unnumbered}
+
+Đầu ra chuẩn hóa thực sự trên chuỗi được nối là $\mathbf{O}^{\text{new}} = \frac{1}{d^{\text{new}}} \sum_{j=1}^N e^{x_j - m^{\text{new}}} \mathbf{V}_j$:
+$$ \begin{aligned} \mathbf{O}^{\text{new}} &= \frac{1}{d^{\text{new}}} \left[ \sum_{j=1}^{N_1} e^{x_j^{(1)} - m^{\text{new}}} \mathbf{V}_j^{(1)} + \sum_{j=1}^{N_2} e^{x_j^{(2)} - m^{\text{new}}} \mathbf{V}_j^{(2)} \right] \\ &= \frac{1}{d^{\text{new}}} \left[ e^{m^{(1)} - m^{\text{new}}} \sum_{j=1}^{N_1} e^{x_j^{(1)} - m^{(1)}} \mathbf{V}_j^{(1)} + e^{m^{(2)} - m^{\text{new}}} \sum_{j=1}^{N_2} e^{x_j^{(2)} - m^{(2)}} \mathbf{V}_j^{(2)} \right] \end{aligned} $$
+
+Lưu ý rằng $d^{(1)} \mathbf{O}^{(1)} = \sum_{j=1}^{N_1} e^{x_j^{(1)} - m^{(1)}} \mathbf{V}_j^{(1)}$, chúng ta thay thế trực tiếp điều này:
+$$ \mathbf{O}^{\text{new}} = \frac{d^{(1)} e^{m^{(1)} - m^{\text{new}}}}{d^{\text{new}}} \mathbf{O}^{(1)} + \frac{e^{m^{(2)} - m^{\text{new}}}}{d^{\text{new}}} \sum_{j=1}^{N_2} e^{x_j^{(2)} - m^{(2)}} \mathbf{V}_j^{(2)}. \quad \blacksquare $$
+
+### Chứng minh độ phức tạp truy cập HBM chính thức {#sec-appdx-algorithm-flash-attention-complexity-proof}
+
+Gọi $M$ là dung lượng SRAM nhanh (tính bằng từ). Theo Thuật toán 1 của @dao2022, FlashAttention đặt $B_c = \lfloor M/(4d) \rfloor$ và $B_r = \min(\lfloor M/(4d) \rfloor,d)$. Chứng minh này trừu tượng hóa các hệ số hằng và việc tái sử dụng bộ đệm, sử dụng $B_c=\Theta(M/d)$, $B_r=\Theta(\min(M/d,d))$, và $B_rB_c=O(M)$ cho tập làm việc trên chip.
+
+Thuật toán thực hiện hai vòng lặp lồng nhau:
+
+* Phân vùng $\mathbf{Q}$ thành $T_r = \lceil N/B_r \rceil$ khối có kích thước $B_r \times d$.
+* Phân vùng $\mathbf{K}, \mathbf{V}$ thành $T_c = \lceil N/B_c \rceil$ khối có kích thước $B_c \times d$.
+* **Vòng lặp ngoài** qua $j = 1, \dots, T_c$: Tải $\mathbf{K}_j$ và $\mathbf{V}_j$ vào SRAM.
+* **Vòng lặp trong** qua $i = 1, \dots, T_r$: Tải $\mathbf{Q}_i$, $\mathbf{O}_i$, và các thống kê softmax của nó; tính toán $\mathbf{S}_{ij} = \mathbf{Q}_i \mathbf{K}_j^T$ trong SRAM; sau đó cập nhật và ghi $\mathbf{O}_i$ và các thống kê mà không hiện thực hóa $\mathbf{S}_{ij}$ trong HBM.
+
+Thứ tự vòng lặp này là nguồn gốc của việc giảm I/O. Một ô khóa-giá trị vẫn còn thường trú trong khi thuật toán duyệt qua mọi ô truy vấn, do đó mỗi phần tử của $\mathbf{K}$ và $\mathbf{V}$ chỉ vượt qua ranh giới HBM một lần. Các ô truy vấn và đầu ra phải được duyệt lại cho mỗi khối khóa-giá trị, nhưng ô điểm số $B_r\times B_c$ được tiêu thụ trên chip và loại bỏ. Attention tiêu chuẩn thay vào đó ghi và đọc lại toàn bộ ma trận điểm số và xác suất $N\times N$.
+
+#### Tính toán tổng truy cập bộ nhớ {.unnumbered}
+
+1. **Đọc khóa và giá trị**: Mỗi phần tử của $\mathbf{K}$ và $\mathbf{V}$ được tải một lần, đóng góp $2Nd$ lượt truy cập.
+2. **Các lượt truy vấn, đầu ra và thống kê**: Mỗi trong số $T_c$ khối cột đọc toàn bộ $\mathbf{Q}$, đọc và ghi $\mathbf{O}$, và cập nhật $O(N)$ thống kê softmax. Các ma trận chiếm ưu thế so với thống kê cho chiều đầu $d\geq 1$, do đó mỗi lượt đóng góp $\Theta(Nd)$ lượt truy cập và tất cả các lượt đóng góp $\Theta(NdT_c)$.
+
+Vì $T_c=\lceil N/B_c\rceil=\Theta(Nd/M)$, nên tổng cộng là
+$$ \text{HBM}_{\text{Flash}} = \Theta\left(Nd + NdT_c\right) = \Theta\left(Nd + \frac{N^2d^2}{M}\right) = \Theta\left(\frac{N^2d^2}{M}\right), $$
+trong đó đẳng thức cuối cùng đúng khi $d \leq M \leq Nd$.
+
+Giới hạn này tính toán giao tiếp hơn là số học. FlashAttention vẫn đánh giá các khối điểm số dày đặc tương tự và có thể tính toán lại các đại lượng trung gian trong quá trình lan truyền ngược; lợi thế của nó đến từ việc giữ các giá trị trung gian đó bên ngoài HBM.
+
+#### Tỷ lệ giảm I/O {.unnumbered}
+
+So sánh I/O của attention tiêu chuẩn với I/O của FlashAttention:
+$$ \frac{\text{HBM}_{\text{Standard}}}{\text{HBM}_{\text{Flash}}} = \frac{\Theta(N^2 + Nd)}{\Theta\left(Nd + \frac{N^2 d^2}{M}\right)} = \Theta\left(\frac{M}{d^2}\right) \quad \text{for } N \gg \max\left(d,\frac{M}{d}\right) $$
+
+::: {#psp-appendix-algorithm-flash-attention-io-reduction .callout-perspective title="Giảm I/O trên A100"}
+
+Tỷ lệ tiệm cận $M/d^2$ dự đoán dung lượng SRAM lớn hơn có thể giảm lưu lượng HBM như thế nào, nhưng các hằng số ẩn và chi tiết kernel ngăn cản nó trở thành một số lượng truyền tải chính xác. Trong một phép đo trên NVIDIA A100, @dao2022 báo cáo hiệu ứng cho một khối lượng công việc (workload) attention xuôi và ngược với chiều dài chuỗi 1.024, chiều đầu 64, 16 đầu, kích thước batch 64, một mặt nạ đệm khóa và không dropout:
+
+* **Attention tiêu chuẩn**: 35.3 GB lượt đọc và ghi HBM; 35.1 ms runtime.
+* **FlashAttention**: 4.4 GB lượt đọc và ghi HBM; 11.7 ms runtime.
+
+Các phép đo cho thấy hệ quả hệ thống của giới hạn I/O: lưu lượng HBM ít hơn đáng kể trùng khớp với runtime thấp hơn mặc dù FlashAttention thực hiện tính toán lại bổ sung. Chúng không ngụ ý rằng mọi cấu hình đều trở thành giới hạn tính toán; kích thước ô, chiều dài chuỗi và triển khai kernel xác định chế độ được hiện thực hóa.
+:::
+
+## Thiết lập Định luật Tỷ lệ Tối ưu Tính toán của Kaplan & Chinchilla {#sec-appdx-algorithm-chinchilla-derivation}
+
+Xác định phân bổ tối ưu tính toán giữa các tham số mô hình $N$ và các token tập dữ liệu huấn luyện $D$ cho một ngân sách dấu phẩy động $C$ cho trước là một quyết định trung tâm trong thiết kế hệ thống mô hình ngôn ngữ lớn. Phần này cung cấp thiết lập toán học chặt chẽ các định luật tỷ lệ tối ưu tính toán bằng cách sử dụng nhân tử Lagrange, đối chiếu các phát hiện ban đầu của @kaplan2020scaling với các hiệu chỉnh tối ưu tính toán của @hoffmann2022chinchilla.
+
+### Công thức mặt mất mát tham số {#sec-appdx-algorithm-chinchilla-loss-surface}
+
+Mất mát đánh giá entropy chéo $\mathcal{L}(N, D)$ của một mô hình ngôn ngữ transformer tự hồi quy được huấn luyện với $N$ tham số không phải embedding trên $D$ token được mô hình hóa bằng công thức luật lũy thừa:
+$$ \mathcal{L}(N, D) = E + \frac{A}{N^\alpha} + \frac{B}{D^\beta} $$
+trong đó:
+
+* $E$: Mất mát không thể giảm đại diện cho entropy của dữ liệu ngôn ngữ tự nhiên.
+* $\frac{A}{N^\alpha}$: Mất mát tắc nghẽn dung lượng do số lượng tham số mô hình $N$ hữu hạn.
+* $\frac{B}{D^\beta}$: Mất mát tắc nghẽn kích thước tập dữ liệu do số lượng token huấn luyện $D$ hữu hạn.
+* $A, B > 0$: Các hằng số tỷ lệ thực nghiệm.
+* $\alpha, \beta > 0$: Các số mũ tỷ lệ luật lũy thừa cho kích thước mô hình và kích thước tập dữ liệu, tương ứng.
+
+### Tối ưu hóa có ràng buộc thông qua nhân tử Lagrange {#sec-appdx-algorithm-chinchilla-lagrange}
+
+Tổng số phép toán dấu phẩy động cần thiết để huấn luyện một transformer với $N$ tham số không phải embedding cho $D$ token được cho bởi:
+$$ C = 6 N D \text{ FLOPs} $$
+
+trong đó $2 N D$ tính cho lượt truyền xuôi và $4 N D$ tính cho lượt truyền ngược.
+
+Với ngân sách tính toán huấn luyện cố định $C_0$, chúng ta xây dựng bài toán tối ưu hóa có ràng buộc để cực tiểu hóa mất mát có thể giảm $\hat{\mathcal{L}}(N, D) = \frac{A}{N^\alpha} + \frac{B}{D^\beta}$:
+$$ \min_{N, D} \left( \frac{A}{N^\alpha} + \frac{B}{D^\beta} \right) \quad \text{subject to} \quad g(N, D) = 6 N D - C_0 = 0 $$
+
+Chúng ta xây dựng hàm Lagrangian $\mathcal{L}_{\text{Lagrange}}(N, D, \lambda)$:
+$$ \mathcal{L}_{\text{Lagrange}}(N, D, \lambda) = \frac{A}{N^\alpha} + \frac{B}{D^\beta} + \lambda (6 N D - C_0) $$
+
+Lấy đạo hàm riêng theo $N, D$ và $\lambda$ và đặt chúng bằng 0:
+$$ \frac{\partial \mathcal{L}_{\text{Lagrange}}}{\partial N} = -\alpha A N^{-\alpha - 1} + 6 \lambda D = 0 \implies \alpha A N^{-\alpha - 1} = 6 \lambda D \tag{1} $$
+$$ \frac{\partial \mathcal{L}_{\text{Lagrange}}}{\partial D} = -\beta B D^{-\beta - 1} + 6 \lambda N = 0 \implies \beta B D^{-\beta - 1} = 6 \lambda N \tag{2} $$
+$$ \frac{\partial \mathcal{L}_{\text{Lagrange}}}{\partial \lambda} = 6 N D - C_0 = 0 \tag{3} $$
+
+Nhân Phương trình (1) với $N$ và Phương trình (2) với $D$:
+$$ \alpha A N^{-\alpha} = 6 \lambda N D $$
+$$ \beta B D^{-\beta} = 6 \lambda N D $$
+
+Đồng nhất các biểu thức này cho ra điều kiện tối ưu luật lũy thừa cơ bản:
+$$ \alpha A N^{-\alpha} = \beta B D^{-\beta} $$
+
+Điều kiện này chứng minh rằng tại phân bổ tối ưu tính toán, mức giảm mất mát biên trên mỗi phần trăm tăng số lượng tham số phải bằng mức giảm mất mát biên trên mỗi phần trăm tăng số lượng token tập dữ liệu.
+
+### Thiết lập phân tích các số mũ tối ưu tính toán {#sec-appdx-algorithm-chinchilla-exponents}
+
+Từ $\alpha A N^{-\alpha} = \beta B D^{-\beta}$, chúng ta giải $D$ theo $N$:
+$$ D^\beta = \left(\frac{\beta B}{\alpha A}\right) N^\alpha \implies D = \left(\frac{\beta B}{\alpha A}\right)^{1/\beta} N^{\alpha/\beta} $$
+
+Thay $D$ vào ràng buộc tính toán $C = 6 N D$:
+$$ C = 6 N \left(\frac{\beta B}{\alpha A}\right)^{1/\beta} N^{\alpha/\beta} = 6 \left(\frac{\beta B}{\alpha A}\right)^{1/\beta} N^{\frac{\alpha + \beta}{\beta}} $$
+
+Giải rõ ràng cho số lượng tham số tối ưu tính toán $N^*(C)$:
+$$ N^*(C) = \left( \frac{\alpha A}{\beta B} \right)^{\frac{1}{\alpha + \beta}} \left( \frac{C}{6} \right)^{\frac{\beta}{\alpha + \beta}} \propto C^{\frac{\beta}{\alpha + \beta}} $$
+
+Theo tính đối xứng, giải cho số lượng token tối ưu tính toán $D^*(C)$:
+$$ D^*(C) = \left( \frac{\beta B}{\alpha A} \right)^{\frac{1}{\alpha + \beta}} \left( \frac{C}{6} \right)^{\frac{\alpha}{\alpha + \beta}} \propto C^{\frac{\alpha}{\alpha + \beta}} $$
+
+#### Các số mũ thực nghiệm và quy tắc $D/N \approx 20$ {.unnumbered}
+
+Bằng cách khớp mặt mất mát tham số với hơn 400 lần chạy thử nghiệm, @hoffmann2022chinchilla ước tính $\alpha \approx 0.34$ và $\beta \approx 0.28$. Thay thế các giá trị này cho ra các số mũ gần với kết quả mô hình tham số của bài báo:
+
+$$ \frac{\beta}{\alpha + \beta} \approx 0.45, \qquad \frac{\alpha}{\alpha + \beta} \approx 0.55 $$
+
+Do đó, mô hình tham số dự đoán:
+$$ N^*(C) \propto C^{0.45}, \qquad D^*(C) \propto C^{0.55} $$
+
+Hai phương pháp thực nghiệm trực tiếp của bài báo báo cáo các số mũ gần cân bằng là $(0.50, 0.50)$ và $(0.49, 0.51)$, điều này thúc đẩy cách viết tắt căn bậc hai phổ biến. Tuy nhiên, theo khớp tham số, $D^*/N^*$ tăng chậm theo tính toán thay vì duy trì hằng số tuyệt đối. Trong toàn bộ phạm vi nghiên cứu, khoảng 20 training token trên mỗi tham số là một heuristic Chinchilla hữu ích, không phải là một bất biến phổ quát.
+
+::: {#psp-appendix-algorithm-kaplan-vs-chinchilla .callout-perspective title="So sánh mở rộng quy mô Kaplan và Chinchilla"}
+
+Sự khác biệt giữa @kaplan2020scaling và @hoffmann2022chinchilla làm nổi bật cách các lựa chọn siêu tham số trong benchmark thực nghiệm có thể thay đổi các kết luận thiết kế hệ thống:
+
+* **@kaplan2020scaling** ước tính $\alpha \approx 0.057$ và $\beta \approx 0.28$, dự đoán $N \propto C^{0.73}$ và $D \propto C^{0.27}$. Điều này khiến lĩnh vực này mở rộng quy mô mô hình một cách mạnh mẽ trong khi giữ kích thước tập dữ liệu huấn luyện tương đối nhỏ (ví dụ: GPT-3 175B được huấn luyện trên 300B token, cho $D/N = 1.71$).
+* **Khác biệt về phương pháp**: @kaplan2020scaling đã sử dụng một ngân sách token cố định và lịch trình tốc độ học trên các mô hình. @hoffmann2022chinchilla đã điều chỉnh lịch trình cho từng chân trời huấn luyện và nhận thấy rằng thiết lập trước đó đã đánh giá thấp giá trị của việc huấn luyện các mô hình nhỏ hơn trên nhiều dữ liệu hơn.
+* **@hoffmann2022chinchilla** đã tìm thấy sự mở rộng quy mô tham số và token gần cân bằng: ba phương pháp của họ báo cáo các cặp số mũ là $(0.50, 0.50)$, $(0.49, 0.51)$ và $(0.46, 0.54)$ thay vì một tỷ lệ phổ quát chính xác duy nhất.
+* **Tác động thực tế**: Chinchilla (70B tham số được huấn luyện trên 1.4T token, $D/N = 20$) đã vượt trội hơn GPT-3 (175B tham số được huấn luyện trên 300B token) trên các benchmark hạ nguồn, đồng thời yêu cầu tính toán ít hơn $2.5\times$ trong quá trình suy luận và bộ nhớ trọng số thấp hơn $2.5\times$ ở cùng độ chính xác [@hoffmann2022chinchilla].
+
+:::
+
+## Tóm tắt {.unnumbered}
+
+Một thuật toán trở thành khối lượng công việc (workload) của hệ thống thông qua các hình dạng, đồ thị hoạt động, phụ thuộc dữ liệu và biểu diễn số của nó. Các nguyên thủy đại số tuyến tính, bố cục bộ nhớ, broadcasting và định dạng thưa xác định công việc, lưu lượng, tính cục bộ và khả năng song song hóa có thể sử dụng. Vi phân tự động và lan truyền ngược bổ sung các activation đã lưu và tính toán ngược; các đồ thị tính toán sau đó mở ra cơ hội cho việc hợp nhất và tính toán lại. Kết quả Baur–Strassen giới hạn chi phí của chế độ ngược, trong khi FlashAttention cho thấy cách phân ô (tiling) và một công thức truy hồi trực tuyến có thể giảm lưu lượng HBM mà không thay đổi ngữ nghĩa của cơ chế attention.
+
+Cùng một cách tính toán này kết nối các kernel với các quyết định mở rộng quy mô. Mở rộng quy mô tối ưu tính toán biến một ngân sách cố định thành phân bổ mô hình-dữ liệu, nhưng các số mũ được khớp vẫn mang tính thực nghiệm chứ không phải phổ quát. Trên các mô hình này, phương pháp có thể tái sử dụng là làm rõ các hoạt động, byte, trạng thái đã lưu, các phụ thuộc và các ràng buộc tiệm cận trước khi chọn một tối ưu hóa.

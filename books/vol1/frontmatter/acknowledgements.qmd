@@ -1,0 +1,272 @@
+# Lời cảm ơn {.unnumbered}
+
+## Nguồn gốc {.unnumbered .unlisted}
+
+Cuốn sách này ra đời nhờ một cuộc trò chuyện duy nhất. Trong thời gian nghỉ phép tại Google, Pete Warden đã mời tôi tham gia vào một dự án dường như bất khả thi đối với TinyML: chạy một mô hình giọng nói nhỏ trên vi điều khiển. Sự hợp tác đó trong TensorFlow Lite for Microcontrollers đã hé lộ một điều cơ bản. Các ràng buộc chi phối một thiết bị có bộ nhớ từ 16 KB đến 256 KB cũng chính là các ràng buộc chi phối một bộ tăng tốc trong một trung tâm dữ liệu, ngay cả khi quy mô hoàn toàn khác biệt. Băng thông, độ trễ, năng lượng và bộ nhớ tuân theo cùng một định luật vật lý trong cả hai môi trường. Cái nhìn sâu sắc đó đã trở thành hạt giống cho cuốn sách này.
+
+Công việc về TinyML đã dẫn đến một khóa học trực tuyến trên HarvardX, được đồng giảng dạy với Laurence Moroney, và đã thu hút hơn 100.000 sinh viên trên toàn thế giới. Brian Plancher đã giúp xây dựng chương trình giảng dạy TinyML. Marcelo Rovai, một giáo sư lần đầu tiếp cận tài liệu thông qua khóa học TinyML, đã tiếp tục phát triển các phòng thí nghiệm thực hành và bộ công cụ đi kèm cuốn sách này. Zach Shelby đã mở nền tảng Edge Impulse cho sinh viên sử dụng. Massimo Banzi và nhóm Arduino, cùng với Eric Pan và Seeed Studio, đã hợp tác với chúng tôi trong việc phát triển và cung cấp các bộ công cụ phần cứng giúp việc hướng dẫn thực hành trở nên khả thi. Marco Zennaro đã mang tài liệu này đến các nước đang phát triển thông qua ICTP và gieo mầm ý tưởng rằng những nguyên tắc này xứng đáng có một cuốn sách giáo khoa phù hợp. Việc giảng dạy ở quy mô đó, mà không có một cuốn sách, đã khiến nhu cầu trở nên không thể phủ nhận.
+
+Nhu cầu đó đã biến thành một cuốn sách thông qua môn CS249r tại Đại học Harvard. Vào năm 2023, dự án học kỳ của lớp là viết ghi chú bài giảng: mỗi nhóm sinh viên chịu trách nhiệm một chủ đề, nghiên cứu và làm việc với tôi để phát triển thành một chương. Công việc đó đã gieo mầm cho mọi chương trong cuốn sách này. Tiền đề là việc viết lách buộc bạn phải suy nghĩ sâu sắc hơn nhiều so với việc đọc. Sau đó, chúng tôi đã công khai tất cả trên GitHub, và những gì bắt đầu chỉ là ghi chú bài giảng thô đã được viết lại và tinh chỉnh qua mỗi học kỳ kể từ đó.
+
+::: {.content-visible unless-format="html:js"}
+Vì công việc trên GitHub vẫn tiếp tục, cuốn sách này được hưởng lợi từ một cộng đồng với những đóng góp phát triển cùng dự án. Những người đóng góp mới tham gia khi độc giả báo cáo lỗi, cải thiện giải thích và mở rộng tài liệu hỗ trợ. Một lời cảm ơn được in ra chỉ có thể ghi lại một khoảnh khắc trong lịch sử tiếp diễn đó. Danh sách những người đóng góp hiện tại và hướng dẫn đóng góp có sẵn tại <https://mlsysbook.ai/git>.
+:::
+
+::: {.content-visible when-format="html:js"}
+Phản ánh lịch sử hợp tác tương tự, sau đây là danh sách những người đóng góp trên GitHub. Hướng dẫn đóng góp có sẵn tại [mlsysbook.ai/git](https://mlsysbook.ai/git).
+
+<style>
+
+  /* Base styles for the contributors' table */
+.contributors-table {
+  width: 100%;
+  text-align: center;
+}
+
+/* Styles for the table cells */
+.contributors-table td {
+  vertical-align: top;
+}
+
+/* Media query for screens smaller than a certain width (for example, 768px) */
+@media (max-width: 768px) {
+  /* Convert table rows and cells to block elements */
+  .contributors-table,
+  .contributors-table tbody,
+  .contributors-table tr,
+  .contributors-table td {
+    display: block;
+    width: 100%;
+  }
+
+  /* Hide the redundant td elements that are empty or not needed */
+  .contributors-table td:empty {
+    display: none;
+  }
+
+  /* Adjust padding and margins for mobile view */
+  .contributors-table td {
+    /* Adjust padding and margins as needed */
+    padding: 10px;
+    margin-bottom: 10px;
+    /* Create a border or separator effect */
+    border-bottom: 1px solid #eaeaea;
+  }
+
+  /* Ensure images and content scale correctly */
+  .contributors-table img {
+    width: 100px; /* or any other appropriate size */
+    height: auto;
+    margin: 0 auto; /* centers the image */
+  }
+
+  /* Optional: Style the name to be more prominent on mobile */
+  .contributors-table sub {
+    display: block;
+    margin-top: 5px;
+    font-size: larger; /* makes the name larger */
+  }
+}
+
+/* Ensure the class is added to the table element */
+.contributors-table {
+  /* Additional styling if needed */
+}
+  </style>
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/profvjreddi"><img src="https://avatars.githubusercontent.com/profvjreddi?s=100" width="100px;" alt="Vijay Janapa Reddi"/><br /><sub><b>Vijay Janapa Reddi</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/hzeljko"><img src="https://avatars.githubusercontent.com/hzeljko?s=100" width="100px;" alt="Željko Hrček"/><br /><sub><b>Željko Hrček</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/Mjrovai"><img src="https://avatars.githubusercontent.com/Mjrovai?s=100" width="100px;" alt="Marcelo Rovai"/><br /><sub><b>Marcelo Rovai</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/jasonjabbour"><img src="https://avatars.githubusercontent.com/jasonjabbour?s=100" width="100px;" alt="Jason Jabbour"/><br /><sub><b>Jason Jabbour</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/kai4avaya"><img src="https://avatars.githubusercontent.com/kai4avaya?s=100" width="100px;" alt="Kai Kleinbard"/><br /><sub><b>Kai Kleinbard</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/uchendui"><img src="https://avatars.githubusercontent.com/uchendui?s=100" width="100px;" alt="Ikechukwu Uchendu"/><br /><sub><b>Ikechukwu Uchendu</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/Naeemkh"><img src="https://avatars.githubusercontent.com/Naeemkh?s=100" width="100px;" alt="Naeem Khoshnevis"/><br /><sub><b>Naeem Khoshnevis</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/Sara-Khosravi"><img src="https://avatars.githubusercontent.com/Sara-Khosravi?s=100" width="100px;" alt="Sara Khosravi"/><br /><sub><b>Sara Khosravi</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/V0XNIHILI"><img src="https://avatars.githubusercontent.com/V0XNIHILI?s=100" width="100px;" alt="Douwe den Blanken"/><br /><sub><b>Douwe den Blanken</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/didier-durand"><img src="https://avatars.githubusercontent.com/didier-durand?s=100" width="100px;" alt="Didier Durand"/><br /><sub><b>Didier Durand</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/18jeffreyma"><img src="https://avatars.githubusercontent.com/18jeffreyma?s=100" width="100px;" alt="Jeffrey Ma"/><br /><sub><b>Jeffrey Ma</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/shanzehbatool"><img src="https://avatars.githubusercontent.com/shanzehbatool?s=100" width="100px;" alt="shanzehbatool"/><br /><sub><b>shanzehbatool</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/eliasab16"><img src="https://avatars.githubusercontent.com/eliasab16?s=100" width="100px;" alt="Elias"/><br /><sub><b>Elias</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/JaredP94"><img src="https://avatars.githubusercontent.com/JaredP94?s=100" width="100px;" alt="Jared Ping"/><br /><sub><b>Jared Ping</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/ishapira1"><img src="https://avatars.githubusercontent.com/ishapira1?s=100" width="100px;" alt="Itai Shapira"/><br /><sub><b>Itai Shapira</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/8863743b4f26c1a20e730fcf7ebc3bc0?d=identicon&s=100" width="100px;" alt="Maximilian Lam"/><br /><sub><b>Maximilian Lam</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/jaysonzlin"><img src="https://avatars.githubusercontent.com/jaysonzlin?s=100" width="100px;" alt="Jayson Lin"/><br /><sub><b>Jayson Lin</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/sophiacho1"><img src="https://avatars.githubusercontent.com/sophiacho1?s=100" width="100px;" alt="Sophia Cho"/><br /><sub><b>Sophia Cho</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/andreamurillomtz"><img src="https://avatars.githubusercontent.com/andreamurillomtz?s=100" width="100px;" alt="Andrea"/><br /><sub><b>Andrea</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/alxrod"><img src="https://avatars.githubusercontent.com/alxrod?s=100" width="100px;" alt="Alex Rodriguez"/><br /><sub><b>Alex Rodriguez</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/korneelf1"><img src="https://avatars.githubusercontent.com/korneelf1?s=100" width="100px;" alt="Korneel Van den Berghe"/><br /><sub><b>Korneel Van den Berghe</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/foundingnimo"><img src="https://avatars.githubusercontent.com/foundingnimo?s=100" width="100px;" alt="Nimo"/><br /><sub><b>Nimo</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/zishenwan"><img src="https://avatars.githubusercontent.com/zishenwan?s=100" width="100px;" alt="Zishen Wan"/><br /><sub><b>Zishen Wan</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/colbybanbury"><img src="https://avatars.githubusercontent.com/colbybanbury?s=100" width="100px;" alt="Colby Banbury"/><br /><sub><b>Colby Banbury</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/oamazonasgabriel"><img src="https://avatars.githubusercontent.com/oamazonasgabriel?s=100" width="100px;" alt="Gabriel Amazonas"/><br /><sub><b>Gabriel Amazonas</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/mmaz"><img src="https://avatars.githubusercontent.com/mmaz?s=100" width="100px;" alt="Mark Mazumder"/><br /><sub><b>Mark Mazumder</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/DivyaAmirtharaj"><img src="https://avatars.githubusercontent.com/DivyaAmirtharaj?s=100" width="100px;" alt="Divya Amirtharaj"/><br /><sub><b>Divya Amirtharaj</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/srivatsankrishnan"><img src="https://avatars.githubusercontent.com/srivatsankrishnan?s=100" width="100px;" alt="Srivatsan Krishnan"/><br /><sub><b>Srivatsan Krishnan</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/ma3mool"><img src="https://avatars.githubusercontent.com/ma3mool?s=100" width="100px;" alt="Abdulrahman Mahmoud"/><br /><sub><b>Abdulrahman Mahmoud</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/arnaumarin"><img src="https://avatars.githubusercontent.com/arnaumarin?s=100" width="100px;" alt="marin-llobet"/><br /><sub><b>marin-llobet</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/minhdang26403"><img src="https://avatars.githubusercontent.com/minhdang26403?s=100" width="100px;" alt="Dang Truong"/><br /><sub><b>Dang Truong</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/James-QiuHaoran"><img src="https://avatars.githubusercontent.com/James-QiuHaoran?s=100" width="100px;" alt="Haoran Qiu"/><br /><sub><b>Haoran Qiu</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/aptl26"><img src="https://avatars.githubusercontent.com/aptl26?s=100" width="100px;" alt="Aghyad Deeb"/><br /><sub><b>Aghyad Deeb</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/VThuong99"><img src="https://avatars.githubusercontent.com/VThuong99?s=100" width="100px;" alt="Thuong Duong"/><br /><sub><b>Thuong Duong</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/Ekhao"><img src="https://avatars.githubusercontent.com/Ekhao?s=100" width="100px;" alt="Emil Njor"/><br /><sub><b>Emil Njor</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/jared-ni"><img src="https://avatars.githubusercontent.com/jared-ni?s=100" width="100px;" alt="Jared Ni"/><br /><sub><b>Jared Ni</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/oishib"><img src="https://avatars.githubusercontent.com/oishib?s=100" width="100px;" alt="oishib"/><br /><sub><b>oishib</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/kaiM0ves"><img src="https://avatars.githubusercontent.com/kaiM0ves?s=100" width="100px;" alt="kaiM0ves"/><br /><sub><b>kaiM0ves</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/MichaelSchnebly"><img src="https://avatars.githubusercontent.com/MichaelSchnebly?s=100" width="100px;" alt="Michael Schnebly"/><br /><sub><b>Michael Schnebly</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/AditiR-42"><img src="https://avatars.githubusercontent.com/AditiR-42?s=100" width="100px;" alt="Aditi Raju"/><br /><sub><b>Aditi Raju</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/ELSuitorHarvard"><img src="https://avatars.githubusercontent.com/ELSuitorHarvard?s=100" width="100px;" alt="ELSuitorHarvard"/><br /><sub><b>ELSuitorHarvard</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/eimlav"><img src="https://avatars.githubusercontent.com/eimlav?s=100" width="100px;" alt="Eimhin Laverty"/><br /><sub><b>Eimhin Laverty</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/BaeHenryS"><img src="https://avatars.githubusercontent.com/BaeHenryS?s=100" width="100px;" alt="Henry Bae"/><br /><sub><b>Henry Bae</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/jaywonchung"><img src="https://avatars.githubusercontent.com/jaywonchung?s=100" width="100px;" alt="Jae-Won Chung"/><br /><sub><b>Jae-Won Chung</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/leo47007"><img src="https://avatars.githubusercontent.com/leo47007?s=100" width="100px;" alt="Yu-Shun Hsiao"/><br /><sub><b>Yu-Shun Hsiao</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/ShvetankPrakash"><img src="https://avatars.githubusercontent.com/ShvetankPrakash?s=100" width="100px;" alt="Shvetank Prakash"/><br /><sub><b>Shvetank Prakash</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/marcozennaro"><img src="https://avatars.githubusercontent.com/marcozennaro?s=100" width="100px;" alt="Marco Zennaro"/><br /><sub><b>Marco Zennaro</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/aryatschand"><img src="https://avatars.githubusercontent.com/aryatschand?s=100" width="100px;" alt="Arya Tschand"/><br /><sub><b>Arya Tschand</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/arbass22"><img src="https://avatars.githubusercontent.com/arbass22?s=100" width="100px;" alt="Andrew Bass"/><br /><sub><b>Andrew Bass</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/pongtr"><img src="https://avatars.githubusercontent.com/pongtr?s=100" width="100px;" alt="Pong Trairatvorakul"/><br /><sub><b>Pong Trairatvorakul</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/euranofshin"><img src="https://avatars.githubusercontent.com/euranofshin?s=100" width="100px;" alt="Eura Nofshin"/><br /><sub><b>Eura Nofshin</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/0c931fcfd03cd548d44c90602dd773ba?d=identicon&s=100" width="100px;" alt="Matthew Stewart"/><br /><sub><b>Matthew Stewart</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/af39c27c6090c50a1921a9b6366e81cc?d=identicon&s=100" width="100px;" alt="Emeka Ezike"/><br /><sub><b>Emeka Ezike</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/jianqingdu"><img src="https://avatars.githubusercontent.com/jianqingdu?s=100" width="100px;" alt="jianqingdu"/><br /><sub><b>jianqingdu</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/jzhou1318"><img src="https://avatars.githubusercontent.com/jzhou1318?s=100" width="100px;" alt="Jennifer Zhou"/><br /><sub><b>Jennifer Zhou</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/vitasam"><img src="https://avatars.githubusercontent.com/vitasam?s=100" width="100px;" alt="The Random DIY"/><br /><sub><b>The Random DIY</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/468ef35acc69f3266efd700992daa369?d=identicon&s=100" width="100px;" alt="Fatima Shah"/><br /><sub><b>Fatima Shah</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/BrunoScaglione"><img src="https://avatars.githubusercontent.com/BrunoScaglione?s=100" width="100px;" alt="Bruno Scaglione"/><br /><sub><b>Bruno Scaglione</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/Allenkzl"><img src="https://avatars.githubusercontent.com/Allenkzl?s=100" width="100px;" alt="Allen-Kuang"/><br /><sub><b>Allen-Kuang</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/Tess314"><img src="https://avatars.githubusercontent.com/Tess314?s=100" width="100px;" alt="Tess Watt"/><br /><sub><b>Tess Watt</b></sub></a><br /><a href="https://github.com/harvard-edge/cs249r_book/issues?q=is%3Aissue+author%3ATess314" title="Bug reports">🪲</a> <a href="https://github.com/harvard-edge/cs249r_book/commits?author=Tess314" title="Documentation">📖</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/taunoe"><img src="https://avatars.githubusercontent.com/taunoe?s=100" width="100px;" alt="Tauno Erik"/><br /><sub><b>Tauno Erik</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/gnodipac886"><img src="https://avatars.githubusercontent.com/gnodipac886?s=100" width="100px;" alt="gnodipac886"/><br /><sub><b>gnodipac886</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/serco425"><img src="https://avatars.githubusercontent.com/serco425?s=100" width="100px;" alt="Sercan Aygün"/><br /><sub><b>Sercan Aygün</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/TheHiddenLayer"><img src="https://avatars.githubusercontent.com/TheHiddenLayer?s=100" width="100px;" alt="TheHiddenLayer"/><br /><sub><b>TheHiddenLayer</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/Gjain234"><img src="https://avatars.githubusercontent.com/Gjain234?s=100" width="100px;" alt="Gauri Jain"/><br /><sub><b>Gauri Jain</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/FinAminToastCrunch"><img src="https://avatars.githubusercontent.com/FinAminToastCrunch?s=100" width="100px;" alt="Fin Amin"/><br /><sub><b>Fin Amin</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/alex-oesterling"><img src="https://avatars.githubusercontent.com/alex-oesterling?s=100" width="100px;" alt="Alex Oesterling"/><br /><sub><b>Alex Oesterling</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/AbenezerKb"><img src="https://avatars.githubusercontent.com/AbenezerKb?s=100" width="100px;" alt="Abenezer Angamo"/><br /><sub><b>Abenezer Angamo</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/BravoBaldo"><img src="https://avatars.githubusercontent.com/BravoBaldo?s=100" width="100px;" alt="Baldassarre Cesarano"/><br /><sub><b>Baldassarre Cesarano</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/KarthikDani"><img src="https://avatars.githubusercontent.com/KarthikDani?s=100" width="100px;" alt="Karthik Dani"/><br /><sub><b>Karthik Dani</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/Jahnic-kb"><img src="https://avatars.githubusercontent.com/Jahnic-kb?s=100" width="100px;" alt="Jahnic Beck"/><br /><sub><b>Jahnic Beck</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/XaicuL"><img src="https://avatars.githubusercontent.com/XaicuL?s=100" width="100px;" alt="JEON HYUNJUN(Luciano)"/><br /><sub><b>JEON HYUNJUN(Luciano)</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/RinZ27"><img src="https://avatars.githubusercontent.com/RinZ27?s=100" width="100px;" alt="Rin"/><br /><sub><b>Rin</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/bilgeacun"><img src="https://avatars.githubusercontent.com/bilgeacun?s=100" width="100px;" alt="Bilge Acun"/><br /><sub><b>Bilge Acun</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/atcheng2"><img src="https://avatars.githubusercontent.com/atcheng2?s=100" width="100px;" alt="Andy Cheng"/><br /><sub><b>Andy Cheng</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/arighosh05"><img src="https://avatars.githubusercontent.com/arighosh05?s=100" width="100px;" alt="Aritra Ghosh"/><br /><sub><b>Aritra Ghosh</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/aethernavshulkraven-allain"><img src="https://avatars.githubusercontent.com/aethernavshulkraven-allain?s=100" width="100px;" alt="अरनव शुक्ला &#124; Arnav Shukla"/><br /><sub><b>अरनव शुक्ला &#124; Arnav Shukla</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/abigailswallow"><img src="https://avatars.githubusercontent.com/abigailswallow?s=100" width="100px;" alt="abigailswallow"/><br /><sub><b>abigailswallow</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/YangZhou1997"><img src="https://avatars.githubusercontent.com/YangZhou1997?s=100" width="100px;" alt="Yang Zhou"/><br /><sub><b>Yang Zhou</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/emmanuel2406"><img src="https://avatars.githubusercontent.com/emmanuel2406?s=100" width="100px;" alt="Emmanuel Rassou"/><br /><sub><b>Emmanuel Rassou</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/jasonlyik"><img src="https://avatars.githubusercontent.com/jasonlyik?s=100" width="100px;" alt="Jason Yik"/><br /><sub><b>Jason Yik</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/jessicaquaye"><img src="https://avatars.githubusercontent.com/jessicaquaye?s=100" width="100px;" alt="Jessica Quaye"/><br /><sub><b>Jessica Quaye</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/cursoragent"><img src="https://avatars.githubusercontent.com/cursoragent?s=100" width="100px;" alt="Cursor Agent"/><br /><sub><b>Cursor Agent</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/happyappledog"><img src="https://avatars.githubusercontent.com/happyappledog?s=100" width="100px;" alt="happyappledog"/><br /><sub><b>happyappledog</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/snuggs"><img src="https://avatars.githubusercontent.com/snuggs?s=100" width="100px;" alt="Snuggs"/><br /><sub><b>Snuggs</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/swilcock0"><img src="https://avatars.githubusercontent.com/swilcock0?s=100" width="100px;" alt="Sam Wilcock"/><br /><sub><b>Sam Wilcock</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/sjohri20"><img src="https://avatars.githubusercontent.com/sjohri20?s=100" width="100px;" alt="Shreya Johri"/><br /><sub><b>Shreya Johri</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/skmur"><img src="https://avatars.githubusercontent.com/skmur?s=100" width="100px;" alt="Sonia Murthy"/><br /><sub><b>Sonia Murthy</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/fc4f3460cdfb9365ab59bdeafb06413e?d=identicon&s=100" width="100px;" alt="Costin-Andrei Oncescu"/><br /><sub><b>Costin-Andrei Oncescu</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/0d6b8616427d8b19d425c9808692e347?d=identicon&s=100" width="100px;" alt="formlsysbookissue"/><br /><sub><b>formlsysbookissue</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/7cd8d5dfd83071f23979019d97655dc5?d=identicon&s=100" width="100px;" alt="Annie Laurie Cook"/><br /><sub><b>Annie Laurie Cook</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/5aa037840c0ca11ee42784ed4843c655?d=identicon&s=100" width="100px;" alt="Parampreet Singh"/><br /><sub><b>Parampreet Singh</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/b15b6e0e9adf58099905c1a0fd474cb9?d=identicon&s=100" width="100px;" alt="Vijay Edupuganti"/><br /><sub><b>Vijay Edupuganti</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/f88052cca4f401d9b0f43aed0a53434a?d=identicon&s=100" width="100px;" alt="Jothi Ramaswamy"/><br /><sub><b>Jothi Ramaswamy</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/35a8d9ffd03f05e79a2c6ce6206a56f2?d=identicon&s=100" width="100px;" alt="Batur Arslan"/><br /><sub><b>Batur Arslan</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/bd53d146aa888548c8db4da02bf81e7a?d=identicon&s=100" width="100px;" alt="Curren Iyer"/><br /><sub><b>Curren Iyer</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/8d8410338458e08bd5e4b96f58e1c217?d=identicon&s=100" width="100px;" alt="Edward Jin"/><br /><sub><b>Edward Jin</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/ef139181fe00190f21730f6912532e9e?d=identicon&s=100" width="100px;" alt="bluebaer7"/><br /><sub><b>bluebaer7</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/f5d58ba6aa9b00189d4c018d370e8f43?d=identicon&s=100" width="100px;" alt="yanjingl"/><br /><sub><b>yanjingl</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/a5a47df988ab1720dd706062e523ca32?d=identicon&s=100" width="100px;" alt="a-saraf"/><br /><sub><b>a-saraf</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/c2dc311aa8122d5f5f061e1db14682b1?d=identicon&s=100" width="100px;" alt="songhan"/><br /><sub><b>songhan</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/4814aad67982ab07a69006a1ce9d2a72?d=identicon&s=100" width="100px;" alt="jvijay"/><br /><sub><b>jvijay</b></sub></a><br /></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/harvard-edge/cs249r_book/graphs/contributors"><img src="https://www.gravatar.com/avatar/43b1feff77c8a95fd581774fb8ec891f?d=identicon&s=100" width="100px;" alt="Zishen"/><br /><sub><b>Zishen</b></sub></a><br /></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/BunningsWarehouseOfficial"><img src="https://avatars.githubusercontent.com/u/49220945?v=4&s=100" width="100px;" alt="Kristian Radoš"/><br /><sub><b>Kristian Radoš</b></sub></a><br /><a href="https://github.com/harvard-edge/cs249r_book/commits?author=BunningsWarehouseOfficial" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+  // Query the table using a distinctive feature, like an embedded GitHub link within a table cell.
+  var githubTables = document.querySelectorAll('table a[href^="https://github.com/"]');
+  githubTables.forEach(function(githubLink) {
+    var table = githubLink.closest('table'); // Find the closest table ancestor
+    if (table) {
+      table.classList.add('contributors-table'); // Add the 'contributors-table' class
+    }
+  });
+});
+</script>
+:::
+
+## Cộng tác viên và Đồng nghiệp {.unnumbered .unlisted}
+
+Ngoài lớp học và cộng đồng GitHub, những hợp tác trước đây của tôi đã định hình nền tảng trí tuệ của cuốn sách. Thời gian tôi làm việc tại Google đã cung cấp nhiều tư duy hệ thống trong các trang này. Giai đoạn đó bắt đầu với việc mô hình hóa hiệu năng cho hệ thống trên chip (SoC) Pixel đầu tiên, dựa trên nền tảng kiến trúc máy tính của tôi. Một sự hợp tác với Mark Hill về mô hình hóa phân tích kiểu roofline cho các SoC dị thể đã dạy tôi cách suy luận về phần cứng từ các nguyên tắc cơ bản, một kiểu tư duy định lượng xuyên suốt mỗi chương. Sự nhấn mạnh vào mô hình hóa phân tích đó đã dẫn tự nhiên đến đánh giá có hệ thống, và đánh giá có hệ thống đã dẫn đến MLPerf. MLPerf có sự tham gia của nhiều người đóng góp từ khắp MLCommons, nhưng tôi đã làm việc chặt chẽ nhất với Peter Mattson, David Kanter, Carole-Jean Wu, Christine Cheng, Guenther Schmuelling, Cody Coleman và Cliff Young. Sự hợp tác đó đã định hình cách tôi suy nghĩ về việc đo lường nghiêm ngặt các hệ thống ML.
+
+Boris Murmann và Song Han đã thuyết phục tôi ngay từ đầu rằng dự án này đáng để theo đuổi. Trong quá trình viết, tôi đã tìm kiếm phản hồi từ các đồng nghiệp trong cả ngành công nghiệp và giới học thuật. Các chuyên gia tại Arm, Google, Intel, Meta, Microsoft, Qualcomm, STMicroelectronics và các tổ chức khác đã đưa ra những quan điểm dựa trên các hệ thống sản xuất, trong khi các nhà phê bình học thuật tại các trường đại học trên khắp Châu Âu, Châu Á và Châu Mỹ đã kiểm tra nghiêm ngặt tài liệu dựa trên nghiên cứu và giảng dạy của riêng họ. Phản hồi tổng hợp của họ đã làm sắc nét từng chương. Evgeni Gousev tại Qualcomm và Pete Bernard tại Edge AI Foundation đã hỗ trợ việc tiếp cận cộng đồng của dự án và giúp xây dựng cộng đồng xung quanh nó.
+
+Vòng lặp phản hồi đó đã mở rộng đến các lớp học trên khắp thế giới, nơi các giảng viên đã thử nghiệm tài liệu khi nó vẫn còn sơ khai. Sophia Shao tại UC Berkeley, Xiaofan (Fred) Jiang tại Columbia, Tushar Krishna và Divya Mahajan tại Georgia Tech, và Wenkai Guan tại Đại học Minnesota Morris là những người đầu tiên, và các giảng viên tại IIT Bombay, NUST Pakistan, Đại học De La Salle ở Philippines, và các trường đại học trên khắp Châu Âu, Châu Mỹ Latinh và Châu Phi đã áp dụng cuốn sách này cho các khóa học của riêng họ. Sự sẵn lòng giảng dạy từ một cuốn sách giáo khoa chưa hoàn thiện của họ đã cung cấp phản hồi vô giá và xác nhận rằng nhu cầu về tài liệu này không giới hạn ở bất kỳ tổ chức hay quốc gia nào.
+
+## Sinh viên và Người đóng góp {.unnumbered .unlisted}
+
+Các sinh viên của tôi tại Phòng thí nghiệm Edge Computing ở Harvard đã định hình cuốn sách này theo những cách mà tôi không thể theo dõi hết. Một số đã thực hiện công việc nền tảng giúp thiết lập TinyML như một lĩnh vực; nghiên cứu của họ và những ý tưởng nảy sinh từ nhiều năm hợp tác đã cung cấp thông tin cho nội dung kỹ thuật của cuốn sách. Nhóm này đã giúp khởi động lĩnh vực này và sau đó giúp tôi viết về nó: Andy Cheng, Arya Tschand, Brian Plancher, Colby Banbury, Elizabeth Suitor, Emma Chen, Ikechukwu Uchendu, Jason Jabbour, Jason Yik, Jeffrey Ma, Jessica Quaye, Mark Mazumder, Matthew Stewart, Maximilian Lam, Radhika Ghosal, Shvetank Prakash, Srivatsan Krishnan, Yu-Shun Hsiao, và Zishen Wan. Kai Kleinbard, khi đó đang ở Trường Mở rộng Harvard, đã xây dựng bot gia sư AI tạo sinh trực tuyến SocratiQ. Naeem Khoshnevis, từ Viện Kempner Harvard, đã thiết lập cơ sở hạ tầng thiết yếu bao gồm GitHub Actions và các tiêu chuẩn tài liệu. Željko Hrček đã tạo ra các sơ đồ TikZ và đóng góp vào bố cục PDF, sắp xếp trang và định dạng hình ảnh cuối cùng của cuốn sách.
+
+Một cuốn sách giáo khoa chắt lọc các nguyên tắc từ một lĩnh vực nghiên cứu năng động cũng mang ơn các nhà nghiên cứu mà công trình của họ là nền tảng. Cộng đồng mã nguồn mở đã định hình cuốn sách này theo những cách mà không một tác giả đơn lẻ nào có thể làm được. Hàng chục người đóng góp đã phát hiện lỗi, cải thiện giải thích, gửi vấn đề và gửi yêu cầu kéo (pull request). Một số đã sửa một lỗi đánh máy duy nhất; những người khác đã viết lại toàn bộ các phần. Cuốn sách được cải thiện vì những người không có nghĩa vụ gì đã chọn làm cho nó tốt hơn. Tôi biết ơn tất cả họ.
+
+## Hỗ trợ {.unnumbered .unlisted}
+
+Công trình này cũng phụ thuộc vào sự hỗ trợ từ Sáng kiến Khoa học Dữ liệu Harvard, Trường Mở rộng Harvard và Quỹ Khoa học Quốc gia; từ Edge AI Foundation và ICTP cho các hoạt động tiếp cận giáo dục và học bổng; và từ Arduino, Edge Impulse, Google, và Seeed Studio cho phần cứng, công cụ và cơ sở hạ tầng đã hỗ trợ các phòng thí nghiệm thực hành.
+
+Tại MIT Press, Susan Hartman đã tin tưởng vào dự án này và hướng dẫn nó từ một thử nghiệm mã nguồn mở trở thành một cuốn sách giáo khoa được xuất bản. Sự hỗ trợ, khả năng biên tập và tình bạn của cô ấy đã biến cuốn sách này thành hiện thực theo cách mà GitHub một mình không thể làm được. Tôi cũng vô cùng biết ơn MIT Press vì đã đồng ý giữ cuốn sách này ở chế độ truy cập mở. Một cuốn sách giáo khoa về một lĩnh vực được định hình bởi cộng đồng mã nguồn mở nên được tiếp cận bởi tất cả mọi người trong đó. Việc MIT Press chia sẻ niềm tin này đã tạo nên sự khác biệt lớn.
+
+Cuối cùng, tôi xin cảm ơn vợ tôi Kari và các con gái tôi Nora và Maya. Cuốn sách này được viết trong những giờ đáng lẽ thuộc về họ: những đêm khuya bắt đầu lúc mười giờ và kết thúc lúc hai hoặc ba giờ sáng, những cuối tuần biến mất vào việc chỉnh sửa, những năm tháng buổi sáng khi tôi có mặt nhưng không hoàn toàn ở đó. Điều khiến tôi tiếp tục, ngoài sự bướng bỉnh, là cộng đồng mã nguồn mở. Mỗi lượt gắn sao trên GitHub là một tín hiệu cho thấy có ai đó ngoài kia quan tâm, có ai đó đang học hỏi, rằng công việc này có ý nghĩa. Cái giá phải trả là thật, và họ đã trả nó bằng sự kiên nhẫn mà tôi không phải lúc nào cũng xứng đáng.

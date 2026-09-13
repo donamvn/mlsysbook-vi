@@ -1,0 +1,176 @@
+# Lời nói đầu {#sec-about .unnumbered}
+
+## Đối tượng của cuốn sách {#sec-book-book-74a2 .unlisted}
+
+Cuốn sách này dành cho bất kỳ ai muốn hiểu *cách* các hệ thống machine learning thực sự hoạt động, từ toán học định nghĩa một mạng nơ-ron đến phần cứng thực thi nó và các quyết định kỹ thuật giúp nó chạy hiệu quả.
+
+Hầu hết độc giả sẽ không trở thành kiến trúc sư phần cứng ML hoặc kỹ sư trình biên dịch. Tuy nhiên, mọi người thực hành xây dựng, huấn luyện, tối ưu hóa hoặc triển khai một mô hình đều đưa ra các quyết định phụ thuộc vào việc hiểu hệ thống bên dưới mã. Cuốn sách này cung cấp nền tảng hệ thống đó cho sinh viên đại học lần đầu tiếp cận hệ thống ML, các kỹ sư đang thực hành củng cố nền tảng của họ, và các nhà nghiên cứu cần suy luận về hiệu suất và triển khai.
+
+## Tại sao lại là một sách giáo khoa về Hệ thống {#sec-book-systems-textbook-76ff .unlisted}
+
+Năm 1968, một hội nghị NATO tại Garmisch, Đức, đã giúp thiết lập *kỹ thuật phần mềm* như một ngành riêng biệt trong bối cảnh lo ngại rằng các hệ thống phần mềm đã trở nên quá phức tạp đối với lập trình tùy tiện [@naur1969softwareengineering]. Phần mềm đáng tin cậy đòi hỏi các nguyên tắc, phương pháp và sự chặt chẽ riêng. Nhiều thập kỷ sau, Hennessy và Patterson đã đưa phân tích định lượng trở thành trọng tâm của giáo dục kiến trúc máy tính, hệ thống hóa cách các kỹ sư đo lường, dự đoán và tối ưu hóa hiệu suất bộ xử lý [@patterson2017hardware]. Cả hai ví dụ đều cho thấy các phương pháp chung làm cho công việc kỹ thuật phức tạp trở nên có hệ thống và dễ dạy.
+
+Machine learning đang đối mặt với khoảnh khắc Garmisch của riêng mình.
+
+Trong thập kỷ qua, nghiên cứu ML đã bị chi phối bởi tư duy *lấy mô hình làm trung tâm*, tập trung vào việc khám phá các thuật toán và kiến trúc mới. Sự tập trung đó quan trọng, nhưng một mô hình không phải là một hệ thống. Một mạng nơ-ron hoạt động tốt trong sổ ghi chép nghiên cứu sẽ vô dụng nếu nó không thể đáp ứng các ràng buộc về độ trễ, nếu pipeline dữ liệu của nó không thể xử lý khối lượng yêu cầu, hoặc nếu chi phí năng lượng của nó vượt quá giá trị kinh tế. Khoảng cách giữa một mô hình hoạt động và một hệ thống sản xuất không chỉ là khoảng cách triển khai; đó là khoảng cách trong các nguyên tắc kỹ thuật cơ bản.
+
+Cuốn sách này coi kỹ thuật hệ thống ML không phải là một tập hợp các công cụ, như Kubernetes, PyTorch và CUDA, mà là một ngành học dựa trên các giới hạn định lượng, mô hình và nguyên tắc thiết kế. Giống như các kỹ sư xây dựng dựa vào vật lý nền tảng và các nguyên tắc cấu trúc, các kỹ sư AI phải làm rõ các nguyên tắc chi phối đằng sau mỗi mô hình hệ thống:
+
+*   **Quy luật sắt của hệ thống ML**: Một sự phân tách chuyển động, tính toán và chi phí chung, với sự chồng chéo được xử lý bởi đường găng.
+*   **Lực hấp dẫn dữ liệu**: Áp lực vị trí được tạo ra bởi khối lượng dữ liệu lớn và mạng bị hạn chế.
+*   **Kế toán năng lượng**: Chi phí trên mỗi sự kiện và số lượng sự kiện xác định liệu chuyển động hay tính toán chiếm ưu thế.
+*   **Định luật Amdahl**: Phần nối tiếp của một pipeline giới hạn tốc độ tăng tốc tổng thể của hệ thống.
+
+Khoa học máy tính nghiên cứu những gì có thể tính toán được. Nghiên cứu ML nghiên cứu những gì có thể học được. Kỹ thuật AI nghiên cứu những gì có thể xây dựng được, dựa trên vật lý của phần cứng thực và dữ liệu thực.
+
+Tôi viết cuốn sách này để giúp xây dựng nền tảng đó và làm cho các hệ thống AI điều mà @patterson2017hardware đã làm cho kiến trúc máy tính: thay thế trực giác bằng đo lường, và nghệ thuật bằng kỹ thuật. Mục tiêu là dạy tư duy cấp hệ thống trước khi triển khai, coi dữ liệu, thuật toán và phần cứng không phải là các silo riêng biệt mà là một vấn đề tối ưu hóa duy nhất, gắn kết.
+
+Hãy xem xét một hộp gạch LEGO. Các mảnh ghép lồng vào nhau giống nhau có thể xây dựng một tàu vũ trụ, một lâu đài hoặc cả một thành phố. Các bộ thay đổi; các viên gạch thì không. Các hệ thống ML hoạt động theo cùng một cách. Một mạng tích chập để phân loại hình ảnh, một transformer để tạo ngôn ngữ và một tác nhân học tăng cường cho robot là những ứng dụng rất khác nhau, nhưng bên dưới chúng là những khối xây dựng giống nhau: đồ thị tính toán, phân cấp bộ nhớ, pipeline dữ liệu, vòng lặp tối ưu hóa và sự đánh đổi giữa độ trễ, thông lượng và năng lượng. Nắm vững các khối xây dựng đó giúp các hệ thống không quen thuộc trở nên dễ hiểu.
+
+Đó là lý do tại sao cuốn sách này dạy các nguyên tắc bền vững thay vì các công cụ hiện tại. Các framework thống trị đã chuyển từ Theano sang TensorFlow rồi PyTorch chỉ trong vòng chưa đầy một thập kỷ. Phần cứng đã phát triển từ các bộ xử lý đồ họa được tái sử dụng thành các bộ tăng tốc tensor chuyên dụng, với các kiến trúc mới xuất hiện mỗi năm. Bất kỳ sách giáo khoa nào dạy các công cụ hiện tại sẽ trở nên lỗi thời trước khi có ấn bản tiếp theo. Các khối xây dựng thì bền vững.
+
+## Nội dung cuốn sách {#sec-book-book-covers-180b .unlisted}
+
+Cuốn sách này tập trung vào *nút tính toán đơn lẻ*: một máy chủ với một đến tám bộ tăng tốc, thường có bộ nhớ thiết bị rời rạc được kết nối bằng một bộ kết nối. Nó cũng giới thiệu huấn luyện đa bộ tăng tốc và các hoạt động sản xuất khi chúng làm rõ thiết kế cấp nút; việc xử lý quy mô đội hình nằm ngoài phạm vi của nó.
+
+Nội dung được tổ chức thành bốn phần, mỗi phần có một vai trò riêng biệt trong lập luận về hệ thống:
+
+- **Phần I: Nền tảng Hệ thống ML** phát triển từ vựng, mô hình tư duy và quy trình làm việc từ đầu đến cuối hướng dẫn mọi dự án ML, từ các đặc điểm phân biệt hệ thống ML với phần mềm truyền thống cho đến các pipeline kỹ thuật dữ liệu cung cấp cho chúng.
+- **Phần II: Phát triển và Huấn luyện** kết nối các nền tảng toán học với các hệ thống hoạt động thông qua tính toán deep learning, kiến trúc nơ-ron, framework và quy trình huấn luyện.
+- **Phần III: Tối ưu hóa và Tăng tốc** đề cập đến hiệu quả dữ liệu, nén mô hình, tăng tốc phần cứng và phương pháp benchmarking cần thiết để đo lường tiến độ một cách nghiêm ngặt.
+- **Phần IV: Triển khai và Vận hành** bao gồm cơ sở hạ tầng phục vụ (serving), các thực hành vận hành và kỹ thuật có trách nhiệm đối với các hệ thống phải công bằng, minh bạch và đáng tin cậy trong sản xuất.
+
+Bốn phần này vạch ra một con đường xuyên qua **Ngăn xếp Hệ thống ML** (ML Systems Stack), một sự trừu tượng hóa theo lớp được mô phỏng theo ngăn xếp hệ thống máy tính cổ điển. Mỗi lớp cung cấp một sự trừu tượng hóa cho lớp bên trên và sử dụng lớp bên dưới: từ phần cứng ở dưới cùng qua các framework, mô hình, huấn luyện và phục vụ (serving), lên đến các hoạt động và ứng dụng ở trên cùng. Dữ liệu chảy qua tất cả các lớp như một kết nối xuyên suốt, giống như một bus dữ liệu trong kiến trúc máy tính.
+
+Xuyên suốt cuốn sách, một hình minh họa ở lề làm nổi bật các lớp mà mỗi chương đề cập, cung cấp một bản đồ lặp lại của kiến trúc.
+
+```{=latex}
+\begin{center}
+\scalebox{0.8}{%
+\mlsysstackfull{60}{60}{60}{60}{60}{60}{60}{60}%
+}
+\end{center}
+```
+
+Thanh dữ liệu bên cạnh kiến trúc không chỉ mang tính trang trí. Màu sắc đồng nhất của nó phản ánh mức độ trung tâm của dữ liệu đối với các mối quan tâm của mỗi chương, một chiều riêng biệt so với cường độ của các lớp. Các đường nối giữa mỗi lớp và thanh dữ liệu cho thấy những lớp nào tương tác với dữ liệu trong ngữ cảnh của chương đó. Ba chương minh họa cách góc nhìn thay đổi.
+
+```{=latex}
+\begin{center}
+\begin{minipage}[t]{0.30\textwidth}
+\centering
+{\usefont{T1}{phv}{b}{n}\fontsize{8}{9}\selectfont HW Acceleration}\\[4pt]
+\mlsysstack{90}{35}{25}{35}{30}{0}{0}{0}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.30\textwidth}
+\centering
+{\usefont{T1}{phv}{b}{n}\fontsize{8}{9}\selectfont Training}\\[4pt]
+\mlsysstack{50}{25}{45}{90}{12}{10}{0}{20}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.30\textwidth}
+\centering
+{\usefont{T1}{phv}{b}{n}\fontsize{8}{9}\selectfont Responsible Engr.}\\[4pt]
+\mlsysstack{0}{0}{10}{10}{20}{40}{90}{15}
+\end{minipage}
+\end{center}
+```
+
+Trong @sec-hardware-acceleration, cường độ lớp tập trung ở đáy kiến trúc trong khi thanh dữ liệu mờ nhạt: chương này nói về silicon, không phải dữ liệu. Trong @sec-model-training, các lớp giữa sáng lên và thanh dữ liệu được chiếu sáng vừa phải, phản ánh rằng huấn luyện tiêu thụ dữ liệu nhưng về cơ bản là về tối ưu hóa. Trong @sec-responsible-engineering, các lớp trên cùng chiếm ưu thế và thanh dữ liệu có màu sắc vừa phải, bởi vì dữ liệu huấn luyện có độ chệch (bias) sẽ dẫn đến các ứng dụng có độ chệch (bias) ngay cả khi có nhiều lớp nằm giữa chúng. Cùng một kiến trúc kể ba câu chuyện khác nhau, với dữ liệu là một chiều độc lập.
+
+Các lề cũng chứa các ghi chú trực quan nhỏ tại điểm mà một mối quan hệ dễ hiểu nhất bằng mắt thường. Đây không phải là các hình được đánh số để trích dẫn sau này; chúng là các công cụ hỗ trợ đọc. Một thang đo làm cho khoảng cách tỷ lệ hiển thị, một phác thảo xu hướng cho thấy hướng, một hình thu nhỏ đường mái nhà (roofline) xác định chế độ tắc nghẽn, và một thanh ưu thế cho thấy thuật ngữ nào kiểm soát tổng thể. Khi một hình thu nhỏ sử dụng thang logarit, điều đó được ghi rõ bên trong hình ảnh.
+
+::: {layout-ncol=4}
+![](../11_hw_acceleration/images/svg/hw_acceleration_energy_ladder.svg){width="100%" fig-alt="Ví dụ trực quan ở lề: ba thanh ngang màu cam trên thang logarit so sánh truy cập DRAM ở 640 pJ, phép nhân FP32 ở 3.7 pJ, và truy cập SRAM ở 0.5 pJ."}
+
+![](../04_data_engineering/images/svg/data_engineering_debt_compounding.svg){width="100%" fig-alt="Ví dụ trực quan ở lề: hai đường cong tăng dần cho thấy nợ dữ liệu phân kỳ khi tốc độ tích lũy tăng lên."}
+
+![](../12_benchmarking/images/svg/vol1_benchmarking_margin_002.svg){width="100%" fig-alt="Ví dụ trực quan ở lề: một hình thu nhỏ đường mái nhà (roofline) cho thấy điểm vận hành kích thước batch đang di chuyển về phía giới hạn tính toán."}
+
+![](../12_benchmarking/images/svg/vol1_benchmarking_margin_001.svg){width="100%" fig-alt="Ví dụ trực quan ở lề: hai thanh độ trễ xếp chồng lên nhau cho thấy rằng việc tăng tốc thành phần chỉ cải thiện một phần độ trễ đầu cuối."}
+:::
+
+Mỗi phần xây dựng dựa trên phần trước. Đọc tuần tự được khuyến nghị cho những người mới làm quen với lĩnh vực này, trong khi các lộ trình tùy chỉnh sau đây hỗ trợ các mục tiêu nghề nghiệp cụ thể:
+
+## Các Lộ Trình Đọc Gợi Ý {#sec-book-suggested-reading-paths-773b .unlisted}
+
+Độc giả với các nền tảng và mục tiêu khác nhau có thể hưởng lợi từ các lộ trình tùy chỉnh:
+
+- **Lộ Trình Hoàn Chỉnh** (tất cả các chương, theo thứ tự): Dành cho sinh viên đại học và độc giả mới làm quen với các hệ thống ML. Bắt đầu với Phần I, sau đó tiếp tục qua Phần II, III và IV. Lộ trình này phát triển mọi khái niệm từ các nguyên tắc cơ bản.
+- **Lộ Trình Kỹ Sư ML** (chiều sâu hệ thống cho người thực hành): Dành cho các kỹ sư đã huấn luyện và triển khai các mô hình nhưng muốn hiểu các hệ thống bên dưới. Đọc lướt Phần I để nắm vững từ vựng, sau đó tập trung vào @sec-ml-frameworks, @sec-model-training, @sec-hardware-acceleration, @sec-benchmarking, và @sec-model-serving.
+- **Lộ Trình Tối Ưu Hóa** (tập trung vào hiệu quả): Dành cho các kỹ sư làm việc về hiệu quả mô hình, triển khai trên edge, hoặc các hệ thống bị hạn chế tài nguyên. Sau Phần I, chuyển thẳng đến @sec-data-selection, @sec-model-compression, @sec-hardware-acceleration, và @sec-benchmarking.
+
+{{< include _conventions.qmd >}}
+
+Bất kể độc giả theo lộ trình nào, văn bản được thiết kế để kết nối với các tài nguyên hỗ trợ ngoài các chương.
+
+::: {.content-visible when-format="html"}
+
+## Một Nền Tảng Học Tập {#sec-about-platform .unlisted}
+
+Cuốn sách này là một thành phần của một hệ sinh thái học tập rộng lớn hơn. Toàn bộ văn bản, sổ tay tương tác, slide bài giảng, bài tập, phòng thí nghiệm thực hành và tài liệu bổ sung cho mỗi chương đều có sẵn miễn phí tại [mlsysbook.ai](https://mlsysbook.ai).
+
+## Một Sách Giáo Khoa Mã Nguồn Mở {#sec-about-open-source .unlisted}
+
+Cuốn sách này là mã nguồn mở. Toàn bộ văn bản, hình ảnh và hệ thống xây dựng có sẵn tại [mlsysbook.ai/git](https://mlsysbook.ai/git), và tôi mời mọi độc giả đóng góp. Sự cởi mở đó là có chủ ý. Nếu kỹ thuật AI muốn trở thành một ngành học chung thay vì một tập hợp các thực hành riêng lẻ, thì các văn bản nền tảng của nó phải dễ tiếp cận với mọi người. Hệ thống ML là một lĩnh vực được định hình bởi các chuyên gia trong ngành công nghiệp, học thuật và cộng đồng mã nguồn mở trên toàn thế giới. Một sách giáo khoa bao quát lĩnh vực này nên phản ánh sự rộng lớn đó và phải có sẵn cho tất cả mọi người, bất kể vị trí địa lý hay liên kết tổ chức.
+
+Các đóng góp từ độc giả, dù là sửa lỗi, đề xuất giải thích rõ ràng hơn, thêm ví dụ minh họa, hay đề xuất nội dung mới, đều đã cải thiện đáng kể mỗi chương. Các vấn đề (issues) và yêu cầu kéo (pull requests) cung cấp cơ chế cho sự hợp tác đó. Cuốn sách này được cải thiện vì độc giả của nó tham gia vào việc xây dựng nó.
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+## Tài Nguyên Bổ Trợ {#sec-about-companion-resources .unlisted}
+
+Cuốn sách này là một phần của hệ sinh thái học tập rộng lớn hơn. Toàn bộ văn bản, sổ tay tương tác, slide bài giảng, bài tập, phòng thí nghiệm thực hành và tài liệu bổ sung cho mỗi chương đều có sẵn trực tuyến tại [mlsysbook.ai](https://mlsysbook.ai).
+
+Cuốn sách này là mã nguồn mở. Toàn bộ văn bản, hình ảnh và hệ thống xây dựng được công khai, và các đóng góp từ độc giả trên toàn thế giới đã cải thiện đáng kể mỗi chương. Truy cập **mlsysbook.ai/git** để báo cáo vấn đề, đề xuất cải tiến hoặc đóng góp trực tiếp.
+
+:::
+
+## Các Yêu Cầu Tiên Quyết {#sec-book-prerequisites-1a4b .unlisted}
+
+Độc giả nên có hai yêu cầu tiên quyết:
+
+- **Lập trình**: Thành thạo Python, bao gồm các hàm, lớp và thao tác dữ liệu cơ bản với NumPy.
+- **Toán học**: Nắm vững đại số tuyến tính, giải tích cơ bản và xác suất ở cấp độ đại học.
+
+Hai lĩnh vực bổ sung hữu ích nhưng không bắt buộc:
+
+- **Hệ thống máy tính**: Sự quen thuộc với phân cấp bộ nhớ và kiến trúc máy tính cơ bản sẽ làm sâu sắc thêm các chương về tối ưu hóa và phần cứng.
+- **Kiến thức cơ bản về machine learning**: Việc tiếp xúc trước với các khái niệm học có giám sát cung cấp ngữ cảnh hữu ích, nhưng Phần II phát triển các nền tảng cần thiết từ các nguyên tắc cơ bản.
+
+## Ngoài Cuốn Sách Này {#sec-book-beyond-book-c426 .unlisted}
+
+Cuốn sách này phát triển nền tảng một nút trong khi giới thiệu thực thi phân tán, vận hành sản xuất và quản trị nơi chúng ảnh hưởng đến hệ thống đầu cuối. Các cấu trúc liên kết đa nút nâng cao, thuật toán tập thể trên toàn bộ hệ thống và khả năng phục hồi cụm mở rộng sang các hệ thống phân tán ở quy mô lớn. Hoàn thành văn bản này chuẩn bị cho độc giả điều hướng bối cảnh kỹ thuật rộng lớn hơn đó.
+
+## Sử Dụng Cuốn Sách Này Trong Một Khóa Học {#sec-book-using-book-course-f71c .unlisted}
+
+Cuốn sách này ra đời từ môn CS249r tại Đại học Harvard và chương trình [chứng chỉ chuyên nghiệp TinyML edX](https://www.edx.org/professional-certificate/harvardx-tiny-machine-learning). Khóa học TinyML đã giảng dạy các hệ thống ML ở phân khúc hạn chế nhất: vi điều khiển hoạt động với công suất miliwatt và bộ nhớ kilobyte. Nó đã tiết lộ một bài học đáng ngạc nhiên. Các ràng buộc cơ bản chi phối các thiết bị nhỏ (băng thông bộ nhớ, mật độ tính toán, năng lượng trên mỗi phép toán) cũng chính là các ràng buộc chi phối các GPU trong trung tâm dữ liệu. *Các quy luật vật lý vẫn đúng; chỉ có các con số thay đổi.* Nhận định đó đã định hình cuốn sách này. Điều khởi đầu là một khóa học về ML bị hạn chế tài nguyên đã phát triển thành một tài liệu toàn diện về kỹ thuật hệ thống ML, dựa trên nguyên tắc rằng việc nắm vững các kiến thức cơ bản ở bất kỳ quy mô nào sẽ chuẩn bị cho các kỹ sư ở mọi quy mô.
+
+Trong bối cảnh khóa học, cuốn sách được thiết kế để hỗ trợ một chuỗi học kỳ bao gồm toàn bộ ngăn xếp hệ thống ML. Giảng viên cũng có thể chọn các phần riêng lẻ cho các học phần ngắn hơn:
+
+- **Phần I–II** tạo thành một nửa học kỳ giới thiệu về nền tảng hệ thống ML và cách các hệ thống đó được xây dựng và huấn luyện.
+- **Phần III–IV** tạo thành một nửa học kỳ ứng dụng về tối ưu hóa, triển khai và vận hành chúng.
+
+Đối với các khóa học tổng quan hoặc chương trình điều hành, riêng phần giới thiệu của bốn phần đã cung cấp một cái nhìn tổng quan cô đọng về các nguyên tắc định lượng chi phối các hệ thống ML.
+
+::: {.content-visible when-format="html"}
+Các slide bài giảng, bài tập và tài nguyên dành cho giảng viên có sẵn tại [mlsysbook.ai](https://mlsysbook.ai).
+:::
+
+::: {.content-visible when-format="pdf"}
+Các slide bài giảng, bài tập và tài nguyên dành cho giảng viên có sẵn tại **mlsysbook.ai**.
+:::
+
+<!--
+## Copyright and Licensing {#sec-book-copyright-licensing-2538 .unlisted}
+
+::: {.content-visible when-format="html"}
+© Vijay Janapa Reddi and MIT Press. This work is distributed under the [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC BY-NC-ND 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0). The source is available at [mlsysbook.ai/git](https://mlsysbook.ai/git).
+:::
+
+::: {.content-visible when-format="pdf"}
+© Vijay Janapa Reddi and MIT Press. This work is distributed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC BY-NC-ND 4.0). The source is available at **mlsysbook.ai/git**.
+:::
+-->

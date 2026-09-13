@@ -1,0 +1,29 @@
+# Các Nguyên tắc Nền tảng {.unnumbered}
+
+Các hệ thống machine learning thể hiện một nguyên tắc heuristic tưởng chừng đơn giản: độ phức tạp thường dịch chuyển chứ không biến mất, mặc dù thiết kế tốt có thể loại bỏ độ phức tạp ngẫu nhiên. Độ phức tạp luân chuyển giữa ba miền của phân loại D·A·M: **Dữ liệu** dưới dạng thông tin, **Thuật toán** dưới dạng logic và **Máy móc** dưới dạng vật lý. Đơn giản hóa một miền có thể gây gánh nặng cho các miền khác. Một pipeline đặc trưng được xây dựng thủ công làm giảm độ phức tạp thuật toán nhưng đòi hỏi nhiều nỗ lực kỹ thuật dữ liệu hơn. Một mô hình lớn hơn có thể hấp thụ dữ liệu lộn xộn nhưng lại chuyển độ phức tạp sang phần cứng phải huấn luyện và phục vụ nó. Nguyên tắc heuristic **Bảo toàn Độ phức tạp** này là động lực cho mọi thứ trong cuốn sách này. Các giới hạn định lượng, mô hình và nguyên tắc được giới thiệu xuyên suốt cuốn sách mô tả các ràng buộc phát sinh từ nơi độ phức tạp hiện đang tồn tại.
+
+Các kiến trúc, framework và tối ưu hóa chỉ thành công khi chúng tuân thủ các ràng buộc do phần cứng, toán học và lý thuyết thông tin đặt ra. Giống như các kỹ sư xây dựng không thể bỏ qua trọng lực, các kỹ sư ML không thể bỏ qua các định luật vật lý chi phối dữ liệu, tính toán và thông lượng hệ thống. Phần I thiết lập các nền tảng này: không phải là các thực tiễn tốt nhất thay đổi theo framework hay các ý kiến khác nhau giữa các nhóm, mà là các ràng buộc vật lý bền vững và các mô hình định lượng cho kỹ thuật ML. Ràng buộc đầu tiên bắt đầu từ chính dữ liệu, nơi ranh giới quen thuộc giữa chương trình và đầu vào bắt đầu biến mất.
+
+::: {#pri-data-as-code .callout-principle title="Nguyên tắc dữ liệu là mã"}
+
+**Bất biến**: Dữ liệu đóng vai trò là mã nguồn của hệ thống ML. Một thay đổi đối với tập dữ liệu huấn luyện có thể làm thay đổi hành vi đã học của hệ thống.
+Ở đây, hành vi đã học có nghĩa là ánh xạ đầu vào-đầu ra đã được huấn luyện; $f$ biểu thị quá trình huấn luyện, và $\approx$ đánh dấu một sự phụ thuộc định tính hơn là một sự bằng nhau dự đoán. Kiến trúc mô hình, khởi tạo, cấu hình optimizer và tính ngẫu nhiên trong huấn luyện đều được bao gồm trong quy trình huấn luyện.
+$$ \text{Learned Behavior} \approx f(\text{Training Data}, \text{Training Procedure}) $$
+
+**Hàm ý**: Kỹ thuật dữ liệu đòi hỏi sự chặt chẽ tương tự như kỹ thuật phần mềm. Các tập dữ liệu nên được **quản lý phiên bản** (như Git), **kiểm thử đơn vị** (kiểm tra chất lượng dữ liệu) và **gỡ lỗi**. Xóa một hàng dữ liệu huấn luyện có thể làm thay đổi mô hình được xây dựng lại, giống như việc xóa một dòng mã có thể làm thay đổi một thành phẩm đã biên dịch.
+
+:::
+
+Nếu dữ liệu đóng vai trò là mã nguồn, thì nó không chỉ đơn thuần là một tạo phẩm logic; nó còn có các thuộc tính vật lý ràng buộc kiến trúc hệ thống khi dữ liệu và tính toán nằm ở các vị trí khác nhau.
+
+::: {#pri-data-gravity .callout-principle title="Nguyên tắc trọng lực dữ liệu"}
+
+**Bất biến**: Khi khối lượng dữ liệu ($D_{\text{vol}}$) tăng lên, việc truyền tập dữ liệu có thể tốn kém hơn việc gửi một truy vấn hoặc tải trọng mã nhỏ hơn nhiều qua cùng một liên kết bị giới hạn [@mccrory2010datagravity].
+Ở đây, chi phí biểu thị một chỉ số truyền tải tại một thời điểm, chẳng hạn như thời gian truyền đã trôi qua hoặc số byte đã gửi, trong điều kiện liên kết giống hệt nhau; nó không kết hợp độ trễ và băng thông thành một đại lượng duy nhất.
+$$ \text{Cost to transfer dataset} \gg \text{Cost to transfer query or code} \quad \text{in this regime} $$
+
+**Hàm ý**: Các tập dữ liệu lớn có thể trở thành trung tâm trọng lực của kiến trúc. Các hệ thống có thể di chuyển tính toán đến dữ liệu bằng cách gửi các truy vấn hoặc mã đến lớp lưu trữ thay vì di chuyển dữ liệu đến tính toán bằng cách tải xuống lặp đi lặp lại các tập dữ liệu lớn.
+
+:::
+
+Cùng với nhau, hai nguyên tắc này thiết lập rằng dữ liệu có thể vừa là chương trình logic vừa là một điểm neo vật lý của một hệ thống ML. Phần I phát triển các hàm ý này thành một chuỗi phụ thuộc. Các ràng buộc triển khai xác định nơi một hệ thống có thể thực thi; vòng đời mang các ràng buộc đó qua định nghĩa vấn đề, dữ liệu, mô hình hóa, xác thực và vận hành; và kỹ thuật dữ liệu làm cho chúng có thể thực thi được trong các tạo phẩm pipeline đã được quản lý phiên bản và kiểm thử. Bỏ qua bất kỳ liên kết nào sẽ làm tăng độ phức tạp dưới dạng chi phí tích hợp: một mô hình chính xác không thể thực thi, một quy trình làm việc không thể tái tạo đầu vào của nó, hoặc một pipeline mà đầu ra không còn khớp với điều kiện triển khai.

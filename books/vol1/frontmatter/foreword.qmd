@@ -1,0 +1,105 @@
+---
+number-sections: false
+---
+
+# Lời nói đầu {.unnumbered}
+
+::: {.content-visible unless-format="html"}
+
+```{=latex}
+\begingroup
+\vspace*{-1.6\baselineskip}
+\begin{center}
+\begin{minipage}{0.82\textwidth}
+\centering
+{\color{accentcolor}\rule{0.44\textwidth}{0.45pt}}\par
+\vspace{0.45em}
+{\bfseries David A. Patterson}\\[0.3em]
+{\small
+Pardee Professor of Computer Science Emeritus\\[0.1em]
+University of California, Berkeley\\[0.1em]
+Distinguished Engineer, Google\\[0.1em]
+ACM A.M. Turing Award Laureate\\[0.1em]
+Berkeley, California\par}
+\vspace{-0.1ex}
+{\color{accentcolor}\rule{0.44\textwidth}{0.45pt}}\par
+\end{minipage}
+\end{center}
+\vspace{2ex}
+```
+
+:::
+
+::: {.content-visible when-format="html"}
+
+<div style="text-align: center; margin: 0.25rem auto 1.5rem; max-width: 42rem; border-top: 1px solid #a51c30; border-bottom: 1px solid #a51c30; padding: 0.7rem 0;"><strong>David A. Patterson</strong><br>Giáo sư danh dự Khoa học Máy tính Pardee<br>Đại học California, Berkeley<br>Kỹ sư Ưu tú, Google<br>Người đoạt Giải thưởng A.M. Turing của ACM<br>Berkeley, California</div>
+
+:::
+
+Sự nghiệp của tôi đã được dành để tìm hiểu và cải thiện những nền tảng cốt lõi mà trên đó điện toán hoạt động – từ kiến trúc tập lệnh định nghĩa bộ xử lý cho đến các hệ thống lưu trữ chứa dữ liệu của chúng ta. Tôi đã tận mắt chứng kiến những tiến bộ sâu sắc hiếm khi chỉ là một ý tưởng xuất sắc đơn lẻ, mà là sự tích hợp toàn diện của nhiều ý tưởng vào một hệ thống mạnh mẽ, hiệu quả và đáng tin cậy.
+
+Ngày nay, chúng ta đang đứng trước một thời điểm then chốt khác. machine learning (ML) đã vượt ra ngoài sự tò mò khoa học để trở thành một lực lượng định hình lại các ngành công nghiệp, thúc đẩy đổi mới và thay đổi cuộc sống hàng ngày của chúng ta. Sức mạnh trí tuệ của các thuật toán, những cải thiện về độ chính xác và những khả năng kỳ diệu mà chúng mở khóa đã thu hút trí tưởng tượng của thế giới một cách chính đáng.
+
+Một mối lo ngại là phần lớn tiến bộ này đã đạt được bởi một cộng đồng mà, không phải do lỗi của chính họ, chưa bao giờ được dạy cách suy nghĩ theo hướng hệ thống về những gì họ đang xây dựng. Các kỹ sư có thể gọi `model.fit()` nhưng không thể giải thích tại sao quá trình huấn luyện lại chậm. Các nhà nghiên cứu tinh chỉnh siêu tham số mà không hiểu các ràng buộc về băng thông bộ nhớ khiến một số lựa chọn trở nên không thực tế. Các chuyên gia triển khai các mô hình vào sản xuất mà không có một framework để lý giải về độ trễ, thông lượng hoặc các chế độ lỗi.
+
+Một thuật toán xuất sắc, nếu không có một hệ thống được thiết kế tốt để hỗ trợ, giống như một động cơ mạnh mẽ không có khung gầm và phanh. Nó sẽ không đưa bạn đi xa, và chắc chắn sẽ không đưa bạn đến đó một cách đáng tin cậy.
+
+Khoảng cách này không phải là thiếu hụt tài năng. Đó là thiếu hụt chương trình giảng dạy. Lĩnh vực này đơn giản là chưa có những cuốn sách giáo khoa xứng đáng. Cuốn sách này, *Giới thiệu về Hệ thống machine learning*, ra đời đúng thời điểm để làm sáng tỏ khía cạnh quan trọng, thường bị bỏ qua này của cuộc cách mạng ML.
+
+## Tại sao Tư duy Hệ thống lại Quan trọng {.unnumbered .unlisted}
+
+Sự nghiệp của tôi đã tận dụng sức mạnh của tư duy hệ thống. Xác định các nút thắt cổ chai, hiểu các tương tác giữa các thành phần và thiết kế để đạt hiệu suất, độ tin cậy, hiệu quả chi phí và dễ sử dụng trên toàn bộ ngăn xếp. Bạn không thể đạt được kết luận chỉ từ các nguyên tắc cơ bản. Bạn phải suy nghĩ về hệ thống.
+
+Các hệ thống ML đòi hỏi chính xác cùng một kỷ luật. Một mạng nơ-ron không phải là một trừu tượng toán học trôi nổi tự do khỏi các ràng buộc vật lý. Đó là một phép tính phải thực thi trên silicon với băng thông bộ nhớ hữu hạn, ngân sách công suất hữu hạn và dung lượng giao tiếp hữu hạn. Cường độ số học, Mô hình Roofline và các hiệu ứng của hệ thống phân cấp bộ nhớ không phải là các chủ đề nâng cao cần được giải quyết sau khi sinh viên học những kiến thức cơ bản. Chúng chính là những kiến thức cơ bản.
+
+## Tại sao Hệ thống ML Xứng đáng được Đối xử Nghiêm túc trong Sách Giáo khoa {.unnumbered .unlisted}
+
+Mục đích của một cuốn sách giáo khoa không chỉ là liệt kê biên giới hiện tại. Đó là cung cấp khung khái niệm cho phép sinh viên hiểu được biên giới đó và tự mình phát triển nó. Các kiến trúc mạng nơ-ron được đề cập trong các trang này sẽ phát triển. Các bộ tăng tốc phần cứng được mô tả sẽ bị thay thế. Nhưng một số nguyên tắc cơ bản sẽ không thay đổi. Chúng ta vẫn sẽ có hệ thống phân cấp bộ nhớ và cường độ số học vẫn sẽ là một thước đo quan trọng. Các nguyên tắc của pipelining, của sự đánh đổi giữa độ trễ và thông lượng, của lượng tử hoá và độ chính xác phản ánh các thực tế vật lý và toán học không lỗi thời. Bất kỳ ai thực sự hiểu chúng sẽ có thể lý giải về bất kỳ hệ thống mới nào mà lĩnh vực này tạo ra vào năm tới hoặc mười năm nữa.
+
+Tôi cũng ấn tượng bởi phạm vi mà cuốn sách này cố gắng đạt được. Không đủ để giải thích cách quá trình huấn luyện hoạt động; người ta cũng phải đề cập đến kỹ thuật dữ liệu, tối ưu hóa mô hình, tăng tốc phần cứng, triển khai, benchmark, AI có trách nhiệm và tính bền vững. Đây không phải là các chủ đề riêng biệt được ghép lại để hoàn chỉnh. Chúng là các khía cạnh liên kết của một ngành kỹ thuật duy nhất. Một quyết định được đưa ra ở lớp dữ liệu có ảnh hưởng đến hành vi của mô hình, điều này có ảnh hưởng đến độ trễ suy luận, điều này có ảnh hưởng đến chi phí triển khai, điều này có ảnh hưởng đến các cộng đồng có thể và không thể tiếp cận hệ thống kết quả. Cuốn sách xử lý đúng đắn sự tích hợp này như một mối quan tâm hàng đầu.
+
+Tôi đặc biệt hài lòng khi thấy phương pháp định lượng xuyên suốt mỗi chương. Các tuyên bố được hỗ trợ bởi các phép đo. Các đánh đổi được thể hiện bằng số. Sinh viên được dạy cách ước tính, đo lường và xác minh thay vì dựa vào cảm tính. Sự khác biệt giữa một kỹ sư và một người nghiệp dư chính là khả năng suy luận chặt chẽ, dựa trên phép đo này.
+
+## Tại sao Truy cập Mở lại Quan trọng đối với Thế hệ Tiếp theo {.unnumbered .unlisted}
+
+Tôi hoan nghênh quyết định cung cấp miễn phí nguồn tài liệu vô giá này.
+
+Khi tôi đồng tác giả *Kiến trúc Máy tính: Một Cách tiếp cận Định lượng* với John Hennessy, chúng tôi đã tranh luận về cách làm cho tài liệu dễ tiếp cận nhất có thể. Chúng tôi đã vận động nhà xuất bản của chúng tôi giữ giá thấp và thậm chí đã cho ra mắt một phiên bản dành cho sinh viên quốc tế với chi phí thấp để bán bên ngoài Bắc Mỹ. Những lo ngại đó chỉ trở nên cấp bách hơn khi ML đã trở thành cơ sở hạ tầng — quan trọng đối với thế giới hiện đại như lưới điện hoặc internet.
+
+Quyết định xuất bản cuốn sách này như một tài nguyên giáo dục miễn phí không phải là một sự thỏa hiệp. Đó là một tuyên bố về các giá trị. Các hệ thống ML đang được triển khai trong mọi lĩnh vực của mọi nền kinh tế trên mọi lục địa. Các kỹ sư xây dựng và duy trì chúng sẽ đến từ khắp mọi nơi. Nếu nền tảng giáo dục cần thiết để thực hiện công việc này một cách có trách nhiệm chỉ dành cho sinh viên tại các tổ chức có nguồn lực tốt, chúng ta sẽ góp phần tạo ra một khoảng cách chuyên môn phản ánh những lo ngại của xã hội về việc ai được hưởng lợi từ AI và ai phải gánh chịu chi phí của nó.
+
+Điều khiến tôi ấn tượng hơn nữa là dự án này đã vượt xa việc chỉ cung cấp quyền truy cập mở vào một văn bản tĩnh. Hệ sinh thái đi kèm &mdash; các phòng thí nghiệm tương tác, một framework xây dựng từ đầu trong TinyTorch, bộ công cụ triển khai phần cứng, tài liệu dành cho giảng viên, một mạng lưới các trường đại học áp dụng trên toàn cầu &mdash; phản ánh một châm ngôn giáo dục quen thuộc: “Tôi nghe và tôi quên. Tôi thấy và tôi nhớ. Tôi làm và tôi hiểu.”
+
+Mô hình mã nguồn mở cũng làm cho chương trình học tốt hơn. Lỗi được sửa chữa. Các ví dụ được trau chuốt. Các chương mới xuất hiện để đáp ứng những gì lĩnh vực này thực sự cần. Như chúng tôi đã nhận thấy với *Computer Architecture: A Quantitative Approach*, một cộng đồng những người đóng góp hình thành xung quanh một cuốn sách có thể mang lại một hình thức đảm bảo chất lượng mà không một nhóm tác giả đơn lẻ nào, dù chuyên gia đến đâu, có thể sánh kịp một mình.
+
+## Lời Cuối {.unnumbered .unlisted}
+
+Lĩnh vực kiến trúc máy tính có một truyền thống mà tôi tự hào: chúng tôi xây dựng mọi thứ, đo lường chúng một cách trung thực, chia sẻ những gì chúng tôi học được và điều chỉnh triết lý của mình khi các phép đo yêu cầu. Chúng tôi không trốn tránh đằng sau sự phức tạp của các hệ thống để tránh trách nhiệm về việc liệu chúng có thực sự hoạt động hay không. Chúng tôi không đánh đồng sự mới lạ với tiến bộ. Chúng tôi tranh luận, một cách nghiêm túc, về những gì quan trọng và tại sao.
+
+Hy vọng rằng, kỹ thuật hệ thống machine learning sẽ tuân theo truyền thống này. Nó cần những thói quen tư duy đến từ việc xem xét nghiêm túc các hệ thống: suy nghĩ về các tương tác, đo lường ở mức độ trừu tượng phù hợp, trung thực về các đánh đổi và chịu trách nhiệm về hiệu suất thực tế thay vì những câu chuyện dân gian về benchmark. Cuốn sách này thể hiện những thói quen đó.
+
+*Giới thiệu về Hệ thống Machine Learning* không chỉ là một cuốn sách giáo khoa; nó là một lời kêu gọi rõ ràng cho tư duy hệ thống trong thời đại AI, một hướng dẫn để xây dựng các ứng dụng ML mạnh mẽ và là minh chứng cho sức mạnh của giáo dục mở.
+
+Chúng ta đang ở một thời điểm phi thường. Trong suốt sự nghiệp của tôi, mỗi thập kỷ đều có một bước đột phá lớn: bộ vi xử lý vào những năm 1970, máy tính cá nhân vào những năm 1980, Internet vào những năm 1990, điện thoại thông minh vào những năm 2000 và AI vào những năm 2010. Bốn điều đầu tiên đã thay đổi kinh doanh và xã hội, nhưng AI dường như có tác động lớn nhất trong số đó.
+
+Các hệ thống đang được xây dựng ngày nay sẽ định hình cách thức trí tuệ được triển khai, ai được hưởng lợi từ nó và chi phí của nó &mdash; về tiền bạc, năng lượng và lượng khí thải carbon. Chúng ta cần các kỹ sư xây dựng những hệ thống đó có kỹ năng hệ thống tốt nhất có thể.
+
+Cuốn sách này là một bước tiến quan trọng để giúp bất kỳ ai cũng có thể học được những kỹ năng đó.
+
+::: {.content-visible unless-format="html"}
+
+```{=latex}
+\par\nobreak\vspace{0.5ex}
+\noindent\hfill David A. Patterson\hspace*{1pt}\par
+\endgroup
+```
+
+:::
+
+::: {.content-visible when-format="html"}
+
+<div style="text-align: right; margin-top: 2rem;">
+David A. Patterson
+</div>
+
+:::

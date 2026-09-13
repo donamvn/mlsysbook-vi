@@ -1,0 +1,61 @@
+# Các Nguyên tắc Triển khai {.unnumbered}
+
+Mã có thể đúng và các benchmark có thể xuất sắc, nhưng hệ thống vẫn có thể thất bại. Phần IV chuyển từ môi trường được kiểm soát sang môi trường sản xuất, nơi các hệ thống ML đối mặt với mối đe dọa bổ sung là sự suy giảm thầm lặng. Một hệ thống machine learning có thể tiếp tục tạo ra các đầu ra tự tin, định dạng tốt và sai khi thế giới trôi dạt khỏi phân phối huấn luyện của nó. Khi triển khai, môi trường dữ liệu thoát khỏi sự kiểm soát của kỹ sư và có thể gây áp lực lên thuật toán đã được huấn luyện và máy phục vụ theo những cách mà không bộ kiểm thử nào lường trước được. Do đó, độ tin cậy là một vòng lặp điều khiển liên tục của thiết kế đồng thời D·A·M chứ không phải là một cổng phát hành một lần. Các nguyên tắc ở đây định nghĩa các yêu cầu và mô hình chẩn đoán cho độ tin cậy đó.
+
+::: {#pri-verification-gap .callout-principle title="Khoảng cách xác minh"}
+
+**Bất biến**: Xác minh thống kê chỉ có giá trị trên một quần thể triển khai $P_{\text{deploy}}$ xác định, khoảng cách tác vụ $d$, dung sai $\tau$ và sai số mục tiêu $\epsilon$, được ước tính bằng một quy trình mẫu hữu hạn ở mức độ tin cậy đã nêu:
+$$ \Pr_{(x,y)\sim P_{\text{deploy}}}\!\left[d(f(x),y) \leq \tau\right] \geq 1-\epsilon $$
+**Hàm ý**: Triển khai không phải là một chuyển giao một chiều; đó là một vòng lặp điều khiển. Bởi vì không có bộ kiểm thử nào có thể bao phủ mọi đầu vào thực tế có thể có, các hệ thống sản xuất phải giám sát sự không chắc chắn của chính chúng và thất bại một cách duyên dáng khi chúng trôi dạt ra ngoài phạm vi hiệu suất đã biết của chúng.
+
+:::
+
+Khoảng cách xác minh có nghĩa là đánh giá hữu hạn chỉ có thể ước tính hành vi trên một quần thể xác định với sự không chắc chắn. Các giới hạn đó có thể bị xói mòn khi dữ liệu sản xuất khác biệt so với dữ liệu được sử dụng để thiết lập chúng.
+
+::: {#pri-statistical-drift .callout-principle title="Chẩn đoán trôi dạt thống kê"}
+
+**Bất biến**: Sự phân kỳ giữa phân phối sản xuất và phân phối cơ sở tự nó không xác định liệu độ chính xác có thay đổi hay không; trên một phạm vi triển khai được đo lường, các kết quả được gán nhãn có thể phù hợp với một mối quan hệ tuyến tính cục bộ:
+$$ \text{Accuracy}(t) \approx \text{Accuracy}_0 - \lambda \cdot \mathcal{D}(P_t \lVert P_0) $$
+trong đó $P_0$ là phân phối cơ sở, $\text{Accuracy}_0$ là hiệu suất của mô hình trên $P_0$, $\mathcal{D}(P_t \lVert P_0)$ là sự phân kỳ thống kê giữa phân phối hiện tại và phân phối cơ sở, và $\lambda$ được khớp từ các kết quả được gán nhãn thay vì suy luận từ riêng sự phân kỳ. Hãy xem xét một mô hình chấm điểm tín dụng được huấn luyện trên hành vi của người vay năm 2020. Hai năm sau, lạm phát tăng, lãi suất thay đổi và chính sách cho vay dịch chuyển. Hệ thống vẫn tạo ra điểm số, nhưng mối quan hệ thống kê giữa đầu vào và đầu ra có thể đã thay đổi; giám sát kết quả được gán nhãn xác định liệu độ chính xác thực tế có giảm hay không trong khi nhật ký lỗi thông thường vẫn im lặng. Không giống như nhiều lỗi phần mềm truyền thống, thường được phát hiện bởi sự cố, ngoại lệ hoặc tín hiệu sức khỏe dịch vụ rõ ràng, các hệ thống ML có thể thất bại một cách thầm lặng vì *môi trường* thay đổi ngay cả khi mã và cơ sở hạ tầng vẫn không thay đổi. Sự tuyến tính hóa bậc nhất này chỉ áp dụng trên phạm vi đo được; mối quan hệ này phụ thuộc vào mô hình và có thể phi tuyến tính đối với sự trôi dạt lớn.
+
+**Hàm ý**: Khả năng quan sát phải mở rộng ra ngoài các số liệu hệ thống (độ trễ, lỗi) để kết hợp các tín hiệu trôi dạt thống kê với các kết quả được gán nhãn. Một hệ thống có thể vẫn hoạt động trong khi chất lượng dự đoán thay đổi, nhưng chỉ giám sát sự trôi dạt không xác định được sự suy giảm.
+
+:::
+
+Sự trôi dạt bên ngoài không phải là mối đe dọa duy nhất. Ngay cả khi thế giới đứng yên, pipeline phục vụ vẫn có thể khác biệt so với mô hình được xác thực ngoại tuyến.
+
+::: {#pri-training-serving-skew .callout-principle title="Chẩn đoán độ lệch huấn luyện-phục vụ"}
+
+**Bất biến**: Các đường dẫn mã huấn luyện và phục vụ có thể phân kỳ trên các đầu vào giống hệt nhau, và sự phân kỳ đó có thể đo lường được mà không cần nhãn. Đối với điểm số mô hình vô hướng, định nghĩa sự phân kỳ huấn luyện-phục vụ là hiệu số tuyệt đối kỳ vọng giữa hai hàm trên một phân phối đầu vào so sánh đã nêu:
+$$ S_{\text{skew}} = \mathbb{E}[|f_{\text{serve}}(x) - f_{\text{train}}(x)|] $$
+Mối quan hệ chính xác giữa $S_{\text{skew}}$ và độ chính xác phụ thuộc vào hàm mất mát, hình học biên quyết định và phân phối sản xuất. Sự phân kỳ không giải thích được làm suy yếu giả định rằng xác thực ngoại tuyến ước tính hành vi sản xuất và có thể gây ra mất độ chính xác thầm lặng, nhưng $S_{\text{skew}}$ không phải là một phương trình mất độ chính xác phổ quát. Sự phân kỳ này phát sinh từ logic tiền xử lý không nhất quán, các triển khai thư viện khác nhau, giá trị đặc trưng cũ hoặc thay đổi trạng thái môi trường giữa hai đường dẫn mã.
+
+**Hàm ý**: Tính nhất quán của đặc trưng là một yêu cầu kiến trúc, không chỉ đơn thuần là một thực hành tốt nhất. Kho lưu trữ đặc trưng không chỉ là các cache; chúng có thể giảm độ lệch bằng cách tập trung định nghĩa và truy xuất đặc trưng. Các nhóm vẫn cần xác thực về độ tươi mới, tính đúng đắn tại một thời điểm, tiền xử lý, runtime mô hình và sự tương đương hậu xử lý. Ngay cả những khác biệt tinh tế (thay đổi kích thước PIL so với OpenCV, chuẩn hóa FP64 so với FP32) cũng có thể tích lũy để tạo ra sự suy giảm độ chính xác thầm lặng mà giám sát tiêu chuẩn có thể không phát hiện được.
+
+:::
+
+Đằng sau tất cả những lo ngại về độ tin cậy này là một ràng buộc không thể thương lượng: thời gian. Một hệ thống hình ảnh y tế phát hiện khối u với độ chính xác 99 phần trăm nhưng mất 30 giây mỗi lần quét có thể bỏ lỡ thời hạn quy trình làm việc của nó. Một mô hình nhận thức xe tự hành phân loại chướng ngại vật chính xác nhưng phản hồi trong 200 ms thay vì 50 ms có thể bỏ lỡ thời hạn phanh của nó. Một kết quả đúng có thể không có giá trị vận hành nếu nó đến quá muộn. Các mô hình được triển khai nhạy cảm với độ trễ hoạt động dưới một thời hạn, và việc vượt quá thời hạn đó có thể tương đương về mặt chức năng với việc không trả về bất kỳ dự đoán nào.
+
+::: {#pri-latency-budget .callout-principle title="Nguyên tắc ngân sách độ trễ"}
+
+**Bất biến**: Theo tính toán đường dẫn yêu cầu nối tiếp, độ trễ đầu cuối là tổng của độ trễ mạng, tiền xử lý, suy luận, hậu xử lý và xếp hàng, và một triển khai chỉ đáp ứng thời hạn của nó tại một phân vị hoàn thành đã nêu:
+$$ L_{\text{lat,total}} = L_{\text{lat,net}} + L_{\text{lat,pre}} + L_{\text{lat,infer}} + L_{\text{lat,post}} + L_{\text{lat,queue}}, \qquad \Pr[L_{\text{lat,total}} \leq D] \geq q $$
+**Hàm ý**: Trong phục vụ nhạy cảm với độ trễ, sản phẩm chọn thời hạn và phân vị hoàn thành chấp nhận được, chẳng hạn như 0.95, 0.99 hoặc 0.999, và thông lượng được tối ưu hóa trong ràng buộc đó. Các hệ thống phục vụ phải triển khai các kiểm soát độ trễ đuôi (ví dụ: batching động với độ trễ giới hạn hoặc các yêu cầu được bảo hiểm). Các hệ thống phục vụ phải sẵn sàng hy sinh thông lượng tổng thể để đáp ứng thời hạn độ trễ của yêu cầu cũ nhất trong hàng đợi.
+
+:::
+
+Một hệ thống có thể đáp ứng các SLO về độ trễ, phát hiện các dịch chuyển phân phối được đo lường và duy trì tính nhất quán giữa huấn luyện và phục vụ (serving) trong khi vẫn gây ra tác hại có hệ thống. Các nguyên tắc trước đó giải quyết các lỗi thầm lặng về tính đúng đắn và chất lượng dịch vụ; nguyên tắc này giải quyết các lỗi làm suy giảm *sự công bằng* thông qua khuếch đại thầm lặng.
+
+::: {#pri-bias-feedback .callout-principle title="Mô hình phản hồi độ chệch (bias)"}
+
+**Bất biến**: Khi đầu ra ảnh hưởng đến đầu vào tương lai, sự chênh lệch hiện tại trở thành đầu vào cho chu kỳ huấn luyện tiếp theo, do đó sự chênh lệch phát triển như một hệ động lực thay vì giữ nguyên. Gọi $\Delta_g(k) \geq 0$ là độ lớn chênh lệch cho nhóm $g$ so với một nhóm tham chiếu được chỉ định sau $k$ khoảng thời gian phản hồi cố định. Nếu không có sự can thiệp hiệu quả và một hệ số phản hồi không thứ nguyên xấp xỉ không đổi $\alpha_{\text{fb}} > 0$, sự chênh lệch có thể phát triển như sau:
+$$ \Delta_g(k) \approx \Delta_g(0) \cdot \alpha_{\text{fb}}^k $$
+trong đó $\Delta_g(0)$ là độ lớn chênh lệch ban đầu so với nhóm tham chiếu đó và $\alpha_{\text{fb}}$ được điều chỉnh cho mỗi khoảng thời gian phản hồi. Hãy xem xét một mô hình phê duyệt khoản vay từ chối tín dụng với tỷ lệ cao hơn đối với những người nộp đơn từ các cộng đồng bị bỏ qua trong lịch sử. Những người nộp đơn bị từ chối không thể xây dựng lịch sử tín dụng, điều này làm cho các đơn đăng ký trong tương lai yếu hơn, từ đó làm tăng tỷ lệ từ chối trong tương lai. Độ chính xác của mô hình trên phân phối huấn luyện của nó vẫn ổn định, nhưng dân số mà nó phục vụ đã được định hình lại bởi chính các quyết định của nó. Khi $\alpha_{\text{fb}} > 1$ theo các giả định này, vòng lặp phản hồi tự củng cố; khi $\alpha_{\text{fb}} \leq 1$, động lực học được mô hình hóa là ổn định hoặc suy giảm. Các triển khai thực tế cũng có thể là phi tuyến tính, bão hòa hoặc bị thay đổi bởi sự can thiệp.
+
+**Hàm ý**: Sự công bằng không phải là một cuộc kiểm toán sau triển khai; đó là một **ràng buộc ổn định** đối với vòng lặp kiểm soát triển khai. Khi tác động đáng kể đòi hỏi điều đó và việc thu thập hoặc sử dụng các thuộc tính nhóm là hợp pháp và chính đáng, các hệ thống phải giám sát **các chỉ số hiệu suất phân tách** trên các nhóm nhân khẩu học có liên quan với sự chặt chẽ tương tự được áp dụng cho các phân vị độ trễ, bởi vì sự suy giảm độ chệch (bias) có thể không thể nhìn thấy đối với độ chính xác tổng hợp, giống như một vi phạm độ trễ ở đuôi có thể không thể nhìn thấy đối với độ trễ trung bình.
+
+:::
+
+Cùng nhau, năm nguyên tắc định nghĩa một vòng lặp kiểm soát triển khai thiết lập những gì bằng chứng hỗ trợ, quan sát hệ thống và môi trường đang hoạt động, chỉ hành động khi một lỗi được đo lường đòi hỏi sự can thiệp, và đánh giá lại tiêu chí dịch vụ, dự đoán hoặc nhóm con có liên quan. Chúng tách biệt chẩn đoán khỏi phản ứng. Một tín hiệu thu hẹp phạm vi điều tra nhưng không quy định một sự can thiệp tự động cũng không chứng minh rằng chất lượng đã suy giảm.
+
+Phần IV làm cho vòng lặp kiểm soát đó trở nên cụ thể. Phục vụ (serving) mô hình xây dựng cơ sở hạ tầng đáp ứng các ngân sách độ trễ dưới lưu lượng truy cập thay đổi. Vận hành ML phát hiện sự trôi dạt và lệch trong khi bảo toàn bằng chứng cần thiết cho chẩn đoán và phản ứng. Kỹ thuật có trách nhiệm coi sự công bằng và phản hồi là các động lực triển khai có thể đo lường được thay vì một lần kiểm tra tuân thủ duy nhất. Tập sách kết thúc bằng cách kết nối các kiểm soát sản xuất này với các giới hạn định lượng và mô hình được phát triển trong các phần trước đó.

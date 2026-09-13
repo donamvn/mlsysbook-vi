@@ -1,0 +1,1117 @@
+---
+quiz: conclusion_quizzes.json
+concepts: conclusion_concepts.yml
+engine: jupyter
+---
+
+# Kết luận {#sec-conclusion}
+
+::: {layout-narrow}
+::: {.column-margin}
+
+\chapterminitoc
+
+:::
+
+::: {.content-visible when-format="pdf"}
+\noindent
+![](images/png/cover_conclusion_blueprint_labeled_print.png){fig-alt="Tập hợp đầy đủ các hệ thống ML đơn nút kết nối dữ liệu, tính toán mô hình, hạ cấp framework, thực thi bộ tăng tốc, phục vụ (serving), phản hồi hoạt động và ranh giới quản trị."}
+:::
+
+::: {.content-visible unless-format="pdf"}
+![](images/webp/cover_conclusion_blueprint_labeled.webp){fig-alt="Tập hợp đầy đủ các hệ thống ML đơn nút kết nối dữ liệu, tính toán mô hình, hạ cấp framework, thực thi bộ tăng tốc, phục vụ (serving), phản hồi hoạt động và ranh giới quản trị."}
+:::
+
+:::
+
+## Mục đích {.unnumbered .unlisted}
+
+\begin{marginfigure}
+\mlsysstack{30}{30}{30}{30}{30}{30}{30}{30}
+\end{marginfigure}
+
+_Việc nắm vững toàn bộ stack mang lại điều gì mà chuyên môn ở một lớp riêng lẻ không thể?_
+
+Một quyết định sản xuất duy nhất có thể đi qua toàn bộ stack. Một pipeline dữ liệu quyết định sự kiện nào được tính là tín hiệu huấn luyện; tín hiệu đó định hình kiến trúc có thể học tác vụ; kiến trúc xác định mức sử dụng bộ nhớ và cường độ số học; những thuộc tính đó giới hạn lựa chọn phần cứng, chiến lược lượng tử hoá, độ trễ phục vụ (serving), giám sát trôi dạt và nghĩa vụ quản trị. Khi được nắm vững riêng lẻ, mỗi lớp là một kỹ năng có giá trị. Khi được nắm vững cùng nhau, chúng mang lại khả năng suy luận xuyên biên giới. Một kỹ sư chỉ hiểu về nén có thể thu nhỏ một mô hình, nhưng không thể dự đoán liệu việc mất độ chính xác có quan trọng đối với ngữ cảnh triển khai hay không. Một kỹ sư chỉ hiểu về phục vụ (serving) có thể tối ưu hóa độ trễ, nhưng không thể truy tìm sự suy giảm hiệu suất đến một thay đổi pipeline dữ liệu ba giai đoạn trước đó. Ngành kỹ thuật hệ thống ML là ngành nhìn thấy những kết nối này, nơi tối ưu hóa của một nhóm trở thành ràng buộc của nhóm khác. Các nguyên tắc chi phối những tương tác này, bao gồm lan truyền ràng buộc, giới hạn bộ nhớ, nghịch đảo huấn luyện-phục vụ, chi phí điều phối, chi phí giao tiếp và chi phí định kỳ của việc vận hành các mô hình trong sản xuất, không gắn liền với bất kỳ framework, thế hệ phần cứng hoặc họ mô hình cụ thể nào. Công nghệ sẽ thay đổi, nhưng các ràng buộc vật lý và sự đánh đổi cơ bản sẽ tồn tại. Theo thuật ngữ D·A·M, điều tồn tại là khả năng nhìn vào một hệ thống chưa tồn tại và suy luận về cách các ràng buộc dữ liệu, thuật toán và máy móc của nó sẽ tương tác, nơi các nút thắt cổ chai sẽ xuất hiện và những quyết định thiết kế nào sẽ không thể đảo ngược. Thói quen tư duy D·A·M về hệ thống thay vì các thành phần là điều phân biệt một kỹ sư có thể xây dựng một phần với một kỹ sư có thể xây dựng toàn bộ.
+
+::: {.content-visible when-format="pdf"}
+
+\newpage
+
+:::
+
+::: {.callout-learning-objectives}
+
+- Tổng hợp các nguyên tắc cốt lõi của hệ thống ML thành một framework để suy luận xuyên suốt các ràng buộc Dữ liệu, Thuật toán và Máy móc
+- Truy vết cách các quyết định về dữ liệu, kiến trúc, nén, phần cứng, phục vụ (serving), hoạt động và quản trị lan truyền ràng buộc trong một hệ thống ML
+- Áp dụng suy luận mô hình hải đăng để chẩn đoán các nút thắt cổ chai trên các triển khai đám mây, di động, edge, khuyến nghị và TinyML
+- Đánh giá các đánh đổi triển khai sử dụng ngân sách độ trễ, di chuyển bộ nhớ, trôi dạt, trách nhiệm và các ràng buộc bền vững
+- Thiết kế một tư thế kỹ thuật hệ thống cho các ngữ cảnh mới nổi trước khi chi phí phối hợp quy mô đội hình trở nên chiếm ưu thế
+
+:::
+
+## Tổng hợp các hệ thống ML {#sec-synthesizing-ml-systems-ee10}
+
+Hãy tưởng tượng triển khai một mô hình phân loại hình ảnh mới cho một đội thiết bị di động. Nhóm kiến trúc đã chọn các tích chập phân tách theo chiều sâu để đạt hiệu quả. Nhóm nén đã lượng tử hoá thành INT8 để tăng tốc độ. Nhóm phục vụ (serving) đã đạt mục tiêu độ trễ p99 là 50 ms. Mỗi nhóm đều thành công theo tiêu chí riêng của mình, nhưng trong vòng vài tuần, khiếu nại của người dùng bắt đầu xuất hiện: độ chính xác đã giảm bốn điểm phần trăm trên các nhóm firmware và thiết bị cụ thể. Nguyên nhân là một tương tác tinh tế giữa lược đồ lượng tử hoá và một đường dẫn tiền xử lý hình ảnh dành riêng cho firmware. Không có thành phần nào bị hỏng riêng lẻ, nhưng pipeline dữ liệu, kiến trúc, chiến lược nén, mục tiêu phần cứng và cơ sở hạ tầng giám sát đã kết nối với nhau trong sản xuất.
+
+Kỹ thuật có trách nhiệm không phải là một lớp bên ngoài được thêm vào sau khi tối ưu hóa, mà là nguyên tắc chỉ định, kiểm thử, giám sát và quản trị toàn bộ hệ thống. Bài học đó giờ đây được khái quát hóa trên toàn bộ tài liệu nền tảng này. Hệ thống ML là một vấn đề kỹ thuật khác với phần mềm truyền thống vì mô hình không thể tách rời khỏi hệ thống sản xuất, phục vụ và giám sát nó.
+
+Cuốn sách bắt đầu với định luật sắt của hệ thống ML\index{Iron law of ML systems!synthesis} (nguyên tắc \ref{pri-iron-law}). Ba thuật ngữ của nó---di chuyển dữ liệu, tính toán và chi phí chung---từng có vẻ trừu tượng, giờ đây đóng vai trò là đòn bẩy kỹ thuật chính để phân tích định lượng các hệ thống từng có vẻ khó hiểu. Xây dựng trí thông minh đòi hỏi cả thuật toán và sự tuân thủ hợp đồng silicon\index{Silicon contract!constraint propagation} (nguyên tắc \ref{pri-silicon-contract}), thỏa thuận vật lý và kinh tế giữa mô hình và máy móc. Cường độ số học và suy luận đường mái nhà chuyển đổi những trực giác hiệu suất mơ hồ thành các quyết định kỹ thuật định lượng [@williams2009].
+
+Nền tảng định lượng dẫn đến một điểm rộng hơn: những thành tựu trí tuệ nhân tạo đương đại là một thuộc tính nổi bật của thiết kế đồng thời D·A·M, chứ không phải bất kỳ hiểu biết thuật toán đơn lẻ nào. Machine learning thuộc về cùng một truyền thống kỹ thuật đã xây dựng nên những máy tính đáng tin cậy, nơi các khả năng nổi bật phát sinh từ việc phối hợp nhiều bộ phận với nhau. Kiến trúc transformer đã giới thiệu một họ mô hình dựa trên cơ chế chú ý [@vaswani2017], và sau đó các hệ thống mô hình ngôn ngữ lớn như GPT-3 và Llama 2 cho thấy cách họ mô hình đó mở rộng thành một khối lượng công việc (workload) trung tâm cho các hệ thống ML hiện đại [@brown2020language; @touvron2023llama2]. Thiết kế toán học của nó một mình không giải thích được tiện ích thực tế của nó. Tiện ích đó phụ thuộc vào việc tích hợp các cơ chế chú ý với cơ sở hạ tầng huấn luyện phân tán, các kỹ thuật tối ưu hóa hiệu quả bộ nhớ và các framework vận hành đáng tin cậy.
+
+Việc tích hợp có những hệ quả cụ thể. Chúng ta thường nói về "mô hình" như một tệp trọng số, một khối dữ liệu 500 MB gồm các số dấu phẩy động. Tuy nhiên, trong môi trường sản xuất, các trọng số chỉ là một thành phần của mô hình thực sự, và thường không phải là thành phần quan trọng nhất. Một mô hình tạo ra các dự đoán hoàn hảo sẽ vô dụng nếu nó nhận đầu vào bị hỏng, và một mô hình huấn luyện không lỗi sẽ thất bại nếu nó không thể được triển khai một cách đáng tin cậy. *Mô hình thực sự* là tổng hòa của pipeline dữ liệu định nghĩa những gì mô hình nhìn thấy, hạ tầng huấn luyện quyết định những gì nó học được, hệ thống phục vụ (serving) quyết định cách nó tương tác với thế giới, và vòng lặp giám sát giữ cho nó gắn liền với thực tế. Tối ưu hóa hệ thống, và mô hình sẽ cải thiện. Bỏ bê hệ thống, và mô hình sẽ suy giảm. Kỹ thuật hệ thống không phải là một lớp bao bọc xung quanh ML; nó là sự triển khai của ML. *Hệ thống chính là mô hình.*\index{System is the model, The!definition}
+
+::: {#chk-conclusion-systems-thinking .callout-checkpoint title="Tư duy hệ thống"}
+
+Các phụ thuộc, vòng lặp phản hồi và đường dẫn yêu cầu của hệ thống làm cho các ranh giới của nó có thể kiểm thử được.
+
+**Sự tích hợp**
+
+- [ ] **Các phụ thuộc**: bạn có thể theo dõi một thay đổi trong pipeline dữ liệu qua quá trình huấn luyện và phục vụ (serving) để xác định ảnh hưởng của nó đến độ trễ không?
+- [ ] **Vòng lặp phản hồi**: bạn đã lập bản đồ cách các dự đoán của mô hình ảnh hưởng đến dữ liệu huấn luyện trong tương lai của nó chưa?
+
+**Tính toàn vẹn**
+
+- [ ] **Đầu cuối**: bạn có thể theo dõi một yêu cầu của người dùng từ giao diện người dùng (UI), qua mạng, tiền xử lý, mô hình, hậu xử lý và quay trở lại giao diện người dùng không?
+
+:::
+
+Việc theo dõi một yêu cầu từ đầu đến cuối, như checkpoint yêu cầu, cũng đưa ra cùng một quan điểm về mặt cấu trúc: các ranh giới hệ thống định nghĩa khả năng của mô hình. Cái nhìn sâu sắc đó đã định hướng cho việc khám phá xuyên suốt cuốn sách này. Hành trình bắt đầu bằng việc làm rõ nền tảng: kỹ thuật dữ liệu (@sec-data-engineering) và lựa chọn dữ liệu (@sec-data-selection) quyết định những gì hệ thống có thể học, tính toán thần kinh (@sec-neural-computation) và kiến trúc mạng (@sec-network-architectures) quyết định cách tín hiệu đó trở thành tính toán, và các hệ thống huấn luyện (@sec-model-training) cùng các framework (@sec-ml-frameworks) biến tính toán thành một quá trình tối ưu hóa có thể thực thi.
+
+Khi nền tảng đã tồn tại, vấn đề kỹ thuật chuyển từ xây dựng sang đàm phán lại các ràng buộc. Nén mô hình (@sec-model-compression) đã thay đổi sự đánh đổi giữa độ chính xác-bộ nhớ-độ trễ; tăng tốc phần cứng (@sec-hardware-acceleration) đã kiểm tra xem liệu tính toán kết quả có thực sự có thể cung cấp cho silicon hay không; benchmark (@sec-benchmarking) đã cung cấp kỷ luật đo lường cần thiết để phân biệt tốc độ tăng thực sự với lỗi. Sau đó, quá trình sản xuất đã bộc lộ những giả định tồn tại trong phòng thí nghiệm nhưng thất bại dưới tải: các hệ thống phục vụ (serving) (@sec-model-serving) phải đáp ứng các ngân sách độ trễ, các thực hành vận hành (@sec-ml-operations) phải giữ cho các mô hình khỏe mạnh khi phân phối thay đổi, và kỹ thuật có trách nhiệm (@sec-responsible-engineering) phải đánh giá xem hệ thống phục vụ ai và nơi hiệu suất tổng hợp che giấu sự thất bại của nhóm con. Các chương này hoàn thiện khuôn khổ năm trụ cột của phần giới thiệu: kỹ thuật dữ liệu, hệ thống huấn luyện, hạ tầng triển khai, vận hành và giám sát, và trụ cột đạo đức-quản trị được lồng ghép xuyên suốt Phần IV thay vì đứng riêng biệt.
+
+Mỗi chương đóng góp một phần. Tuy nhiên, bài học thực sự không nằm ở bất kỳ phần riêng lẻ nào mà ở *cách* các phần hạn chế lẫn nhau. Một lựa chọn kiến trúc cho phép một lựa chọn nén, điều này cho phép một lựa chọn tăng tốc, điều này định hình một ràng buộc phục vụ (serving), điều này định nghĩa một yêu cầu vận hành. Thiết kế phân tách theo chiều sâu của MobileNetV2 nhắm đến suy luận thị giác di động hiệu quả [@sandler2018], trong khi lượng tử hoá số học số nguyên đã biến việc triển khai INT8 thành một đường dẫn suy luận thực tế [@jacob2018]. Sự kết hợp đó có thể cho phép triển khai NPU di động, định hình một ràng buộc độ trễ p99 và yêu cầu giám sát trôi dạt trên các tập hợp thiết bị không đồng nhất. Mọi quyết định đều lan truyền về phía trước, và kỹ sư chỉ hiểu một lớp không thể dự đoán được các thay đổi sẽ lan truyền như thế nào qua phần còn lại.
+
+::: {.column-margin}
+![](images/svg/vol1_conclusion_margin_001.svg){width="100%" fig-alt="Chuỗi nhân quả từ lựa chọn kiến trúc đến lượng tử hoá INT8, độ trễ phục vụ (serving) p99, và các nghĩa vụ về trôi dạt hoặc quản trị."}
+
+*Các lựa chọn kiến trúc lan truyền thành nén, phục vụ (serving), trôi dạt và quản trị.*
+:::
+
+Các mô hình hải đăng cung cấp một bản đồ ràng buộc để suy luận về các hệ thống ML như một tổng thể chứ không phải là tập hợp các bộ phận. Chúng theo dõi các tương tác tương tự qua các chương trước khi phần tổng hợp chính thức hóa mười ba nguyên tắc định lượng, bao gồm các giới hạn chính xác và các mô hình chẩn đoán phụ thuộc vào giả định, để suy luận về hành vi hệ thống ML. Các nguyên tắc đó sau đó được áp dụng vào ba lĩnh vực ứng dụng, các hướng đi tương lai nơi tư duy hệ thống sẽ quan trọng nhất, và trách nhiệm kỹ thuật đi kèm với việc xây dựng các hệ thống có sức mạnh này.
+
+### Các mô hình hải đăng: Lan truyền ràng buộc {.unnumbered}
+
+Năm mô hình hải đăng\index{Lighthouse model!bottleneck probe} được giới thiệu trong @sec-introduction-iron-law-ml-systems-c32a đã làm cho sự lan truyền ràng buộc này trở nên cụ thể, đóng vai trò là thám tử hệ thống xuyên suốt cuốn sách. Mỗi mô hình đã tiết lộ cách các khối lượng công việc (workload) khác nhau bộc lộ các nút thắt khác nhau.
+
+```{=latex}
+\newpage
+```
+Năm khối lượng công việc (workload) hải đăng bộc lộ các chế độ ràng buộc riêng biệt:
+
+- **ResNet-50**\index{ResNet-50!batching efficiency}: Kích thước batch có thể biến suy luận hình ảnh từ một đường dẫn bị giới hạn bởi bộ nhớ thành thông lượng bị giới hạn bởi tính toán.
+- **GPT-2/Llama**\index{GPT-2!memory bandwidth}: Giải mã tự hồi quy kích thước batch thấp thường bị giới hạn băng thông vì mỗi bước tái sử dụng trọng số quá ít; việc sử dụng batch, prefill, kiến trúc, song song hóa và phần cứng có thể làm dịch chuyển nút thắt.
+- **MobileNetV2**\index{MobileNetV2!efficiency under constraint}: Các tích chập phân tách theo chiều sâu và lượng tử hoá INT8 đánh đổi khả năng biểu diễn để triển khai NPU di động trong một chế độ bị giới hạn công suất.
+- **DLRM**\index{DLRM!capacity-bound workload}: Các bảng embedding quy mô terabyte có thể làm cho *dung lượng* bộ nhớ trở thành một ràng buộc chính bên cạnh *băng thông* bộ nhớ, buộc các kỹ sư phải thiết kế xoay quanh vị trí vật lý của dữ liệu và cách các phép toán thưa thớt hoạt động.
+- **Phát hiện từ khóa (KWS)/Wake Vision**\index{Keyword spotting!sub-megabyte models}: Các mô hình vi điều khiển dưới megabyte với suy luận luôn bật trong giới hạn công suất miliwatt khiến từng byte và miliwatt đều quan trọng.
+
+Cùng với nhau, năm khối lượng công việc (workload) này bao trùm toàn bộ phổ triển khai từ trung tâm dữ liệu đến vi điều khiển, khám phá các nút thắt mà những nguyên tắc này chẩn đoán và kiểm tra các chiến lược tối ưu hóa được phát triển trong suốt cuốn sách. Tư duy hệ thống mà chúng tôi phát triển bằng cách theo dõi các mô hình hải đăng này qua các chương, từ thiết kế kiến trúc đến huấn luyện, tối ưu hóa và triển khai, là góc nhìn tích hợp giúp phân biệt kỹ thuật hệ thống ML với phát triển thuật toán đơn lẻ.
+
+```{python}
+#| echo: false
+#| output: false
+from mlsysim import *
+from mlsysim.core.units import *
+
+# ┌─────────────────────────────────────────────────────────────────────────────
+# │ MOBILENET JOURNEY MATH
+# ├─────────────────────────────────────────────────────────────────────────────
+# │ Context: @tbl-lighthouse-journey-mobilenet (Architecture and Compression rows)
+# │          in the Synthesizing ML Systems section.
+# │
+# │ Goal:    Compute the FLOP and byte ratios that quantify MobileNetV2's
+# │          efficiency wins across the architecture/compression journey.
+# │ Show:    Depthwise-separable FLOP reduction, ResNet-50 vs. MobileNetV2
+# │          operation ratio, and INT8 byte ratios versus FP32/FP16.
+# │ How:     Apply the depthwise-separable FLOP formula at a representative
+# │          3x3, 256-channel layer; divide ResNet-50/MobileNetV2 inference
+# │          FLOPs; divide FP32/FP16 byte widths by INT8 byte width.
+# │
+# └─────────────────────────────────────────────────────────────────────────────
+from mlsysim import Models
+from mlsysim.fmt import fmt, check
+
+class MobileNetJourneyMath:
+    # LOAD
+    resnet = Models.Vision.ResNet50
+    mobilenet = Models.Vision.MobileNetV2
+    kernel_size = 3
+    representative_output_channels = 256
+
+    # EXECUTE
+    standard_to_depthwise = (kernel_size**2 * representative_output_channels) / (kernel_size**2 + representative_output_channels)
+    resnet_to_mobilenet = resnet.inference_flops / mobilenet.inference_flops
+    int8_vs_fp32 = BYTES_FP32 / BYTES_INT8
+    int8_vs_fp16 = BYTES_FP16 / BYTES_INT8
+
+    # GUARD
+    check(8 <= standard_to_depthwise <= 9, "Depthwise separable example should land near 8--9x.")
+    check(13 <= resnet_to_mobilenet.to("").magnitude <= 15, "ResNet-50/MobileNetV2 ratio drifted.")
+    check(int8_vs_fp32.to("").magnitude == 4 and int8_vs_fp16.to("").magnitude == 2, "INT8 byte ratios changed.")
+
+    # OUTPUT
+    depthwise_reduction_mult_str = fmt_multiple(standard_to_depthwise, precision=1, commas=False)
+    resnet_ops_reduction_mult_str = fmt_multiple(resnet_to_mobilenet.to("").magnitude, precision=1, commas=False)
+    int8_fp32_reduction_mult_str = fmt_multiple(int8_vs_fp32.to("").magnitude, precision=0, commas=False)
+    int8_fp16_reduction_mult_str = fmt_multiple(int8_vs_fp16.to("").magnitude, precision=0, commas=False)
+```
+
+@Tbl-lighthouse-journey-mobilenet theo dõi hành trình này cho một mô hình duy nhất, MobileNetV2, cho thấy các nguyên tắc từ khắp cuốn sách hội tụ như thế nào vào một tạo phẩm kỹ thuật. Bảng này đi qua bảy giai đoạn (từ các ràng buộc nền tảng đến kiến trúc, huấn luyện, nén, tăng tốc, phục vụ (serving) và vận hành) cho thấy các quyết định của mỗi giai đoạn lan truyền về phía trước để định hình những gì có thể thực hiện được trong các giai đoạn tiếp theo.
+
+| **Journey Phase**                             | **System Lens**                | **MobileNetV2 Implementation**                                                                                                                                                                                                                                                       |
+|:----------------------------------------------|:-------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Foundations (@sec-introduction)**           | The AI Triad                   | Bounded by machine constraints (Battery/Thermal)                                                                                                                                                                                                                                     |
+| **Architecture (@sec-network-architectures)** | Algorithmic Efficiency         | Depthwise Separable Convolutions: `{python} MobileNetJourneyMath.depthwise_reduction_mult_str` fewer FLOPs for a representative 3-by-3, 256-output-channel layer and `{python} MobileNetJourneyMath.resnet_ops_reduction_mult_str` fewer operations than ResNet-50 at ImageNet scale |
+| **Training (@sec-model-training)**            | Throughput vs. Latency         | Optimized for single-request mobile latency; data augmentation can improve robustness                                                                                                                                                                                                |
+| **Compression (@sec-model-compression)**      | Navigating the Pareto Frontier | INT8 Quantization: FP32 uses `{python} MobileNetJourneyMath.int8_fp32_reduction_mult_str` and FP16 uses `{python} MobileNetJourneyMath.int8_fp16_reduction_mult_str` the per-value storage of INT8, with accuracy revalidated per deployment                                         |
+| **Acceleration (@sec-hardware-acceleration)** | Honoring the Silicon Contract  | Mapping kernels to Mobile NPUs (for example, Apple Neural Engine) to maximize hardware utilization                                                                                                                                                                                   |
+| **Serving (@sec-model-serving)**              | Respecting the Latency Budget  | $\text{p99} < 50$ ms constraint; optimizing preprocessing (resize/normalize) to avoid CPU bottlenecks                                                                                                                                                                                |
+| **Operations (@sec-ml-operations)**           | Managing System Entropy        | Drift Monitoring: Detecting distribution shifts and tracking cohort-level accuracy across heterogeneous device populations and lighting conditions                                                                                                                                   |
+
+: **Hành trình Hải đăng (MobileNetV2)**: Theo dõi một mô hình qua bảy giai đoạn của ngăn xếp hệ thống cho thấy các quyết định trong một lĩnh vực (ví dụ: kiến trúc) lan truyền các ràng buộc và cơ hội sang các lĩnh vực hạ nguồn (ví dụ: tăng tốc phần cứng và giám sát). {#tbl-lighthouse-journey-mobilenet tbl-colwidths="[17,22,61]"}
+
+Bảng này cho thấy các quyết định trong một hàng hạn chế các lựa chọn ở hàng tiếp theo như thế nào. Các lựa chọn kiến trúc (tích chập tách sâu) đã cho phép các lựa chọn nén (lượng tử hoá INT8), mà đến lượt mình lại cho phép các lựa chọn tăng tốc (triển khai NPU di động). Sự lan truyền ràng buộc tái diễn trong các hệ thống ML, và hành trình của MobileNetV2 là một ví dụ về cấu trúc đó. Câu hỏi đặt ra là những công cụ định lượng nào tái diễn trên các mô hình và công nghệ cụ thể. Câu trả lời nằm ở mười ba nguyên tắc định lượng, một số là các giới hạn chính xác và một số khác là các chẩn đoán phụ thuộc vào giả định.
+
+## Mười Ba Nguyên Tắc Định Lượng {#sec-thirteen-quantitative-invariants-0dd2}
+
+Trong suốt cuốn sách này, mỗi phần đã giới thiệu các công cụ định lượng để lập luận về hành vi của hệ thống ML. Mười ba nguyên tắc định lượng này\index{Thirteen quantitative principles!framework} cố ý kết hợp các giới hạn toán học chính xác với các phân tách kỹ thuật, các mô hình cục bộ được điều chỉnh, các yêu cầu chính sách và các phương pháp heuristic thiết kế. @Tbl-thirteen-principles tập hợp tất cả mười ba nguyên tắc này ở một nơi, được tổ chức theo bốn phần đã tiết lộ chúng. Giá trị của chúng đến từ việc áp dụng từng nguyên tắc trong các giả định đã nêu của nó, chứ không phải từ việc coi mỗi hàng là một định luật phổ quát.
+
+```{python}
+#| echo: false
+#| label: conclusion-energy-movement-math
+#| output: false
+# ┌─────────────────────────────────────────────────────────────────────────────
+# │ ENERGY-MOVEMENT INVARIANT RATIOS
+# ├─────────────────────────────────────────────────────────────────────────────
+# │ Context: @tbl-thirteen-principles (energy-movement invariant row) and the
+# │          adjacent diagnostic-chain paragraph in the Thirteen Quantitative
+# │          Invariants section.
+# │
+# │ Goal:    Quantify the energy cost of a DRAM access relative to a single
+# │          FP32 or FP16 floating-point operation.
+# │ Show:    DRAM-vs-FP32 and DRAM-vs-FP16 energy ratios used to anchor the
+# │          "100--1,000x" energy-movement claim in prose.
+# │ How:     Divide the reference DRAM access energy by the per-FLOP energy
+# │          constants for FP32 and FP16 from mlsysim.core.units.
+# │
+# └─────────────────────────────────────────────────────────────────────────────
+from mlsysim.core.units import flop
+from mlsysim.fmt import fmt_int, fmt, fmt_multiple, fmt_multiple_range, check
+
+class EnergyMovementMath:
+    # LOAD
+    ENERGY_DRAM_ACCESS_PJ = Hardware.Tech.Memory.DRAM.energy_per_access
+    ENERGY_FLOP_FP32_PJ = Hardware.Tech.Op.FlopFp32.energy
+    ENERGY_FLOP_FP16_PJ = Hardware.Tech.Op.FlopFp16.energy
+    dram_access = ENERGY_DRAM_ACCESS_PJ
+    fp32_flop_energy = ENERGY_FLOP_FP32_PJ * flop
+    fp16_flop_energy = ENERGY_FLOP_FP16_PJ * flop
+
+    # EXECUTE
+    dram_vs_fp32 = (dram_access / fp32_flop_energy).to("").magnitude
+    dram_vs_fp16 = (dram_access / fp16_flop_energy).to("").magnitude
+
+    # GUARD
+    check(100 <= dram_vs_fp32 <= 1000, "DRAM/FP32 energy ratio left expected range.")
+    check(100 <= dram_vs_fp16 <= 1000, "DRAM/FP16 energy ratio left expected range.")
+
+    # OUTPUT
+    dram_vs_fp32_display = round(dram_vs_fp32)
+    dram_vs_fp16_display = round(dram_vs_fp16)
+    dram_vs_fp32_mult_str = fmt_multiple(dram_vs_fp32_display, precision=0, commas=False)
+    dram_vs_fp16_mult_str = fmt_multiple(dram_vs_fp16_display, precision=0, commas=False)
+    dram_vs_range_mult_str = fmt_multiple_range(
+        dram_vs_fp32_display,
+        dram_vs_fp16_display,
+        precision=0,
+        commas=False,
+    )
+```
+
+| **#**                           | **Principle**                    | **Part**       | **Core Equation/Statement**                                                                                                  | **What It Predicts**                                    |
+|:--------------------------------|:---------------------------------|:---------------|:-----------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------|
+| \ref{pri-data-as-code}          | Data-as-Code Principle           | I: Foundations | Behavior $=f$(data, algorithm, code, randomness)                                                                             | Data changes behavior; other inputs also matter         |
+| \ref{pri-data-gravity}          | Data-Gravity Principle           | I: Foundations | Move compute toward data when repeated transfer costs exceed placement costs                                                 | Depends on volume, reuse, network, and compute mobility |
+| \ref{pri-iron-law}              | Iron Law of ML Systems           | II: Build      | $T_{\text{seq}}=D_{\text{vol}}/\text{BW}+O/(R_{\text{peak}}\eta_{\text{hw}})+L_{\text{lat}}$; overlap ranges from max to sum | Stages may add or overlap                               |
+| \ref{pri-silicon-contract}      | Silicon Contract                 | II: Build      | $I_{\text{ridge}}=R_{\text{peak}}/\text{BW}$; compare $I_{\text{model}}$ with $I_{\text{ridge}}$                             | Diagnoses bandwidth- versus compute-limited operation   |
+| \ref{pri-pareto-frontier}       | Pareto Frontier                  | III: Optimize  | $\nexists c'\ne c:\,[\forall k\,M_k(c')\ge M_k(c)]\land[\exists j\,M_j(c')>M_j(c)]$                                          | No distinct configuration dominates a frontier point    |
+| \ref{pri-arithmetic-intensity}  | Arithmetic Intensity Law         | III: Optimize  | $R_{\text{attain}} \le \min(R_{\text{peak}},\; I \times \text{BW})$                                                          | More compute cannot raise a bandwidth ceiling           |
+| \ref{pri-energy-movement}       | Energy-Movement Invariant        | III: Optimize  | $E_{\text{total}}=\sum_j N_jE_j$; DRAM/FLOP cost ratio: `{python} EnergyMovementMath.dram_vs_range_mult_str`                 | Total energy depends on event counts and costs          |
+| \ref{pri-amdahl}                | Amdahl's Law                     | III: Optimize  | $\text{Speedup} = \frac{1}{(1-f_{\text{parallel}}) + \frac{f_{\text{parallel}}}{S_{\text{parallel}}}}$                       | The serial fraction caps all parallelism gains          |
+| \ref{pri-verification-gap}      | Verification Gap                 | IV: Deploy     | $\Pr_{(X,Y)\sim P_{\text{deploy}}}[d(f(X),Y)\le\tau]\ge1-\epsilon$                                                           | Specify distance, tolerance, population, and confidence |
+| \ref{pri-statistical-drift}     | Statistical Drift Diagnostic     | IV: Deploy     | $\text{Accuracy}(t)\approx\text{Accuracy}_0-\lambda\mathcal{D}(P_t\Vert P_0)$                                                | A local fit; drift need not lower quality               |
+| \ref{pri-training-serving-skew} | Training-Serving Skew Diagnostic | IV: Deploy     | $S_{\text{skew}}=\mathbb{E}_{X\sim P_{\text{deploy}}}[d(f_{\text{serve}}(X),f_{\text{train}}(X))]$                           | Output mismatch signals risk, not accuracy loss         |
+| \ref{pri-latency-budget}        | Latency Budget Principle         | IV: Deploy     | $T_q\le L_{\text{budget}}$                                                                                                   | The product SLO selects $q$ and its budget              |
+| \ref{pri-bias-feedback}         | Bias Feedback Model              | IV: Deploy     | $\Delta_g(k)\approx\Delta_g(0)\alpha_{\text{fb}}^k$ with fitted $\alpha_{\text{fb}}$                                         | Feedback may amplify harm; measure and intervene        |
+
+: **Mười Ba Nguyên Tắc Định Lượng**: Mỗi công cụ xuất hiện trong phần mà ràng buộc chi phối hoặc mục đích chẩn đoán của nó lần đầu tiên trở nên rõ ràng. Tập hợp này kết hợp các giới hạn, phân tách, mô hình được điều chỉnh, yêu cầu chính sách và các phương pháp heuristic. Mỗi hàng chỉ hữu ích dưới các giả định đã nêu của nó; cùng với nhau, chúng cung cấp một vốn từ vựng phân tích chung cho thiết kế, tối ưu hóa và triển khai hệ thống, thay vì một tập hợp các bất biến phổ quát. {#tbl-thirteen-principles tbl-colwidths="[3,15,13,39,30]"}
+
+Mười ba nguyên tắc này không phải là các tiên đề độc lập. Chúng tạo thành một framework tích hợp được kết nối bởi một siêu nguyên tắc duy nhất: phương pháp heuristic bảo toàn độ phức tạp\index{Conservation of complexity!meta-principle}.[^fn-conservation-complexity-heuristic] Độ phức tạp được loại bỏ khỏi một giao diện thường xuất hiện trở lại ở một phần khác của hệ thống, nhưng đây không phải là một định luật bảo toàn vật lý và không ngụ ý rằng mọi sự đơn giản hóa đều có một chi phí bù đắp tương đương. Giá trị của nó là chẩn đoán: sau khi đơn giản hóa một thành phần, hãy kiểm tra xem gánh nặng xác thực, trạng thái, phối hợp hoặc vận hành đã thay đổi ở đâu. Thử nghiệm là liệu các nguyên tắc có giải thích được cùng các nút thắt của mô hình hải đăng từ các góc độ dữ liệu, mô hình, phần cứng và triển khai mà không mâu thuẫn với nhau hay không.
+
+[^fn-conservation-complexity-heuristic]: **Phương pháp heuristic bảo toàn độ phức tạp**\index{Conservation of complexity!heuristic limits}: Định luật Tesler\index{Tesler's law!conservation of complexity}, một châm ngôn thiết kế, nói rằng độ phức tạp không thể giảm bớt của một ứng dụng phải được xử lý ở đâu đó trong tương tác giữa người dùng, ứng dụng và nền tảng [@tesler1984complexity]; việc mở rộng nó cho tất cả độ phức tạp của hệ thống ML là một phép loại suy, không phải là một định luật vật lý. Lượng tử hoá có thể làm tăng gánh nặng xác thực, và sự trừu tượng hóa có thể di chuyển chi tiết triển khai ra sau một giao diện, nhưng thiết kế tốt cũng có thể loại bỏ hoàn toàn độ phức tạp ngẫu nhiên. Các pipeline ứng dụng mô hình ngôn ngữ lớn minh họa một sự thay đổi có thể xảy ra: đơn giản hóa giao diện hướng người dùng bằng các lời nhắc ngắn hơn hoặc mơ hồ hơn có thể chuyển công việc sang các lời nhắc hệ thống, truy xuất hoặc xác minh đầu ra. Sử dụng phương pháp heuristic để tìm kiếm các chi phí bị dịch chuyển, chứ không phải để giả định rằng một chi phí bù đắp tương đương phải tồn tại.
+
+### Nền tảng: Nơi độ phức tạp bắt nguồn (nguyên tắc 1–2) {.unnumbered}
+
+Nguyên tắc dữ liệu như mã\index{Data-as-code principle!logical program} (\ref{pri-data-as-code}) và phương pháp heuristic trọng lực dữ liệu\index{Data gravity principle!physical anchor} (nguyên tắc \ref{pri-data-gravity}), được thiết lập trong Phần I và phát triển trong @sec-data-engineering, thiết lập dữ liệu như một đầu vào logic chính và một điểm neo vật lý tiềm năng. Hành vi cũng phụ thuộc vào thuật toán và triển khai, trong khi việc đặt vị trí tính toán-đến-dữ liệu phụ thuộc vào khối lượng, tái sử dụng, chi phí mạng và khả năng di chuyển của tính toán. Do đó, hành vi và kiến trúc mô hình kế thừa các ràng buộc từ nền tảng dữ liệu.
+
+Các mô hình hải đăng minh họa trực tiếp cả hai nguyên tắc. ResNet-50 và GPT-2 phụ thuộc vào cả kiến trúc và dữ liệu huấn luyện của chúng. Các bảng embedding quy mô terabyte của DLRM có thể đưa ra một lập luận mạnh mẽ để thiết kế hệ thống xoay quanh nơi dữ liệu vật lý cư trú. Những nguyên tắc này giúp giải thích tại sao mô hình tính toán-đến-dữ liệu tái diễn trong các ngữ cảnh triển khai mà không biến nó thành một quy tắc đặt vị trí phổ quát.
+
+### Xây dựng: Độ phức tạp trở thành tính toán như thế nào (nguyên tắc 3–4) {.unnumbered}
+
+Luật sắt (nguyên tắc \ref{pri-iron-law}) và hợp đồng silicon (nguyên tắc \ref{pri-silicon-contract}) hướng dẫn các quyết định trong việc xây dựng một hệ thống ML. Phân tách ba thành phần của luật sắt (được giới thiệu trong @sec-introduction-iron-law-ml-systems-c32a) xác định đòn bẩy nào cần tác động; hợp đồng silicon xác định thành phần nào chiếm ưu thế đối với một cặp kiến trúc-phần cứng nhất định. Như hành trình hải đăng đã chỉ ra, mỗi mô hình có thể bộc lộ một chế độ ràng buộc khác nhau: suy luận ResNet-50 theo batch có thể bị giới hạn bởi tính toán, giải mã Llama batch thấp có thể bị giới hạn bởi băng thông, DLRM có thể bị giới hạn bởi dung lượng, và MobileNetV2 định hình lại phép tính của nó để phù hợp với các ràng buộc của NPU di động. @Sec-appdx-dam-taxonomy-bottleneck-diagnostic-3fc9 ánh xạ mỗi chế độ này tới các tối ưu hóa mang lại hiệu quả và những tối ưu hóa lãng phí công sức, biến việc chẩn đoán giới hạn bởi tính toán so với giới hạn bởi băng thông so với giới hạn bởi dung lượng thành một kế hoạch hành động. @Sec-model-training xác nhận rằng thời gian huấn luyện giảm nhiều nhất khi các kỹ sư tối ưu hóa thành phần chiếm ưu thế thay vì phân bổ công sức đồng đều.
+
+### Tối ưu hóa: Các ràng buộc định hình sự đánh đổi như thế nào (nguyên tắc 5–8) {.unnumbered}
+
+Bốn nguyên tắc tối ưu hóa tạo thành một chuỗi chẩn đoán liên kết chặt chẽ. Biên Pareto\index{Pareto frontier!multi-objective optimization} (nguyên tắc \ref{pri-pareto-frontier}) xác định các đánh đổi không bị chi phối sau khi các hướng mục tiêu được chuẩn hóa: lượng tử hoá đánh đổi độ chính xác để giảm lưu lượng bộ nhớ, tỉa (pruning) đánh đổi dung lượng để tăng tốc độ, và chưng cất (distillation) đánh đổi tính toán huấn luyện để tăng hiệu quả suy luận. Định luật cường độ số học\index{Arithmetic intensity!bottleneck diagnosis} (nguyên tắc \ref{pri-arithmetic-intensity}) chẩn đoán liệu tính toán hay băng thông đặt ra giới hạn lý tưởng. Bất biến năng lượng-chuyển động\index{Energy-movement invariant!data locality} (nguyên tắc \ref{pri-energy-movement}) kết hợp chi phí cho mỗi sự kiện với số lượng sự kiện: trong các hằng số tham chiếu của sách, một lần truy cập DRAM tốn khoảng `{python} EnergyMovementMath.dram_vs_range_mult_str` bằng một phép toán số học FP32/FP16, nhưng sự chiếm ưu thế tổng thể của khối lượng công việc (workload) phụ thuộc vào số lượng của mỗi loại xảy ra. Định luật Amdahl\index{Amdahl's law!preprocessing bottleneck} (nguyên tắc \ref{pri-amdahl}) đặt ra giới hạn cho bất kỳ lợi ích song song nào, giải thích tại sao việc tải dữ liệu và tiền xử lý có thể trở thành nút thắt cổ chai trong các hệ thống được tối ưu hóa cao.
+
+MobileNetV2 (hải đăng của chúng ta từ @sec-network-architectures) điều hướng cả bốn đồng thời: tích chập tách sâu định hình lại biên Pareto [@sandler2019], lượng tử hoá INT8\index{INT8 quantization!bandwidth trade-off} khai thác định luật cường độ số học bằng cách tăng số phép toán trên mỗi byte thông qua việc giảm lưu lượng bộ nhớ [@jacob2018], và tiết kiệm năng lượng thu được tôn trọng bất biến năng lượng-chuyển động trong khi Định luật Amdahl giải thích tại sao một giai đoạn tiền xử lý không được tăng tốc có thể giới hạn tốc độ tăng tốc từ đầu đến cuối. Hải đăng KWS đẩy những đánh đổi này đến mức cực đoan, nơi các mô hình dưới megabyte trên vi điều khiển không để lại bất kỳ biên độ lãng phí nào trên bất kỳ trục nào.
+
+### Triển khai: Thực tế đánh bại các giả định như thế nào (nguyên tắc 9–13) {.unnumbered}
+
+Các nguyên tắc triển khai giải quyết các lỗi mà thử nghiệm trên băng ghế (bench testing) không thể loại trừ: một hệ thống có thể hoạt động chính xác trên băng ghế nhưng lại thất bại âm thầm trong sản xuất. Khoảng cách xác minh\index{Verification gap!statistical testing} (nguyên tắc \ref{pri-verification-gap}) có nghĩa là xác minh thống kê chỉ có giá trị trên một tập hợp triển khai, khoảng cách tác vụ, dung sai, lỗi mục tiêu và quy trình tin cậy mẫu hữu hạn đã nêu; thử nghiệm ước tính hành vi chứ không phải chứng minh tính đúng đắn cho mọi đầu vào trong tương lai. Chẩn đoán trôi dạt thống kê\index{Statistical drift risk!accuracy erosion} (nguyên tắc \ref{pri-statistical-drift}) phát hiện sự thay đổi phân phối nhưng không xác định liệu độ chính xác có xấu đi, giữ nguyên hay cải thiện, do đó đường cong suy giảm cục bộ chỉ hợp lệ khi được khớp với các kết quả. Chẩn đoán độ chệch (skew) giữa huấn luyện và phục vụ (serving)\index{Training-serving skew!accuracy impact} (nguyên tắc \ref{pri-training-serving-skew}) cũng là một chỉ số rủi ro hơn là một phương trình mất độ chính xác phổ quát, mặc dù tiền xử lý hoặc sự khác biệt số học vẫn có thể gây ra thay đổi chất lượng. Ngân sách độ trễ\index{Latency budget!tail latency constraint} (nguyên tắc \ref{pri-latency-budget}) ràng buộc việc phục vụ (serving) tại phân vị được chọn theo yêu cầu sản phẩm, có thể là p95, p99 hoặc một thước đo đuôi khác. Cuối cùng, mô hình phản hồi độ chệch (bias)\index{Bias feedback model!disparity amplification} (nguyên tắc \ref{pri-bias-feedback}) có thể đại diện cho sự khuếch đại chênh lệch, nhưng hồi quy lũy thừa yêu cầu một yếu tố phản hồi được đo lường, xấp xỉ không đổi và không có sự can thiệp hiệu quả.
+
+Năm nguyên tắc triển khai giải thích tại sao @sec-ml-operations dành sự chú ý rộng rãi đến giám sát, phát hiện trôi dạt, kho đặc trưng (feature store) và các chỉ số nhóm con phân tách: cơ sở hạ tầng vận hành phải làm lộ ra các lỗi âm thầm và kết nối bằng chứng với phản hồi. Một hệ thống đề xuất DLRM đạt độ chính xác ngoại tuyến xuất sắc vẫn cần kiểm tra tính chẵn lẻ khi độ chệch (skew) giữa huấn luyện và phục vụ (serving) làm hỏng các giá trị đặc trưng (nguyên tắc \ref{pri-training-serving-skew}) và kiểm tra kết quả khi hành vi người dùng thay đổi theo mùa (nguyên tắc \ref{pri-statistical-drift}). Việc phục vụ (serving) GPT-2/Llama phải tôn trọng phân vị độ trễ đã chọn của nó thông qua các kỹ thuật như batching liên tục và giải mã suy đoán, như được trình bày chi tiết trong @sec-model-serving, bởi vì thời gian phản hồi quá mức có thể vi phạm yêu cầu sản phẩm. Một hệ thống phê duyệt khoản vay có thể thỏa mãn mọi nguyên tắc khác trong khi vẫn từ chối tín dụng một cách có hệ thống đối với các cộng đồng kém được phục vụ, và phản hồi có thể làm trầm trọng thêm tác hại trừ khi giám sát nhóm con phân tách phát hiện và kích hoạt xem xét.
+
+### Framework tích hợp {.unnumbered}
+
+Mười ba nguyên tắc không phải là một danh sách kiểm tra để áp dụng tuần tự. Chúng tạo thành một mạng lưới các ràng buộc lẫn nhau. Phương pháp heuristic bảo toàn độ phức tạp thúc đẩy các kỹ sư tìm kiếm nơi mà một sự đơn giản hóa cục bộ thay đổi gánh nặng ở nơi khác.
+
+Chúng ta có thể theo dõi cụ thể các ràng buộc lẫn nhau này bằng cách xem xét điều gì xảy ra khi một kỹ sư lượng tử hoá một mô hình từ FP16 sang INT8. Quyết định đơn lẻ này điều hướng biên Pareto (nguyên tắc \ref{pri-pareto-frontier}), đánh đổi độ chính xác lấy lưu lượng bộ nhớ. Hậu quả không dừng lại ở đó: lượng tử hoá làm thay đổi hợp đồng silicon của mô hình (nguyên tắc \ref{pri-silicon-contract}), dịch chuyển vị trí của nó trên đường cong cường độ số học (nguyên tắc \ref{pri-arithmetic-intensity}) và làm thay đổi hồ sơ năng lượng của nó (nguyên tắc \ref{pri-energy-movement}). Khi mô hình đã lượng tử hoá đó được triển khai, ngân sách độ trễ (nguyên tắc \ref{pri-latency-budget}) chi phối việc liệu tốc độ tăng có đáp ứng mục tiêu mức dịch vụ (SLO) hay không, trong khi xác thực triển khai phải kiểm tra rằng đường dẫn phục vụ đã lượng tử hoá vẫn giữ nguyên hành vi được chấp nhận trong quá trình kiểm thử nén. Một quyết định lượng tử hoá duy nhất lan truyền đồng thời qua biên Pareto, hợp đồng silicon và ngân sách độ trễ, trong đó một lợi ích ở khía cạnh này (lưu lượng bộ nhớ) phải được xác thực so với một rủi ro ở khía cạnh khác (lỗi số học).
+
+Việc theo dõi đó không yêu cầu mọi nguyên tắc phải áp dụng cùng lúc. Nó cho thấy các nguyên tắc liên quan trở nên hoạt động như thế nào khi một quyết định di chuyển từ biểu diễn mô hình đến thực thi phần cứng và xác thực sản xuất. Vị trí dữ liệu ảnh hưởng đến nơi mô hình có thể chạy, Định luật Amdahl giới hạn mức độ kernel nhanh hơn có thể cải thiện toàn bộ đường dẫn yêu cầu, xác minh giới hạn sự mất mát độ chính xác kết quả, và giám sát kết quả kiểm tra xem hành vi đã được xác thực có còn tồn tại sau khi triển khai hay không. Nhiệm vụ của kỹ sư là theo dõi các chi phí bị dịch chuyển thay vì giả định rằng độ phức tạp được bảo toàn.
+
+Một đề xuất triển khai nhỏ làm cho mạng lưới ràng buộc này trở nên cụ thể.
+
+::: {#chk-conclusion-applying-invariants .callout-checkpoint title="Áp dụng các nguyên tắc"}
+
+Một đồng nghiệp đề xuất lượng tử hoá mô hình của bạn từ FP32 sang INT8 để giảm chi phí phục vụ.
+
+**Theo dõi các nguyên tắc**
+
+- [ ] **Biên Pareto** (nguyên tắc \ref{pri-pareto-frontier}): Bạn đang đánh đổi độ chính xác nào để lấy lợi ích băng thông?
+- [ ] **Hợp đồng silicon** (nguyên tắc \ref{pri-silicon-contract}): Phần cứng mục tiêu có tăng tốc hiệu quả các toán tử INT8 cần thiết không?
+- [ ] **Xác thực đường dẫn phục vụ**: tạo phẩm phục vụ đã lượng tử hoá có giữ nguyên hành vi được chấp nhận trong quá trình kiểm thử nén không?
+- [ ] **Ngân sách độ trễ** (nguyên tắc \ref{pri-latency-budget}): Tốc độ tăng có đưa bạn vào trong phạm vi SLO, hay tạo không gian cho việc xử lý theo batch?
+
+:::
+
+Để thấy chu trình ràng buộc lẫn nhau này hoạt động, hãy theo dõi luồng trong @fig-invariants-cycle. Bốn giai đoạn (Nền tảng, Xây dựng, Tối ưu hoá, Triển khai) bao quanh một trung tâm đại diện cho phương pháp heuristic bảo toàn độ phức tạp, và các mũi tên ánh xạ luồng các quyết định kỹ thuật: các lựa chọn của mỗi giai đoạn ràng buộc những gì có thể thực hiện được ở giai đoạn tiếp theo, và chu trình cuối cùng quay trở lại điểm khởi đầu. Các quyết định trong Xây dựng ràng buộc Tối ưu hoá, trong khi bằng chứng sản xuất như trôi dạt, lệch và thay đổi kết quả có thể phản hồi lại Nền tảng. Vai trò của kỹ sư là quản lý luồng này, đảm bảo rằng các gánh nặng bị dịch chuyển được đặt ở nơi chúng có thể được xử lý hiệu quả.
+
+Mũi tên phản hồi từ Triển khai đến Nền tảng là trung tâm của chu trình này. Các nguyên tắc từ chín đến mười ba phơi bày các tín hiệu và ràng buộc có thể yêu cầu một bản phát hành đã sửa lỗi, dự phòng, dữ liệu mới, huấn luyện lại, hoặc một lượt tối ưu hoá mới. Khi một trong số đó xuất hiện, các kỹ sư phải chẩn đoán phản ứng nào phù hợp với nguyên nhân thay vì tự động phản ứng với một cảnh báo trôi dạt. Chu trình hoạt động trong phạm vi hệ thống đơn lẻ của cuốn sách này: mục tiêu không phải là đặt tên cho mọi kiến trúc tương lai, mà là làm cho phản hồi hiển thị đủ sớm để các kỹ sư có thể thiết kế lại trước khi các lỗi chồng chất.
+
+::: {#fig-invariants-cycle fig-env="figure" fig-pos="htb" fig-cap="**Chu trình của Hệ thống ML (13 Nguyên tắc)**: Một vòng đời kỹ thuật hệ thống bốn giai đoạn được tổ chức xung quanh phương pháp heuristic bảo toàn độ phức tạp. Các giai đoạn kết nối trong một chu trình phản hồi, và mười ba nguyên tắc được nhóm dọc theo các chuyển đổi dưới dạng giới hạn, phân tách, mô hình đã khớp, yêu cầu chính sách và các phương pháp heuristic thiết kế mà các giả định của chúng phải được kiểm tra." fig-alt="Sơ đồ tròn theo chiều kim đồng hồ với bốn giai đoạn: Nền tảng (Dữ liệu), Xây dựng (Mô hình), Tối ưu hoá (Phần cứng), và Triển khai (Vận hành). Các mũi tên nối Nền tảng với Xây dựng, Xây dựng với Tối ưu hoá, Tối ưu hoá với Triển khai, và Triển khai trở lại Nền tảng. Các chuyển đổi được gắn nhãn 1–2 Dữ liệu dưới dạng Mã và trọng lực dữ liệu; 3–4 định luật sắt và Hợp đồng Silicon; 5–8 Biên Pareto, Cường độ Số học, Di chuyển Năng lượng, và Định luật Amdahl; và 9–13 khoảng cách xác minh, Trôi dạt Thống kê, Chẩn đoán Lệch, Ngân sách Độ trễ, và Phản hồi Độ chệch. Một vòng tròn trung tâm nét đứt được gắn nhãn Bảo toàn Độ phức tạp."}
+
+```{.tikz}
+\begin{tikzpicture}[line join=round,font=\sffamily]
+
+\tikzset{
+Box/.style={align=flush center,
+    inner sep=4pt,
+    node distance=1.4,
+    draw=OrangeLine,
+    line width=0.75pt,
+    rounded corners,
+    fill=OrangeL!30,
+    text width=25mm,
+    minimum width=25mm, minimum height=10mm
+  },
+Box2/.style={Box, draw=VioletLine, fill=VioletL2!70,align=left,
+    text width=36mm, minimum width=36mm, minimum height=10mm
+  },
+  }
+
+\tikzset{%
+planet/.style = {circle, draw=yellow!50!red!90,semithick, fill=yellow!30,line width=1.5pt,
+                    font=\sffamily\bfseries,
+                    minimum size=24mm, inner sep=1mm,align=flush center},
+satellite/.style = {circle, draw=none, semithick, fill=#1!10,
+                    text width=26mm, inner sep=1pt, align=flush center,minimum size=20mm,minimum height=12mm},
+TxtC/.style = {font=\small\sffamily,text width=44mm,align=flush center},
+arr/.style = {-{Triangle[length=3mm,width=6mm]}, color=#1!60,
+                    line width=3mm, shorten <=1mm, shorten >=1mm},
+LineA/.style = {violet!60,{Circle[line width=1.5pt,fill=white,length=7.5pt]}-,line width=2.0pt,shorten <=-4pt},
+LineAA/.style={violet!30,dashed, line width=1.0pt,{-{Triangle[width=1.0*6pt,length=1.6*6pt]}},shorten <=3pt,shorten >=2pt}
+}
+
+\tikzset{pics/brain/.style = {
+        code = {
+        \pgfkeys{/channel/.cd, #1}
+\begin{scope}[local bounding box=BRAIN,scale=\scalefac, every node/.append style={transform shape}]
+\draw[fill=\filllcolor,line width=\Linewidth](-0.3,-0.10)to(0.08,0.60)
+to[out=60,in=50,distance=3](-0.1,0.69)to[out=160,in=80](-0.26,0.59)to[out=170,in=90](-0.46,0.42)
+to[out=170,in=110](-0.54,0.25)to[out=210,in=150](-0.54,0.04)
+to[out=240,in=130](-0.52,-0.1)to[out=300,in=240]cycle;
+\draw[fill=\filllcolor,line width=\Linewidth]
+(-0.04,0.64)to[out=120,in=0](-0.1,0.69)(-0.19,0.52)to[out=120,in=330](-0.26,0.59)
+(-0.4,0.33)to[out=150,in=280](-0.46,0.42)
+%
+(-0.44,-0.03)to[bend left=30](-0.34,-0.04)
+(-0.33,0.08)to[bend left=40](-0.37,0.2) (-0.37,0.12)to[bend left=40](-0.45,0.14)
+(-0.26,0.2)to[bend left=30](-0.24,0.13)
+(-0.16,0.32)to[bend right=30](-0.27,0.3)to[bend right=30](-0.29,0.38)
+(-0.13,0.49)to[bend left=30](-0.04,0.51);
+\draw[rounded corners=0.8pt,line width=1.5*\Linewidth,\drawcircle,-{Circle[fill=\filllcolor,length=4.15pt]}](-0.23,0.03)--(-0.15,-0.03)--(-0.19,-0.18)--(-0.04,-0.28);
+\draw[rounded corners=0.8pt,line width=1.5*\Linewidth,\drawcircle,-{Circle[fill=\filllcolor,length=4.15pt]}](-0.17,0.13)--(-0.04,0.05)--(-0.06,-0.06)--(0.14,-0.11);
+\draw[rounded corners=0.8pt,line width=1.5*\Linewidth,\drawcircle,-{Circle[fill=\filllcolor,length=4.15pt]}](-0.12,0.23)--(0.31,0.0);
+\draw[rounded corners=0.8pt,line width=1.5*\Linewidth,\drawcircle,-{Circle[fill=\filllcolor,length=4.15pt]}](-0.07,0.32)--(0.06,0.26)--(0.16,0.33)--(0.34,0.2);
+\draw[rounded corners=0.8pt,line width=1.5*\Linewidth,\drawcircle,-{Circle[fill=\filllcolor,length=4.15pt]}](-0.01,0.43)--(0.06,0.39)--(0.18,0.51)--(0.31,0.4);
+\end{scope}
+     }
+  }
+}
+
+%brick
+\tikzset{
+  cigla/.style={ inner sep=0pt,anchor=west,
+    node distance=1.4pt,
+    draw=none,
+    line width=0.1pt,
+    rounded corners=1pt,
+    fill=\filllcolor,
+    minimum width=4mm, minimum height=2mm
+  },
+    cigla1/.style={cigla,fill=\filllcirclecolor},
+pics/brick/.style = {
+        code = {
+        \pgfkeys{/channel/.cd, #1}
+\begin{scope}[shift={($(0,0)+(0,0)$)},scale=\scalefac,every node/.append style={transform shape}]
+\path[clip] (-1.05,-0.52)rectangle (0.71,0.45);
+\node[cigla](C1) at (-1.03,-0.4){};
+\node[cigla1,right= of C1](C2){};
+\node[cigla,right= of C2](C3){};
+\node[cigla1,right= of C3](C4){};
+%
+\node[cigla,above right= of C1,anchor=south](C11){};
+\node[cigla1,right= of C11](C12){};
+\node[cigla,right= of C12](C13){};
+\node[cigla1,right= of C13](C14){};
+%
+\node[cigla,above right= of C11,anchor=south](C21){};
+\node[cigla1,right= of C21](C22){};
+\node[cigla,right= of C22](C23){};
+%
+\node[cigla,above right= of C21,anchor=south](C31){};
+\node[cigla1,right= of C31](C32){};
+\node[cigla,right= of C32](C33){};
+\end{scope}
+    }
+  }
+}
+%vaga
+\tikzset{
+pics/vaga/.style = {
+        code = {
+        \pgfkeys{/channel/.cd, #1}
+\begin{scope}[shift={($(0,0)+(0,0)$)},scale=\scalefac,every node/.append style={transform shape}]
+\node[rectangle,minimum width=2mm,minimum height=22mm,
+draw=none, fill=\filllcolor,line width=\Linewidth](1R) at (0,-0.95){};
+\fill[fill=\filllcolor!60!black](230:2.8)arc(230:310:2.8)--cycle;%circle(2.9);
+%LT
+\node [semicircle, shape border rotate=180,  anchor=chord center,
+      minimum size=11mm, draw=none, fill=\filllcirclecolor](LT) at (-2,-0.5) {};
+\node [circle,  minimum size=4mm, draw=none, fill=\filllcirclecolor](T1) at (-2,1.25) {};
+\draw[draw=\drawcolor,line width=1.2*\Linewidth,shorten <=3pt,shorten >=3pt](T1)--(LT);
+\draw[draw=\drawcolor,line width=1.2*\Linewidth,shorten <=3pt,shorten >=3pt](T1)--(LT.30);
+\draw[draw=\drawcolor,line width=1.2*\Linewidth,shorten <=3pt,shorten >=3pt](T1)--(LT.150);
+%DT
+\node [semicircle, shape border rotate=180,  anchor=chord center,
+      minimum size=11mm, draw=none, fill=\filllcirclecolor!70!black](DT) at (2,-0.5) {};
+\node [circle,  minimum size=4mm, draw=none, fill=\filllcirclecolor!70!black](T2) at (2,1.25) {};
+\draw[draw=\drawcolor,line width=1.2*\Linewidth,shorten <=3pt,shorten >=3pt](T2)--(DT);
+\draw[draw=\drawcolor,line width=1.2*\Linewidth,shorten <=3pt,shorten >=3pt](T2)--(DT.30);
+\draw[draw=\drawcolor,line width=1.2*\Linewidth,shorten <=3pt,shorten >=3pt](T2)--(DT.150);
+%
+\node[draw=none,rectangle,minimum width=32mm,minimum height=1.5mm,inner sep=0pt,
+fill=\filllcolor!60!black]at(0,1.25){};
+\node[draw=white,fill=\filllcolor,line width=2*\Linewidth,ellipse,minimum width=9mm,  minimum height=15mm](EL)at(0,0.85){};
+\node[draw=white,fill=\filllcolor!60!black,line width=2*\Linewidth,circle,minimum size=10mm](2C)at(0,2.05){};
+\end{scope}
+    }
+  }
+}
+%llm
+\tikzset{
+pics/llm/.style = {
+        code = {
+        \pgfkeys{/channel/.cd, #1}
+\begin{scope}[shift={($(0,0)+(0,0)$)},scale=\scalefac,every node/.append style={transform shape}]
+\node[circle,minimum size=12mm,draw=\drawcolor, fill=\filllcolor!70,line width=0.5*\Linewidth](C\picname) at (0,0){};
+\def\startangle{90}
+\def\radius{1.15}
+\def\radiusI{1.1}
+\foreach \i [evaluate=\i as \j using \i+1] [count =\k] in {0,2,4,6,8} {
+\pgfmathsetmacro{\angle}{\startangle - \i * (360/8)}
+\draw[draw=black,-{Circle[black ,fill=\filllcirclecolor,length=5.5pt,line width=0.5*\Linewidth]},line width=1.5*\Linewidth](C\picname)--++(\startangle - \i*45:\radius) ;
+\node[circle,draw=black,fill=\filllcirclecolor!80!red!50,inner sep=3pt,line width=0.5*\Linewidth](2C\k)at(\startangle - \j*45:\radiusI) {};
+}
+\draw[line width=1.5*\Linewidth](2C1)--++(-0.5,0)|-(2C2);
+\draw[line width=1.5*\Linewidth](2C3)--++(0.5,0)|-(2C4);
+\node[circle,minimum size=12mm,draw=\drawcolor, fill=\filllcolor!70,line width=0.5*\Linewidth]at (0,0){};
+\end{scope}
+    }
+  }
+}
+%battery
+\tikzset{
+pics/battery/.style = {
+        code = {
+        \pgfkeys{/channel/.cd, #1}
+\begin{scope}[shift={($(0,0)+(0,0)$)},scale=\scalefac,every node/.append style={transform shape}]
+\node[rectangle,minimum width=35mm,minimum height=8mm,draw=\drawcolor,
+rounded corners=4pt,fill=\filllcirclecolor,line width=\Linewidth](2R\picname) at (1,0){};
+\node[rectangle,minimum width=45mm,minimum height=22mm,draw=\drawcolor,
+rounded corners=4pt,fill=\filllcolor,line width=\Linewidth](R\picname) at (0,0){};
+\node[rectangle,minimum width=5mm,minimum height=18mm,draw=none,
+fill=green,line width=\Linewidth](3R\picname) at ($(R\picname.west)!0.5!(R\picname.east)$){};
+\node[rectangle,minimum width=5mm,minimum height=18mm,draw=none,
+fill=green,line width=\Linewidth](3R\picname) at ($(R\picname.west)!0.33!(R\picname.east)$){};
+\node[rectangle,minimum width=5mm,minimum height=18mm,draw=none,
+fill=green,line width=\Linewidth](3R\picname) at ($(R\picname.west)!0.16!(R\picname.east)$){};
+
+\end{scope}
+    }
+  }
+}
+%rocket
+\tikzset{
+pics/rocket/.style = {
+        code = {
+        \pgfkeys{/channel/.cd, #1}
+\begin{scope}[shift={($(0,0)+(0,0)$)},scale=\scalefac,every node/.append style={transform shape},line cap = round]
+%vrh
+\draw[fill=\filllcolor,draw=\drawcolor,line width=\Linewidth](-0.26,0.5)to[bend right=12](0.26,0.5)to[bend right=7] (0,0.85)to[bend right=7] cycle;
+%krila
+\draw[fill=\filllcolor!70!red,draw=\drawcolor,line width=\Linewidth,rounded corners=1pt](-0.2,-0.7)--(-0.45,-0.9)--(-0.567,-0.4)--(-0.3,-0.17)--cycle;
+\draw[fill=\filllcolor!70!red,draw=\drawcolor,line width=\Linewidth,rounded corners=1pt](0.2,-0.7)--(0.45,-0.9)--(0.567,-0.4)--(0.3,-0.17)--cycle;
+%rep
+\draw[fill=\filllcolor!70!green,draw=\drawcolor,line width=\Linewidth](0.16,-0.76)--(0.22,-0.9)--(-0.2,-0.9)--(-0.15,-0.76)--cycle;
+%body
+\draw[fill=\filllcolor,draw=\drawcolor,line width=\Linewidth](-0.2,-0.7)--(0.2,-0.7)to[out=75,in=320](0,0.85)to[out=220,in=105] cycle;
+%krug
+\node[circle,draw=\drawcolor,minimum size=4mm,fill=\filllcirclecolor,line width=\Linewidth]{};
+\draw[draw=\drawcolor,line width=1.5*\Linewidth](0,-0.99)--(0,-1.3);
+\draw[draw=\drawcolor,line width=1.5*\Linewidth](-0.11,-0.99)--(-0.11,-1.2);
+\draw[draw=\drawcolor,line width=1.5*\Linewidth](0.11,-0.99)--(0.11,-1.2);
+\end{scope}
+    }
+  }
+}
+\pgfkeys{
+  /channel/.cd,
+   Depth/.store in=\Depth,
+  Height/.store in=\Height,
+  Width/.store in=\Width,
+  filllcirclecolor/.store in=\filllcirclecolor,
+  filllcolor/.store in=\filllcolor,
+  drawcolor/.store in=\drawcolor,
+  drawcircle/.store in=\drawcircle,
+  scalefac/.store in=\scalefac,
+  Linewidth/.store in=\Linewidth,
+  picname/.store in=\picname,
+  filllcolor=BrownLine,
+  filllcirclecolor=violet!20,
+  drawcolor=black,
+  drawcircle=violet,
+  scalefac=1,
+  Linewidth=0.5pt,
+  Depth=1.3,
+  Height=0.8,
+  Width=1.1,
+  picname=C
+}
+
+\def\radius{3.9}
+\def\startangle{90}
+
+\foreach \i/\j/\sho [count=\k from 0] in {
+%green!79!black
+white/{\textbf{}\\ }/15pt,
+%magenta!60!
+white/{\textbf{}\\ }/15pt,
+%gray
+white/{\textbf{}\\}/15pt,
+%cyan
+white/{\textbf{}\\ }/15pt
+}
+{
+%Satelit
+\pgfmathsetmacro{\angle}{\startangle - \k * (360/4)}
+\node (s\k) [satellite=\i, font=\footnotesize\sffamily] at (\angle:\radius) {};
+ \node[TxtC,below=0pt of s\k]{\j};
+}
+%logos
+%brick
+\pic[shift={(0.15,0.15)}] at  (s3) {brick={scalefac=1.1,picname=1,filllcolor=red!70!black!80,Linewidth=1.0pt,filllcirclecolor=red!90!black!50}};
+%llm
+\pic[shift={(0,0)}] at  (s0){llm={scalefac=0.9,drawcolor=BlueLine,filllcolor=BlueLine!10!, Linewidth=1.25pt,filllcirclecolor=red}};
+%brain
+\pic[shift={(0.1,-0.16)}] at  (s0){brain={scalefac=0.8,picname=1,filllcolor=orange!30!, filllcirclecolor=cyan!55!black!60, Linewidth=0.5pt}};
+%battery
+\pic[shift={(0,0)}] at  (s1){battery={scalefac=0.38,picname=1, drawcolor=BrownLine,filllcolor=BrownLine!10!, Linewidth=1.5pt,filllcirclecolor=BrownLine}};
+%rocket
+\pic[shift={(0,0.2)}] at  (s2){rocket={scalefac=1.1,picname=1, drawcolor=black,filllcolor=cyan!10!, Linewidth=1.0pt,filllcirclecolor=red}};
+%center
+\node[circle, draw=BrownLine, dashed,thick, fill=none,minimum size=26mm](CE)at(0,0){};
+ \node[TxtC,below=0pt of CE]{Conservation\\ of Complexity};
+ \pic[shift={(0,0)}] at  (0,0){vaga={scalefac=0.35,picname=1,filllcolor=BlueLine,  Linewidth=1.0pt,filllcirclecolor=orange}};
+\def\ra{26mm}
+\foreach \i [count=\k from 0] in{360,320,140,135}{
+\pgfmathtruncatemacro{\newX}{\i + 90} %
+\draw[line width=2.6pt,violet]
+   (s\k)+(\i:0.5*\ra) arc[start angle=\i, end angle=\newX, radius=0.5*\ra];
+}
+ \draw[LineA](s0.35)--++(0:1)coordinate(MA);
+ \node[Box,anchor=west](FO)at(MA){\textbf{Build}\\ (Model)};
+ \draw[LineA](s1.355)--++(345:1)coordinate(ST);
+ \node[Box,anchor=west](PR)at(ST){\textbf{Optimize}\\ (Hardware)};
+ \draw[LineA](s2.185)--++(200:3.25)coordinate(DE);
+ \node[Box,anchor=west](DEP)at(DE){\textbf{Deploy}\\(Operations)};
+ \draw[LineA](s3.180)--++(180:3.9)coordinate(FO);
+ \node[Box,anchor=west](FND)at(FO){\textbf{Foundations}\\(Data)};
+%
+\draw[-{Triangle[width=18pt,length=8pt]}, line width=10pt,cyan!40] (60:\radius)
+arc[radius=\radius, start angle=60, end angle= 16];
+\coordinate (AR1) at (38:\radius);
+\draw[-{Triangle[width=18pt,length=8pt]}, line width=10pt,cyan!40] (340:\radius)
+arc[radius=\radius, start angle=340, end angle= 290];
+\coordinate (AR2) at (315:\radius);
+\draw[-{Triangle[width=18pt,length=8pt]}, line width=10pt,cyan!40] (240:\radius)
+arc[radius=\radius, start angle=240, end angle= 200];
+\coordinate (AR3) at (225:\radius);
+\draw[-{Triangle[width=18pt,length=8pt]}, line width=10pt,cyan!40] (160:\radius)
+arc[radius=\radius, start angle=160, end angle= 114];
+\coordinate (AR4) at (137:\radius);
+%
+ \draw[LineA](AR1)--++(0:1.3)coordinate(MA);
+ \node[Box2,anchor=west]at(MA){3. Iron Law\\
+4. Silicon Contract};
+ \draw[LineA](AR2)--++(340:1.6)coordinate(MA1);
+ \node[Box2,anchor=west]at(MA1){5. Pareto Frontier\\
+6. Arith. Intensity\\
+7. Energy-Movement\\
+8. Amdahl’s Law};
+ \draw[LineA](AR3)--++(180:6.5)coordinate(MA2);
+ \node[Box2,anchor=west]at(MA2){9. Verification Gap\\
+10. Stat. Drift\\
+11. Skew Diagnostic\\
+12. Latency Budget\\
+13. Bias Feedback};
+ \draw[LineA](AR4)--++(180:6.5)coordinate(MA3);
+ \node[Box2,anchor=west]at(MA3){1. Data as Code\\
+2. Data Gravity};
+ \end{tikzpicture}
+```
+
+:::
+
+Theo dõi một đề xuất lượng tử hoá qua bốn nguyên tắc là một lượt chẩn đoán; thói quen tương tự cũng được áp dụng khi nút thắt cổ chai không phải là một đề xuất tối ưu hoá mà là chi phí phục vụ một token được tạo ra.
+
+```{python}
+#| echo: false
+#| label: conclusion-roofline-setup
+#| output: false
+# ┌─────────────────────────────────────────────────────────────────────────────
+# │ CONCLUSION CHAPTER ROOFLINE ANALYSIS
+# ├─────────────────────────────────────────────────────────────────────────────
+# │ Context: Cost-of-a-token callout demonstrating Iron Law in practice
+# │
+# │ Goal: Illustrate the memory-compute trade-off for LLM inference.
+# │ Scope: chapter-anchor — the summary reuses this chapter-level result.
+# │ Show: The ratio between idealized memory-transfer and peak-compute bounds
+# │       for batch-one Llama 2 70B decode on two balanced H100 shards.
+# │ How:  Aggregate H100 bandwidth and peak FP16 throughput across two shards.
+# │
+# └─────────────────────────────────────────────────────────────────────────────
+from mlsysim import Hardware, Models
+from mlsysim.physics import calc_transformer_decode_flops
+from mlsysim.fmt import fmt, fmt_math, MarkdownStr, check, fmt_params, fmt_qty
+
+# ┌── LEGO ───────────────────────────────────────────────
+class ConclusionRoofline:
+    """
+    Namespace for Conclusion Roofline Analysis.
+    Scenario: 70-billion-parameter Llama 2 inference sharded across two H100s.
+    """
+
+    # ┌── 1. LOAD (Constants) ───────────────────────────────────────────────
+    gpu = Hardware.Cloud.H100
+    gpu_count = 2
+    model = Models.Language.Llama2_70B
+    precision_bytes = BYTES_FP16
+
+    # ┌── 2. EXECUTE (The Compute) ─────────────────────────────────────────
+    d_vol = model.size_in_bytes(precision_bytes)
+    compute_req = calc_transformer_decode_flops(model.parameters)
+    aggregate_memory_bandwidth = gpu.memory.bandwidth * gpu_count
+    aggregate_peak_flops = gpu.compute.peak_flops * gpu_count
+
+    t_mem = d_vol / aggregate_memory_bandwidth
+    t_comp = compute_req / aggregate_peak_flops
+
+    ratio = t_mem / t_comp
+
+    # ┌── 3. GUARD (Invariants) ───────────────────────────────────────────
+    check(d_vol <= gpu.memory.capacity * gpu_count, "FP16 weights must fit across the H100 shards.")
+    check(ratio >= 10, f"Batch-one decode should be bandwidth bound in this model. Ratio is only {ratio:.1f}x")
+
+    # ┌── 4. OUTPUT (Formatting) ──────────────────────────────────────────────
+    llama_params_count_str = fmt_params(model.parameters, scale_style="word", precision=0)
+    llama_params_modifier_str = fmt_params(
+        model.parameters,
+        scale_style="word",
+        precision=0,
+        attributive=True,
+    )
+    llama_dvol_gb_str = fmt_qty(d_vol, GB, precision=0, commas=False)
+    llama_compute_gflop_str = fmt_qty(compute_req, GFLOPs, precision=0, commas=False)
+
+    h100_bw_tb_per_s_str = fmt_qty(aggregate_memory_bandwidth, TB / second, precision=2, commas=False)
+    h100_peak_tflop_per_s_str = fmt_qty(aggregate_peak_flops, TFLOP / second, precision=0, commas=False)
+
+    t_mem_ms_str = fmt_qty(t_mem, ms, precision=1, commas=False)
+    t_comp_ms_str = fmt_qty(t_comp, ms, precision=2, commas=False)
+    ratio_mult_str = fmt_multiple(ratio.to("").magnitude, precision=1, commas=False)
+
+    # LaTeX equations — use raw magnitudes, not suffixed _str exports
+    dvol_gb_val = d_vol.to(GB).magnitude
+    h100_bw_gb_val = aggregate_memory_bandwidth.to(GB / second).magnitude
+    compute_gflops_val = compute_req.to(GFLOPs).magnitude
+    h100_peak_tflops_val = aggregate_peak_flops.to(TFLOP / second).magnitude
+    t_mem_ms_val = t_mem.to(ms).magnitude
+    t_comp_ms_val = t_comp.to(ms).magnitude
+
+    t_mem_math = fmt_math(
+        f"T_{{\\text{{mem}}}} = \\frac{{{dvol_gb_val:.0f} \\text{{ GB}}}}{{{h100_bw_gb_val:.0f} \\text{{ GB/s}}}} \\approx {t_mem_ms_val:.1f} \\text{{ ms}}"
+    )
+    t_comp_math = fmt_math(
+        f"T_{{\\text{{comp}}}} = \\frac{{{compute_gflops_val:.0f} \\times 10^9 \\text{{ FLOP}}}}{{{h100_peak_tflops_val:.0f} \\times 10^{{12}} \\text{{ FLOP/s}}}} \\approx {t_comp_ms_val:.2f} \\text{{ ms}}"
+    )
+```
+
+:::: {#nbk-conclusion-cost-token .callout-notebook title="Chi phí của một token"}
+
+**Bài toán**: Khi chúng ta áp dụng định luật sắt (nguyên tắc \ref{pri-iron-law}) và định luật cường độ số học (nguyên tắc \ref{pri-arithmetic-intensity}) để phục vụ một token từ một mô hình tham số `{python} ConclusionRoofline.llama_params_modifier_str` như Llama 2 70B\index{Llama 2!khối lượng công việc giới hạn bộ nhớ 70 tỷ tham số}, với các trọng số FP16 được phân chia đều trên hai NVIDIA H100, cận dưới lý tưởng hoá nào lớn hơn: truyền bộ nhớ hay tính toán đỉnh? @Sec-appdx-machine-foundations-ai-hardware-cheat-sheet-modern-reference-4dc1 cung cấp các thông số kỹ thuật của H100. Tính toán này không bao gồm lưu lượng KV-cache, activations, FLOPs attention-over-KV phụ thuộc ngữ cảnh, giao tiếp liên kết, và chi phí điều phối.
+
+**Vật lý**:
+
+- **Khối lượng byte trọng số mô hình đã di chuyển** $(D_{\text{vol}})$: `{python} ConclusionRoofline.llama_params_count_str` tham số $\times$ 2 byte (FP16) = \mbox{`{python} ConclusionRoofline.llama_dvol_gb_str`.}.
+- **Tính toán** $(O)$: $O \approx 2 \times P =$ `{python} ConclusionRoofline.llama_compute_gflop_str` mỗi token, trong đó $P$ là số lượng tham số.
+- **Phần cứng**: Hai H100 với băng thông tổng hợp $\text{BW}$ = `{python} ConclusionRoofline.h100_bw_tb_per_s_str`, $R_{\text{peak}} \approx$ `{python} ConclusionRoofline.h100_peak_tflop_per_s_str` FP16.
+
+Toán học:
+
+- Thời gian di chuyển dữ liệu: `{python} ConclusionRoofline.t_mem_math`
+- Thời gian tính toán: `{python} ConclusionRoofline.t_comp_math`
+
+Hiểu biết về hệ thống:
+
+Giới hạn dưới lý tưởng của việc truyền bộ nhớ $T_{\text{mem}}$ lớn hơn `{python} ConclusionRoofline.ratio_mult_str` lần so với giới hạn dưới của tính toán đỉnh $T_{\text{comp}}$. Với mô hình batch-một này, giải mã bị giới hạn nặng bởi băng thông (cường độ số học $\approx 1$ FLOP/byte). Batching có thể tăng khả năng tái sử dụng, trong khi lượng tử hoá có thể giảm lưu lượng trọng số. Chỉ tối ưu hóa việc thực thi tính toán có thể giảm thời gian tính toán thực tế hướng tới giới hạn dưới `{python} ConclusionRoofline.t_comp_ms_str`, nhưng nó không thể giảm giới hạn dưới của việc truyền bộ nhớ `{python} ConclusionRoofline.t_mem_ms_str`.
+
+::::
+
+::: {.column-margin}
+```{=latex}
+\vspace*{-15mm}
+```
+![](images/svg/vol1_conclusion_margin_002.svg){width="100%" fig-alt="Điểm giải mã Llama batch-một lý tưởng được vẽ bên trái đường gờ roofline trên biểu đồ H100."}
+
+*Trong mô hình giới hạn dưới batch-một này, giải mã nằm bên trái đường gờ roofline trong chế độ bị giới hạn băng thông.*
+:::
+
+Phép tính này cho thấy framework hoạt động như một công cụ chẩn đoán hơn là một phân loại trừu tượng. Các chương đã áp dụng các giới hạn, mô hình và phương pháp heuristic này vào các quyết định kỹ thuật cụ thể, thường không gọi tên chúng một cách rõ ràng. Việc theo dõi các ứng dụng đó trên ba lĩnh vực---xây dựng nền tảng, kỹ thuật cho quy mô lớn và điều hướng thực tế sản xuất---cho thấy cách framework đã hướng dẫn phân tích xuyên suốt cuốn sách.
+
+## Các nguyên tắc trong thực tiễn {#sec-principles-practice-1005}
+
+Một nhóm ghi nhớ tất cả mười ba nguyên tắc nhưng không thể xác định các giả định của chúng hoặc áp dụng chúng vào một quyết định triển khai thực tế thì chưa học được gì. Bài kiểm tra là như nhau trên ba lĩnh vực trải dài vòng đời ML: xây dựng nền tảng kỹ thuật, kỹ thuật cho quy mô lớn và điều hướng thực tế sản xuất. Tư duy hệ thống kết nối những gì phân tích thành phần riêng lẻ không thể.
+
+### Xây dựng nền tảng kỹ thuật {.unnumbered}
+
+Nguyên tắc dữ liệu là mã (\ref{pri-data-as-code}) đã định hình @sec-data-engineering, lặp lại cách Karpathy định hình Software 2.0 về tập dữ liệu và kiến trúc mô hình như mã nguồn [@karpathy2017software] đồng thời nhận ra rằng các thuật toán và mã phục vụ (serving code) cũng ảnh hưởng đến hành vi. Các nền tảng toán học (@sec-neural-computation) đã thiết lập các mẫu tính toán liên quan đến hợp đồng silicon: các phép nhân ma trận là cốt lõi của tính toán thần kinh xác định cường độ số học, mà vị trí của nó so với điểm gờ phần cứng giúp chẩn đoán liệu một khối lượng công việc (workload) bị giới hạn bởi băng thông hay tính toán. Việc lựa chọn framework (@sec-ml-frameworks) đã minh họa hậu quả thực tế của hợp đồng silicon: mỗi framework hạn chế việc tối ưu hóa đồ thị, quản lý bộ nhớ, hỗ trợ phần cứng backend và các đường dẫn triển khai vẫn còn mở. Một kỹ sư chọn một framework mà không xem xét những hàm ý đó có thể phát hiện quá muộn rằng con đường đã chọn loại bỏ tùy chọn triển khai hiệu quả nhất.
+
+Các lựa chọn nền tảng (dữ liệu nào cần quản lý, các nguyên thủy tính toán nào cần dựa vào, framework nào cần áp dụng) lan truyền vào các quyết định kỹ thuật sau này. Sự lan truyền đó trở nên đặc biệt rõ ràng khi một hệ thống phải mở rộng quy mô vượt ra ngoài một máy đơn lẻ, nơi ba thuật ngữ của định luật sắt mở rộng từ các đại lượng cấp chip thành các ràng buộc cấp cụm.
+
+### Kỹ thuật cho quy mô lớn {.unnumbered}
+
+Các hệ thống huấn luyện (@sec-model-training) đã chứng minh định luật sắt trong thực tế: song song dữ liệu có thể giảm thời gian tính toán mỗi bước bằng cách phân phối công việc trên các GPU đồng thời thêm giao tiếp, độ chính xác hỗn hợp có thể giảm di chuyển dữ liệu cho các tensor được biểu diễn ở FP16 thay vì FP32, và gradient checkpointing đánh đổi việc tính toán lại để lấy dung lượng bộ nhớ, mỗi kỹ thuật kéo một đòn bẩy khác nhau của cùng một phương trình ba thuật ngữ. Nén mô hình (@sec-model-compression) đã điều hướng trực tiếp biên Pareto: lượng tử hoá INT8 của MobileNetV2 và tỉa (pruning) embedding của DLRM mỗi cái đánh đổi một chỉ số này lấy một chỉ số khác, trong khi định luật cường độ số học chẩn đoán sự đánh đổi nào sẽ mang lại lợi nhuận lớn nhất cho một mục tiêu phần cứng nhất định.
+
+Tuy nhiên, việc xây dựng và tối ưu hóa một mô hình chỉ là một nửa thách thức kỹ thuật. Nửa còn lại bắt đầu từ thời điểm mô hình rời khỏi cụm huấn luyện và đi vào sản xuất, nơi các yêu cầu thống kê, chẩn đoán phù hợp và chính sách SLO chi phối hành vi và nơi các tối ưu hóa đã hoạt động tốt trong phòng thí nghiệm phải tồn tại được sự không thể đoán trước của lưu lượng truy cập trong thế giới thực.
+
+```{python}
+#| echo: false
+#| label: conclusion-tail-latency-ratio
+#| output: false
+# ┌─────────────────────────────────────────────────────────────────────────────
+# │ TAIL LATENCY RATIO CALCULATION
+# ├─────────────────────────────────────────────────────────────────────────────
+# │ Context: "Navigating Production Reality" section on P99 latency
+# │
+# │ Goal: Demonstrate why mean latency is a misleading metric for user experience.
+# │ Show: That p99 latency is 40× the mean in this illustrative scenario.
+# │ How: Divide the scenario's p99 latency by its mean latency.
+# │ Scope: chapter-anchor
+# │
+# └─────────────────────────────────────────────────────────────────────────────
+from mlsysim.fmt import fmt, check
+
+# ┌── LEGO ───────────────────────────────────────────────
+class TailLatencyRatio:
+    """
+    Namespace for Tail Latency Ratio Calculation.
+    Scenario: Comparing mean latency vs P99 tail latency.
+    """
+
+    # ┌── 1. LOAD (Constants) ───────────────────────────────────────────────
+    mean_latency_ms = 50.0
+    p99_latency_ms = 2000.0
+
+    # ┌── 2. EXECUTE (The Compute) ─────────────────────────────────────────
+    ratio = p99_latency_ms / mean_latency_ms
+
+    # ┌── 3. GUARD (Invariants) ───────────────────────────────────────────
+    check(ratio >= 10, f"P99 tail latency ({ratio:.1f}x) is not significant enough.")
+
+    # ┌── 4. OUTPUT (Formatting) ──────────────────────────────────────────────
+    conclusion_tail_ratio_mult_str = fmt_multiple(ratio, precision=0, commas=False)
+```
+
+### Điều hướng thực tế sản xuất {.unnumbered}
+
+Sự chuyển đổi từ *huấn luyện* sang *suy luận* thường thay đổi các mục tiêu tối ưu hóa: nơi huấn luyện tối đa hóa thông lượng trong nhiều ngày, suy luận tương tác có thể tối ưu hóa một phân vị độ trễ đuôi được chọn trong mili giây. Kịch bản minh họa sử dụng trung bình 50 ms và p99 là 2.000 ms, do đó đuôi được chọn gấp 40$\times$ lần trung bình; một sản phẩm khác có thể chỉ định p95, p99.9, hoặc các thời hạn riêng biệt theo loại yêu cầu. Phân tích độ trễ đuôi\index{Tail latency!p99 significance} cho thấy tại sao độ trễ trung bình có thể che giấu các yêu cầu chi phối trải nghiệm người dùng [@dean2013]. Trong phục vụ (serving) ML, các đỉnh độ trễ đuôi có thể phát sinh từ việc tạm dừng thu gom rác trong các framework suy luận dựa trên Python, batching động hình thành không tối ưu dưới lưu lượng truy cập không đều, hoặc tạo sinh tự hồi quy trong đó một lời nhắc hoặc đầu ra dài tạo ra nhiều khối lượng công việc (workload) hơn đáng kể so với một phản hồi ngắn thông thường.
+
+::: {.column-margin}
+```{=latex}
+\vspace*{-15mm}
+```
+![](images/svg/vol1_conclusion_margin_003.svg){width="100%" fig-alt="Minh họa lề cho thấy độ trễ trung bình so với độ trễ p99."}
+
+*Độ trễ trung bình che giấu phần đuôi; phân vị đuôi được chọn chi phối SLO.*
+:::
+
+Ngoài hiệu năng kỹ thuật, @sec-responsible-engineering đã mở rộng framework để bao gồm tác động xã hội. Các yêu cầu xác minh thúc đẩy việc giám sát các vi phạm về tính công bằng cùng với hiệu năng: theo dõi phân phối dự đoán trên các nhóm nhân khẩu học, phát hiện sự khuếch đại độ chệch (bias) theo thời gian (nguyên tắc \ref{pri-bias-feedback}), và cảnh báo về sự chênh lệch độ chính xác không giải thích được. Giám sát trôi dạt cũng áp dụng cho phân phối và kết quả của các nhóm con, nơi độ chính xác có thể thay đổi đối với các quần thể ít được đại diện ngay cả khi các chỉ số tổng hợp vẫn ổn định. Do đó, AI có trách nhiệm là một khía cạnh không thể thiếu của kỹ thuật hệ thống, một ràng buộc thiết kế hạng nhất được quản lý bởi cùng một nguyên tắc đo lường như hiệu năng.
+
+Ba lĩnh vực này chứng minh rằng mười ba nguyên tắc là các công cụ thực tiễn chứ không phải là các tiên đề phổ quát. Câu hỏi đặt ra bây giờ là *ở đâu* các giả định của chúng sẽ được kiểm nghiệm tiếp theo, khi các hệ thống ML mở rộng sang các ngữ cảnh triển khai mới, đối mặt với các chế độ lỗi mới và theo đuổi các mục tiêu ngày càng tham vọng.
+
+## Các Hướng Đi Tương Lai {#sec-future-directions-01df}
+
+Framework này hữu ích nhất khi nó dự báo nơi các ràng buộc có thể trở nên chặt chẽ tiếp theo. Ba lĩnh vực đặt cùng một nguyên lý vật lý dưới áp lực ngày càng tăng: triển khai trên các ngữ cảnh đa dạng, tính mạnh mẽ trong điều kiện đối kháng [@goodfellow2015explaining], và các ứng dụng xã hội mà sự cố của chúng gây ra hậu quả công cộng. Một chân trời thứ tư, các hệ thống bao gồm nhiều mô hình, công cụ và bộ xác minh hoặc phát triển vượt ra ngoài một máy, mở rộng cùng một góc nhìn chứ không thay thế nó.
+
+### Áp dụng các nguyên tắc cho các ngữ cảnh triển khai mới nổi {.unnumbered}
+
+Sự đa dạng trong triển khai kiểm tra xem liệu một framework định lượng có thể giải thích các hệ thống với các chế độ tài nguyên tương phản hay không. Đám mây cung cấp công suất dồi dào và phần cứng tập trung, các thiết bị edge và di động hoạt động dưới các giới hạn về độ trễ và pin, và TinyML cùng các hệ thống nhúng nén cùng một vấn đề thiết kế vào kilobyte và milliwatt. AI tạo sinh không phải là môi trường triển khai thứ năm; nó là một lớp khối lượng công việc (workload) gây áp lực lên cả bốn.
+
+Trong chế độ đám mây, quyết định ràng buộc là làm thế nào để biến phần cứng dồi dào thành thông lượng hữu ích mà không để việc di chuyển dữ liệu, dung lượng hoặc chi phí chiếm ưu thế. Các khối lượng công việc (workload) dày đặc như ResNet-50 theo đuổi việc sử dụng GPU thông qua hợp nhất kernel, huấn luyện độ chính xác hỗn hợp và nén gradient, trong khi các hệ thống khuyến nghị kiểu DLRM cũng phải quản lý dung lượng bảng embedding, vị trí và các mẫu truy cập thưa thớt. @Sec-model-compression và @sec-model-training đã khám phá các kỹ thuật này, chứng minh cách chúng kết hợp để cân bằng tối ưu hóa hiệu năng với hiệu quả chi phí ở quy mô lớn.
+
+```{python}
+#| echo: false
+#| label: conclusion-edge-reference-ratios
+#| output: false
+# ┌─────────────────────────────────────────────────────────────────────────────
+# │ EDGE-VS-H100 REFERENCE RATIOS
+# ├─────────────────────────────────────────────────────────────────────────────
+# │ Context: Cross-domain applications section, mobile/edge paragraph
+# │          contrasting a reference mobile platform against an H100 accelerator.
+# │
+# │ Goal:    Quantify the memory-capacity and TDP gaps between the reference
+# │          mobile platform and an H100.
+# │ Show:    Memory-capacity and TDP ratios between H100 and the book's
+# │          reference mobile platform.
+# │ How:     Divide H100 TDP and memory capacity by phone TDP and RAM.
+# │
+# └─────────────────────────────────────────────────────────────────────────────
+from mlsysim import Hardware
+from mlsysim.fmt import fmt, check
+
+class EdgeReferenceRatios:
+    # LOAD
+    h_h100 = Hardware.Cloud.H100
+    mobile_power = Hardware.Mobile.iPhone15Pro.tdp
+    phone_ram = Platforms.Mobile.ram
+
+    # EXECUTE
+    power_ratio = h_h100.tdp / mobile_power
+    memory_ratio = h_h100.memory.capacity / phone_ram
+
+    # GUARD
+    check(memory_ratio.to("").magnitude > 5, "Mobile edge example should have meaningfully less memory capacity.")
+    check(power_ratio.to("").magnitude > 100, "Mobile edge example should have a much smaller power envelope.")
+
+    # OUTPUT
+    power_ratio_mult_str = fmt_multiple(power_ratio.to("").magnitude, precision=0, commas=False)
+    memory_ratio_mult_str = fmt_multiple(memory_ratio.to("").magnitude, commas=False)
+```
+
+Ngược lại, các hệ thống di động và edge đối mặt với các ràng buộc nghiêm ngặt về công suất, bộ nhớ và độ trễ, đòi hỏi sự đồng thiết kế phần cứng-phần mềm tinh vi\index{Hardware-software co-design!edge deployment}. Các kiến trúc hiệu quả được giới thiệu trong @sec-network-architectures (như tích chập phân tách theo chiều sâu và tìm kiếm kiến trúc mạng nơ-ron) kết hợp với các kỹ thuật nén từ @sec-model-compression (như lượng tử hoá và tỉa (pruning)) cho phép triển khai trên các thiết bị mà nền tảng di động tham chiếu của sách có dung lượng bộ nhớ nhỏ hơn khoảng `{python} EdgeReferenceRatios.memory_ratio_mult_str` và công suất tiêu thụ nhỏ hơn khoảng `{python} EdgeReferenceRatios.power_ratio_mult_str` so với một bộ tăng tốc lớp H100. Triển khai edge quan trọng khi độ trễ, quyền riêng tư, kết nối, năng lượng hoặc chi phí trên mỗi yêu cầu khiến việc phục vụ (serving) tập trung trở thành một trừu tượng hóa không phù hợp; trong các chế độ đó, hiệu quả trở thành một phần của khả năng tiếp cận chứ không phải là một tối ưu hóa riêng biệt.[^fn-ai-democratization-accessibility]
+
+[^fn-ai-democratization-accessibility]: **Dân chủ hóa AI**\index{AI democratization}: Làm cho AI có thể tiếp cận được ngoài một số ít tổ chức có nguồn lực tốt thông qua kỹ thuật hệ thống hiệu quả. Các mô hình được tối ưu hóa cho di động và API đám mây có thể mở rộng khả năng tiếp cận, nhưng để làm được điều đó một cách bền vững đòi hỏi tối ưu hóa có hệ thống trên phần cứng, thuật toán và cơ sở hạ tầng để duy trì chất lượng ở quy mô lớn.
+
+Các mô hình tạo sinh tự hồi quy, được minh họa bởi họ mô hình GPT-2/Llama, gây áp lực lên cùng các ràng buộc ở quy mô phục vụ (serving) token. Giải mã batch thấp cho các mô hình tự hồi quy dày đặc thường bị giới hạn bởi băng thông vì mỗi bước tái sử dụng mỗi trọng số quá ít; các batch lớn hơn có thể tăng cường độ số học, trong khi prefill thường tốn nhiều tính toán. Phân vùng mô hình trên các thiết bị (chia một mô hình trên nhiều bộ tăng tốc), mở rộng tính song song mà @sec-model-training đã xem trước, phân phối lại trọng số và công việc đồng thời tăng thêm giao tiếp. Giải mã suy đoán (@sec-model-serving) đánh đổi tính toán bổ sung để có độ trễ giải mã thấp hơn. Cùng với nhau, các cơ chế này chứng minh cách các nguyên tắc thích ứng khi cấu trúc khối lượng công việc (workload) thay đổi.
+
+Ở thái cực đối lập, TinyML và các hệ thống nhúng, lĩnh vực của đèn hiệu KWS/Wake Vision của chúng ta, đối mặt với ngân sách bộ nhớ kilobyte, giới hạn công suất milliwatt và vòng đời triển khai có thể kéo dài. Thành công trong các ngữ cảnh này phụ thuộc vào phương pháp kỹ thuật hệ thống toàn diện: đo lường cẩn thận cho thấy các nút thắt thực tế, đồng thiết kế phần cứng cải thiện hiệu quả, và lập kế hoạch cho sự cố hỗ trợ độ tin cậy bất chấp những hạn chế tài nguyên nghiêm trọng. Các ràng buộc về tài nguyên đã thúc đẩy các họ kiến trúc hiệu quả như MobileNets [@howard2017mobilenets; @sandler2018] và EfficientNets [@tan2019efficientnet] mà cũng cung cấp thông tin cho thực tiễn hiệu quả mô hình rộng hơn, chứng minh cách các ràng buộc hệ thống có thể xúc tác đổi mới thuật toán.
+
+Các giới hạn vật lý tương tự áp dụng trên các mô hình này, trong khi các mô hình thống kê đã điều chỉnh và chính sách SLO vẫn mang tính đặc thù của triển khai. Thành công phụ thuộc vào việc kiểm tra những khác biệt đó và áp dụng các nguyên tắc cùng nhau thay vì theo đuổi các tối ưu hóa riêng lẻ. Hệ thống càng bao quát nhiều ngữ cảnh triển khai, nó càng tạo ra nhiều bề mặt lỗi. Do đó, tính mạnh mẽ, chứ không phải chỉ riêng phạm vi bao phủ, trở thành một ràng buộc ràng buộc ở biên giới tiếp theo.
+
+### Xây dựng các hệ thống AI mạnh mẽ {.unnumbered}
+
+Hệ thống ML có thể phản hồi một cách tự tin nhưng không chính xác trong khi các kiểm tra tính khả dụng thông thường vẫn báo xanh, và không ai có thể nhận ra trong nhiều tuần. Sự dịch chuyển phân phối có thể làm thay đổi độ chính xác mà không cần thay đổi mã, đầu vào đối kháng có thể khai thác các lỗ hổng không thể nhìn thấy bằng kiểm thử tiêu chuẩn, và các trường hợp biên có thể tiết lộ những hạn chế của dữ liệu huấn luyện mà việc gỡ lỗi đơn thuần không thể khắc phục. Đây là những rủi ro sản xuất đáng tin cậy, chứ không phải là kết quả được đảm bảo bởi một chỉ số phân kỳ duy nhất.
+
+Kiểm thử hữu hạn ước tính hành vi trên một tập hợp xác định với sự không chắc chắn; nó không thể chứng minh tính đúng đắn cho mọi đầu vào trong tương lai. Tín hiệu trôi dạt cho thấy khi nào tập hợp đó có thể đã thay đổi, trong khi kết quả được gán nhãn xác định xem chất lượng có thay đổi hay không. Cùng với nhau, chúng thúc đẩy việc giám sát liên tục như một yêu cầu thiết kế, cùng với các chính sách dự phòng và xác thực lại định kỳ, mà không khẳng định rằng mọi sự dịch chuyển phân phối đều gây ra suy giảm. Câu hỏi vận hành là liệu một lỗi có được phát hiện và chẩn đoán trước khi tác động của nó lan rộng hay không.
+
+Do đó, tính mạnh mẽ đòi hỏi phải thiết kế để suy giảm mềm\index{Graceful degradation!triggers}, chứ không chỉ là phòng ngừa. Ở quy mô một hệ thống đơn lẻ, nguyên tắc đó thể hiện dưới dạng các đường dẫn dự phòng, ngưỡng không chắc chắn, chính sách hoàn nguyên theo phiên bản cụ thể và các điểm nối giám sát. Hoàn nguyên giải quyết một bản phát hành lỗi; sự trôi dạt bên ngoài có thể thay vào đó yêu cầu cảnh báo, giảm lưu lượng, dự phòng, thu thập dữ liệu hoặc huấn luyện lại sau khi bằng chứng kết quả xác nhận thiệt hại. Ở quy mô lớn hơn, logic tương tự mở rộng sang dự phòng phần cứng và đa dạng hóa theo kiểu tập hợp. Khi các hệ thống AI đảm nhận vai trò ngày càng tự chủ trong chăm sóc sức khỏe, giao thông vận tải và tài chính, khoảng cách giữa "hoạt động trong phòng thí nghiệm" và "hoạt động trong thế giới thực" trở thành thách thức kỹ thuật then chốt. Tính mạnh mẽ trở nên cần thiết hơn khi các hệ thống bổ sung thành phần, bởi vì mỗi giao diện tạo ra một thời gian chờ khác, đầu vào cũ, trạng thái không nhất quán hoặc đường dẫn phục hồi để giám sát.
+
+### AI vì lợi ích xã hội {.unnumbered}
+
+Các hệ thống mạnh mẽ là điều kiện tiên quyết để triển khai AI trong các lĩnh vực mà lỗi kỹ thuật gây ra hậu quả công cộng. Một AI y tế thất bại không thể đoán trước không thể được tin cậy trong việc chăm sóc bệnh nhân. Một hệ thống giáo dục suy giảm dưới tải không thể phục vụ những học sinh cần nó nhất. Một mô hình khí hậu tạo ra các dự đoán tự tin nhưng không được hiệu chỉnh có thể làm sai lệch các quyết định chính sách ảnh hưởng đến hàng triệu sinh mạng. Trong mỗi lĩnh vực, mười ba nguyên tắc cung cấp các câu hỏi và giới hạn chung, trong khi bằng chứng lĩnh vực xác định chính sách chấp nhận được.
+
+Mỗi lĩnh vực nhấn mạnh một ràng buộc quản lý khác nhau trước khi có thể mang lại giá trị xã hội:
+
+- **Khám phá khoa học**: Gấp protein, mô hình hóa tương tác thuốc và khoa học vật liệu có thể yêu cầu thông lượng huấn luyện hoặc suy luận đáng kể được điều chỉnh bởi luật sắt (nguyên tắc \ref{pri-iron-law}) và hợp đồng silicon (nguyên tắc \ref{pri-silicon-contract}); khi công việc được phân tán, sự phối hợp làm tăng thêm một chi phí hệ thống khác.
+- **AI chăm sóc sức khỏe**: Đánh giá lâm sàng, độ không chắc chắn được hiệu chỉnh, xác thực bên ngoài và giám sát liên tục có thể trở nên quan trọng về an toàn bởi vì một mô hình chẩn đoán được huấn luyện trên tập hợp bệnh nhân của một bệnh viện có thể suy giảm khi triển khai cho một bệnh viện khác với nhân khẩu học, tỷ lệ mắc bệnh hoặc thiết bị hình ảnh khác nhau.
+- **Giáo dục cá nhân hóa**: Bảo vệ dữ liệu tương tác nhạy cảm của học sinh được sử dụng để cá nhân hóa ở quy mô toàn cầu nhấn mạnh quản trị dữ liệu và nguyên tắc dữ liệu-như-mã (\ref{pri-data-as-code}); các dịch vụ tương tác cũng phải đáp ứng các ngân sách độ trễ đã chọn của chúng.
+
+Cả ba ứng dụng này đều chứng minh rằng sự xuất sắc về kỹ thuật đơn thuần là không đủ. Các nguyên tắc được phát triển trong suốt cuốn sách này (phân loại D·A·M, mười ba công cụ định lượng và khung lý luận tích hợp) cung cấp *nền tảng* kỹ thuật hệ thống, nhưng *ứng dụng* nền tảng đó đòi hỏi kiến thức lĩnh vực mà không một ngành nào có thể cung cấp.
+
+Bản chất có giới hạn của các ứng dụng này là điều làm cho các ràng buộc hệ thống của chúng trở nên khả thi: một mô hình y tế chẩn đoán phân loại các tình trạng trong một tập hợp nhãn xác định, và một mô hình khí hậu dự báo các thống kê khí hậu trong các ràng buộc vật lý. Giới hạn tiếp theo đặt ra câu hỏi liệu các nguyên tắc tương tự có thể hướng dẫn các hệ thống ủy quyền công việc qua nhiều thành phần trong khi vẫn duy trì các yêu cầu từ đầu đến cuối hay không.
+
+### Thành phần hệ thống như một kiểm thử căng thẳng {.unnumbered}
+
+Các kiểm thử căng thẳng tham vọng nhất cho các nguyên tắc này là các hệ thống có ranh giới tác vụ không được cố định trước. Một trợ lý tổng quát tác vụ hoặc dịch vụ ML đa thành phần có thể định tuyến một yêu cầu qua truy xuất, lập kế hoạch, thực thi công cụ, tạo và xác minh. Thách thức quản lý là kỹ thuật hệ thống cũng như thiết kế thuật toán: hệ thống xung quanh phải giới hạn độ trễ, độ tin cậy, chi phí, an toàn và khả năng quan sát khi công việc phân tán qua các thành phần.
+
+Thành phần hệ thống\index{System composition} làm cho một số nguyên tắc trung tâm hoạt động cùng lúc:
+
+- **Luật sắt**: Phép tính mà mỗi thành phần thực hiện phải được lập ngân sách khi công việc phân tán qua truy xuất, lập kế hoạch, thực thi công cụ, tạo và xác minh.
+- **Hợp đồng silicon**: Hệ thống phải tuân thủ các ràng buộc cụ thể của phần cứng trên các CPU, GPU lớp NVIDIA H100, Bộ xử lý Tensor và bộ tăng tốc tùy chỉnh.
+- **Biên Pareto**: Bề mặt đánh đổi mở rộng từ hai hoặc ba chỉ số, như độ chính xác, độ trễ và bộ nhớ, sang một bề mặt lớn hơn cũng bao gồm an toàn, công bằng, tính xác thực, quyền riêng tư và chi phí.
+- **Trôi dạt thống kê**: Trôi dạt không chỉ áp dụng cho đầu ra cuối cùng, mà còn cho các tài liệu được truy xuất, phản hồi công cụ và các quyết định trung gian.
+
+Một hệ thống tổng hợp không thể chỉ dựa vào một tuyên bố chất lượng mô hình duy nhất; nó cần các giao diện có hành vi có thể đo lường được, bởi vì mỗi giao diện là nơi các giả định của một thành phần về thành phần khác trở nên có thể kiểm thử [@lampson1983hints]. Các hệ thống tổng hợp đánh đổi sự đơn giản nguyên khối để lấy sự phối hợp rõ ràng. Một thành phần truy xuất tìm thông tin liên quan, một thành phần suy luận xử lý thông tin đó, một lệnh gọi công cụ có thể truy vấn một hệ thống bên ngoài và một bộ kiểm chứng kiểm tra đầu ra. Mỗi bước có thể được cập nhật, giám sát và gỡ lỗi độc lập, nhưng mỗi bước cũng tạo ra một hợp đồng giao diện khác. Sự phân tách đánh đổi độ trễ và độ phức tạp kiến trúc để lấy khả năng kiểm soát và khả năng quan sát, một ví dụ về đánh đổi Pareto và sự dịch chuyển độ phức tạp có thể xảy ra thay vì một định luật bảo toàn.
+
+Chi phí hệ thống được thể hiện rõ trong một yêu cầu duy nhất. Nếu một trợ lý phân tán đến truy xuất, một bộ lập kế hoạch, hai công cụ, một bộ tạo và một bộ kiểm chứng, độ trễ thực tế của nó sẽ tuân theo đường găng của yêu cầu\index{Critical path!composed request}, với các lệnh gọi công cụ song song đóng góp tối đa thay vì tổng của chúng, cộng với chi phí điều phối. Phân tích độ tin cậy của nó cũng phải tính đến từng thành phần: mỗi thành phần bổ sung tạo ra một sự kiện hết thời gian chờ, không khớp lược đồ, chỉ mục cũ hoặc âm tính giả của bộ kiểm chứng khác cần được giám sát. Các microservice thông thường đã phải đối mặt với các lỗi hợp đồng runtime trên các ranh giới tiến trình. Các hệ thống ML tổng hợp bổ sung các giao diện xác suất trong đó một bộ lập kế hoạch mô hình ngôn ngữ lớn có thể ảo giác tên công cụ hoặc tạo ra JSON lệch khỏi lược đồ đã khai báo, yêu cầu phân tích cú pháp phòng thủ, logic thử lại và xác thực đầu ra tại mỗi ranh giới giao diện. Khả năng có thể tăng lên bằng cách thêm cấu trúc hệ thống, nhưng cấu trúc đó phải tuân thủ các yêu cầu về độ trễ, độ tin cậy và khả năng quan sát tương tự như bất kỳ hệ thống ML sản xuất nào.
+
+Thành phần hệ thống phù hợp tự nhiên với các nguyên tắc kỹ thuật hệ thống được nghiên cứu trong suốt cuốn sách này. Các thành phần mô-đun có thể được nén và tăng tốc độc lập bằng cách sử dụng các kỹ thuật từ @sec-model-compression và @sec-hardware-acceleration. Mỗi thành phần có hợp đồng silicon riêng (nguyên tắc \ref{pri-silicon-contract}) và hồ sơ cường độ số học, cho phép tối ưu hóa dành riêng cho phần cứng. Các giao diện giữa các thành phần tạo ra các điểm giám sát tự nhiên để phát hiện trôi, lệch và suy giảm. Các thách thức kỹ thuật phía trước đòi hỏi sự làm chủ toàn bộ ngăn xếp mà chúng ta đã khám phá: điều phối đáng tin cậy nhiều mô hình, định tuyến yêu cầu hiệu quả qua các thành phần chuyên biệt và duy trì tính nhất quán trên trạng thái chia sẻ đều đòi hỏi sự tích hợp từ kỹ thuật dữ liệu thông qua tối ưu hóa mô hình đến cơ sở hạ tầng vận hành.
+
+::: {#psp-conclusion-new-golden-age .callout-perspective title="Một kỷ nguyên vàng mới"}
+
+@hennessy2019 đã tuyên bố một "Kỷ nguyên vàng mới cho Kiến trúc máy tính", được thúc đẩy bởi sự kết thúc của định luật Dennard, sự chậm lại của Định luật Moore và các cơ hội mới từ kiến trúc dành riêng cho miền, tập lệnh mở và phát triển chip linh hoạt. Các khối lượng công việc AI quy mô lớn là một miền mà những áp lực đó có thể nhìn thấy. Xây dựng các dịch vụ AI có khả năng hơn sẽ không chỉ là vấn đề viết một hàm mất mát tốt hơn; đó sẽ là một thách thức kỹ thuật hệ thống liên quan đến hiệu quả năng lượng, các kết nối liên mạng băng thông cao, thiết kế hệ thống phân cấp bộ nhớ và các ngăn xếp phần mềm giúp phần cứng không đồng nhất hữu ích thay vì nhàn rỗi. Mười ba nguyên tắc cung cấp một từ vựng định lượng để điều hướng chế độ đó trong khi vẫn bảo toàn sự khác biệt giữa các giới hạn vật lý và các giả định dành riêng cho triển khai.
+
+:::
+
+Kỷ nguyên đó đòi hỏi những tiến bộ kỹ thuật cụ thể. Đạt được thông lượng bền vững exascale $(\geq 10^{18} \text{ FLOP/s})$ và hơn thế nữa đòi hỏi các phương pháp tiếp cận mới về cung cấp điện, làm mát, kết nối liên mạng và phối hợp phần mềm, chứ không chỉ đơn thuần là chip nhanh hơn. Các công cụ phân tích được phát triển trong cuốn sách này trang bị cho các kỹ sư để điều hướng chế độ đó. Ứng dụng của chúng phát triển khi quy mô triển khai và hỗn hợp khối lượng công việc thay đổi.
+
+## Hành trình phía trước {#sec-journey-forward-6453}
+
+Mọi biên giới vừa được khám phá đều dựa trên một nền tảng chung: các kỹ năng kỹ thuật mà cuốn sách này đã phát triển. Quản lý dữ liệu ngẫu nhiên thông qua việc lập phiên bản và xác thực thống kê, đồng thời thực thi các ràng buộc thực thi thông qua các giới hạn vật lý, kiểm tra runtime và SLO sản phẩm, đòi hỏi phải thu hẹp khoảng cách giữa logic rõ ràng của Phần mềm 1.0 và hành vi học được của Phần mềm 2.0. Làm cho những giả định đó có thể đo lường được và các chế độ lỗi của chúng có thể quan sát được là sự chặt chẽ về kỹ thuật cần thiết để làm cho các hệ thống xác suất trở nên đáng tin cậy.
+
+*Trí tuệ là một thuộc tính của hệ thống.* Nó nổi lên từ việc tích hợp dữ liệu, mô hình, phần cứng, phần mềm, giám sát và quản trị chứ không phải từ bất kỳ đột phá đơn lẻ nào. Bài học về hệ thống do đó không phải là một công thức cho một họ mô hình hoặc ngăn xếp cơ sở hạ tầng. Đó là kỷ luật làm cho mọi phụ thuộc đủ rõ ràng để đo lường, mọi đánh đổi đủ rõ ràng để đánh giá và mọi triển khai đủ trách nhiệm để vận hành trong thế giới thực.
+
+### Trách nhiệm kỹ thuật {.unnumbered}
+
+Quan điểm tích hợp hệ thống giải thích tại sao các cân nhắc đạo đức không thể tách rời khỏi các cân nhắc kỹ thuật. Yêu cầu tính toán ảnh hưởng đến ai có thể truy cập một hệ thống: một mô hình yêu cầu một số bộ tăng tốc trung tâm dữ liệu cao cấp để suy luận loại trừ các tổ chức không đủ khả năng chi trả cơ sở hạ tầng đó. Dữ liệu huấn luyện có thể mã hóa các độ chệch (bias) ảnh hưởng đến hành vi của hệ thống. Kế toán năng lượng khối lượng công việc (workload) đóng góp vào lượng khí thải carbon của trung tâm dữ liệu ảnh hưởng đến hành tinh. Các lựa chọn về hiệu quả, lựa chọn về dữ liệu và lựa chọn về triển khai do đó phân phối chi phí và lợi ích vượt ra ngoài nhóm kỹ thuật. Các quyết định kỹ thuật là các quyết định đạo đức, được nhìn qua một lăng kính rộng hơn.
+
+Câu hỏi đặt ra cho chúng ta với tư cách là kỹ sư không chỉ là chúng ta có thể xây dựng những khả năng nào, mà còn là liệu chúng ta có thể xây dựng những hệ thống đó một cách tốt đẹp hay không. Chúng phải đủ hiệu quả để mở rộng khả năng tiếp cận, đủ an toàn để chống lại sự khai thác, đủ bền vững để hạn chế tác hại đến môi trường, và đủ trách nhiệm để phục vụ mọi người một cách công bằng. Các hệ thống như hệ thống giám sát khí hậu quy mô hành tinh và trợ lý y tế cá nhân đòi hỏi chuyên môn kỹ thuật mà cuốn sách này đã phát triển, được định hướng bởi trách nhiệm mà @sec-responsible-engineering đã thiết lập như một ràng buộc thiết kế hạng nhất.
+
+Các nguyên tắc được thiết lập ở đây cung cấp một lăng kính nhất quán cho các hệ thống ML riêng lẻ. Các hệ thống lớn hơn không làm mất hiệu lực lăng kính đó; chúng bộc lộ những ràng buộc tương tự ở một ranh giới khác.
+
+```{python}
+#| echo: false
+#| label: conclusion-fleet-failure-math
+#| output: false
+# ┌─────────────────────────────────────────────────────────────────────────────
+# │ FLEET FAILURE MATH (HORIZON NOTE)
+# ├─────────────────────────────────────────────────────────────────────────────
+# │ Context: "A horizon note: from node to fleet" paragraph that keeps
+# │          fleet-scale reliability as an extension of the single-system lens.
+# │
+# │ Goal:    Show that independent failures across a thousand-GPU pool collapse
+# │          a multi-year component MTTF into an approximately two-day cluster MTBF.
+# │ Show:    Reference GPU MTTF in years, GPU count, and cluster MTBF in hours.
+# │ How:     Convert Systems.Reliability.Gpu.mttf_hours to years via HOURS_PER_DAY * DAYS_PER_YEAR;
+# │          call calc_mtbf_cluster for the independent-failure cluster MTBF.
+# │
+# └─────────────────────────────────────────────────────────────────────────────
+from mlsysim.physics import calc_mtbf_cluster
+from mlsysim.fmt import fmt, check, fmt_time
+
+class FleetFailureMath:
+    # LOAD
+    gpu_count = Systems.Clusters.Training_1K.total_accelerators
+    gpu_mtbf = float(Systems.Reliability.Gpu.mttf_hours) * ureg.hour
+
+    # EXECUTE
+    gpu_mtbf_years = gpu_mtbf.to(hour).magnitude / (HOURS_PER_DAY * DAYS_PER_YEAR)
+    cluster_mtbf = calc_mtbf_cluster(gpu_mtbf, gpu_count)
+
+    # GUARD
+    check(gpu_mtbf_years > 1, "Component MTTF should read as years.")
+    check(cluster_mtbf.to(hour).magnitude < 100, "Thousand-GPU MTBF should read as hours.")
+
+    # OUTPUT
+    gpu_count_str = fmt(gpu_count, precision=0)
+    gpu_mtbf_years_str = fmt_time(gpu_mtbf_years, 'year', precision=1, commas=False, style='word')
+    cluster_mtbf_hours_str = fmt_time(cluster_mtbf.to(hour).magnitude, 'hour', precision=1, commas=False, style='word')
+```
+
+### Một ghi chú về tầm nhìn: Từ nút đến fleet {.unnumbered}
+
+Một số khối lượng công việc (workload) cuối cùng vượt quá một hệ thống đơn lẻ. Lý luận về nút thắt cổ chai tương tự vẫn quan trọng, nhưng ranh giới tài nguyên di chuyển ra bên ngoài. Các ràng buộc bộ nhớ cục bộ được bổ sung bởi các ràng buộc cấu trúc liên kết mạng, xử lý lỗi cục bộ trở thành độ tin cậy của fleet, và thông lượng huấn luyện trở thành một vấn đề phối hợp. Theo một mô hình nguy hiểm không đổi, độc lập, giống hệt nhau, trong đó lỗi GPU đầu tiên được tính là một sự kiện của pool, thời gian trung bình đến hỏng hóc (MTTF)\index{Mean time to failure!component reliability} của thành phần tham chiếu trong sách là `{python} FleetFailureMath.gpu_mtbf_years_str` trở thành thời gian trung bình giữa các lần hỏng hóc (MTBF)\index{Mean time between failures!fleet-scale reliability} của cụm khoảng `{python} FleetFailureMath.cluster_mtbf_hours_str` trong một pool GPU `{python} FleetFailureMath.gpu_count_str`, trước khi tính đến các lỗi tương quan. Do đó, một lần chạy kéo dài hàng tuần hoặc hàng tháng có xác suất cao gặp phải lỗi phần cứng. Một chiến lược chịu lỗi\index{Fault tolerance!training checkpoint strategy} là một yêu cầu vận hành để hoàn thành một lần chạy như vậy một cách hiệu quả; checkpointing không đồng bộ và phục hồi cục bộ có thể giảm chi phí nhưng không bắt buộc riêng lẻ để hội tụ. Ranh giới đã thay đổi đó là biên giới tiếp theo: quy mô. Vấn đề không phải là cuốn sách này phải trở thành một danh mục hệ thống phân tán. Vấn đề là lăng kính hệ thống ML được phát triển ở đây vẫn hữu ích khi quy mô thay đổi: xác định ràng buộc ràng buộc, định lượng thuật ngữ chi phí và theo dõi nơi chi phí đó lan truyền.
+
+::: {.column-margin}
+```{=latex}
+\vspace*{-29mm}
+```
+![](images/svg/vol1_conclusion_fleet_mtbf_ladder.svg){width="100%" fig-alt="Thang lề cho thấy một GPU có thời gian trung bình đến hỏng hóc khoảng 5,7 năm so với một pool 1024 GPU có thời gian trung bình giữa các lần hỏng hóc khoảng 48,8 giờ."}
+
+*Quy mô fleet biến các lỗi thành phần hiếm gặp thành các sự kiện hệ thống thường xuyên.*
+:::
+
+Tuy nhiên, sự thành thạo mang theo một cám dỗ lặp đi lặp lại: niềm tin rằng hiểu một hệ thống có nghĩa là hiểu nó hoàn toàn. Cám dỗ đó tạo ra những ngụy biện và cạm bẫy sau đây, trong đó sự tự tin vượt quá sự khiêm tốn.
+
+## Ngụy biện và Cạm bẫy {#sec-fallacies-pitfalls-12ef}
+
+Các ngụy biện và cạm bẫy trong hệ thống ML phát sinh từ một nguồn chung: coi hệ thống có thể phân tách thành các phần độc lập. Mỗi ngụy biện giả định rằng việc tối ưu hóa một chiều, một số liệu hoặc một giai đoạn là đủ; mỗi cạm bẫy cho thấy hậu quả khi giả định đó đối mặt với thực tế sản xuất.
+
+::: {.fallacy-pitfall}
+
+**Ngụy biện**: *Sự phức tạp của kỹ thuật hệ thống biến mất với các công cụ và trừu tượng hóa tốt hơn.*
+
+Các công cụ trừu tượng hóa sự phức tạp; chúng không loại bỏ các ràng buộc vật lý. Một framework cấp cao ẩn quản lý bộ nhớ vẫn tiêu thụ bộ nhớ. Một hệ thống AutoML điều chỉnh siêu tham số vẫn đối mặt với biên Pareto. Đơn giản hóa một giao diện có thể chuyển gánh nặng sang giao diện khác, mặc dù thiết kế tốt cũng có thể loại bỏ sự phức tạp ngẫu nhiên. Kỹ sư tin rằng các công cụ loại bỏ các ràng buộc cơ bản sẽ ngạc nhiên khi những ràng buộc đó xuất hiện trở lại ở quy mô lớn, thường ở dạng khó chẩn đoán hơn vấn đề ban đầu.
+
+:::
+
+::: {.fallacy-pitfall}
+
+**Cạm bẫy**: *Tối ưu hóa một số liệu mà không theo dõi các chi phí bị dịch chuyển.*
+
+Khi một tối ưu hóa giảm độ trễ 50 phần trăm, hãy hỏi điều gì đã thay đổi ở những nơi khác. Lượng tử hoá có thể làm tăng gánh nặng xác thực. Bộ nhớ đệm có thể đánh đổi dung lượng bộ nhớ để lấy tốc độ phục vụ (serving). Một số đơn giản hóa loại bỏ sự phức tạp ngẫu nhiên; những cái khác dịch chuyển chi phí. Các kỹ sư ăn mừng những cải thiện trong một số liệu mà không theo dõi những tác động đó có thể xây dựng các hệ thống thất bại theo những cách không mong muốn. Đo lường quyết định điều gì đã xảy ra.
+
+:::
+
+::: {.fallacy-pitfall}
+
+**Ngụy biện**: *Thành thạo các thành phần riêng lẻ tương đương với thành thạo hệ thống.*
+
+Chuyên môn về thành phần là cần thiết nhưng không đủ. Một kỹ sư hiểu các pipeline dữ liệu, huấn luyện, phục vụ (serving) và vận hành như các miền riêng biệt vẫn sẽ gặp khó khăn với các hệ thống mà một thay đổi lược đồ dữ liệu lan truyền qua quá trình huấn luyện, phá vỡ các giả định lượng tử hoá và gây ra sự suy giảm độ chính xác âm thầm trong sản xuất. Tích hợp có thể tạo ra nhiều sự phức tạp hơn so với những gì các thành phần bộc lộ khi đứng riêng lẻ vì các giao diện nhân lên các chế độ lỗi. Tư duy hệ thống có nghĩa là hiểu cách các thành phần tương tác, chứ không chỉ cách chúng hoạt động riêng lẻ.
+
+:::
+
+::: {.fallacy-pitfall}
+
+**Cạm bẫy**: *Mở rộng quy mô thu thập dữ liệu mà không đo lường giá trị thông tin biên.*
+
+Trực giác cho rằng nhiều dữ liệu hơn sẽ tạo ra các mô hình tốt hơn là hấp dẫn bởi vì điều đó thường đúng ở giai đoạn đầu phát triển mô hình. @Sec-data-selection đã chứng minh quy luật lợi suất giảm dần có thể xuất hiện khi một tập dữ liệu đạt được độ bao phủ đủ: vượt quá ngưỡng đó, việc tăng gấp đôi kích thước tập dữ liệu có thể mang lại lợi ích độ chính xác biên trong khi tăng chi phí lưu trữ, tiền xử lý và gán nhãn. Nguyên tắc trọng lực dữ liệu khuyến nghị đo lường các chi phí hạ nguồn đó, bao gồm việc di chuyển hoặc quét lặp lại một tập dữ liệu lớn hơn có tốn kém hơn việc di chuyển tính toán về phía nó hay không. Kỹ sư mở rộng quy mô dữ liệu mà không đo lường lợi nhuận gia tăng trên mỗi mẫu đang tối ưu hóa sai biến.
+
+:::
+
+::: {.fallacy-pitfall}
+
+**Ngụy biện**: *Một số liệu độ chính xác duy nhất nắm bắt chất lượng mô hình.*
+
+Một mô hình chỉ được đánh giá dựa trên độ chính xác tồn tại trong một thế giới đơn chiều. Phân tích Pareto bao gồm độ trễ, thông lượng, bộ nhớ, năng lượng, công bằng và chi phí sau khi các hướng mục tiêu được chuẩn hóa. Với SLO độ trễ đuôi 100 ms, một mô hình có độ chính xác 95% ở 500 ms là không khả thi, trong khi một mô hình có độ chính xác 93% ở 50 ms vẫn là một ứng viên; nếu không có yêu cầu như vậy, không có điểm nào tự động tốt hơn. @Sec-responsible-engineering đã chỉ ra rằng độ chính xác tổng hợp cũng có thể che giấu sự chênh lệch lớn về tỷ lệ lỗi giữa các nhóm nhân khẩu học, vì vậy ngay cả chiều độ chính xác cũng đòi hỏi phép đo phân tách. Đánh giá phải bao trùm bề mặt Pareto có liên quan, chứ không phải một trục đơn lẻ.
+
+:::
+
+::: {.fallacy-pitfall}
+
+**Pitfall**: *Coi mọi cảnh báo drift là một yếu tố kích hoạt rollback tự động.*
+
+Phát hiện drift nên kích hoạt một phản ứng đã được chẩn đoán, chứ không phải một rollback vô điều kiện. Rollback là phù hợp khi một phiên bản hoặc bản phát hành bị suy giảm chất lượng đã được xác định. Drift phân phối bên ngoài không được khắc phục bằng cách khôi phục cùng một mô hình cũ; các hành động tự động an toàn hơn có thể bao gồm cảnh báo, dự phòng, giảm lưu lượng truy cập hoặc giữ các dự đoán để xem xét, sau đó là thu thập dữ liệu và huấn luyện lại khi bằng chứng kết quả hỗ trợ. Nếu không có các cơ chế phản ứng cụ thể theo nguyên nhân, sự suy giảm chất lượng có thể tiếp tục cho đến khi con người nhận ra. @Sec-ml-operations do đó kết nối giám sát với hành động, nhưng hành động tuân theo nguyên nhân đã được chẩn đoán chứ không phải chỉ riêng tín hiệu drift.
+
+:::
+
+```{python}
+#| echo: false
+#| label: conclusion-amdahl-pitfall
+#| output: false
+# ┌─────────────────────────────────────────────────────────────────────────────
+# │ AMDAHL'S LAW PITFALL CALCULATION
+# ├─────────────────────────────────────────────────────────────────────────────
+# │ Context: Fallacies and Pitfalls paragraph immediately following the
+# │          "Optimizing a single pipeline stage" pitfall in the conclusion.
+# │
+# │ Goal:    Quantify how Amdahl's Law caps end-to-end speedup when only a
+# │          small fraction of the pipeline is being optimized.
+# │ Show:    Local speedup factor, serial-fraction percent, and resulting
+# │          system-level speedup for the worked pitfall example.
+# │ How:     Apply calc_amdahls_speedup with optimized_fraction=0.10 and a
+# │          10x local speedup, then format each value for prose inlining.
+# │
+# └─────────────────────────────────────────────────────────────────────────────
+from mlsysim.physics import calc_amdahls_speedup
+from mlsysim.fmt import fmt, check
+
+class AmdahlPitfallMath:
+    # LOAD
+    optimized_fraction = 0.10
+    serial_fraction = 1 - optimized_fraction
+    local_speedup = 10.0
+
+    # EXECUTE
+    system_speedup = calc_amdahls_speedup(optimized_fraction, local_speedup)
+
+    # GUARD
+    check(system_speedup < 1.2, "Amdahl example should remain bottlenecked by preprocessing.")
+
+    # OUTPUT
+    local_speedup_mult_str = fmt_multiple(local_speedup, precision=0, commas=False)
+    serial_pct_str = fmt_percent(serial_fraction, precision=0, commas=False, style='prose')
+    system_speedup_mult_str = fmt_multiple(system_speedup, precision=1, commas=False)
+```
+
+::: {.fallacy-pitfall}
+
+**Ngụy biện**: *Một giai đoạn pipeline được tối ưu hóa duy nhất làm cho hệ thống nhanh.*
+
+Định luật Amdahl (nguyên tắc \ref{pri-amdahl}) áp dụng trực tiếp cho các pipeline ML đầu cuối. Tối ưu hóa độ trễ suy luận của bộ tăng tốc bằng `{python} AmdahlPitfallMath.local_speedup_mult_str` chỉ mang lại tốc độ tăng hệ thống `{python} AmdahlPitfallMath.system_speedup_mult_str` nếu quá trình tiền xử lý bị giới hạn bởi CPU chiếm `{python} AmdahlPitfallMath.serial_pct_str` tổng độ trễ đầu cuối—các phần nối tiếp này có thể phát sinh từ việc tăng cường hình ảnh phía máy chủ, tra cứu kho đặc trưng đồng bộ hoặc việc mã hóa token vẫn bị giới hạn ở máy chủ trong một số triển khai. Quy luật sắt của hệ thống ML (nguyên tắc \ref{pri-iron-law}) phân tách thời gian thực thi thành các thành phần di chuyển dữ liệu, tính toán và độ trễ một cách chính xác để các kỹ sư có thể xác định thành phần chiếm ưu thế trước khi đầu tư nỗ lực tối ưu hóa. @Sec-benchmarking đã chính thức hóa quy trình chẩn đoán này thông qua các phương pháp hồ sơ hóa (profiling) đo lường thời gian thực sự được sử dụng ở đâu. Các kỹ sư tối ưu hóa mà không hồ sơ hóa là đang đoán mò, và Định luật Amdahl không khoan nhượng với những phỏng đoán nhắm vào thành phần sai.
+
+:::
+
+::: {.fallacy-pitfall}
+
+**Pitfall**: *Chỉ hồ sơ hóa giai đoạn có vẻ dễ tối ưu hóa nhất.*
+
+Các nhóm thường hồ sơ hóa nhân mô hình vì nó hiển thị, có công cụ đo lường và thuộc sở hữu của nhóm ML, trong khi đường dẫn dữ liệu xung quanh được chia sẻ giữa lưu trữ, tiền xử lý, mạng và mã ứng dụng. Cái nhìn cục bộ đó có thể khiến việc cải thiện nhân 10$\times$ có vẻ cấp bách ngay cả khi nó thay đổi rất ít về đường dẫn mà người dùng nhìn thấy. Hồ sơ hóa đầu cuối giữ cho mục tiêu tối ưu hóa trung thực: giai đoạn cần cải thiện là giai đoạn giới hạn hệ thống, chứ không phải giai đoạn có bộ công cụ benchmark sạch nhất.
+
+:::
+
+Tất cả tám ngụy biện và cạm bẫy đều có chung một gốc rễ: sự cám dỗ muốn thu nhỏ một hệ thống thành các bộ phận của nó, cho dù bằng cách tối ưu hóa một chỉ số duy nhất, một giai đoạn duy nhất, hay một thời điểm duy nhất. Phần tóm tắt cuối cùng chống lại sự thu nhỏ đó bằng cách quay trở lại quan điểm tích hợp: suy luận xuyên ranh giới là kỷ luật cốt lõi của kỹ thuật hệ thống ML.
+
+## Tóm tắt {#sec-summary-2ef7}
+
+Kỹ thuật hệ thống ML khác với tối ưu hóa thành phần riêng lẻ ở chỗ nó suy luận xuyên ranh giới. Mười ba nguyên tắc, nguyên tắc phỏng đoán bảo toàn độ phức tạp, và framework hành trình hải đăng cung cấp các công cụ phân tích để suy luận về các hệ thống như một tổng thể. Các giả định đã nêu của chúng phân biệt các giới hạn chính xác với các mô hình đã điều chỉnh, các chính sách SLO và các nguyên tắc phỏng đoán thiết kế, cho phép các công cụ vẫn hữu ích khi các framework, thế hệ phần cứng và họ mô hình thay đổi.
+
+::: {.callout-takeaways title="Suy luận xuyên ranh giới"}
+
+* **Các giả định quan trọng trong các triển khai khác nhau**: Mười ba nguyên tắc biến kỹ thuật thủ công đặc thù của framework thành suy luận có thể đo lường được bằng cách kết hợp các giới hạn vật lý, phân tách, mô hình đã điều chỉnh, yêu cầu và nguyên tắc phỏng đoán. Chỉ áp dụng từng nguyên tắc trong phạm vi đã nêu của nó.
+* **Theo dõi các chi phí bị dịch chuyển mà không giả định bảo toàn**: Nén, xử lý theo batch, giám sát và quản trị có thể di chuyển gánh nặng giữa dữ liệu, thuật toán và máy, trong khi thiết kế tốt có thể loại bỏ hoàn toàn sự phức tạp ngẫu nhiên. Phép đo phân biệt hai trường hợp này.
+* **Ranh giới tiết lộ điểm nghẽn**: Trong mô hình lý tưởng batch-một, hai-H100, giới hạn dưới của việc truyền bộ nhớ cho một token Llama 2 70B là khoảng `{python} ConclusionRoofline.ratio_mult_str` giới hạn dưới của tính toán đỉnh, và độ trễ p99 minh họa là `{python} TailLatencyRatio.conclusion_tail_ratio_mult_str` giá trị trung bình. Tư duy hệ thống có nghĩa là đo lường nơi vật lý, lưu lượng truy cập và người dùng bị ràng buộc.
+* **Quy mô thay đổi thành phần ràng buộc**: Biên giới tiếp theo là quy mô, nơi một nhóm nghìn GPU biến MTTF thành phần kéo dài nhiều năm thành MTBF cụm kéo dài vài ngày. Vật lý vẫn còn đó, nhưng ràng buộc chuyển sang các đội hình.
+
+:::
+
+Cuốn *Computer Architecture: A Quantitative Approach* của Hennessy và Patterson đã giúp thiết lập một ngôn ngữ phân tích chung để so sánh CPI, tốc độ xung nhịp và số lượng lệnh [@hennessy2011computer; @patterson2017hardware]. Tập hợp này mong muốn có một vai trò tương tự đối với kỹ thuật hệ thống ML mà không khẳng định rằng mọi chẩn đoán đều là bất biến. Đây là một khởi đầu, không phải là một điểm kết thúc. Công việc trong tương lai sẽ tinh chỉnh các mô hình, giả định và phạm vi.
+
+Điều sẽ tồn tại là lập trường trí tuệ mà những nguyên tắc này thể hiện: suy luận từ bằng chứng và giới hạn vật lý thay vì phản ứng với các triệu chứng, định lượng các đánh đổi thay vì chạy theo xu hướng, và coi thiết kế như một bài toán tối ưu hóa có ràng buộc. Đây là hệ quả kỹ thuật của bài học cay đắng mà phần giới thiệu đã rút ra từ bảy thập kỷ nghiên cứu AI: bởi vì các phương pháp tổng quát có thể mở rộng theo tính toán đã liên tục vượt trội so với chuyên môn thủ công, lợi thế bền vững thuộc về kỹ thuật hệ thống có thể hấp thụ tính toán đó, chứ không phải bất kỳ kiến trúc thông minh đơn lẻ nào [@sutton2019bitter]. Các frameworks cụ thể sẽ nổi lên rồi lụi tàn, các thế hệ phần cứng sẽ thay đổi, và kiến trúc mô hình sẽ bị thay thế. Nhưng suy luận có kỷ luật về dữ liệu, tính toán và các ràng buộc vật lý thì không.
+
+Ở ranh giới tiếp theo của quy mô, một số mô hình không còn vừa trên một máy, các lỗi trở nên rất có khả năng xảy ra trên toàn bộ các cụm máy, và các liên kết mạng có thể trở thành yếu tố ràng buộc cùng với các bus bộ nhớ cục bộ. Các định luật vật lý không thay đổi; chỉ có quy mô mà tại đó chúng trở thành ràng buộc là thay đổi.
+
+*Thế giới đang vội vã xây dựng các hệ thống AI. Nhiệm vụ của chúng ta là thiết kế kỹ thuật chúng.*
+
+```{=latex}
+\vspace{5mm}
+\begingroup
+\raggedleft
+```
+
+*GS. Vijay Janapa Reddi, Đại học Harvard*
+
+```{=latex}
+\vspace{10mm}
+\endgroup
+```
+
+::: { .quiz-end }
+:::
+
+```{=latex}
+\part{key:backmatter}
+```

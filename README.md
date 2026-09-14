@@ -6,6 +6,19 @@ thực hiện với sự đồng ý của tác giả, nhằm **đóng góp cho c
 > Đây là **Tập I – Nhập môn Hệ thống Học máy** (Introduction to Machine Learning Systems).
 > Bản dịch máy có bảng thuật ngữ thống nhất, **chưa hiệu đính toàn diện** — hoan nghênh mọi góp ý.
 
+## 📥 Tải bản dịch để đọc/soát
+
+Bản dịch Tập I (đã qua 2 lượt tinh chỉnh) được xuất sẵn để đọc lại một lượt:
+
+| Định dạng | Dùng cho | Tải |
+|---|---|---|
+| **EPUB** | Điện thoại / máy đọc sách (mục lục, công thức MathML) | [MLSystems-TapI-vi.epub](https://github.com/donamvn/mlsysbook-vi/releases/latest/download/MLSystems-TapI-vi.epub) |
+| **HTML** | Mở bằng trình duyệt (tự chứa, kèm ảnh) | [MLSystems-TapI-vi.html](https://github.com/donamvn/mlsysbook-vi/releases/latest/download/MLSystems-TapI-vi.html) |
+| **DOCX** | Word / Google Docs — tiện Track Changes, ghi chú chỗ cần sửa | [MLSystems-TapI-vi.docx](https://github.com/donamvn/mlsysbook-vi/releases/latest/download/MLSystems-TapI-vi.docx) |
+
+Tất cả bản tải nằm ở trang [Releases](https://github.com/donamvn/mlsysbook-vi/releases/latest).
+*(PDF sẽ bổ sung sau khi dựng bằng Quarto đầy đủ.)*
+
 ## Nội dung đã dịch
 
 - **Văn xuôi:** 16 chương chính, các phụ lục và phần đầu sách. Giữ nguyên mã, công thức, trích dẫn,

@@ -12,12 +12,15 @@ Bản dịch Tập I (đã qua 2 lượt tinh chỉnh) được xuất sẵn đ�
 
 | Định dạng | Dùng cho | Tải |
 |---|---|---|
+| **PDF** | In / đọc cố định, dàn trang sách (mục lục, công thức, 103 sơ đồ vector) | [MLSystems-TapI-vi.pdf](https://github.com/donamvn/mlsysbook-vi/releases/latest/download/MLSystems-TapI-vi.pdf) |
 | **EPUB** | Điện thoại / máy đọc sách (mục lục, công thức MathML) | [MLSystems-TapI-vi.epub](https://github.com/donamvn/mlsysbook-vi/releases/latest/download/MLSystems-TapI-vi.epub) |
 | **HTML** | Mở bằng trình duyệt (tự chứa, kèm ảnh) | [MLSystems-TapI-vi.html](https://github.com/donamvn/mlsysbook-vi/releases/latest/download/MLSystems-TapI-vi.html) |
 | **DOCX** | Word / Google Docs — tiện Track Changes, ghi chú chỗ cần sửa | [MLSystems-TapI-vi.docx](https://github.com/donamvn/mlsysbook-vi/releases/latest/download/MLSystems-TapI-vi.docx) |
 
+
+> **Lưu ý bản PDF:** các sơ đồ vẽ bằng TikZ/pgfplots trong sách được thay bằng ghi chú *[Sơ đồ kỹ thuật — xem bản HTML/EPUB]* (chúng cần bộ dựng Quarto đầy đủ). Ảnh chụp, sơ đồ SVG (103 hình) và công thức toán vẫn hiển thị đầy đủ.
+
 Tất cả bản tải nằm ở trang [Releases](https://github.com/donamvn/mlsysbook-vi/releases/latest).
-*(PDF sẽ bổ sung sau khi dựng bằng Quarto đầy đủ.)*
 
 ## Nội dung đã dịch
 

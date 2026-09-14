@@ -2,15 +2,15 @@
 engine: jupyter
 ---
 
-# Các Giả Định Hệ Thống {#sec-appdx-system-assumptions dropcap="chapter-opening"}
+# Các giả định hệ thống {#sec-appdx-system-assumptions dropcap="chapter-opening"}
 
-Một phép tính nháp chỉ đáng tin cậy như các đầu vào đằng sau nó, và những đầu vào đó dễ bị bỏ sót: tốc độ đỉnh của bộ tăng tốc, số lượng tham số của mô hình, giá điện, chi phí năng lượng cho mỗi phép toán. Phụ lục này tập hợp các giá trị chuẩn và quy ước đơn vị đó vào một bảng tham chiếu duy nhất, cho phép mọi ước tính định lượng trong sách có thể được kiểm tra, cập nhật với số liệu mới hơn hoặc đối chiếu giữa các chương. Nó cũng cố định các quy ước đơn vị mà các ước tính đó phụ thuộc vào. Các chương sau đó có thể lập luận dựa trên các con số mà không cần nhắc lại nguồn gốc của từng con số.
+Một phép tính nháp chỉ đáng tin cậy đúng bằng độ tin cậy của các đầu vào, mà những đầu vào ấy lại rất dễ bị bỏ sót: tốc độ đỉnh của một bộ tăng tốc, số tham số của một mô hình, giá điện, hay chi phí năng lượng cho mỗi phép toán. Phụ lục này gom các giá trị chuẩn và quy ước đơn vị vào một bảng tham chiếu duy nhất, để mọi ước tính định lượng trong sách đều có thể được kiểm tra, cập nhật bằng số liệu mới, hoặc đối chiếu giữa các chương. Nó cũng chốt lại các quy ước đơn vị mà các ước tính này dựa vào. Nhờ vậy, các chương có thể lập luận dựa trên con số mà không cần nhắc lại nguồn gốc của từng số.
 
-## Cách Sử Dụng Phụ Lục Này {.unnumbered}
+## Cách sử dụng phụ lục này {.unnumbered}
 
-Khi một chương nói rằng H100 đạt một điểm đỉnh nhất định, hoặc việc huấn luyện một mô hình 7B cần một lượng bộ nhớ nhất định, thì các băng thông, dung lượng và kích thước mô hình cơ bản được liệt kê ở đây. Một ước tính cục bộ có thể sử dụng các mục Giá trị và Đơn vị liên quan. Các bảng được nhóm theo chủ đề: bộ tăng tốc, mô hình tham chiếu, năng lượng trên mỗi lần truy cập, băng thông kết nối, kinh tế, các điểm neo quy mô sản xuất và quy ước đơn vị. Các giả định đến từ các thông số kỹ thuật đỉnh của nhà cung cấp, các nghiên cứu đã công bố hoặc báo cáo ngành, số liệu thống kê thị trường hoặc lưới điện minh họa, và các quy ước của sách; @sec-appdx-assumption-provenance liệt kê nguồn gốc ở một nơi.
+Khi một chương nói H100 đạt một ridge point nhất định, hoặc việc huấn luyện một mô hình 7B cần một mức bộ nhớ cụ thể, thì các băng thông, dung lượng và kích thước mô hình cơ sở sẽ được liệt kê tại đây. Khi cần ước tính cục bộ, bạn có thể lấy các mục Giá trị và Đơn vị tương ứng. Các bảng được nhóm theo chủ đề: bộ tăng tốc, mô hình tham chiếu, năng lượng trên mỗi lần truy cập, băng thông liên kết, kinh tế, các điểm neo ở quy mô sản xuất, và quy ước đơn vị. Các giả định lấy từ thông số đỉnh trong datasheet của nhà cung cấp, các nghiên cứu đã công bố hoặc báo cáo ngành, số liệu minh họa về thị trường hoặc lưới điện, và các quy ước của sách; @sec-appdx-assumption-provenance liệt kê nguồn gốc đó ở một nơi.
 
-Các phép tính dưới đây cho thấy những giả định nào chi phối từng ước tính, do đó, một thay đổi về thông số kỹ thuật phần cứng hoặc giá cả có thể lan truyền mà không làm thay đổi phương pháp.
+Các phép tính dưới đây cho thấy giả định nào chi phối từng ước tính, nên khi thông số phần cứng hay giá thay đổi, ta có thể cập nhật mà không phải đổi phương pháp.
 
 ```{python}
 #| echo: false
@@ -100,66 +100,66 @@ class NapkinMath:
     napkin_model_b_digit_str = fmt(model_params_b, precision=0, commas=False)
 ```
 
-Các hằng số trong phụ lục này hỗ trợ các phép tính nhanh chóng, có thể tái tạo. Ba ví dụ dưới đây áp dụng chúng cho hiệu suất, dung lượng và chi phí.
+Các hằng số trong phụ lục này hỗ trợ các phép tính nhanh và có thể tái lập. Ba ví dụ dưới đây áp dụng chúng cho hiệu suất, dung lượng và chi phí.
 
 ::: {#nbk-appendix-assumptions-napkin-math-constants .callout-notebook title="Phân loại chế độ roofline"}
 
 **Bài toán**:
-Với H100 và cường độ khối lượng công việc (workload) đã nêu, những phép toán nào bị giới hạn bởi tính toán và những phép toán nào bị giới hạn bởi bộ nhớ?
+Với H100 và cường độ khối lượng công việc (workload) đã cho, những phép toán nào bị giới hạn bởi tính toán và những phép toán nào bị giới hạn bởi bộ nhớ?
 
-**Biến số**:
-Đối với H100 ở hiệu suất đỉnh FP16/BF16, sử dụng hiệu suất tính toán đỉnh `{python} NapkinMath.h100_fp16_tflop_per_s_str` và băng thông bộ nhớ `{python} NapkinMath.h100_bw_tb_per_s_str`.
+**Các biến số**:
+Với H100 ở hiệu suất đỉnh FP16/BF16, chúng ta sẽ sử dụng hiệu suất tính toán đỉnh là `{python} NapkinMath.h100_fp16_tflop_per_s_str` và băng thông bộ nhớ là `{python} NapkinMath.h100_bw_tb_per_s_str`.
 
 **Phép tính**:
-Chia FLOP/s đỉnh cho băng thông bộ nhớ để có điểm đỉnh roofline\index{Ridge point!appendix refresher}: `{python} NapkinMath.h100_fp16_tflop_per_s_str`/`{python} NapkinMath.h100_bw_tb_per_s_str` $\approx$ `{python} NapkinMath.ridge_str`. Một phép nhân ma trận tổng quát (GEMM) lớn với $n=$ `{python} NapkinMath.gemm_n_str` có cường độ $n/3 \approx$ `{python} NapkinMath.gemm_intensity_str`.
+Để tìm điểm đỉnh roofline\index{Ridge point!appendix refresher}, ta chia FLOP/s đỉnh cho băng thông bộ nhớ: `{python} NapkinMath.h100_fp16_tflop_per_s_str`/`{python} NapkinMath.h100_bw_tb_per_s_str` $\approx$ `{python} NapkinMath.ridge_str`. Một phép nhân ma trận tổng quát (GEMM) lớn với $n=$ `{python} NapkinMath.gemm_n_str` sẽ có cường độ $n/3 \approx$ `{python} NapkinMath.gemm_intensity_str`.
 
 **Kết quả**:
-Các phép toán trên `{python} NapkinMath.ridge_str` bị giới hạn bởi tính toán; các phép toán dưới nó bị giới hạn bởi bộ nhớ. Ví dụ GEMM bị giới hạn bởi tính toán, trong khi một giải mã tự hồi quy một token với cường độ $\approx 1$ FLOP/byte bị giới hạn sâu bởi bộ nhớ.
+Các phép toán nằm trên `{python} NapkinMath.ridge_str` bị giới hạn bởi tính toán (compute bound); các phép toán nằm dưới ngưỡng đó bị giới hạn bởi bộ nhớ (memory bound). Ví dụ GEMM là compute bound, còn giải mã tự hồi quy từng token với cường độ $\approx 1$ FLOP/byte thì bị giới hạn nặng bởi bộ nhớ.
 
 **Thông tin chuyên sâu về hệ thống**:
-Cùng một bộ tăng tốc có thể giàu tài nguyên tính toán nhưng bị hạn chế về bộ nhớ. Cường độ số học xác định tài nguyên nào mà khối lượng công việc (workload) thực sự tiêu thụ.
+Cùng một bộ tăng tốc có thể dư dả về tính toán nhưng lại bị bó về bộ nhớ. Cường độ số học quyết định khối lượng công việc (workload) thực sự tiêu thụ tài nguyên nào.
 
 :::
 
-Thông lượng chỉ là một ràng buộc. Huấn luyện cũng yêu cầu đủ dung lượng cho trọng số, gradient và trạng thái optimizer.
+Thông lượng chỉ là một ràng buộc. Huấn luyện cũng cần đủ dung lượng cho trọng số, gradient và trạng thái optimizer.
 
 ::: {#nbk-appendix-assumptions-training-memory .callout-notebook title="Ước tính bộ nhớ trạng thái huấn luyện"}
 
 **Bài toán**:
-Cần bao nhiêu bộ nhớ trạng thái mô hình để huấn luyện một mô hình `{python} NapkinMath.model_b_str` với Adam (Adaptive Moment Estimation) độ chính xác hỗn hợp?
+Cần bao nhiêu bộ nhớ trạng thái mô hình để huấn luyện một mô hình `{python} NapkinMath.model_b_str` với Adam (Adaptive Moment Estimation) dùng độ chính xác hỗn hợp?
 
-**Biến số**:
-Adam độ chính xác hỗn hợp lưu trữ trọng số BF16, gradient, trọng số chính FP32, momentum và phương sai. Ngân sách trạng thái mô hình là `{python} NapkinMath.bytes_per_param_value_str` byte trên mỗi tham số.
+**Các biến số**:
+Adam độ chính xác hỗn hợp lưu trữ trọng số BF16, gradient, trọng số master FP32, momentum và phương sai. Dung lượng bộ nhớ dành cho trạng thái mô hình là `{python} NapkinMath.bytes_per_param_value_str` byte cho mỗi tham số.
 
 **Phép tính**:
 Đối với `{python} NapkinMath.model_b_str` tham số, trạng thái mô hình là `{python} NapkinMath.napkin_model_b_digit_str` $\times 10^9 \times$ `{python} NapkinMath.bytes_per_param_value_str` byte = `{python} NapkinMath.train_mem_gb_str`.
 
 **Kết quả**:
-Một H100 có `{python} NapkinMath.accel_mem_gb_str` bộ nhớ băng thông cao (HBM), do đó trạng thái mô hình riêng lẻ đã vượt quá một bộ tăng tốc duy nhất trước khi tính đến các activation.
+Một bộ tăng tốc H100 có `{python} NapkinMath.accel_mem_gb_str` bộ nhớ băng thông cao (HBM), nên chỉ riêng trạng thái mô hình đã vượt quá dung lượng của một bộ tăng tốc, chưa kể các activation.
 
 **Thông tin chuyên sâu về hệ thống**:
-Trạng thái optimizer\index{Optimizer state!appendix refresher}, chứ không phải chỉ trọng số, đặt ra giới hạn dưới cho bộ nhớ huấn luyện. Lập kế hoạch dung lượng bắt đầu từ số byte tham số sẽ đánh giá thấp yêu cầu thực tế.
+Trạng thái optimizer\index{Optimizer state!appendix refresher}, chứ không chỉ các trọng số, mới đặt ra mức tối thiểu cho bộ nhớ huấn luyện. Lập kế hoạch dung lượng mà bắt đầu từ số byte tham số sẽ đánh giá thấp yêu cầu thực tế.
 
 :::
 
-Việc đưa mô hình vào bộ nhớ xác lập tính khả thi, nhưng không phải chi phí vận hành. Công suất và thời gian trôi qua cung cấp các đại lượng còn lại cho ước tính điện năng ban đầu.
+Việc đưa mô hình vào bộ nhớ chỉ xác lập tính khả thi, chứ không phải chi phí vận hành. Công suất và thời gian thực thi (elapsed time) cung cấp các đại lượng còn lại để ước tính chi phí điện năng ban đầu.
 
 ::: {#nbk-appendix-assumptions-electricity-cost .callout-notebook title="Ước tính chi phí điện năng của bộ tăng tốc"}
 
 **Bài toán**:
-Chi phí điện năng chỉ riêng bộ tăng tốc\index{Training cost!electricity} của kịch bản quy mô GPT-3 theo biên tập là bao nhiêu?
+Chi phí điện năng chỉ tính cho bộ tăng tốc\index{Training cost!electricity} trong kịch bản quy mô GPT-3 trong phần biên tập là bao nhiêu?
 
-**Biến số**:
-Sử dụng `{python} NapkinMath.gpt3_accelerators_str` A100, `{python} NapkinMath.a100_tdp_w_str` mỗi bộ tăng tốc, `{python} NapkinMath.gpt3_days_str` thời gian thực, và `{python} NapkinMath.elec_rate_str` điện năng.
+**Các biến số**:
+Sử dụng `{python} NapkinMath.gpt3_accelerators_str` bộ tăng tốc A100, `{python} NapkinMath.a100_tdp_w_str` mỗi bộ tăng tốc, `{python} NapkinMath.gpt3_days_str` thời gian chạy thực tế (wall-clock), và `{python} NapkinMath.elec_rate_str` giá điện.
 
 **Phép tính**:
-Quá trình chạy yêu cầu khoảng `{python} NapkinMath.gpt3_ops_math` FLOPs. Ước tính chi phí điện năng tương đương A100 là `{python} NapkinMath.gpt3_days_str` thời gian thực $\times$ `{python} NapkinMath.gpt3_accelerators_str` A100 $\times$ 24 giờ/ngày $\times$ `{python} NapkinMath.a100_kw_str` $\times$ `{python} NapkinMath.elec_rate_str` = `{python} NapkinMath.elec_cost_str`.
+Quá trình chạy này cần khoảng `{python} NapkinMath.gpt3_ops_math` FLOPs. Ước tính chi phí điện năng tương đương A100 là `{python} NapkinMath.gpt3_days_str` thời gian thực $\times$ `{python} NapkinMath.gpt3_accelerators_str` A100 $\times$ 24 giờ/ngày $\times$ `{python} NapkinMath.a100_kw_str` $\times$ `{python} NapkinMath.elec_rate_str` = `{python} NapkinMath.elec_cost_str`.
 
 **Kết quả**:
-Chi phí điện năng chỉ riêng bộ tăng tốc xấp xỉ `{python} NapkinMath.elec_cost_str`. Ước tính chỉ dựa trên công suất thiết kế nhiệt (TDP) của bộ tăng tốc này không bao gồm CPU máy chủ, mạng, lưu trữ, làm mát và chi phí chung của cơ sở. Lần chạy GPT-3 gốc đã sử dụng cơ sở hạ tầng thời V100; đây là một kịch bản tương đương A100 theo biên tập, không phải là một cấu hình được báo cáo hay một thời lượng được suy ra chỉ từ FLOP/s đỉnh.
+Chi phí điện năng chỉ riêng bộ tăng tốc là khoảng `{python} NapkinMath.elec_cost_str`. Ước tính này chỉ dựa trên công suất thiết kế nhiệt (TDP) của bộ tăng tốc, không bao gồm CPU máy chủ, mạng, lưu trữ, làm mát hay chi phí vận hành chung của cơ sở. Lần chạy GPT-3 gốc sử dụng cơ sở hạ tầng thời V100; đây là một kịch bản tương đương A100 do biên tập viên đặt ra, không phải cấu hình được báo cáo hay thời lượng suy ra chỉ từ FLOP/s đỉnh.
 
 **Thông tin chuyên sâu về hệ thống**:
-Năng lượng có thể đo được từ công suất và thời gian, nhưng việc hạch toán chi phí đầy đủ cũng phải bao gồm việc sử dụng vốn, mạng, lưu trữ, nhân sự và các lần chạy thất bại hoặc lặp lại.
+Năng lượng có thể đo được từ công suất và thời gian, nhưng để tính đủ chi phí, còn phải tính cả việc sử dụng vốn, mạng, lưu trữ, nhân sự và những lần chạy bị lỗi hoặc phải chạy lại.
 
 :::
 
@@ -274,13 +274,13 @@ class AcceleratorConstants:
     v100_tdp_unit_str = fmt_unit(Hardware.Cloud.V100.tdp)
 ```
 
-## Thông Số Kỹ Thuật Bộ Tăng Tốc {.unnumbered}
+## Thông số kỹ thuật bộ tăng tốc {.unnumbered}
 
-Đây là các **giả định về bộ tăng tốc**\index{Assumptions!accelerator} được sử dụng trong các ví dụ về roofline, bộ nhớ huấn luyện, năng lượng và chi phí của sách: thông lượng đỉnh, băng thông bộ nhớ, dung lượng bộ nhớ và TDP cho mỗi thế hệ mà các chương trích dẫn. Các giá trị là giá trị đỉnh từ bảng dữ liệu của nhà cung cấp—mức trần cho tính toán nhanh, không phải mức sử dụng bền vững—được lấy từ tài liệu sản phẩm của NVIDIA và các bài báo kiến trúc IEEE Micro [@nvidia2017gpu; @nvidia2020v100datasheet; @NVIDIA2020; @nvidia2021a10080gb; @choquette2021; @choquette2023; @nvidia2018t4; @nvidia2024blackwell], tài liệu AMD MI300X [@amd2023mi300x], các ấn phẩm về Bộ xử lý Tensor (TPU) của Google [@jouppi2023], và trang thông số kỹ thuật TPU v6e hiện tại của Google Cloud [@googleCloudTpuV6eDocs]. Các hàng dung lượng giữ nguyên tên gọi GB thập phân chính thức. Các bảng tiến triển từ @tbl-assumptions-v100 (Volta) và @tbl-assumptions-t4 (Turing) qua các thế hệ hiện tại và hướng tới tương lai.
+Đây là các **giả định về bộ tăng tốc**\index{Assumptions!accelerator} được sử dụng trong các ví dụ về roofline, bộ nhớ huấn luyện, năng lượng và chi phí của sách: thông lượng đỉnh, băng thông bộ nhớ, dung lượng bộ nhớ và TDP cho từng thế hệ được nêu trong các chương. Các giá trị này là mức đỉnh từ bảng dữ liệu của nhà cung cấp—giới hạn trên để tính toán nhanh, không phải mức sử dụng bền vững—và được lấy từ tài liệu sản phẩm của NVIDIA, các bài báo kiến trúc IEEE Micro [@nvidia2017gpu; @nvidia2020v100datasheet; @NVIDIA2020; @nvidia2021a10080gb; @choquette2021; @choquette2023; @nvidia2018t4; @nvidia2024blackwell], tài liệu AMD MI300X [@amd2023mi300x], các ấn phẩm về Bộ xử lý Tensor (TPU) của Google [@jouppi2023], và trang thông số kỹ thuật TPU v6e hiện tại của Google Cloud [@googleCloudTpuV6eDocs]. Các hàng dung lượng giữ nguyên tên gọi GB thập phân chính thức. Các bảng trình bày từ @tbl-assumptions-v100 (Volta) và @tbl-assumptions-t4 (Turing) đến các thế hệ hiện tại và hướng tới.
 
 ### Ma trận thông số kỹ thuật bộ tăng tốc chính {.unnumbered}
 
-Ma trận bộ tăng tốc chính trong @tbl-appdx-assumptions-accelerator-matrix tổng hợp các thông số kỹ thuật trên các bộ tăng tốc AI chính như GPU, TPU, Wafer-Scale và chuyên biệt theo miền.
+Ma trận bộ tăng tốc chính trong @tbl-appdx-assumptions-accelerator-matrix tổng hợp các thông số kỹ thuật của các bộ tăng tốc AI chủ chốt như GPU, TPU, Wafer-Scale và các bộ tăng tốc chuyên biệt theo miền.
 
 | **Architecture/Chip**         | **Node (nm)**  | **TDP (W)** | **Compute Peak TFLOPs/TOPS**                                                  | **Memory Capacity & Bandwidth** | **On-Chip SRAM** | **$I_{\text{ridge}}$ (FLOP/B)** |
 |:------------------------------|:--------------:|:-----------:|:------------------------------------------------------------------------------|:--------------------------------|:----------------:|:-------------------------------:|
@@ -302,7 +302,7 @@ Ma trận bộ tăng tốc chính trong @tbl-appdx-assumptions-accelerator-matri
 | **Intel Habana Gaudi 2**      | 7nm N7 (TSMC)  |     600     | FP32: 38.5, TF32: 154, FP16/BF16: 307, FP8: 614, INT8: 614                    | 96 GB HBM2e @ 2.45 TB/s         |      48 MB       |              125.3              |
 | **Intel Habana Gaudi 3**      | 5nm N5 (TSMC)  |     900     | FP32: 115, TF32: 460, FP16/BF16: 1,835, FP8: 3,670, INT8: 3,670               | 128 GB HBM3e @ 3.70 TB/s        |      96 MB       |              495.9              |
 
-: **Ma trận thông số kỹ thuật bộ tăng tốc chính**: Ma trận tham chiếu toàn diện so sánh phần cứng AI sản xuất trên các kiến trúc, nút xử lý, TDP, thông lượng tính toán đa độ chính xác (FP64 đến INT8), dung lượng và băng thông bộ nhớ, dung lượng SRAM trên chip, và Điểm Ridge Roofline FP16 ($I_{\text{ridge}} = \text{Peak FP16 TFLOP/s}/\text{Memory Bandwidth (TB/s)}$). {#tbl-appdx-assumptions-accelerator-matrix tbl-colwidths="[17,10,8,28,17,10,10]"}
+: **Ma trận thông số kỹ thuật bộ tăng tốc tổng hợp**: Ma trận tham khảo toàn diện, so sánh các bộ tăng tốc AI dùng trong sản xuất theo kiến trúc, nút công nghệ, TDP, thông lượng tính toán ở nhiều độ chính xác (từ FP64 đến INT8), dung lượng và băng thông bộ nhớ, dung lượng SRAM tích hợp, cùng Điểm Ridge Roofline FP16 ($I_{\text{ridge}} = \text{Peak FP16 TFLOP/s}/\text{Memory Bandwidth (TB/s)}$). {#tbl-appdx-assumptions-accelerator-matrix tbl-colwidths="[17,10,8,28,17,10,10]"}
 
 ### NVIDIA V100 {.unnumbered}
 
@@ -320,7 +320,7 @@ Ma trận bộ tăng tốc chính trong @tbl-appdx-assumptions-accelerator-matri
 | **HBM capacity (V100)**                | `{python} AcceleratorConstants.v100_mem_capacity_val_str` | `{python} AcceleratorConstants.v100_mem_capacity_unit_str` |
 | **TDP (V100)**                         |      `{python} AcceleratorConstants.v100_tdp_val_str`     |     `{python} AcceleratorConstants.v100_tdp_unit_str`      |
 
-: **NVIDIA V100 (Volta)**: Thông số kỹ thuật đỉnh từ sách trắng kiến trúc và bảng dữ liệu sản phẩm của NVIDIA [@nvidia2017gpu; @nvidia2020v100datasheet]. V100 đã giới thiệu Tensor Cores cho huấn luyện độ chính xác hỗn hợp và neo các so sánh thế hệ cơ sở. {#tbl-assumptions-v100 tbl-colwidths="[34,33,33]"}
+: **NVIDIA V100 (Volta)**: Các thông số kỹ thuật cao nhất được lấy từ sách trắng kiến trúc và bảng dữ liệu sản phẩm của NVIDIA [@nvidia2017gpu; @nvidia2020v100datasheet]. V100 là dòng sản phẩm đã giới thiệu Tensor Cores cho huấn luyện độ chính xác hỗn hợp và được dùng làm cơ sở để so sánh giữa các thế hệ. {#tbl-assumptions-v100 tbl-colwidths="[34,33,33]"}
 
 ```{=latex}
 \endgroup
@@ -339,11 +339,11 @@ Ma trận bộ tăng tốc chính trong @tbl-appdx-assumptions-accelerator-matri
 | **Memory bandwidth (T4)**            |  `{python} AcceleratorConstants.t4_mem_bw_val_str`   |   `{python} AcceleratorConstants.t4_mem_bw_unit_str`  |
 | **TDP (T4)**                         |    `{python} AcceleratorConstants.t4_tdp_val_str`    |    `{python} AcceleratorConstants.t4_tdp_unit_str`    |
 
-: **NVIDIA T4 (Turing)**: Thông số kỹ thuật đỉnh từ tài liệu sản phẩm NVIDIA Tesla T4 [@nvidia2018t4]. TDP 70 W làm cho bộ tăng tốc suy luận công suất thấp này trở thành một điểm neo chi phí trên mỗi suy luận hữu ích. {#tbl-assumptions-t4 tbl-colwidths="[34,33,33]"}
+: **NVIDIA T4 (Turing)**: Các thông số kỹ thuật cao nhất được lấy từ tài liệu sản phẩm NVIDIA Tesla T4 [@nvidia2018t4]. Với TDP 70 W, bộ tăng tốc suy luận tiêu thụ công suất thấp này là một điểm tham chiếu hữu ích để đánh giá chi phí trên mỗi lần suy luận. {#tbl-assumptions-t4 tbl-colwidths="[34,33,33]"}
 
 ### NVIDIA A100 {.unnumbered}
 
-Các thông số kỹ thuật thế hệ Ampere (@tbl-assumptions-a100) neo hầu hết các ví dụ huấn luyện trong sách.
+Các thông số kỹ thuật của thế hệ Ampere (@tbl-assumptions-a100) được dùng làm cơ sở cho hầu hết các ví dụ huấn luyện trong sách.
 
 ```{=latex}
 \begingroup
@@ -360,11 +360,11 @@ Các thông số kỹ thuật thế hệ Ampere (@tbl-assumptions-a100) neo hầ
 | **HBM capacity (A100)**                | `{python} AcceleratorConstants.a100_mem_capacity_val_str` | `{python} AcceleratorConstants.a100_mem_capacity_unit_str` |
 | **TDP (A100)**                         |      `{python} AcceleratorConstants.a100_tdp_val_str`     |     `{python} AcceleratorConstants.a100_tdp_unit_str`      |
 
-: **NVIDIA A100 (Ampere)**: Thông số kỹ thuật đỉnh từ sách trắng kiến trúc, bảng dữ liệu 80 GB và bài báo kiến trúc của NVIDIA [@NVIDIA2020; @nvidia2021a10080gb; @choquette2021]. A100 là bộ tăng tốc được trích dẫn phổ biến nhất trong các ví dụ huấn luyện; HBM2e 80 GB và TF32 Tensor Cores đặt các điểm neo về dung lượng bộ nhớ và cường độ tính toán. {#tbl-assumptions-a100 tbl-colwidths="[50,20,30]"}
+: **NVIDIA A100 (Ampere)**: Các thông số kỹ thuật cao nhất được lấy từ sách trắng kiến trúc, bảng dữ liệu 80 GB và bài báo kiến trúc của NVIDIA [@NVIDIA2020; @nvidia2021a10080gb; @choquette2021]. A100 là bộ tăng tốc được nhắc đến phổ biến nhất trong các ví dụ huấn luyện; với HBM2e 80 GB và TF32 Tensor Cores, nó thiết lập các điểm tham chiếu về dung lượng bộ nhớ và cường độ tính toán. {#tbl-assumptions-a100 tbl-colwidths="[50,20,30]"}
 
 ### NVIDIA H100 {.unnumbered}
 
-Đối với các ước tính thời đại Hopper, các giá trị tham chiếu bao gồm FP8 Tensor Cores và Transformer Engine (@tbl-assumptions-h_h100).
+Đối với các ước tính cho thế hệ Hopper, các giá trị tham chiếu có tính đến FP8 Tensor Cores và Transformer Engine (@tbl-assumptions-h_h100).
 
 | **Assumption**                         |                         **Value**                         |                          **Unit**                          |
 |:---------------------------------------|:---------------------------------------------------------:|:----------------------------------------------------------:|
@@ -377,11 +377,11 @@ Các thông số kỹ thuật thế hệ Ampere (@tbl-assumptions-a100) neo hầ
 | **HBM capacity (H100)**                | `{python} AcceleratorConstants.h100_mem_capacity_val_str` | `{python} AcceleratorConstants.h100_mem_capacity_unit_str` |
 | **TDP (H100)**                         |      `{python} AcceleratorConstants.h100_tdp_val_str`     |     `{python} AcceleratorConstants.h100_tdp_unit_str`      |
 
-: **NVIDIA H100 (Hopper)**: Thông số kỹ thuật đỉnh từ tổng quan kiến trúc Hopper [@choquette2023]. FP8 Tensor Cores và Transformer Engine thúc đẩy các ước tính huấn luyện và phục vụ thế hệ Hopper. {#tbl-assumptions-h_h100 tbl-colwidths="[50,20,30]"}
+: **NVIDIA H100 (Hopper)**: Các thông số kỹ thuật cao nhất được lấy từ tổng quan kiến trúc Hopper [@choquette2023]. FP8 Tensor Cores và Transformer Engine là những yếu tố chính để đưa ra các ước tính về huấn luyện và phục vụ cho thế hệ Hopper. {#tbl-assumptions-h_h100 tbl-colwidths="[50,20,30]"}
 
 ### NVIDIA B200 {.unnumbered}
 
-Các ví dụ lập kế hoạch dung lượng hướng tới tương lai dựa trên thông số kỹ thuật thế hệ Blackwell (@tbl-assumptions-b200).
+Các ví dụ về lập kế hoạch dung lượng cho tương lai dựa trên các thông số kỹ thuật của thế hệ Blackwell (@tbl-assumptions-b200).
 
 | **Assumption**                         |                         **Value**                         |                          **Unit**                          |
 |:---------------------------------------|:---------------------------------------------------------:|:----------------------------------------------------------:|
@@ -392,7 +392,7 @@ Các ví dụ lập kế hoạch dung lượng hướng tới tương lai dựa 
 | **HBM capacity (B200)**                | `{python} AcceleratorConstants.b200_mem_capacity_val_str` | `{python} AcceleratorConstants.b200_mem_capacity_unit_str` |
 | **TDP (B200)**                         |      `{python} AcceleratorConstants.b200_tdp_val_str`     |     `{python} AcceleratorConstants.b200_tdp_unit_str`      |
 
-: **NVIDIA B200 (Blackwell)**: Thông số kỹ thuật đỉnh từ tài liệu sản phẩm NVIDIA Blackwell [@nvidia2024blackwell]. Các ví dụ lập kế hoạch dung lượng hướng tới tương lai sử dụng băng thông HBM3e và thông lượng FP8 của nó. {#tbl-assumptions-b200 tbl-colwidths="[50,20,30]"}
+: **NVIDIA B200 (Blackwell)**: Các thông số kỹ thuật cao nhất được lấy từ tài liệu sản phẩm NVIDIA Blackwell [@nvidia2024blackwell]. Các ví dụ về lập kế hoạch dung lượng cho tương lai sử dụng băng thông HBM3e và thông lượng FP8 của bộ tăng tốc này. {#tbl-assumptions-b200 tbl-colwidths="[50,20,30]"}
 
 ```{=latex}
 \endgroup
@@ -400,7 +400,7 @@ Các ví dụ lập kế hoạch dung lượng hướng tới tương lai dựa 
 
 ### AMD Instinct MI300X {.unnumbered}
 
-Để so sánh với phần cứng cấp H100 được sử dụng ở những nơi khác, các thông số kỹ thuật về dung lượng, băng thông, thông lượng và công suất của MI300X cung cấp một đường cơ sở đa nhà cung cấp (@tbl-assumptions-mi300x).
+Để so sánh với các phần cứng cùng lớp H100 được sử dụng ở nơi khác, các thông số kỹ thuật về dung lượng, băng thông, thông lượng và công suất của MI300X cung cấp một điểm chuẩn chung giữa các nhà cung cấp (@tbl-assumptions-mi300x).
 
 | **Assumption**                           |                          **Value**                          |                           **Unit**                           |
 |:-----------------------------------------|:-----------------------------------------------------------:|:------------------------------------------------------------:|
@@ -409,11 +409,11 @@ Các ví dụ lập kế hoạch dung lượng hướng tới tương lai dựa 
 | **HBM capacity (MI300X)**                | `{python} AcceleratorConstants.mi300x_mem_capacity_val_str` | `{python} AcceleratorConstants.mi300x_mem_capacity_unit_str` |
 | **TDP (MI300X)**                         |      `{python} AcceleratorConstants.mi300x_tdp_val_str`     |     `{python} AcceleratorConstants.mi300x_tdp_unit_str`      |
 
-: **AMD Instinct MI300X**: Thông số kỹ thuật đỉnh từ tài liệu sản phẩm AMD Instinct MI300X [@amd2023mi300x]. Dung lượng HBM cao (192 GB) và băng thông làm cho nó trở thành một đường cơ sở đa nhà cung cấp phổ biến cho các khối lượng công việc (workload) bị giới hạn bởi bộ nhớ. {#tbl-assumptions-mi300x tbl-colwidths="[50,20,30]"}
+: **AMD Instinct MI300X**: Các thông số kỹ thuật cao nhất được lấy từ tài liệu sản phẩm AMD Instinct MI300X [@amd2023mi300x]. Dung lượng HBM lớn (192 GB) và băng thông cao giúp nó trở thành một điểm chuẩn chung giữa các nhà cung cấp, đặc biệt cho các khối lượng công việc (workload) bị giới hạn bởi bộ nhớ. {#tbl-assumptions-mi300x tbl-colwidths="[50,20,30]"}
 
 ### Google TPU v4 và v6e {.unnumbered}
 
-Khi so sánh kinh tế huấn luyện giữa các dòng bộ tăng tốc, các số liệu TPU cung cấp một giải pháp thay thế dựa trên mạch tích hợp chuyên dụng (ASIC) (@tbl-assumptions-tpuv4).
+Khi so sánh hiệu quả kinh tế của huấn luyện giữa các dòng bộ tăng tốc, các số liệu của TPU cung cấp một lựa chọn thay thế dựa trên mạch tích hợp chuyên dụng (ASIC) (@tbl-assumptions-tpuv4).
 
 | **Assumption**                     |                        **Value**                         |                          **Unit**                         |
 |:-----------------------------------|:--------------------------------------------------------:|:---------------------------------------------------------:|
@@ -422,11 +422,11 @@ Khi so sánh kinh tế huấn luyện giữa các dòng bộ tăng tốc, các s
 | **Peak BF16 throughput (TPU v6e)** | `{python} AcceleratorConstants.tpuv6_flops_bf16_val_str` | `{python} AcceleratorConstants.tpuv6_flops_bf16_unit_str` |
 | **Memory bandwidth (TPU v6e)**     |   `{python} AcceleratorConstants.tpuv6_mem_bw_val_str`   |   `{python} AcceleratorConstants.tpuv6_mem_bw_unit_str`   |
 
-: **Google TPU v4 và v6e (Trillium)**: Các giá trị TPU v4 đến từ các ấn phẩm về TPU của Google [@jouppi2023], và các giá trị TPU v6e đến từ trang thông số kỹ thuật Trillium hiện tại của Google Cloud [@googleCloudTpuV6eDocs]. {#tbl-assumptions-tpuv4 tbl-colwidths="[50,20,30]"}
+: **Google TPU v4 và v6e (Trillium)**: Các số liệu của TPU v4 được lấy từ các tài liệu công bố về TPU của Google [@jouppi2023], còn các số liệu của TPU v6e thì từ trang thông số kỹ thuật Trillium hiện tại của Google Cloud [@googleCloudTpuV6eDocs]. {#tbl-assumptions-tpuv4 tbl-colwidths="[50,20,30]"}
 
-### Bộ xử lý CPU và di động/edge {.unnumbered}
+### CPU và bộ xử lý di động/edge {.unnumbered}
 
-Các ví dụ về ML trên edge và di động dựa trên một đường cơ sở hiệu suất khác (@tbl-assumptions-cpu-mobile), tương phản rõ rệt với thông lượng trung tâm dữ liệu để minh họa lý do tại sao mục tiêu triển khai định hình mọi quyết định thiết kế.
+Các ví dụ ML trên edge và di động dựa trên một điểm chuẩn hiệu suất khác (@tbl-assumptions-cpu-mobile). Điều này đối lập rõ với thông lượng tại trung tâm dữ liệu, qua đó minh họa vì sao mục tiêu triển khai định hình mọi quyết định thiết kế.
 
 | **Assumption**                               |                            **Value**                            |                             **Unit**                             |
 |:---------------------------------------------|:---------------------------------------------------------------:|:----------------------------------------------------------------:|
@@ -438,7 +438,7 @@ Các ví dụ về ML trên edge và di động dựa trên một đường cơ 
 | **Power (edge object detector, reference)**  | `{python} AcceleratorConstants.object_detector_power_w_val_str` | `{python} AcceleratorConstants.object_detector_power_w_unit_str` |
 | **Battery capacity (phone, reference)**      |     `{python} AcceleratorConstants.phone_battery_wh_val_str`    |    `{python} AcceleratorConstants.phone_battery_wh_unit_str`     |
 
-: **Thông số kỹ thuật CPU, NPU di động và thiết bị Edge**: Các điểm tham chiếu minh họa cho các ví dụ về edge và di động (không phải giá trị đỉnh của nhà cung cấp cho một SKU duy nhất). Sự tương phản với các bộ tăng tốc trung tâm dữ liệu cho thấy lý do tại sao mục tiêu triển khai định hình mọi quyết định thiết kế. {#tbl-assumptions-cpu-mobile tbl-colwidths="[50,20,30]"}
+: **Thông số kỹ thuật CPU, NPU di động và thiết bị Edge**: Các điểm tham chiếu minh họa cho các ví dụ về edge và di động (không phải giá trị đỉnh của nhà cung cấp cho một SKU duy nhất). Sự tương phản với các bộ tăng tốc trong trung tâm dữ liệu cho thấy rõ vì sao mục tiêu triển khai định hình mọi quyết định thiết kế. {#tbl-assumptions-cpu-mobile tbl-colwidths="[50,20,30]"}
 
 ```{python}
 #| echo: false
@@ -489,7 +489,7 @@ class ModelConstants:
 
 ## Thông số kỹ thuật mô hình {.unnumbered}
 
-Đây là các **giả định mô hình tham chiếu**\index{Assumptions!reference models} đằng sau các ví dụ về chi phí huấn luyện, dung lượng bộ nhớ và khối lượng công việc (workload) suy luận: số lượng tham số, ngân sách FLOP cho mỗi suy luận và các điểm neo quy mô huấn luyện đã công bố. Kích thước mô hình đã công bố tuân theo các bài báo chính, báo cáo mô hình và tài liệu mô hình chính thức [@devlin2019; @radford2019language; @brown2020language; @dubey2024llama; @he2016; @sandler2018; @ultralytics2023yolov8Docs]. Ngân sách FLOP suy luận là các giá trị được suy ra từ sách: chúng sử dụng độ dài chuỗi 128 cho BERT-Base, hình ảnh 224 $\times$ 224 cho ResNet-50 và MobileNetV2, và hình ảnh 640 $\times$ 640 cho YOLOv8-Nano; các mô hình thị giác tính hai FLOP cho mỗi phép nhân-cộng. FLOP huấn luyện GPT-3 tuân theo [@brown2020language]; cặp 25 ngày, 1.024-A100 là do biên tập. Số lượng tham số GPT-4 và số ngày GPU huấn luyện là các ước tính hỗn hợp chuyên gia (MoE) của bên thứ ba công khai [@semianalysisGPT4] vì báo cáo kỹ thuật GPT-4 không tiết lộ kích thước kiến trúc. Khi một chương ước tính thời gian huấn luyện quy mô GPT-3, nó sử dụng @tbl-assumptions-models.
+Đây là các **giả định mô hình tham chiếu**\index{Assumptions!reference models} đứng sau các ví dụ về chi phí huấn luyện, dung lượng bộ nhớ và khối lượng công việc (workload) suy luận: số lượng tham số, ngân sách FLOP cho mỗi lần suy luận, và các mốc quy mô huấn luyện đã công bố. Kích thước mô hình được đối chiếu theo các bài báo gốc, báo cáo mô hình và tài liệu chính thức [@devlin2019; @radford2019language; @brown2020language; @dubey2024llama; @he2016; @sandler2018; @ultralytics2023yolov8Docs]. Ngân sách FLOP cho suy luận là các giá trị do sách này quy định: dùng độ dài chuỗi 128 cho BERT-Base, ảnh 224 $\times$ 224 cho ResNet-50 và MobileNetV2, và ảnh 640 $\times$ 640 cho YOLOv8-Nano; các mô hình thị giác tính hai FLOP cho mỗi phép nhân-cộng. Tổng FLOP huấn luyện GPT-3 theo [@brown2020language]; thiết lập 25 ngày với 1,024 A100 là quyết định biên tập. Số lượng tham số và số ngày GPU để huấn luyện GPT-4 là các ước tính công khai từ bên thứ ba về mô hình hỗn hợp chuyên gia (MoE) [@semianalysisGPT4], vì báo cáo kỹ thuật GPT-4 không công bố kích thước kiến trúc. Khi một chương ước tính thời gian huấn luyện ở quy mô GPT-3, nó sẽ dùng @tbl-assumptions-models.
 
 | **Assumption**                              |                         **Value**                          |                           **Unit**                          |
 |:--------------------------------------------|:----------------------------------------------------------:|:-----------------------------------------------------------:|
@@ -510,11 +510,11 @@ class ModelConstants:
 | **Parameters (MobileNetV2)**                |    `{python} ModelConstants.mobilenetv2_params_val_str`    |    `{python} ModelConstants.mobilenetv2_params_unit_str`    |
 | **Inference FLOPs (YOLOv8-Nano)**           |    `{python} ModelConstants.YOLOV8_NANO_FLOPs_val_str`     |     `{python} ModelConstants.YOLOV8_NANO_FLOPs_unit_str`    |
 
-: **Thông số kỹ thuật Mô hình Tham chiếu**: Số lượng tham số và ngân sách FLOP cho các ví dụ minh họa. Các dòng BERT, GPT-2, GPT-3, Llama, ResNet-50, MobileNetV2 và YOLOv8 sử dụng các bài báo gốc, báo cáo mô hình hoặc tài liệu mô hình chính thức [@devlin2019; @radford2019language; @brown2020language; @dubey2024llama; @he2016; @sandler2018; @ultralytics2023yolov8Docs]. Các dòng GPT-4 trích dẫn [@openai2023gpt4] cho họ mô hình chính thức và [@semianalysisGPT4] cho các ước tính tham số MoE công khai và GPU-ngày được sử dụng trong ấn bản này. {#tbl-assumptions-models tbl-colwidths="[50,20,30]"}
+: **Thông số kỹ thuật mô hình tham chiếu**: Số lượng tham số và ngân sách FLOP cho các ví dụ minh họa. Đối với BERT, GPT-2, GPT-3, Llama, ResNet-50, MobileNetV2 và YOLOv8, thông số được lấy từ các bài báo gốc, báo cáo mô hình hoặc tài liệu chính thức [@devlin2019; @radford2019language; @brown2020language; @dubey2024llama; @he2016; @sandler2018; @ultralytics2023yolov8Docs]. Đối với GPT-4, chúng tôi trích dẫn [@openai2023gpt4] cho thông tin về họ mô hình chính thức, và [@semianalysisGPT4] cho các ước tính công khai về tham số của mô hình MoE và số ngày GPU dùng trong ấn bản này. {#tbl-assumptions-models tbl-colwidths="[50,20,30]"}
 
-## Quy ước Bộ nhớ Huấn luyện {.unnumbered}
+## Quy ước về bộ nhớ khi huấn luyện {.unnumbered}
 
-Tính toán sơ bộ bộ nhớ huấn luyện\index{Assumptions!training memory} giả định mô hình lưu trữ Adam\index{Mixed-precision Adam!storage model} độ chính xác hỗn hợp được sử dụng trong hộp chú thích tính toán sơ bộ và một số chương huấn luyện: trọng số BF16, gradient BF16 và trọng số chính FP32 cùng với bộ đệm mô-men thứ nhất và thứ hai của Adam (`{python} NapkinMath.bytes_per_param_value_str` byte trên mỗi tham số tổng cộng). Đây là một quy ước của sách, không phải là một hằng số phần cứng đo được. Đường dẫn dữ liệu BF16 tuân theo thực hành độ chính xác hỗn hợp BFLOAT16 đã được thiết lập [@kalamkar2019]; mô hình FP32-master tuân theo công trình FP16 trước đây [@micikevicius2017mixed; @nvidia_tensors_fp16_2017], và bộ đệm mô-men thứ nhất và thứ hai của Adam tuân theo [@kingma2014adam]. @Tbl-assumptions-training-memory liệt kê độ rộng byte của từng thành phần; nhân số byte trên mỗi tham số (Adam độ chính xác hỗn hợp) với số lượng tham số sẽ cho ra dấu chân trạng thái huấn luyện không phải activation.
+Ước tính nhanh bộ nhớ huấn luyện\index{Assumptions!training memory} giả định mô hình lưu trữ Adam\index{Mixed-precision Adam!storage model} dùng độ chính xác hỗn hợp như trong phần napkin-math và một số chương huấn luyện: trọng số BF16, gradient BF16, và trọng số chủ FP32 kèm các bộ đệm mô-men bậc một và bậc hai của Adam (tổng cộng `{python} NapkinMath.bytes_per_param_value_str` byte cho mỗi tham số). Đây là một quy ước của sách, không phải hằng số phần cứng đo được. Đường dữ liệu BF16 tuân theo thực hành BFLOAT16 độ chính xác hỗn hợp đã được thiết lập [@kalamkar2019]; mẫu FP32-master dựa trên các công trình FP16 trước đây [@micikevicius2017mixed; @nvidia_tensors_fp16_2017], và các bộ đệm mô-men bậc một và bậc hai của Adam theo [@kingma2014adam]. @Tbl-assumptions-training-memory liệt kê bề rộng byte của từng thành phần; nhân số byte trên mỗi tham số (Adam độ chính xác hỗn hợp) với số tham số sẽ cho dung lượng bộ nhớ trạng thái huấn luyện (không tính activation).
 
 ```{python}
 #| echo: false
@@ -539,9 +539,9 @@ class MemoryConstants:
 | **Master + Adam states per parameter (FP32)**  |   `{python} MemoryConstants.MASTER_PLUS_ADAM_val_str`    |    `{python} MemoryConstants.MASTER_PLUS_ADAM_unit_str`   |
 | **Bytes per parameter (mixed-precision Adam)** | `{python} MemoryConstants.ADAM_MIXED_PREC_TOTAL_val_str` | `{python} MemoryConstants.ADAM_MIXED_PREC_TOTAL_unit_str` |
 
-: **Quy ước Bộ nhớ Huấn luyện**: Lưu trữ trên mỗi tham số cho Adam độ chính xác hỗn hợp (2 + 2 + 12 = 16 byte trước các activation). Quy ước của sách cho tính toán sơ bộ; xem [@nvidia_tensors_fp16_2017] để biết ngữ cảnh huấn luyện độ chính xác hỗn hợp. {#tbl-assumptions-training-memory tbl-colwidths="[50,20,30]"}
+: **Quy ước bộ nhớ huấn luyện**: Dung lượng lưu trữ trên mỗi tham số cho Adam với độ chính xác hỗn hợp (2 + 2 + 12 = 16 byte, chưa tính activation). Đây là quy ước của sách dùng cho napkin math; xem [@nvidia_tensors_fp16_2017] để biết thêm về ngữ cảnh huấn luyện độ chính xác hỗn hợp. {#tbl-assumptions-training-memory tbl-colwidths="[50,20,30]"}
 
-Các giả định về phần cứng và mô hình xác định *cái gì* chạy ở đâu; **các giả định về năng lượng**\index{Assumptions!energy} xác định liệu thiết kế có khả thi về mặt nhiệt và kinh tế ở mức độ hoạt động và truy cập bộ nhớ hay không.
+Các giả định về phần cứng và mô hình ấn định *cái gì* chạy ở đâu; còn **các giả định về năng lượng**\index{Assumptions!energy} quyết định liệu thiết kế có khả thi về nhiệt và kinh tế ở cấp độ thao tác và truy cập bộ nhớ hay không.
 
 ```{python}
 #| echo: false
@@ -591,9 +591,9 @@ class EnergyConstants:
     NETWORK_5G_ENERGY_PER_MB_MJ_unit_str = fmt_unit(Systems.NetworkEnergy.Per5gMb)
 ```
 
-## Hằng số Năng lượng {.unnumbered}
+## Hằng số năng lượng {.unnumbered}
 
-Các ước tính số học 45 nm và DRAM 32-bit của Horowitz [@horowitz2014], cùng với các điểm neo minh họa của sách cho truy cập thanh ghi và SRAM, suy luận MobileNetV2 và truyền tải 5G, làm nền tảng cho các so sánh hiệu quả của sách nhưng không độc lập với quy trình. @Tbl-assumptions-energy liệt kê hệ thống phân cấp năng lượng truy cập từ thanh ghi đến DRAM. Hệ thống phân cấp đó định lượng lý do tại sao việc tái sử dụng dữ liệu chi phối thiết kế kernel.
+Các ước tính số học 45 nm và DRAM 32-bit của Horowitz [@horowitz2014], cùng với các mốc minh họa trong sách về truy cập thanh ghi và SRAM, suy luận MobileNetV2 và truyền 5G, là nền tảng cho các so sánh hiệu quả trong sách, dù chúng không độc lập với công nghệ chế tạo. @Tbl-assumptions-energy liệt kê hệ phân cấp năng lượng truy cập từ thanh ghi đến DRAM. Hệ phân cấp đó cho thấy vì sao tái sử dụng dữ liệu là yếu tố chi phối thiết kế kernel.
 
 ```{=latex}
 \begingroup
@@ -613,11 +613,11 @@ Các ước tính số học 45 nm và DRAM 32-bit của Horowitz [@horowitz2014
 | **MobileNetV2 inference energy (reference)** |   `{python} EnergyConstants.ENERGY_MOBILENET_INF_MJ_val_str`   |   `{python} EnergyConstants.ENERGY_MOBILENET_INF_MJ_unit_str`   |
 | **5G transfer energy per MB**                | `{python} EnergyConstants.NETWORK_5G_ENERGY_PER_MB_MJ_val_str` | `{python} EnergyConstants.NETWORK_5G_ENERGY_PER_MB_MJ_unit_str` |
 
-: **Năng lượng trên mỗi Hoạt động và Truy cập**: Ước tính số học và DRAM 32-bit sử dụng mô hình 45 nm của Horowitz [@horowitz2014], và hàng DRAM trên mỗi byte được suy ra từ ước tính đó. Các hàng Thanh ghi, SRAM, MobileNetV2 và 5G là các điểm neo minh họa của sách. Khoảng cách xấp xỉ `{python} EnergyConstants.ENERGY_DRAM_TO_REG_RATIO_mult_str` giữa một truy cập thanh ghi `{python} EnergyConstants.ENERGY_REG_PJ_val_str` pJ và một truy cập DRAM `{python} EnergyConstants.ENERGY_DRAM_ACCESS_PJ_val_str` pJ giải thích tại sao việc tái sử dụng dữ liệu chi phối tối ưu hóa kernel ML. {#tbl-assumptions-energy tbl-colwidths="[50,20,30]"}
+: **Năng lượng trên mỗi phép toán và truy cập**: Các ước tính cho phép toán số học và DRAM 32-bit dựa trên mô hình 45 nm của Horowitz [@horowitz2014], và giá trị DRAM theo byte được suy ra từ ước tính này. Các hàng Thanh ghi, SRAM, MobileNetV2 và 5G là các mốc tham chiếu minh họa trong sách. Khoảng cách xấp xỉ `{python} EnergyConstants.ENERGY_DRAM_TO_REG_RATIO_mult_str` giữa một lần truy cập thanh ghi `{python} EnergyConstants.ENERGY_REG_PJ_val_str` pJ và một lần truy cập DRAM `{python} EnergyConstants.ENERGY_DRAM_ACCESS_PJ_val_str` pJ cho thấy vì sao tái sử dụng dữ liệu là trọng tâm khi tối ưu hóa kernel ML. {#tbl-assumptions-energy tbl-colwidths="[50,20,30]"}
 
-### Hệ thống phân cấp năng lượng số học và độ chính xác {.unnumbered}
+### Thứ bậc năng lượng theo độ chính xác và phép toán số học {.unnumbered}
 
-Hệ thống phân cấp năng lượng số học trong @tbl-appdx-assumptions-energy-hierarchy so sánh năng lượng cần thiết trên mỗi hoạt động ($E_{\text{op}}$ tính bằng pJ/op) cho phép cộng và phép nhân trên các độ chính xác dấu phẩy động, tensor và số nguyên trên các nút quy trình silicon 7nm, 5nm và 3nm hiện đại.
+Thứ bậc năng lượng của các phép toán số học trong @tbl-appdx-assumptions-energy-hierarchy so sánh năng lượng trên mỗi phép toán ($E_{\text{op}}$ tính bằng pJ/op) cho phép cộng và phép nhân, xét các mức độ chính xác gồm dấu phẩy động, tensor và số nguyên, trên các nút quy trình silicon 7nm, 5nm và 3nm hiện đại.
 
 | **Precision/Data Format**     | **7nm Node ($E_{\text{op}}$ pJ)** | **5nm Node ($E_{\text{op}}$ pJ)** | **3nm Node ($E_{\text{op}}$ pJ)** | **Energy Ratio vs FP32 (3nm)** |
 |:------------------------------|:---------------------------------:|:---------------------------------:|:---------------------------------:|:------------------------------:|
@@ -631,9 +631,9 @@ Hệ thống phân cấp năng lượng số học trong @tbl-appdx-assumptions-
 | **INT8 (8-bit Integer)**      |        Add: 0.03/Mul: 0.20        |        Add: 0.02/Mul: 0.13        |       Add: 0.013/Mul: 0.085       |          0.18$\times$          |
 | **INT4 (4-bit Integer)**      |       Add: 0.010/Mul: 0.060       |       Add: 0.006/Mul: 0.039       |       Add: 0.004/Mul: 0.025       |         0.053$\times$          |
 
-: **Hệ thống phân cấp Năng lượng Số học và Độ chính xác**: Năng lượng trên mỗi hoạt động ($E_{\text{op}}$ tính bằng pJ/op) cho Phép cộng (Add) và Phép nhân (Mul) trên các định dạng dữ liệu (FP64, FP32, TF32, FP16, BF16, FP8 E4M3/E5M2, INT32, INT8, INT4) và các nút quy trình bán dẫn (7nm, 5nm, 3nm). Sự mở rộng năng lượng minh họa sự phụ thuộc vào độ rộng bit của bộ nhân bậc hai $O(b^2)$ so với bộ cộng tuyến tính $O(b)$ [@horowitz2014; @dally2021]. {#tbl-appdx-assumptions-energy-hierarchy tbl-colwidths="[20,22,22,22,14]"}
+: **Thứ bậc năng lượng theo độ chính xác và phép toán số học**: Năng lượng trên mỗi phép toán ($E_{\text{op}}$ tính bằng pJ/op) cho Phép cộng (Add) và Phép nhân (Mul) trên các định dạng dữ liệu (FP64, FP32, TF32, FP16, BF16, FP8 E4M3/E5M2, INT32, INT8, INT4) và các nút quy trình silicon (7nm, 5nm, 3nm). Sự thay đổi năng lượng phản ánh phụ thuộc vào độ rộng bit: bậc hai $O(b^2)$ với bộ nhân và tuyến tính $O(b)$ với bộ cộng [@horowitz2014; @dally2021]. {#tbl-appdx-assumptions-energy-hierarchy tbl-colwidths="[20,22,22,22,14]"}
 
-Chi phí năng lượng hoạt động ở cấp độ chip, nhưng các hệ thống ML thực tế cũng di chuyển dữ liệu qua các kết nối—giữa các bộ tăng tốc, giữa các giá đỡ và qua các mạng diện rộng. Phần tiếp theo liệt kê các giả định về băng thông được sử dụng khi các chương ước tính chi phí giao tiếp.
+Chi phí năng lượng được tính ở cấp chip, nhưng các hệ thống ML thực tế còn phải chuyển dữ liệu qua các liên kết—giữa các bộ tăng tốc, giữa các tủ rack và qua các mạng diện rộng. Phần tiếp theo liệt kê các giả định về băng thông được dùng khi các chương ước tính chi phí truyền thông.
 
 ```{python}
 #| echo: false
@@ -676,9 +676,9 @@ class InterconnectConstants:
     SPEED_OF_LIGHT_FIBER_KM_S_unit_str = fmt_unit(SPEED_OF_LIGHT_FIBER_KM_S)
 ```
 
-## Băng thông Kết nối và Mạng {.unnumbered}
+## Băng thông liên kết và mạng {.unnumbered}
 
-Các **giả định về băng thông**\index{Assumptions!bandwidth} này áp dụng khi các chương lập luận về đồng bộ hóa gradient, bong bóng pipeline, I/O checkpoint hoặc độ trễ liên trung tâm dữ liệu. Tốc độ NVLink và PCIe tuân theo tài liệu sản phẩm bộ tăng tốc [@nvidia2017gpu; @NVIDIA2020; @choquette2023]; đặc tả kiến trúc InfiniBand làm nền tảng cho họ giao thức [@infiniband2000spec], trong khi các dòng sản phẩm tốc độ cao hiện tại và lộ trình Ethernet làm nền tảng cho các ví dụ về tốc độ liên kết hiện đại [@nvidia2026quantumX800; @ethernetAlliance2025roadmap]; ngưỡng tốc độ ánh sáng trong sợi quang là một định luật vật lý. @Tbl-assumptions-interconnect liệt kê tốc độ NVLink, InfiniBand, PCIe, Non-Volatile Memory Express (NVMe) và Ethernet cùng với tốc độ truyền ánh sáng trong sợi quang.
+Các **giả định về băng thông**\index{Assumptions!bandwidth} này được áp dụng khi các chương phân tích về đồng bộ hóa gradient, bong bóng pipeline, checkpoint I/O, hoặc độ trễ xuyên các trung tâm dữ liệu. Tốc độ NVLink và PCIe dựa trên tài liệu sản phẩm của các bộ tăng tốc [@nvidia2017gpu; @NVIDIA2020; @choquette2023]; đặc tả kiến trúc InfiniBand là cơ sở cho họ giao thức này [@infiniband2000spec], trong khi các dòng sản phẩm tốc độ cao hiện tại và lộ trình Ethernet là cơ sở cho các ví dụ về tốc độ liên kết hiện đại [@nvidia2026quantumX800; @ethernetAlliance2025roadmap]; giới hạn bởi tốc độ ánh sáng trong sợi quang là một hằng số vật lý. @Tbl-assumptions-interconnect liệt kê tốc độ của NVLink, InfiniBand, PCIe, Non-Volatile Memory Express (NVMe) và Ethernet cùng với tốc độ lan truyền của ánh sáng trong sợi quang.
 
 | **Assumption**                     |                             **Value**                              |                               **Unit**                              |
 |:-----------------------------------|:------------------------------------------------------------------:|:-------------------------------------------------------------------:|
@@ -695,11 +695,11 @@ Các **giả định về băng thông**\index{Assumptions!bandwidth} này áp d
 | **100 GbE link rate**              |      `{python} InterconnectConstants.NETWORK_100G_BW_val_str`      |      `{python} InterconnectConstants.NETWORK_100G_BW_unit_str`      |
 | **Speed of light in fiber**        | `{python} InterconnectConstants.SPEED_OF_LIGHT_FIBER_KM_S_val_str` | `{python} InterconnectConstants.SPEED_OF_LIGHT_FIBER_KM_S_unit_str` |
 
-: **Băng thông Kết nối và Mạng**: Băng thông của các họ liên kết sử dụng thông số kỹ thuật của nhà cung cấp, đặc tả kiến trúc InfiniBand và tài liệu sản phẩm/lộ trình hiện tại [@infiniband2000spec; @nvidia2026quantumX800; @ethernetAlliance2025roadmap]. Tốc độ NVLink là tổng hợp hai chiều; các tốc độ liên kết khác là danh nghĩa trên mỗi hướng. Tốc độ ánh sáng trong sợi quang đặt ra ngưỡng độ trễ liên trung tâm dữ liệu. {#tbl-assumptions-interconnect tbl-colwidths="[50,20,30]"}
+: **Băng thông của các kết nối và mạng**: Băng thông của các loại kết nối sử dụng thông số kỹ thuật từ nhà cung cấp, đặc tả kiến trúc InfiniBand và tài liệu về sản phẩm/lộ trình phát triển hiện tại [@infiniband2000spec; @nvidia2026quantumX800; @ethernetAlliance2025roadmap]. Tốc độ của NVLink là tổng hợp cho cả hai chiều; các tốc độ kết nối khác là giá trị danh nghĩa cho mỗi hướng. Tốc độ ánh sáng trong sợi quang thiết lập giới hạn dưới cho độ trễ xuyên các trung tâm dữ liệu. {#tbl-assumptions-interconnect tbl-colwidths="[50,20,30]"}
 
-### Bảng thông số kỹ thuật vật lý của kết nối & cấu trúc mạng {.unnumbered}
+### Bảng thông số kỹ thuật vật lý của kết nối và cấu trúc mạng {.unnumbered}
 
-Bảng thông số kỹ thuật vật lý trong @tbl-appdx-assumptions-interconnect-matrix chi tiết băng thông, độ trễ, đóng khung, hỗ trợ truy cập bộ nhớ trực tiếp (DMA) và năng lượng trên mỗi bit trên các bus máy chủ, kết nối bộ tăng tốc, cấu trúc mạng và giao diện nhất quán cache.
+Bảng thông số kỹ thuật vật lý trong @tbl-appdx-assumptions-interconnect-matrix trình bày chi tiết về băng thông, độ trễ, cơ chế đóng khung, hỗ trợ truy cập bộ nhớ trực tiếp (DMA) và năng lượng tiêu thụ trên mỗi bit qua các bus máy chủ, các kết nối bộ tăng tốc, cấu trúc mạng và các giao diện nhất quán cache.
 
 | **Bus/Interconnect Standard** | **Directional & Aggregate Bandwidth** |         **Latency**          | **Encoding/Framing**  | **DMA/GPUDirect Support**             | **Energy Cost ($E_{\text{link}}$)** |
 |:------------------------------|:--------------------------------------|:----------------------------:|:----------------------|:--------------------------------------|:-----------------------------------:|
@@ -727,7 +727,7 @@ Bảng thông số kỹ thuật vật lý trong @tbl-appdx-assumptions-interconn
 | **CXL 3.0**                   | 126 GB/s dir/252 GB/s agg (x16)       |           ~120 ns            | 256B Flit PAM4        | P2P Memory Pooling & Fabric Switch    |              5.5 pJ/bit             |
 | **CXL 3.1**                   | 126 GB/s dir/252 GB/s agg (x16)       |           ~110 ns            | 256B Flit PAM4        | Global Integrated Memory, TEE         |              5.0 pJ/bit             |
 
-: **Bảng thông số kỹ thuật vật lý của kết nối nội bộ & Fabric mạng**: Bảng thông số kỹ thuật vật lý toàn diện cho các bus máy chủ, kết nối nội bộ GPU, bộ chuyển mạch, fabric mạng và giao diện nhất quán (PCIe Gen3–Gen7, NVLink 1–5, NVSwitch 1–4, InfiniBand EDR–XDR, RoCE v2, CXL 1.1–3.1). Các cột liệt kê băng thông định hướng và tổng hợp, độ trễ PHY/liên kết, mã hóa/đóng khung đường truyền, khả năng DMA và GPUDirect, và chi phí năng lượng lớp vật lý ($E_{\text{link}}$ tính bằng pJ/bit). {#tbl-appdx-assumptions-interconnect-matrix tbl-colwidths="[18,20,14,18,20,10]"}
+: **Bảng thông số kỹ thuật vật lý của kết nối và cấu trúc mạng**: Bảng thông số kỹ thuật vật lý toàn diện cho các bus máy chủ, các kết nối GPU, các bộ chuyển mạch, cấu trúc mạng và các giao diện nhất quán (PCIe Gen3–Gen7, NVLink 1–5, NVSwitch 1–4, InfiniBand EDR–XDR, RoCE v2, CXL 1.1–3.1). Các cột liệt kê băng thông theo hướng và băng thông tổng hợp, độ trễ của lớp vật lý (PHY)/liên kết, mã hóa đường truyền/cơ chế đóng khung, khả năng DMA và GPUDirect, và chi phí năng lượng ở lớp vật lý ($E_{\text{link}}$ tính bằng pJ/bit). {#tbl-appdx-assumptions-interconnect-matrix tbl-colwidths="[18,20,14,18,20,10]"}
 
 ```{python}
 #| echo: false
@@ -750,16 +750,16 @@ class EconomicConstants:
 
 ## Các hằng số kinh tế {.unnumbered}
 
-Các **giả định về giá**\index{Assumptions!pricing} này là cơ sở cho tổng chi phí sở hữu (TCO) và tính toán nhanh chi phí năng lượng trong @tbl-assumptions-economic. Chúng là các mức giá mang tính minh họa theo quy mô hyperscaler để phân tích tỷ lệ (tương tự về tinh thần với các ví dụ về kế toán carbon trong [@patterson2021carbon]), không phải là báo giá cho một khu vực hoặc hợp đồng cụ thể. Các giá trị cục bộ nên thay thế các điểm neo này khi giá tuyệt đối chiếm ưu thế.
+Các **giả định về giá**\index{Assumptions!pricing} này là nền tảng để tính tổng chi phí sở hữu (TCO) và ước tính nhanh chi phí năng lượng trong @tbl-assumptions-economic. Đây là các mức giá tham khảo mang tính minh họa, ở quy mô của các nhà cung cấp đám mây lớn (hyperscaler), dùng cho phân tích tỷ lệ (tương tự tinh thần các ví dụ về kế toán carbon trong [@patterson2021carbon]), không phải báo giá cho một khu vực hay hợp đồng cụ thể. Khi giá trị tuyệt đối là yếu tố quyết định, hãy thay các giá trị neo này bằng số liệu thực tế tại địa phương.
 
 | **Assumption**                |                           **Value**                            |                             **Unit**                            |
 |:------------------------------|:--------------------------------------------------------------:|:---------------------------------------------------------------:|
 | **Cloud electricity price**   | `{python} EconomicConstants.cloud_electricity_per_kwh_val_str` | `{python} EconomicConstants.cloud_electricity_per_kwh_unit_str` |
 | **Cloud egress price per GB** |    `{python} EconomicConstants.cloud_egress_per_gb_val_str`    |    `{python} EconomicConstants.cloud_egress_per_gb_unit_str`    |
 
-: **Các giả định kinh tế**: Mức giá điện và egress của đám mây mang tính minh họa cho tính toán nhanh TCO (mức độ lớn năm 2024–2025). Cấu trúc chi phí tại chỗ khác nhau; độ lớn tương đối hướng dẫn các đánh đổi trong thiết kế. {#tbl-assumptions-economic tbl-colwidths="[50,20,30]"}
+: **Các giả định kinh tế**: Các mức giá điện và phí egress trên đám mây, mang tính minh họa, dùng để ước tính nhanh TCO (ước lượng theo bậc độ lớn năm 2024–2025). Cấu trúc chi phí triển khai tại chỗ (on-premise) khác biệt; các độ lớn tương đối sẽ giúp định hướng các đánh đổi trong thiết kế. {#tbl-assumptions-economic tbl-colwidths="[50,20,30]"}
 
-Các hằng số kinh tế đặt ra giá mỗi đơn vị tính toán và truyền dữ liệu, nhưng chúng ít có ý nghĩa nếu không có cảm nhận về khối lượng liên quan. Các hệ thống ML sản xuất xử lý hàng triệu đến hàng tỷ yêu cầu mỗi ngày—những con số đủ lớn để khó hình dung nếu không có các điểm tham chiếu cụ thể.
+Các hằng số kinh tế xác định giá cho mỗi đơn vị tính toán và truyền dữ liệu, nhưng chúng không nói lên nhiều điều nếu thiếu cảm nhận về khối lượng liên quan. Hệ thống ML trong sản xuất xử lý từ hàng triệu đến hàng tỷ yêu cầu mỗi ngày — những con số đủ lớn để khó hình dung nếu không có các điểm tham chiếu cụ thể.
 
 ```{python}
 #| echo: false
@@ -799,7 +799,7 @@ class ScaleConstants:
 
 ## Tham chiếu quy mô {.unnumbered}
 
-Các **giả định về quy mô**\index{Assumptions!scale} này trong @tbl-assumptions-scale là điểm neo cho câu hỏi "lớn đến mức nào?" đối với các ví dụ lập kế hoạch năng lực, cung cấp các đường cơ sở minh họa về độ lớn cho khối lượng email và tìm kiếm, luồng cảm biến của xe tự hành, và các định dạng video 1080p và 4K tiêu chuẩn. Chúng là các điểm neo về độ lớn, không phải là số liệu thống kê đã được kiểm toán cho một năm cụ thể.
+Các **giả định về quy mô**\index{Assumptions!scale} trong @tbl-assumptions-scale giúp trả lời câu hỏi "lớn đến mức nào?" cho các ví dụ lập kế hoạch năng lực, bằng cách cung cấp các mức cơ sở minh họa theo bậc độ lớn cho khối lượng email và tìm kiếm, luồng cảm biến của xe tự hành, và các định dạng video 1080p và 4K tiêu chuẩn. Đây là các giá trị neo về độ lớn, không phải số liệu đã được kiểm toán cho một năm cụ thể.
 
 | **Assumption**                    |                          **Value**                          |                           **Unit**                           |
 |:----------------------------------|:-----------------------------------------------------------:|:------------------------------------------------------------:|
@@ -814,13 +814,13 @@ Các **giả định về quy mô**\index{Assumptions!scale} này trong @tbl-ass
 | **Bytes per RGB pixel**           | `{python} ScaleConstants.VIDEO_BYTES_PER_PIXEL_RGB_val_str` | `{python} ScaleConstants.VIDEO_BYTES_PER_PIXEL_RGB_unit_str` |
 | **Video frame rate (standard)**   |     `{python} ScaleConstants.VIDEO_FPS_STANDARD_val_str`    |    `{python} ScaleConstants.VIDEO_FPS_STANDARD_unit_str`     |
 
-: **Tham chiếu quy mô sản xuất và tốc độ dữ liệu**: Các điểm neo khối lượng công việc (workload) và tốc độ cảm biến mang tính minh họa, cùng với các thông số video 1080p và UHD 4K tiêu chuẩn. {#tbl-assumptions-scale tbl-colwidths="[60,20,20]"}
+: **Tham chiếu quy mô sản xuất và tốc độ dữ liệu**: Các giá trị tham chiếu minh họa về khối lượng công việc (workload) và tốc độ cảm biến, cùng các thông số video 1080p và UHD 4K tiêu chuẩn. {#tbl-assumptions-scale tbl-colwidths="[60,20,20]"}
 
 ```{=latex}
 \endgroup
 ```
 
-Các giả định trên sử dụng các quy ước đơn vị chung: tiền tố dữ liệu thập phân, các đại lượng FLOPS và FLOP/s riêng biệt, và các bí danh được định nghĩa trong phần tiếp theo.
+Các giả định trên dùng chung một số quy ước đơn vị: tiền tố dữ liệu thập phân, phân biệt rõ các đại lượng FLOPs và FLOP/s, cùng các bí danh được định nghĩa trong phần tiếp theo.
 
 ```{python}
 #| echo: false
@@ -872,9 +872,9 @@ class UnitConstants:
 
 ## Quy ước đơn vị {.unnumbered}
 
-@Tbl-assumptions-units cố định các quy ước đơn vị\index{Assumptions!unit conventions} được sử dụng trong mọi ví dụ định lượng trong sách này. Mỗi hàng cung cấp hệ số nhân $k$ trong `1 bí danh` $=$ $k$ `cơ sở`. Các tiền tố dữ liệu sử dụng hệ thập phân SI ($\mathrm{KB} = 10^3$ byte, không phải 1024). Các tiền tố lưu trữ IEC nhị phân xuất hiện trong một vài thảo luận cụ thể về lưu trữ nhưng bị bỏ qua ở đây vì hầu hết các ước tính quy mô đội hình trong sách sử dụng KB/GB/TB thập phân. Các đại lượng thông lượng (FLOP/s, GB/s) kết hợp các bí danh này với thời gian; việc thêm các chiều không tương thích (byte vào FLOP/s) là một lỗi phân loại trong tính toán nhanh, không phải là chuyển đổi đơn vị.
+@Tbl-assumptions-units quy định các quy ước đơn vị\index{Assumptions!unit conventions} dùng trong mọi ví dụ định lượng của sách này. Mỗi hàng cho biết hệ số nhân $k$ theo công thức `1 alias` $=$ $k` base`. Các tiền tố dữ liệu dùng hệ thập phân SI ($\mathrm{KB} = 10^3$ byte, không phải 1024). Các tiền tố lưu trữ nhị phân IEC có xuất hiện trong một vài phần bàn về lưu trữ, nhưng được bỏ qua ở đây vì hầu hết các ước tính ở quy mô đội máy trong sách dùng KB/GB/TB thập phân. Các đại lượng thông lượng (FLOP/s, GB/s) kết hợp các alias này với thời gian; việc cộng ghép các đại lượng không tương thích (ví dụ: đưa byte vào FLOP/s) là một lỗi phân loại trong phép tính nháp, không phải là một phép đổi đơn vị.
 
-Dung lượng phần cứng là một ngoại lệ có chủ ý\index{Assumptions!nameplate capacity}. Các nhà cung cấp dán nhãn bộ nhớ bằng ký hiệu thập phân nhưng lại xuất xưởng các đại lượng nhị phân. Một bộ tăng tốc được bán dưới dạng thiết bị 80 GB cung cấp $80 \times 2^{30}$ byte, và một vi điều khiển được bán với 512 KB SRAM cung cấp $512 \times 2^{10}$ byte. Cuốn sách này giữ cả số của nhà cung cấp và nhãn của nhà cung cấp, vì vậy dung lượng được in là 80 GB là con số trên nhãn chứ không phải là chuyển đổi thập phân của nó. Mọi đại lượng dữ liệu khác, bao gồm dấu chân mô hình, kích thước activation và khối lượng truyền tải, đều sử dụng các tiền tố thập phân ở trên. Khi một ví dụ đã giải trừ một dấu chân được tính toán từ dung lượng thiết bị, cả hai thuật ngữ đều được giữ ở dạng thập phân để phép tính được in trên trang là phép tính mà người đọc có thể tái tạo.
+Dung lượng phần cứng là ngoại lệ duy nhất được quy ước riêng\index{Assumptions!nameplate capacity}. Các nhà cung cấp thường ghi nhãn bộ nhớ bằng ký hiệu thập phân nhưng lại giao dung lượng theo chuẩn nhị phân. Ví dụ, một bộ tăng tốc được quảng cáo là 80 GB thực tế cung cấp $80 \times 2^{30}$ byte, và một vi điều khiển với 512 KB SRAM cung cấp $512 \times 2^{10}$ byte. Cuốn sách này giữ nguyên cả con số và nhãn do nhà cung cấp đưa ra, nên một dung lượng in là 80 GB được hiểu là giá trị danh định trên nhãn, không phải giá trị đã quy đổi thập phân. Mọi đại lượng dữ liệu khác, gồm dung lượng chiếm dụng của mô hình, kích thước activation và khối lượng dữ liệu truyền, đều dùng các tiền tố thập phân nêu trên. Khi một ví dụ tính dung lượng chiếm dụng rồi trừ khỏi dung lượng thiết bị, cả hai vế đều dùng thập phân để phép tính in trên trang khớp với phép tính người đọc có thể làm lại.
 
 | **Alias**    |               **Multiplier**               |              **Base unit**               |
 |:-------------|:------------------------------------------:|:----------------------------------------:|
@@ -901,13 +901,13 @@ Dung lượng phần cứng là một ngoại lệ có chủ ý\index{Assumption
 | **`watt`**   |  `{python} UnitConstants.watt_factor_str`  |  `{python} UnitConstants.watt_base_str`  |
 | **`meter`**  | `{python} UnitConstants.meter_factor_str`  | `{python} UnitConstants.meter_base_str`  |
 
-: **Quy ước đơn vị**: Các bí danh SI thập phân và hệ số tỷ lệ (quy ước của sách cho tính toán nhanh). Các dạng thông lượng như FLOP/s và GB/s chia công việc hoặc dữ liệu theo thời gian bằng cách sử dụng cùng các quy ước. {#tbl-assumptions-units tbl-colwidths="[33,34,33]"}
+: **Quy ước đơn vị**: Ký hiệu SI thập phân và hệ số tỷ lệ (quy ước của sách cho tính nháp). Các dạng thông lượng như FLOP/s và GB/s đo công việc hoặc dữ liệu trên đơn vị thời gian cũng tuân theo các quy ước này. {#tbl-assumptions-units tbl-colwidths="[33,34,33]"}
 
-Mỗi giả định cũng có một hồ sơ xuất xứ cho phép người đọc truy tìm con số đó về nguồn gốc chính của nó.
+Mỗi giả định cũng đi kèm một hồ sơ nguồn gốc, giúp người đọc lần ngược con số đó về nguồn gốc ban đầu.
 
-## Xuất xứ giả định {#sec-appdx-assumption-provenance}
+## Nguồn gốc giả định {#sec-appdx-assumption-provenance}
 
-@Tbl-assumption-provenance-catalog nhóm các đầu vào định lượng của phụ lục theo loại bằng chứng và xác định các tài liệu tham khảo chính đằng sau mỗi nhóm. Các thông số kỹ thuật và tiêu chuẩn của nhà cung cấp định nghĩa các giới hạn đã công bố, các phép đo được bình duyệt cung cấp các điểm neo thực nghiệm, và các kịch bản biên tập được đánh dấu rõ ràng cung cấp các giá trị minh họa nơi không tồn tại hằng số phổ quát bền vững. Sự phân biệt này cho phép người đọc đánh giá trọng lượng bằng chứng của một đầu vào, cập nhật các giá trị nhạy cảm với thời gian và tái tạo một ước tính bằng một giá trị thay thế cục bộ phù hợp.
+@Tbl-assumption-provenance-catalog phân nhóm các đầu vào định lượng trong phụ lục theo lớp bằng chứng và chỉ ra các tài liệu tham khảo chính cho từng nhóm. Các thông số kỹ thuật và tiêu chuẩn của nhà cung cấp xác định các giới hạn đã công bố; các phép đo được bình duyệt cung cấp các mốc thực nghiệm; còn các kịch bản biên tập được đánh dấu rõ ràng cung cấp các giá trị minh họa khi không có một hằng số phổ quát bền vững. Sự phân biệt này giúp người đọc đánh giá mức độ tin cậy của từng đầu vào, cập nhật các giá trị nhạy theo thời gian, và tái tạo một ước tính bằng cách thay thế bằng giá trị địa phương phù hợp.
 
 | **Appendix section**            | **Source type**                                                                                                                              | **Primary references**                                                                                                                                                                 |
 |:--------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -920,10 +920,10 @@ Mỗi giả định cũng có một hồ sơ xuất xứ cho phép người đ�
 | **Scale references**            | Illustrative workload rates; standard video conventions                                                                                      | Editorial for workload rates; standard format definitions for video                                                                                                                    |
 | **Unit conventions**            | Decimal SI; book notation                                                                                                                    | Editorial                                                                                                                                                                              |
 
-: **Danh mục xuất xứ giả định**: Sơ đồ nhanh từ phần phụ lục đến lớp nguồn và thư mục tài liệu tham khảo. {#tbl-assumption-provenance-catalog tbl-colwidths="[26,28,46]"}
+: **Danh mục Nguồn Gốc Giả Định**: Sơ đồ tra cứu nhanh từ phần phụ lục đến loại nguồn và danh mục tài liệu tham khảo. {#tbl-assumption-provenance-catalog tbl-colwidths="[26,28,46]"}
 
 ## Tóm tắt {.unnumbered}
 
-Phụ lục này là danh mục tham chiếu cho các đầu vào định lượng được sử dụng trong toàn bộ cuốn sách. Nó tập hợp các thông số kỹ thuật của bộ tăng tốc và mô hình, các quy ước bộ nhớ huấn luyện, các hằng số năng lượng, băng thông kết nối nội bộ, các tham chiếu kinh tế và quy mô, các quy ước đơn vị và xuất xứ. Các giá trị đến từ các đỉnh hiệu suất của nhà cung cấp, các phép đo đã công bố, các tiêu chuẩn và các kịch bản biên tập, vì vậy chúng mang trọng lượng bằng chứng khác nhau và cũ đi với tốc độ khác nhau.
+Phụ lục này là danh mục tham khảo cho các dữ liệu đầu vào định lượng được sử dụng trong toàn bộ cuốn sách. Nó tổng hợp các thông số kỹ thuật của bộ tăng tốc và mô hình, các quy ước về bộ nhớ trong huấn luyện, các hằng số năng lượng, băng thông kết nối, các tham chiếu về kinh tế và quy mô, các quy ước đơn vị và nguồn gốc. Các giá trị này đến từ các mức đỉnh do nhà cung cấp công bố, các phép đo đã công bố, các tiêu chuẩn, và các kịch bản biên tập; vì thế, chúng có mức độ tin cậy khác nhau và “lão hóa” với tốc độ khác nhau.
 
-Sử dụng các bảng này làm đầu vào ban đầu, không phải là các hằng số phổ quát. Đối với mỗi ước tính, hãy ghi lại hàng trong bảng, quy ước đơn vị và xuất xứ; thay thế các đỉnh hiệu suất, giá cả và tỷ lệ nhạy cảm với thời gian bằng các giá trị cục bộ; phân biệt giới hạn vật lý với điểm vận hành đo được và giả định kịch bản; và báo cáo những giả định nào chi phối kết quả. Điều này giúp tính toán nhanh có thể tái tạo và làm rõ đầu vào nào kiểm soát kết luận.
+Hãy dùng các bảng này như đầu vào khởi đầu, không phải các hằng số phổ quát. Với mỗi ước tính, hãy ghi lại dòng bảng, quy ước đơn vị và nguồn gốc; thay thế các mức đỉnh, giá và tỷ lệ nhạy theo thời gian bằng giá trị địa phương; phân biệt trần vật lý với điểm vận hành đã đo và giả định kịch bản; và báo cáo những giả định nào chi phối kết quả. Nhờ vậy, phép tính nháp (napkin math) có thể tái tạo và rõ ràng đầu vào nào quyết định kết luận.

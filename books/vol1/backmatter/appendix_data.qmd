@@ -4,21 +4,21 @@ engine: jupyter
 
 # Nền tảng Dữ liệu {#sec-appdx-data-foundations dropcap="chapter-opening"}
 
-Các vấn đề về dữ liệu hiếm khi biểu hiện dưới dạng các vấn đề về dữ liệu; chúng xuất hiện dưới dạng một lần chạy huấn luyện không thể tăng tốc, một bộ tăng tốc nằm không, hoặc độ chính xác suy giảm trong khi các bảng điều khiển vẫn hiển thị màu xanh. Để giữ cho các lập luận của chương tập trung vào thiết kế hệ thống, phụ lục này tập hợp các phép tính nháp và các công cụ thống kê giúp truy vết các triệu chứng đó về các nút thắt dữ liệu có thể đo lường được: thời gian truyền tải, chi phí bố cục lưu trữ, chẩn đoán trôi dạt và các công cụ ổn định số học. Các công cụ ở đây dựa trên xác suất cơ bản và trên thuật ngữ dữ liệu của định luật sắt.
+Các vấn đề về dữ liệu hiếm khi lộ diện như “vấn đề dữ liệu”; chúng thường hiện ra dưới dạng một lần huấn luyện mãi không nhanh hơn, một bộ tăng tốc ngồi không, hoặc độ chính xác tụt dần dù dashboard vẫn báo xanh. Để phần lập luận của chương tập trung vào thiết kế hệ thống, phụ lục này gom các phép tính nháp và công cụ thống kê giúp lần từ những triệu chứng đó về các nút thắt dữ liệu đo được: thời gian truyền, chi phí bố trí lưu trữ, chẩn đoán trôi dạt và các công cụ ổn định số. Các công cụ ở đây dựa trên xác suất cơ bản và vế dữ liệu của định luật sắt.
 
 ## Cách sử dụng Phụ lục này {.unnumbered}
 
-Phụ lục này được thiết kế như một tài liệu *tham khảo*. Hãy tìm đến nó khi việc gỡ lỗi các vấn đề như "huấn luyện chậm", "tỷ lệ sử dụng bộ tăng tốc thấp" hoặc "độ chính xác sản xuất bị trôi dạt" đòi hỏi con đường nhanh nhất từ triệu chứng đến phép đo.
+Phụ lục này được thiết kế như một tài liệu *tham khảo*. Hãy mở nó khi bạn cần gỡ lỗi "huấn luyện chậm", "bộ tăng tốc ít được sử dụng" hoặc "độ chính xác môi trường sản xuất bị trôi dạt", và cần con đường nhanh nhất từ triệu chứng đến phép đo.
 
 Các quy ước được sử dụng ở đây tuân theo ký hiệu chung của sách (ví dụ, $B$ được dành cho kích thước batch và $\text{BW}$ biểu thị băng thông).
 
 - **Khi dữ liệu không di chuyển được**: Bắt đầu với @tbl-data-gravity và phương trình thời gian truyền tải trong @sec-appdx-data-foundations-napkin-math-physics-data-gravity-9ae0.
 - **Khi bộ tăng tốc bị đói**: Sử dụng @tbl-serialization-cost và thảo luận về bố cục trong @sec-appdx-data-foundations-row-vs-columnar-formats-bca2.
-- **Khi các pipeline bùng nổ về chi phí**: Sử dụng các nguyên thủy trong @sec-appdx-data-foundations-algebra-data-9792, đặc biệt là các xáo trộn do phép nối gây ra.
-- **Khi "trung bình có vẻ ổn" nhưng người dùng phàn nàn**: Sử dụng @sec-appdx-data-foundations-distributions-long-tail-901f và xác suất đuôi ở cấp phiên.
+- **Khi các pipeline bùng nổ về chi phí**: Sử dụng các phép cơ bản trong @sec-appdx-data-foundations-algebra-data-9792, đặc biệt là các xáo trộn do phép nối gây ra.
+- **Khi "trung bình có vẻ ổn" nhưng người dùng phàn nàn**: Sử dụng @sec-appdx-data-foundations-distributions-long-tail-901f và xác suất đuôi ở mức phiên.
 - **Khi độ chính xác trôi dạt một cách âm thầm**: Sử dụng @sec-appdx-data-foundations-measuring-drift-divergence-a6dd để so sánh các phân phối đầy đủ.
 
-Bức tranh dữ liệu có thể giống như một vườn bách thú của các định dạng, mã hóa và các trường hợp edge, nhưng phụ lục này tập trung vào các hằng số cấu trúc giới hạn mọi hệ thống ML.
+Bức tranh dữ liệu có thể giống như một vườn bách thú của các định dạng, mã hóa và các trường hợp edge, nhưng phụ lục này tập trung vào những hằng số cấu trúc ràng buộc mọi hệ thống ML.
 
 ```{python}
 #| echo: false
@@ -96,15 +96,15 @@ Với những điểm tham chiếu đó đã được thiết lập, phụ lục
 
 ## Nền tảng Kỹ thuật Dữ liệu {#sec-appdx-data-foundations-data-engineering-foundations-0c20}
 
-Hiểu các ràng buộc phần cứng chỉ là một nửa cuộc chiến; chúng ta cũng phải định hình dữ liệu của mình để phù hợp với chúng. Kỹ thuật dữ liệu áp dụng các nguyên tắc của hệ thống phân cấp bộ nhớ vào các định dạng lưu trữ và thiết kế pipeline, đảm bảo rằng bộ tăng tốc không bao giờ bị đói. Quá trình này bắt đầu bằng việc nhận ra rằng dữ liệu là vật lý—nó có khối lượng, tốn thời gian để di chuyển và đòi hỏi năng lượng để phân tích.
+Hiểu các ràng buộc phần cứng mới chỉ là một nửa vấn đề; chúng ta còn phải định hình dữ liệu cho phù hợp với chúng. Kỹ thuật dữ liệu áp dụng các nguyên tắc của hệ thống phân cấp bộ nhớ vào định dạng lưu trữ và thiết kế pipeline, để bộ tăng tốc không bao giờ thiếu dữ liệu. Quá trình này bắt đầu từ việc nhận ra rằng dữ liệu là thứ vật lý—nó có dung lượng, cần thời gian để di chuyển và tiêu tốn năng lượng để đọc, giải mã.
 
-### Tính toán nhanh: Vật lý của trọng lực dữ liệu {#sec-appdx-data-foundations-napkin-math-physics-data-gravity-9ae0}
+### Tính nhẩm: Vật lý của trọng lực dữ liệu {#sec-appdx-data-foundations-napkin-math-physics-data-gravity-9ae0}
 
-Trọng lực dữ liệu[^fn-data-gravity-anchor] là một phép ẩn dụ dựa trên các phép tính thời gian truyền tải. Không giống như tính toán, vốn nhanh hơn mỗi năm, tốc độ ánh sáng là cố định và băng thông mạng là một tài nguyên hữu hạn. Khi các tập dữ liệu đủ lớn, quán tính thực tế của chúng tăng lên—việc di chuyển chúng có thể tốn nhiều thời gian và năng lượng hơn so với việc di chuyển tính toán đến nơi dữ liệu đã tồn tại.
+Trọng lực dữ liệu[^fn-data-gravity-anchor] là một phép ẩn dụ dựa trên các phép tính về thời gian truyền. Khác với năng lực tính toán tăng lên qua từng năm, tốc độ ánh sáng là hằng số và băng thông mạng là tài nguyên hữu hạn. Khi các tập dữ liệu đủ lớn, quán tính thực tế của chúng tăng lên—việc di chuyển chúng có thể tốn nhiều thời gian và năng lượng hơn là đưa tính toán tới nơi dữ liệu đang nằm.
 
-[^fn-data-gravity-anchor]: **Trọng lực dữ liệu**\index{Data gravity!appendix refresher}: Được Dave McCrory\index{McCrory, Dave|seealso{Data gravity}} đặt ra vào năm 2010 để mô tả cách các tập dữ liệu lớn thu hút các dịch vụ và ứng dụng về phía chúng, giống như các vật thể lớn hút các vật thể nhỏ hơn trong vật lý [@mccrory2010datagravity]. Phép tương tự này rất phù hợp: "vận tốc thoát" cần thiết để di chuyển một tập dữ liệu quy mô petabyte thường được đo bằng tuần.
+[^fn-data-gravity-anchor]: **Trọng lực dữ liệu**\index{Data gravity!appendix refresher}: Được Dave McCrory\index{McCrory, Dave|seealso{Data gravity}} đặt ra vào năm 2010 để mô tả cách các tập dữ liệu lớn thu hút các dịch vụ và ứng dụng đến gần chúng, giống như các vật thể có khối lượng lớn hút các vật thể nhỏ hơn trong vật lý [@mccrory2010datagravity]. Sự so sánh này rất phù hợp: "vận tốc thoát" cần thiết để di chuyển một tập dữ liệu quy mô petabyte thường được đo bằng tuần.
 
-Thời gian truyền tải lý tưởng theo tốc độ đường truyền là $T = D_{\text{vol}}/\text{BW}$ sau khi chuyển đổi khối lượng dữ liệu và băng thông sang các đơn vị tương thích (các phép tính dưới đây chuyển đổi byte thập phân và bit trên giây một cách rõ ràng). Đối với các khối lượng lớn ở đây, độ trễ là không đáng kể; phương trình đầy đủ xuất hiện trong @sec-appdx-machine-foundations-bandwidth-vs-latency-5320. @Tbl-data-gravity đưa ra các giới hạn dưới; chi phí giao thức và giới hạn điểm cuối làm tăng chúng.
+Thời gian truyền lý tưởng ở tốc độ đường truyền là $T = D_{\text{vol}}/\text{BW}$ sau khi chuyển đổi dung lượng dữ liệu và băng thông về cùng đơn vị (các phép tính dưới đây chuyển đổi rõ ràng giữa byte thập phân và bit trên giây). Với các dung lượng lớn như ở đây, độ trễ có thể bỏ qua; phương trình đầy đủ được trình bày trong @sec-appdx-machine-foundations-bandwidth-vs-latency-5320. @Tbl-data-gravity đưa ra các giới hạn dưới; chi phí giao thức và giới hạn của điểm cuối sẽ làm tăng các giá trị này.
 
 | **Data Volume** |       **1 Gbps (Standard WAN)**       |       **10 Gbps (High-End WAN)**       |      **100 Gbps (Direct Connect)**      |       **Truck (Illustrative)**       |
 |:----------------|:-------------------------------------:|:--------------------------------------:|:---------------------------------------:|:------------------------------------:|
@@ -112,7 +112,7 @@ Thời gian truyền tải lý tưởng theo tốc độ đường truyền là 
 | **100 TB**      | `{python} DataGravity.t_100tb_1g_str` | `{python} DataGravity.t_100tb_10g_str` | `{python} DataGravity.t_100tb_100g_str` |                 N/A                  |
 | **1 PB**        |  `{python} DataGravity.t_1pb_1g_str`  |  `{python} DataGravity.t_1pb_10g_str`  |  `{python} DataGravity.t_1pb_100g_str`  | `{python} DataGravity.truck_1pb_str` |
 
-: **Chi phí của quán tính**: Những thời gian truyền tải này giải thích tại sao chúng ta thường "chuyển tính toán đến dữ liệu" thay vì "chuyển dữ liệu đến tính toán." Các cột mạng là giới hạn dưới ở tốc độ đường truyền duy trì. Mục xe tải là một mô hình thời gian đã trôi qua minh họa cho 1 PB: 8 giờ để tải, 32 giờ vận chuyển và 8 giờ để dỡ, không bao gồm chi phí lập lịch và cấp phát. {#tbl-data-gravity tbl-colwidths="[23,20,20,20,17]"}
+: **Chi phí của quán tính**: Những khoảng thời gian truyền này giải thích vì sao chúng ta thường "chuyển tính toán đến dữ liệu" thay vì "chuyển dữ liệu đến tính toán." Các cột mạng thể hiện giới hạn dưới ở tốc độ đường truyền duy trì. Mục xe tải là một mô hình minh họa thời gian trọn vẹn cho 1 PB: 8 giờ để tải, 32 giờ di chuyển và 8 giờ để dỡ, chưa tính chi phí lập lịch và cấp phát. {#tbl-data-gravity tbl-colwidths="[23,20,20,20,17]"}
 
 ### Chi phí của tuần tự hóa {#sec-appdx-data-foundations-cost-serialization-b921}
 
@@ -157,9 +157,9 @@ class SerializationCost:
     proto_cycles_str = MarkdownStr("Medium")
 ```
 
-Ngay cả sau khi dữ liệu đến máy, thuế tuần tự hóa vẫn là một rào cản cuối cùng.[^fn-serialization-binary-format] Như @tbl-serialization-cost cho thấy, nhiều kỹ sư tỉ mỉ tối ưu hóa các kernel bộ tăng tốc của họ trong khi bỏ qua chi phí CPU để giải mã dữ liệu. Phân tích cú pháp các định dạng dựa trên văn bản như JavaScript Object Notation (JSON) hoặc CSV cực kỳ tốn CPU, thường khiến bộ tăng tốc nằm không trong khi CPU phải vật lộn để chuyển đổi chuỗi thành số dấu phẩy động.
+Ngay cả khi dữ liệu đã đến máy, chi phí tuần tự hóa vẫn là một trở ngại cuối cùng.[^fn-serialization-binary-format] Như @tbl-serialization-cost chỉ ra, nhiều kỹ sư rất tỉ mỉ tối ưu hóa các kernel của bộ tăng tốc nhưng lại bỏ qua chi phí CPU để giải mã dữ liệu. Việc xử lý các định dạng văn bản như JavaScript Object Notation (JSON) hay CSV tiêu tốn rất nhiều tài nguyên CPU, thường khiến bộ tăng tốc phải chờ trong khi CPU vất vả chuyển các chuỗi thành số dấu phẩy động.
 
-[^fn-serialization-binary-format]: **Tuần tự hóa**\index{Serialization!definition}: Từ tiếng Latin *serialis* (tạo thành một chuỗi). Quá trình chuyển đổi các cấu trúc dữ liệu trong bộ nhớ thành một luồng byte để lưu trữ hoặc truyền tải, và ngược lại (*giải tuần tự hóa*). Trong các pipeline ML, việc lựa chọn định dạng tuần tự hóa có thể chi phối thời gian huấn luyện từ đầu đến cuối; @sec-data-engineering-data-ingestion-8efc đề cập đến các chiến lược thiết kế pipeline nhằm giảm thiểu chi phí này.
+[^fn-serialization-binary-format]: **Tuần tự hóa**\index{Serialization!definition}: Từ tiếng Latin *serialis* (có nghĩa là tạo thành một chuỗi). Đây là quá trình chuyển đổi các cấu trúc dữ liệu trong bộ nhớ thành một luồng byte để lưu trữ hoặc truyền tải, và quá trình ngược lại (*giải tuần tự hóa*). Trong các pipeline ML, việc chọn định dạng tuần tự hóa có thể ảnh hưởng rất lớn đến tổng thời gian huấn luyện; @sec-data-engineering-data-ingestion-8efc sẽ trình bày các chiến lược thiết kế pipeline để giảm thiểu chi phí này.
 
 | **Format**   |                **Decoding Speed (MB/s)**                |           **Relative CPU Decode Cost**          | **Suitability**        |
 |:-------------|:-------------------------------------------------------:|:-----------------------------------------------:|:-----------------------|
@@ -167,11 +167,11 @@ Ngay cả sau khi dữ liệu đến máy, thuế tuần tự hóa vẫn là m�
 | **Protobuf** |  `{python} SerializationCost.proto_speed_mb_per_s_str`  |  `{python} SerializationCost.proto_cycles_str`  | RPC/Messages           |
 | **Parquet**  | `{python} SerializationCost.parquet_speed_mb_per_s_str` | `{python} SerializationCost.parquet_cycles_str` | Columnar storage       |
 
-: **Chi phí tuần tự hóa**: Những giá trị minh họa này cho thấy tại sao các định dạng cột nhị phân có thể vượt trội hơn văn bản dựa trên hàng, nhưng chúng không phải là các benchmark di động. Arrow là một định dạng trong bộ nhớ/IPC; Parquet là một định dạng lưu trữ nén. {#tbl-serialization-cost tbl-colwidths="[21,27,27,25]"}
+: **Chi phí tuần tự hóa**: Những giá trị minh họa này cho thấy vì sao các định dạng cột nhị phân có thể vượt trội hơn văn bản theo hàng, nhưng chúng không phải là benchmark có thể áp dụng rộng rãi. Arrow là một định dạng trong bộ nhớ/IPC; Parquet là một định dạng lưu trữ nén. {#tbl-serialization-cost tbl-colwidths="[21,27,27,25]"}
 
-### Định dạng hàng so với định dạng cột {#sec-appdx-data-foundations-row-vs-columnar-formats-bca2}
+### Định dạng theo hàng và theo cột {#sec-appdx-data-foundations-row-vs-columnar-formats-bca2}
 
-Việc lựa chọn định dạng tệp xác định "cơ chế vật lý" về cách dữ liệu được đọc. Các định dạng hướng hàng như CSV và JSON lưu trữ dữ liệu theo từng bản ghi, vì vậy việc đọc trường `age` vẫn yêu cầu phân tích cú pháp từng hàng. Điều này phù hợp với các nhật ký được nối thêm nhưng không phù hợp với phân tích trên các đặc trưng được chọn. Parquet lưu trữ các khối cột nén trên đĩa, trong khi Arrow cung cấp định dạng cột trong bộ nhớ và IPC. Các trình đọc Parquet có thể sử dụng *projection pushdown*\index{Projection pushdown} để tìm nạp các khối cột được chọn, và cả hai định dạng đều hỗ trợ *xử lý vector hóa*\index{Vectorization!columnar processing}. So sánh hai cách sắp xếp trong @fig-row-vs-col để thấy tại sao truy cập theo cột tránh quét các byte không cần thiết.
+Việc chọn định dạng tệp quyết định "cơ chế" dữ liệu được đọc. Các định dạng hướng hàng như CSV và JSON lưu dữ liệu theo từng bản ghi, nên để đọc trường `age` vẫn phải phân tích từng hàng. Cách này hợp với các log ghi nối tiếp, nhưng không phù hợp khi phân tích các đặc trưng đã chọn. Parquet lưu các khối cột nén trên đĩa, còn Arrow cung cấp định dạng cột trong bộ nhớ và IPC. Trình đọc Parquet có thể dùng *projection pushdown*\index{Projection pushdown} để lấy các khối cột được chọn, và cả hai định dạng đều hỗ trợ *xử lý vector hóa*\index{Vectorization!columnar processing}. So sánh hai cách sắp xếp trong @fig-row-vs-col để thấy vì sao truy cập theo cột giúp tránh quét những byte không cần thiết.
 
 ::: {#fig-row-vs-col fig-env="figure" fig-pos="htb" fig-cap="**Bố cục lưu trữ**: Các định dạng hướng hàng nhóm các giá trị theo bản ghi, vì vậy quá trình quét được minh họa sẽ đọc mọi trường. Các định dạng hướng cột nhóm các giá trị theo đặc trưng, vì vậy quá trình quét được minh họa chỉ đọc Age." fig-alt="Sơ đồ đối chiếu lưu trữ theo hàng và theo cột. Lưu trữ theo hàng nhóm các giá trị ID, Age và Loc theo bản ghi và đọc mọi cột. Lưu trữ theo cột nhóm các giá trị theo cột và chỉ đọc Age."}
 ```{.tikz}
@@ -272,11 +272,11 @@ fill=\filllcirclecolor,minimum height=6mm,anchor=north]at(PO){};
 ```
 :::
 
-Các bố cục trong @fig-row-vs-col khác nhau ở số lượng byte không liên quan đi vào đường dẫn huấn luyện.
+Các bố cục trong @fig-row-vs-col khác nhau ở lượng byte thừa lọt vào đường dữ liệu huấn luyện.
 
 ::: {#psp-appendix-data-accelerator-starvation-problem .callout-perspective title="Vấn đề bộ tăng tốc bị bỏ đói"}
 
-Việc lựa chọn định dạng tệp có thể xác định liệu một hệ thống bị giới hạn bởi I/O hay giới hạn bởi tính toán. Như @fig-row-vs-col cho thấy, bố cục lưu trữ làm tăng thêm chi phí tuần tự hóa vì các định dạng hướng hàng buộc phải quét toàn bộ hàng trong khi các định dạng cột cho phép projection pushdown, chỉ đọc các byte mà mô hình cần. Kết quả là thuật ngữ "Di chuyển dữ liệu" trong định luật sắt có thể âm thầm trở thành nút thắt cổ chai khiến các bộ tăng tốc đắt tiền bị bỏ không.
+Việc chọn định dạng tệp có thể quyết định liệu một hệ thống bị giới hạn bởi I/O hay bởi tính toán. Như @fig-row-vs-col cho thấy, bố trí lưu trữ làm tăng “chi phí tuần tự hóa” vì định dạng hướng hàng buộc phải quét toàn bộ hàng, trong khi định dạng cột cho phép *projection pushdown*, chỉ đọc những byte mà mô hình cần. Hệ quả là hạng mục "Di chuyển dữ liệu" trong định luật sắt có thể âm thầm trở thành nút thắt cổ chai, khiến các bộ tăng tốc đắt tiền phải nhàn rỗi.
 
 :::
 
@@ -319,23 +319,23 @@ class DataAlgebra:
 
 ### Đại số của dữ liệu {#sec-appdx-data-foundations-algebra-data-9792}
 
-Kỹ thuật đặc trưng biến các bản ghi thô thành các cột mà mô hình có thể học được, và phép biến đổi đó thường là một vấn đề về luồng dữ liệu trước khi nó là một vấn đề về mô hình hóa. Một pipeline trước tiên thu hẹp tập hợp, sau đó chọn các đặc trưng, sau đó gắn ngữ cảnh từ các bảng khác. Ba thao tác đó tương ứng với ba nguyên thủy của Ngôn ngữ truy vấn có cấu trúc (SQL)\index{Structured query language!feature pipeline primitives}\index{SQL|see{Structured query language}}, và chi phí tính toán của chúng xác định liệu công việc đặc trưng có ở cục bộ, quét các byte không cần thiết, hay biến thành một sự xáo trộn mạng.
+Kỹ thuật đặc trưng biến các bản ghi thô thành các cột mà mô hình có thể học, và phép biến đổi đó thường là bài toán luồng dữ liệu trước khi là bài toán mô hình. Một pipeline trước hết thu hẹp tập dữ liệu, sau đó chọn đặc trưng, rồi gắn thêm ngữ cảnh từ các bảng khác. Ba bước này tương ứng với ba phép cơ bản trong Ngôn ngữ truy vấn có cấu trúc (SQL)\index{Structured query language!feature pipeline primitives}\index{SQL|see{Structured query language}}, và chi phí tính toán của chúng quyết định liệu tác vụ đặc trưng được xử lý cục bộ, phải quét các byte không cần thiết, hay biến thành một thao tác xáo trộn qua mạng.
 
 1.  **Lựa chọn ($\sigma$)**: Lọc các hàng (ví dụ, `WHERE age > 30`).
     *   **Chi phí**: $\mathcal{O}(\log N + K)$ nếu tra cứu chỉ mục B-tree trả về $K$ hàng; $\mathcal{O}(N)$ cho một lần quét toàn bộ.
 2.  **Phép chiếu ($\pi$)**: Chọn các cột (ví dụ, `SELECT age`).
-    *   **Chi phí**: Các khối được chọn cộng với giải mã và siêu dữ liệu trong các định dạng cột. Ví dụ định dạng hàng này đọc `{python} DataAlgebra.row_size_kb_str` cho một số nguyên `{python} DataAlgebra.int_size_bytes_value_str`-byte, lãng phí `{python} DataAlgebra.waste_pct_str` của dữ liệu đọc được.
-3.  **Kết nối ($\bowtie$)**: Kết hợp các bảng. Thao tác tốn kém nhất.
+    *   **Chi phí**: Gồm các khối dữ liệu được chọn, cộng thêm giải mã và siêu dữ liệu trong các định dạng cột. Ví dụ định dạng hàng này phải đọc `{python} DataAlgebra.row_size_kb_str` cho một số nguyên `{python} DataAlgebra.int_size_bytes_value_str`-byte, lãng phí `{python} DataAlgebra.waste_pct_str` lượng đọc.
+3.  **Join ($\bowtie$)**: Kết hợp các bảng. Đây là phép toán tốn kém nhất.
     *   **Shuffle Join**: Cả hai bảng được phân vùng theo khóa và trao đổi qua mạng.
         *   **Chi phí**: Việc xáo trộn lại cả hai bảng `{python} DataAlgebra.join_table_tb_str` di chuyển khoảng `{python} DataAlgebra.join_network_tb_str`; việc phân vùng và tính cục bộ có thể giảm điều này.
     *   **Broadcast Join**: Một bảng nhỏ được gửi đến tất cả các worker.
-        *   **Chi phí**: $S(W-1)$ byte; bảng $S$-byte phải vừa với mỗi trong số $W$ worker.
+        *   **Chi phí**: $S(W-1)$ byte; bảng kích thước $S$-byte phải nằm trên mỗi worker trong số $W$ worker.
 
-Hiểu các định dạng dữ liệu, chi phí tuần tự hóa và các nguyên thủy đại số cho chúng ta biết cách *di chuyển* dữ liệu một cách hiệu quả. Tuy nhiên, ngay cả một pipeline được thiết kế hoàn hảo cũng có thể âm thầm thất bại nếu dữ liệu mà nó mang theo thay đổi đặc tính theo thời gian. Việc phát hiện sự thay đổi đó—và định lượng mức độ quan trọng của nó—đòi hỏi một bộ công cụ khác: xác suất và thống kê.
+Việc nắm rõ các định dạng dữ liệu, chi phí tuần tự hóa và các phép toán đại số cơ bản giúp chúng ta biết cách *di chuyển* dữ liệu hiệu quả. Tuy nhiên, ngay cả một pipeline được thiết kế hoàn hảo cũng có thể âm thầm gặp lỗi nếu dữ liệu mà nó mang theo thay đổi đặc tính theo thời gian. Để phát hiện sự thay đổi đó—và định lượng mức độ ảnh hưởng của nó—chúng ta cần một bộ công cụ khác: xác suất và thống kê.
 
 ## Xác suất và Thống kê {#sec-appdx-data-foundations-probability-statistics-3934}
 
-Khi dữ liệu đã chảy qua các pipeline của chúng ta, chúng ta cần các công cụ toán học để đảm bảo chất lượng và tính nhất quán của nó. Xác suất và thống kê cung cấp ngôn ngữ để giám sát tình trạng hệ thống, phát hiện các lỗi âm thầm của sự trôi dạt dữ liệu và quản lý sự không chắc chắn.
+Khi dữ liệu đã luân chuyển qua các pipeline, chúng ta cần các công cụ toán học để đảm bảo chất lượng và tính nhất quán của nó. Xác suất và thống kê cung cấp ngôn ngữ để giám sát tình trạng hệ thống, phát hiện các lỗi âm thầm do trôi dạt dữ liệu, và quản lý sự không chắc chắn.
 
 ```{python}
 #| echo: false
@@ -370,7 +370,7 @@ class LongTailScale:
 
 ### Các phân phối và đuôi dài {#sec-appdx-data-foundations-distributions-long-tail-901f}
 
-Trong các hệ thống, giá trị trung bình thường gây hiểu lầm. Các phân phối độ trễ thường có đuôi dài\index{Tail latency!appendix refresher}, và các dịch vụ hiển thị với người dùng thường được điều chỉnh bởi hành vi ở phân vị cao hơn là thời gian phản hồi trung bình [@dean2013]. Độ trễ "P99" (phân vị thứ 99) là 500 ms có nghĩa là tối đa 1 phần trăm yêu cầu mất hơn 500 ms; với nhiều yêu cầu trên mỗi phiên, tỷ lệ người dùng thấy ít nhất một yêu cầu chậm có thể cao hơn nhiều. Ở quy mô lớn (`{python} LongTailScale.n_users_str` người dùng), ngay cả tỷ lệ 1 phần trăm người dùng bị ảnh hưởng cũng sẽ ảnh hưởng đến `{python} LongTailScale.n_unhappy_str`.
+Trong các hệ thống, giá trị trung bình thường dễ gây hiểu lầm. Các phân phối độ trễ thường có đuôi dài\index{Tail latency!appendix refresher}, và các dịch vụ mà người dùng nhìn thấy thường bị chi phối bởi hành vi ở các phân vị cao hơn là thời gian phản hồi trung bình [@dean2013]. Độ trễ "P99" (phân vị thứ 99) là 500 ms có nghĩa là tối đa 1 phần trăm yêu cầu mất hơn 500 ms; với nhiều yêu cầu trong một phiên, tỷ lệ người dùng thấy ít nhất một yêu cầu chậm có thể cao hơn nhiều. Ở quy mô lớn (`{python} LongTailScale.n_users_str` người dùng), ngay cả tỷ lệ 1 phần trăm người dùng bị ảnh hưởng cũng sẽ tác động đến `{python} LongTailScale.n_unhappy_str` người dùng.
 
 ```{python}
 #| echo: false
@@ -408,17 +408,17 @@ class TailLatency:
 
 ::: {#nbk-appendix-data-median-experience .callout-notebook title="Trải nghiệm trung vị"}
 
-Đối với $N_{\text{session}} = 100$ yêu cầu độc lập, mỗi yêu cầu có 0.01 khả năng chậm, xác suất xảy ra ít nhất một sự kiện đuôi P99 là `{python} TailLatency.p_slow_math`.
+Đối với $N_{\text{session}} = 100$ yêu cầu độc lập, mỗi yêu cầu có 0.01 khả năng bị chậm, xác suất xảy ra ít nhất một sự kiện đuôi P99 là `{python} TailLatency.p_slow_math`.
 
-**Hiểu biết về hệ thống**: Theo mô hình này, một phiên 100 yêu cầu có nhiều khả năng bao gồm một sự kiện vượt quá P99. Các sự chậm lại có tương quan có thể thay đổi xác suất này [@dean2013].
+**Hiểu biết về hệ thống**: Theo mô hình này, một phiên gồm 100 yêu cầu có khả năng cao hơn 50% sẽ xuất hiện một sự kiện vượt quá P99. Các đợt chậm có tương quan có thể làm thay đổi xác suất này [@dean2013].
 
 :::
 
 ### Đo lường sự trôi dạt (phân kỳ) {#sec-appdx-data-foundations-measuring-drift-divergence-a6dd}
 
-Vì các phân phối có đuôi dài nơi ẩn chứa những lỗi nguy hiểm nhất, các số liệu đơn giản như "mean shift" là không đủ. Chúng ta cần các công cụ so sánh *toàn bộ hình dạng* của phân phối. Việc phát hiện sự trôi dạt giữa phân phối phục vụ ($P_t$) và phân phối huấn luyện ($P_0$) đòi hỏi phải đo "khoảng cách" giữa các phân phối.
+Vì các phân phối có đuôi dài, nơi ẩn chứa những lỗi nguy hiểm nhất, nên các số liệu đơn giản như "mean shift" là không đủ. Chúng ta cần các công cụ có thể so sánh *toàn bộ hình dạng* của phân phối. Phát hiện trôi dạt giữa phân phối phục vụ (serving) ($P_t$) và phân phối huấn luyện ($P_0$) đòi hỏi phải đo "khoảng cách" giữa các phân phối.
 
-Đối với các kết quả rời rạc $x$, @eq-appdx-data-kl-divergence biểu thị độ phân kỳ KL\index{Kullback-Leibler divergence!appendix refresher}[^fn-kl-divergence-relative] là chi phí mã hóa bổ sung dự kiến khi xấp xỉ $P_t$ bằng $P_0$ [@kullback1951; @cover2006]. Dạng hiển thị chỉ hữu hạn khi $P_0(x) > 0$ ở bất cứ đâu $P_t(x) > 0$; do đó, các triển khai sản xuất cần làm mịn rõ ràng hoặc xử lý số 0.
+Đối với các kết quả rời rạc $x$, @eq-appdx-data-kl-divergence diễn giải độ phân kỳ KL\index{Kullback-Leibler divergence!appendix refresher}[^fn-kl-divergence-relative] như chi phí mã hóa bổ sung kỳ vọng khi xấp xỉ $P_t$ bằng $P_0$ [@kullback1951; @cover2006]. Dạng này chỉ hữu hạn khi $P_0(x) > 0$ ở mọi nơi $P_t(x) > 0$; vì vậy, các triển khai trong môi trường sản xuất cần làm mịn tường minh hoặc xử lý giá trị bằng 0.
 $$ \mathcal{D}_{\text{KL}}(P_t \lVert P_0) = \sum_x P_t(x) \log \frac{P_t(x)}{P_0(x)} $$ {#eq-appdx-data-kl-divergence}
 
 ```{python}
@@ -541,7 +541,7 @@ class KLDrift:
 
 ::: {#nbk-appendix-data-kl-divergence-drift-detection .callout-notebook title="Ví dụ minh họa: Độ phân kỳ KL để phát hiện sự trôi dạt"}
 
-**Tình huống**: Một bộ phân loại cảm xúc đã được huấn luyện trên dữ liệu trong đó `{python} KLDrift.p0_positive_pct_str` số đánh giá là tích cực, `{python} KLDrift.p0_negative_pct_str` là tiêu cực, và `{python} KLDrift.p0_neutral_pct_str` là trung tính. Sau khi triển khai, phân phối phục vụ (serving) chuyển sang `{python} KLDrift.pt_positive_pct_str` tích cực, `{python} KLDrift.pt_negative_pct_str` tiêu cực, và `{python} KLDrift.pt_neutral_pct_str` trung tính.
+**Tình huống**: Một bộ phân loại cảm xúc đã được huấn luyện trên dữ liệu, trong đó `{python} KLDrift.p0_positive_pct_str` bài đánh giá là tích cực, `{python} KLDrift.p0_negative_pct_str` là tiêu cực và `{python} KLDrift.p0_neutral_pct_str` là trung tính. Sau khi triển khai, phân phối phục vụ (serving) chuyển sang `{python} KLDrift.pt_positive_pct_str` tích cực, `{python} KLDrift.pt_negative_pct_str` tiêu cực và `{python} KLDrift.pt_neutral_pct_str` trung tính.
 
 **Toán học**:
 
@@ -559,7 +559,7 @@ print(r"\vspace{-6mm}")
 print(KLDrift.kl_pq_calc_eq)
 ```
 
-Lưu ý sự bất đối xứng: $\mathcal{D}_{\text{KL}}(P_0 \lVert P_t) \neq \mathcal{D}_{\text{KL}}(P_t \lVert P_0)$. Chỉ số ổn định quần thể (PSI)\index{Population stability index!appendix refresher} làm cho điều này đối xứng; phép tính dưới đây sử dụng logarit tự nhiên:
+Lưu ý sự bất đối xứng: $\mathcal{D}_{\text{KL}}(P_0 \lVert P_t) \neq \mathcal{D}_{\text{KL}}(P_t \lVert P_0)$. Chỉ số ổn định quần thể (PSI)\index{Population stability index!appendix refresher} giúp làm đối xứng điều này; phép tính dưới đây sử dụng logarit tự nhiên:
 ```{python}
 #| echo: false
 #| output: asis
@@ -587,29 +587,29 @@ class PsiThreshold:
     psi_threshold_str = fmt(psi_threshold, precision=1, commas=False)
 ```
 
-**Thông tin chuyên sâu về hệ thống**: Vì PSI = `{python} KLDrift.psi_str` < `{python} PsiThreshold.psi_threshold_str`, sự trôi dạt này chưa vượt qua ngưỡng xem xét thủ công minh họa được sử dụng ở đây. Phản ứng đúng đắn là giữ đặc trưng này trên bảng điều khiển giám sát và tìm kiếm các tín hiệu trôi dạt xác nhận khác thay vì huấn luyện lại chỉ dựa vào thống kê này.
+**Góc nhìn hệ thống**: Vì PSI = `{python} KLDrift.psi_str` < `{python} PsiThreshold.psi_threshold_str`, sự trôi dạt này chưa vượt qua ngưỡng minh họa cho việc xem xét thủ công được dùng ở đây. Phản ứng đúng là giữ đặc trưng này trên bảng điều khiển giám sát và tìm thêm các tín hiệu trôi dạt để đối chiếu, thay vì chỉ huấn luyện lại dựa trên thống kê này.
 
 :::
 
-Ngưỡng này vẫn mang tính minh họa: ý nghĩa của nó phụ thuộc vào kích thước mẫu, phân nhóm (binning), làm mịn (smoothing) và xử lý số 0, và việc huấn luyện lại đòi hỏi bằng chứng về chất lượng mô hình.
+Ngưỡng này vẫn mang tính minh họa: ý nghĩa của nó phụ thuộc vào kích thước mẫu, cách phân nhóm (binning), làm mịn (smoothing) và xử lý số 0. Việc huấn luyện lại đòi hỏi bằng chứng về chất lượng mô hình.
 
-[^fn-kl-divergence-relative]: **Độ phân kỳ KL**\index{Kullback-Leibler divergence!appendix refresher}: Được đặt theo tên của Solomon Kullback\index{Kullback, Solomon|seealso{Kullback-Leibler divergence}} và Richard Leibler\index{Leibler, Richard|seealso{Kullback-Leibler divergence}}, những người đã giới thiệu nó vào năm 1951. Còn được gọi là *entropy tương đối*, nó định lượng lượng thông tin phụ trội dự kiến cần thiết để mã hóa các mẫu từ một phân phối bằng cách sử dụng mã được tối ưu hóa cho một phân phối khác; để giám sát sự trôi dạt trong cuốn sách này, hướng chuẩn là $\mathcal{D}_{\text{KL}}(P_t \lVert P_0)$. Với logarit tự nhiên, như trong ví dụ trên, đơn vị là nats; với logarit cơ số 2, đơn vị là bit. Trong ML sản xuất, độ phân kỳ KL là xương sống lý thuyết của nhiều số liệu phát hiện sự trôi dạt.
+[^fn-kl-divergence-relative]: **Độ phân kỳ KL**\index{Kullback-Leibler divergence!appendix refresher}: Được đặt theo tên của Solomon Kullback\index{Kullback, Solomon|seealso{Kullback-Leibler divergence}} và Richard Leibler\index{Leibler, Richard|seealso{Kullback-Leibler divergence}}, những người đã giới thiệu khái niệm này vào năm 1951. Còn gọi là *entropy tương đối*, nó đo lượng thông tin bổ sung dự kiến cần để mã hóa các mẫu từ một phân phối bằng một mã được tối ưu cho một phân phối khác. Trong theo dõi trôi dạt ở cuốn sách này, hướng chuẩn là $\mathcal{D}_{\text{KL}}(P_t \lVert P_0)$. Với logarit tự nhiên, như ví dụ ở trên, đơn vị là nats; với logarit cơ số 2, đơn vị là bit. Trong ML sản xuất, độ phân kỳ KL là nền tảng lý thuyết của nhiều chỉ số phát hiện trôi dạt.
 
-Cả độ phân kỳ KL và PSI đều dựa trên một framework sâu hơn—lý thuyết thông tin\index{Information theory}—cung cấp các đơn vị và giới hạn giúp các số liệu này có nguyên tắc thay vì tùy tiện.
+Cả độ phân kỳ KL và PSI đều dựa trên một framework sâu hơn—lý thuyết thông tin\index{Information theory}—framework này cung cấp các đơn vị và giới hạn, giúp các chỉ số này có cơ sở bài bản thay vì tùy tiện.
 
 ### Lý thuyết thông tin cho các hệ thống {#sec-appdx-data-foundations-information-theory-systems-c033}
 
-Một lần chạy huấn luyện có thể tiêu thụ nhiều ví dụ hơn, chạy lâu hơn, nhưng vẫn ngừng cải thiện nếu dữ liệu bổ sung mang quá ít tín hiệu hữu ích. Tại thời điểm đó, nút thắt không chỉ là tính toán hay băng thông; mà là lượng thông tin mà pipeline dữ liệu cung cấp cho người học. @Sec-appdx-dam-taxonomy-information-roofline-destination-6426 coi giới hạn chất lượng dữ liệu đó là một ràng buộc chẩn đoán, và lý thuyết thông tin cung cấp các đơn vị để lập luận về nó.
+Một lần huấn luyện có thể dùng nhiều ví dụ hơn, chạy lâu hơn, nhưng vẫn ngừng cải thiện nếu dữ liệu bổ sung mang quá ít tín hiệu hữu ích. Lúc đó, nút thắt không chỉ là tính toán hay băng thông; mà là lượng thông tin mà pipeline dữ liệu chuyển tới bộ học. @Sec-appdx-dam-taxonomy-information-roofline-destination-6426 xem giới hạn chất lượng dữ liệu này như một ràng buộc chẩn đoán, và lý thuyết thông tin cung cấp các đơn vị để lập luận về nó.
 
-**Entropy ($H$)**\index{Entropy!definition}[^fn-entropy-information-theory] là độ bất định trung bình trong một phân phối, được định nghĩa là $H(X) = -\sum p(x) \log p(x)$. Cơ số logarit xác định đơn vị: logarit tự nhiên cho nats, trong khi $\log_2$ cho bit. Một phân phối đều chỉ có entropy tối đa trên một miền hỗ trợ hữu hạn cố định. Điều này liên quan trực tiếp đến độ phân kỳ KL ở trên: $\mathcal{D}_{\text{KL}}$ đo chi phí mã hóa dư thừa khi sử dụng sai phân phối.
+**Entropy ($H$)**\index{Entropy!definition}[^fn-entropy-information-theory] là mức độ không chắc chắn trung bình của một phân phối, được định nghĩa $H(X) = -\sum p(x) \log p(x)$. Cơ số logarit quyết định đơn vị: logarit tự nhiên cho nats, còn $\log_2$ cho bit. Một phân phối đều có entropy cực đại, nhưng chỉ trên một miền hỗ trợ hữu hạn cố định. Điều này liên hệ trực tiếp với độ phân kỳ KL ở trên: $\mathcal{D}_{\text{KL}}$ đo chi phí mã hóa phát sinh thêm khi dùng sai phân phối.
 
-**Mật độ thông tin**\index{Information density!definition} được sử dụng ở đây như một heuristic cấp sách cho tín hiệu học tập hữu ích trên mỗi đơn vị lưu trữ, chứ không phải là một đại lượng lý thuyết thông tin tiêu chuẩn.
+**Mật độ thông tin**\index{Information density!definition} được dùng ở đây như một heuristic ở cấp độ cuốn sách để chỉ lượng tín hiệu hữu ích cho việc học trên mỗi đơn vị lưu trữ, chứ không phải một đại lượng chuẩn của lý thuyết thông tin.
 
-**Tỷ lệ tín hiệu trên nhiễu (SNR)**\index{Signal-to-noise ratio!definition} là tỷ lệ giữa công suất tín hiệu và công suất nhiễu. Trong ML, cuốn sách sử dụng SNR thấp một cách định tính cho dữ liệu mà trong đó cấu trúc liên quan đến tác vụ yếu so với nhiễu; việc thêm tính toán không thể bù đắp cho tín hiệu liên quan đến tác vụ bị thiếu.
+**Tỷ lệ tín hiệu trên nhiễu (SNR)**\index{Signal-to-noise ratio!definition} là tỷ số giữa công suất tín hiệu và công suất nhiễu. Trong ML, sách này dùng SNR thấp theo nghĩa định tính để chỉ dữ liệu mà cấu trúc liên quan đến tác vụ yếu so với nhiễu; thêm compute cũng không bù được phần tín hiệu liên quan đến tác vụ bị thiếu.
 
-[^fn-entropy-information-theory]: **Entropy**\index{Entropy!appendix refresher}: Shannon\index{Shannon, Claude!information theory} đã sử dụng thuật ngữ này vào năm 1948 để định lượng nội dung thông tin [@shannon1948]. Về mặt hệ thống, entropy Shannon là một cận dưới cho độ dài mã không mất mát trung bình. Các mã tiền tố thực tế tiếp cận nó, và các mã khối có thể tiếp cận nó tiệm cận. Với $\log_2$, đơn vị là bit; logarit tự nhiên cho nats. Các cận này cung cấp thông tin cho tỷ lệ nén và kích thước pipeline dữ liệu.
+[^fn-entropy-information-theory]: **Entropy**\index{Entropy!appendix refresher}: Shannon\index{Shannon, Claude!information theory} đã đưa ra thuật ngữ này vào năm 1948 để định lượng lượng thông tin [@shannon1948]. Trong ngữ cảnh hệ thống, entropy Shannon là giới hạn dưới của độ dài mã không mất mát trung bình. Các mã tiền tố thực tế có thể tiến sát giới hạn này, và các mã khối có thể đạt tới nó một cách tiệm cận. Với $\log_2$, đơn vị là bit; dùng logarit tự nhiên thì đơn vị là nats. Những giới hạn này giúp xác định tỷ lệ nén và kích thước của pipeline dữ liệu.
 
-### Logit và độ ổn định số học {#sec-appdx-data-foundations-logits-numerical-stability-13e2}
+### Logits và độ ổn định số {#sec-appdx-data-foundations-logits-numerical-stability-13e2}
 
 ```{python}
 #| echo: false
@@ -627,17 +627,17 @@ class LogitOverflowExample:
     logit_val_str = fmt(logit_val, precision=0, commas=False)
 ```
 
-Các bộ phân loại mạng nơ-ron thường xuất ra một vector *logit*\index{Logits!appendix refresher}[^fn-logit-unnormalized-score] $\mathbf{z}$ (điểm chưa chuẩn hóa). Đối với chỉ số lớp $i$, softmax\index{Softmax!appendix refresher} chuẩn hóa $z_i$ trên tất cả các chỉ số lớp $j$ để tạo ra một xác suất:
+Các bộ phân loại dùng mạng nơ-ron thường trả về một vector các *logits*\index{Logits!appendix refresher}[^fn-logit-unnormalized-score] $\mathbf{z}$ (các điểm chưa được chuẩn hóa). Với chỉ số lớp $i$, softmax\index{Softmax!appendix refresher} chuẩn hóa $z_i$ trên tất cả các chỉ số lớp $j$ để tạo ra xác suất:
 
 $$ \text{Softmax}(z_i) = \frac{e^{z_i}}{\sum e^{z_j}} $$
 
-[^fn-logit-unnormalized-score]: **Logit**\index{Logits!logit function}: Joseph Berkson\index{Berkson, Joseph|seealso{Logits}} đã đặt ra thuật ngữ này vào năm 1944 bằng cách tương tự với *probit*. Hàm logit là hàm nghịch đảo của hàm logistic (sigmoid): $\text{logit}(p) = \log(p/(1-p))$. Trong deep learning, "logit" được dùng một cách lỏng lẻo hơn để chỉ đầu ra thô, chưa chuẩn hóa của lớp tuyến tính cuối cùng trước khi bất kỳ hàm activation nào được áp dụng.
+[^fn-logit-unnormalized-score]: **Logit**\index{Logits!logit function}: Joseph Berkson\index{Berkson, Joseph|seealso{Logits}} đã đặt ra thuật ngữ này vào năm 1944, theo phép đặt tên tương tự *probit*. Hàm logit là hàm nghịch đảo của hàm logistic (sigmoid): $\text{logit}(p) = \log(p/(1-p))$. Trong deep learning, "logits" thường được dùng rộng rãi để chỉ đầu ra thô, chưa được chuẩn hóa của lớp tuyến tính cuối cùng, trước khi áp dụng bất kỳ hàm activation nào.
 
-Vấn đề là nếu $z_i$ lớn (ví dụ, `{python} LogitOverflowExample.logit_val_str`), số mũ $e^{z_i}$ sẽ tràn các định dạng huấn luyện và suy luận phổ biến như FP32, BF16 và FP16. FP64 có thể biểu diễn giá trị cụ thể này, nhưng các kernel ML sản xuất hiếm khi sử dụng FP64 cho softmax. Giải pháp là tính toán trong không gian logarit: thủ thuật "Log-Sum-Exp"\index{Log-sum-exp trick!appendix refresher} cho phép chúng ta tính toán $\log\left(\sum e^{z_j}\right)$ mà không cần tính toán trực tiếp các số mũ lớn, giữ được độ chính xác số học.[^fn-logsumexp-numerical-stability]
+Vấn đề là nếu $z_i$ rất lớn (ví dụ, `{python} LogitOverflowExample.logit_val_str`), thì $e^{z_i}$ sẽ tràn trên các định dạng số phổ biến dùng trong huấn luyện và suy luận như FP32, BF16 và FP16. FP64 có thể biểu diễn giá trị cụ thể này, nhưng các kernel ML trong môi trường sản xuất hiếm khi dùng FP64 cho softmax. Giải pháp là tính trong không gian logarit: thủ thuật "Log-Sum-Exp"\index{Log-sum-exp trick!appendix refresher} cho phép tính $\log\left(\sum e^{z_j}\right)$ mà không cần trực tiếp tính các số mũ khổng lồ, giúp giữ được độ chính xác số học.[^fn-logsumexp-numerical-stability]
 
-[^fn-logsumexp-numerical-stability]: **Log-sum-exp**\index{Log-sum-exp trick!appendix refresher}: Được triển khai dưới dạng `torch.logsumexp` trong PyTorch và `scipy.special.logsumexp` trong SciPy. Nó dựa trên đẳng thức $\log\left(\sum e^{x_i}\right) = a + \log\left(\sum e^{x_i - a}\right)$, trong đó $a = \max(x_i)$. Các giá trị đã dịch chuyển $x_i - a$ là $\le 0$, đảm bảo các số mũ không bao giờ bị tràn.
+[^fn-logsumexp-numerical-stability]: **Log-sum-exp**\index{Log-sum-exp trick!appendix refresher}: Được cài đặt dưới dạng `torch.logsumexp` trong PyTorch và `scipy.special.logsumexp` trong SciPy. Thủ thuật này dựa trên đẳng thức $\log\left(\sum e^{x_i}\right) = a + \log\left(\sum e^{x_i - a}\right)$, trong đó $a = \max(x_i)$. Khi đó, các giá trị đã dịch chuyển $x_i - a$ luôn $\le 0$, đảm bảo hàm mũ không bị tràn.
 
-Một ví dụ minh họa nhỏ cho thấy tại sao thủ thuật này lại quan trọng trong thực tế, ngay cả đối với các giá trị logit lớn nhưng thực tế:
+Một ví dụ nhỏ có tính minh họa cho thấy vì sao thủ thuật này quan trọng trong thực tế, ngay cả với các giá trị logit lớn nhưng vẫn hợp lý:
 
 ```{python}
 #| echo: false
@@ -737,27 +737,27 @@ class LogSumExp:
     )
 ```
 
-::: {#nbk-appendix-data-log-sum-exp-action .callout-notebook title="Log-sum-exp trong thực tế"}
+::: {#nbk-appendix-data-log-sum-exp-action .callout-notebook title="Log-sum-exp minh họa"}
 
-**Thiết lập**: Một bộ phân loại ba lớp xuất ra các logit $\mathbf{z} =$ `{python} LogSumExp.z_math`.
+**Thiết lập**: Một bộ phân loại ba lớp cho ra các logit $\mathbf{z} =$ `{python} LogSumExp.z_math`.
 
 **Không dùng thủ thuật (softmax thông thường)**:
 $$\text{
 `{python} LogSumExp.naive_exp0_math`, `{python} LogSumExp.naive_exp1_math`, `{python} LogSumExp.naive_exp2_math`}$$
 
-Các số này có thể biểu diễn trong FP64 nhưng tràn số FP32 (tối đa $\approx 3.4 \times 10^{38}$). Với FP16 (tối đa $\approx 65{,}504$), ngay cả $e^{12}$ cũng tràn số. Các logit thô hiếm khi đạt độ lớn 100, nhưng các giá trị trung gian lớn vẫn phát sinh (ví dụ: điểm chú ý chưa được chia tỷ lệ hoặc đầu ra quá tự tin), và vì FP16 và BF16 là độ chính xác huấn luyện tiêu chuẩn, một softmax thông thường có nguy cơ tràn số đủ thường xuyên để dạng ổn định được sử dụng mặc định.
+Các số này có thể biểu diễn trong FP64 nhưng vượt quá khả năng của FP32 (tối đa $\approx 3.4 \times 10^{38}$). Với FP16 (tối đa $\approx 65{,}504$), ngay cả $e^{12}$ cũng bị tràn. Các logit thô hiếm khi đạt đến độ lớn 100, nhưng các giá trị trung gian lớn vẫn có thể xuất hiện (ví dụ: điểm chú ý chưa được điều chỉnh tỷ lệ hoặc đầu ra quá tự tin). Vì FP16 và BF16 là độ chính xác tiêu chuẩn trong huấn luyện, softmax thông thường có nguy cơ tràn đủ thường xuyên, nên dạng ổn định được dùng mặc định.
 
 **Với thủ thuật**: Trừ đi $a = \max(\mathbf{z}) =$ `{python} LogSumExp.a_str`:
 
 Các logit đã dịch chuyển: $\mathbf{z} - a =$ `{python} LogSumExp.shifted_math`
 
-Các hàm mũ: `{python} LogSumExp.stable_exp0_math`, `{python} LogSumExp.stable_exp1_math`, `{python} LogSumExp.stable_exp2_math`
+Các giá trị sau khi lấy mũ: `{python} LogSumExp.stable_exp0_math`, `{python} LogSumExp.stable_exp1_math`, `{python} LogSumExp.stable_exp2_math`
 
 Tổng = `{python} LogSumExp.sum_str`. LogSumExp = `{python} LogSumExp.a_str` `{python} LogSumExp.log_sum_math`.
 
 Softmax: `{python} LogSumExp.sm_math`
 
-**Hiểu biết về hệ thống**: Các giá trị đã dịch chuyển được lấy lũy thừa và các xác suất softmax thu được nằm trong $[0, 1]$—không có nguy cơ tràn số, ngay cả trong FP16.
+**Góc nhìn hệ thống**: Các giá trị đã dịch chuyển sau khi lấy mũ và các xác suất softmax thu được đều nằm trong khoảng $[0, 1]$—không có nguy cơ tràn, ngay cả với FP16.
 
 :::
 
@@ -765,8 +765,8 @@ Softmax: `{python} LogSumExp.sm_math`
 \enlargethispage{5\baselineskip}
 ```
 
-Cùng với nhau, các ví dụ minh họa này kết nối toàn bộ chuỗi, từ di chuyển dữ liệu vật lý đến dịch chuyển phân phối và độ ổn định số học.
+Tổng hợp lại, các ví dụ minh họa này kết nối trọn chuỗi, từ việc di chuyển dữ liệu ở mức vật lý đến dịch chuyển phân phối và ổn định số.
 
 ## Tóm tắt {#sec-appdx-data-foundations-summary-3c72}
 
-Các công cụ trong phụ lục này—các độ đo nhận biết phần đuôi, độ phân kỳ trôi dạt, các cận lý thuyết thông tin và các kỹ thuật ổn định số học—hỗ trợ chẩn đoán định lượng các lỗi liên quan đến dữ liệu thay vì các giải thích giai thoại.
+Các công cụ trong phụ lục này—độ đo nhận biết phần đuôi, các độ phân kỳ trôi dạt, các cận theo lý thuyết thông tin và các kỹ thuật ổn định số—giúp chẩn đoán định lượng các lỗi liên quan đến dữ liệu, thay vì chỉ dựa vào các giải thích mang tính giai thoại.

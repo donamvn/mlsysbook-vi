@@ -2,24 +2,24 @@
 engine: jupyter
 ---
 
-# Hệ thống phân loại D·A·M {#sec-appdx-dam-taxonomy dropcap="chapter-opening"}
+# Khung phân loại D·A·M {#sec-appdx-dam-taxonomy dropcap="chapter-opening"}
 
-Một hệ thống chạy chậm hiếm khi báo hiệu lý do. Một bộ tăng tốc nhàn rỗi có thể xuất phát từ một pipeline đầu vào bị đói (Dữ liệu), một thuật toán có cường độ số học quá thấp (Thuật toán), hoặc một bus bộ nhớ bị bão hòa (Máy móc). Phụ lục này chính thức hóa hệ thống phân loại chẩn đoán nút đơn của cuốn sách, ánh xạ các triệu chứng và phép đo từ profiler trực tiếp đến trục thực sự ràng buộc quá trình thực thi trước khi bắt đầu tối ưu hóa. Độc giả nên nắm vững ba trục từ các chương mở đầu và định luật sắt định lượng chúng.
+Một hệ thống chạy chậm hiếm khi tự nói vì sao. Một bộ tăng tốc nhàn rỗi có thể bắt nguồn từ pipeline đầu vào thiếu dữ liệu (Data), một thuật toán có cường độ số học quá thấp (Algorithm), hoặc bus bộ nhớ bị bão hòa (Machine). Phụ lục này hệ thống hóa khung phân loại chẩn đoán cho nút đơn của cuốn sách, ánh xạ trực tiếp các triệu chứng và phép đo từ profiler vào trục thật sự đang kìm hãm việc thực thi trước khi bắt đầu tối ưu hóa. Độc giả nên mang theo ba trục từ các chương mở đầu và định luật sắt dùng để định lượng chúng.
 
 ## Cách sử dụng Phụ lục này {.unnumbered}
 
-Sử dụng hệ thống phân loại D·A·M\index{DAM taxonomy@D·A·M taxonomy!appendix refresher} khi một hệ thống không đạt được mục tiêu về hiệu suất, chi phí hoặc chất lượng và nguyên nhân chưa rõ ràng. Thực hiện theo framework qua bốn bước:
+Hãy sử dụng khung phân loại D·A·M\index{DAM taxonomy@D·A·M taxonomy!appendix refresher} khi một hệ thống không đạt được mục tiêu về hiệu suất, chi phí hoặc chất lượng mà nguyên nhân chưa rõ ràng. Hãy áp dụng framework này theo bốn bước sau:
 
-1. **Nêu triệu chứng và ngân sách hoạt động**: Ghi lại mục tiêu đầu cuối không đạt được, khối lượng công việc (workload) và ngữ cảnh triển khai.
-2. **Xác định trục hoặc ranh giới tiềm năng**: Sử dụng @tbl-dam-components-ref cho lần kiểm tra đầu tiên và @tbl-dam-intersections khi bằng chứng vượt qua các trục.
-3. **Kiểm tra giả thuyết**: Ánh xạ bằng chứng vào định luật sắt và cường độ số học, sau đó thu thập các phép đo xác nhận với @tbl-dam-tooling và @tbl-dam-scorecard.
-4. **Can thiệp và đo lường lại**: Chọn một đòn bẩy từ @tbl-bottleneck-actions và lặp lại phép đo đầu cuối. Nếu mục tiêu không cải thiện, hãy điều chỉnh giả thuyết.
+1. **Nêu triệu chứng và ngân sách vận hành**: Ghi lại mục tiêu end-to-end bị lỡ, khối lượng công việc (workload) và ngữ cảnh triển khai.
+2. **Xác định trục hoặc ranh giới tiềm năng**: Sử dụng @tbl-dam-components-ref cho bước phân tích ban đầu và @tbl-dam-intersections khi bằng chứng cắt qua nhiều trục.
+3. **Kiểm tra giả thuyết**: Ánh xạ các bằng chứng vào định luật sắt và cường độ số học, sau đó thu thập các phép đo xác nhận với @tbl-dam-tooling và @tbl-dam-scorecard.
+4. **Can thiệp và đo lường lại**: Chọn một giải pháp từ @tbl-bottleneck-actions và lặp lại phép đo tổng thể. Nếu mục tiêu không cải thiện, hãy điều chỉnh giả thuyết.
 
-Triệu chứng xác định điểm khởi đầu hữu ích nhất. Mức sử dụng bộ tăng tốc thấp hoặc phân phối batch chậm nên bắt đầu với @sec-appdx-dam-taxonomy-rules-thumb-f94f và @sec-appdx-dam-taxonomy-production-troubleshooting-02fb. Một mục tiêu mức dịch vụ (SLO) không đạt được nên chuyển từ thời gian pha và độ sâu hàng đợi trong @tbl-dam-troubleshooting sang thuật ngữ định luật sắt tương ứng. Một mức chất lượng ổn định nên được kiểm tra dựa trên ranh giới Dữ liệu/Thuật toán và @sec-appdx-dam-taxonomy-scaling-laws-vs-roofline-b290 trước khi phân bổ thêm tài nguyên tính toán. Trong mọi trường hợp, nhãn trục là một giả thuyết, không phải là một phán quyết: các trục chồng chéo, và một chẩn đoán hữu ích có thể nêu tên cả trục chi phối và hiệu ứng ranh giới.
+Triệu chứng sẽ xác định điểm khởi đầu hữu ích nhất. Mức sử dụng bộ tăng tốc thấp hoặc giao batch chậm nên bắt đầu với @sec-appdx-dam-taxonomy-rules-thumb-f94f và @sec-appdx-dam-taxonomy-production-troubleshooting-02fb. Một mục tiêu mức dịch vụ (SLO) bị lỡ nên chuyển từ thời gian các pha và độ sâu hàng đợi trong @tbl-dam-troubleshooting sang hạng mục tương ứng trong định luật sắt. Khi chất lượng chững lại, hãy kiểm tra ranh giới Data/Algorithm và @sec-appdx-dam-taxonomy-scaling-laws-vs-roofline-b290 trước khi cấp thêm tài nguyên tính toán. Trong mọi trường hợp, nhãn trục là một giả thuyết, không phải kết luận: các trục chồng lấn, và một chẩn đoán hữu ích có thể nêu cả trục chi phối lẫn hiệu ứng ở ranh giới.
 
 ## Tóm tắt chẩn đoán {#sec-appdx-dam-taxonomy-diagnostic-summary-9f73}
 
-Hệ thống phân loại này ánh xạ trực tiếp đến định luật sắt của các hệ thống ML được thiết lập trong @sec-introduction-iron-law-ml-systems-c32a. @Tbl-dam-components-ref tóm tắt vai trò, ràng buộc vật lý chính và lộ trình tối ưu hóa cốt lõi cho mỗi trục.
+Khung phân loại này ánh xạ trực tiếp đến định luật sắt của các hệ thống ML đã được thiết lập trong @sec-introduction-iron-law-ml-systems-c32a. @Tbl-dam-components-ref tóm tắt vai trò, ràng buộc vật lý chính và lộ trình tối ưu hóa cốt lõi cho mỗi trục.
 
 ```{=latex}
 \begingroup
@@ -32,19 +32,19 @@ Hệ thống phân loại này ánh xạ trực tiếp đến định luật s�
 | **Algorithm (A)** | Logic (The Blueprint)  |  Operations and dependencies  | Model Compression (@sec-model-compression)         |
 | **Machine (M)**   |  Physics (The Engine)  |      Compute, memory, I/O     | Hardware Acceleration (@sec-hardware-acceleration) |
 
-: **Tham chiếu Trục D·A·M**: Mỗi trục ánh xạ đến một lớp ràng buộc và chiến lược tối ưu hóa. Hình thành một giả thuyết, xác nhận nó bằng các phép đo, sau đó theo dõi con trỏ chương. {#tbl-dam-components-ref tbl-colwidths="[13,23,30,34]"}
+: **Tham khảo Trục D·A·M**: Mỗi trục tương ứng với một loại ràng buộc và một chiến lược tối ưu hóa. Bạn hãy đưa ra giả thuyết, kiểm chứng bằng các phép đo, rồi xem chương tương ứng. {#tbl-dam-components-ref tbl-colwidths="[13,23,30,34]"}
 
 ```{=latex}
 \endgroup
 ```
 
-Sự phân tách ban đầu này hữu ích, nhưng các hệ thống sản xuất hiếm khi gặp phải một nút thắt cổ chai chỉ tập trung vào một trục. Thường thì, vấn đề nằm ở *ranh giới* giữa hai trục—một lựa chọn định dạng dữ liệu quyết định liệu GPU có thể bị bão hòa hay không, hoặc một chiến lược tỉa (pruning) làm thay đổi mẫu truy cập bộ nhớ. Xử lý các trường hợp này đòi hỏi phải ánh xạ các giao điểm.
+Việc phân tách ban đầu này rất hữu ích, nhưng các hệ thống sản xuất hiếm khi gặp nút thắt cổ chai chỉ do một trục gây ra. Thường thì, vấn đề nằm ở *ranh giới* giữa hai trục—chẳng hạn như lựa chọn định dạng dữ liệu quyết định liệu GPU có thể được sử dụng hết công suất hay không, hoặc một chiến lược tỉa (pruning) làm thay đổi cách truy cập bộ nhớ. Để xử lý các trường hợp này, chúng ta cần ánh xạ các giao điểm.
 
-## Bức tranh giao điểm {#sec-appdx-dam-taxonomy-intersection-landscape-0d6e}
+## Toàn cảnh các giao điểm {#sec-appdx-dam-taxonomy-intersection-landscape-0d6e}
 
-Chương mở đầu sử dụng @fig-ai-triad để thiết lập bức tranh khái niệm. Ở đây, @fig-dam-axis-triad biến bản đồ đó thành một chuỗi chẩn đoán. Đầu tiên, xác định trục ràng buộc, sau đó hỏi một sự can thiệp sẽ thay đổi hai trục còn lại như thế nào.
+Chương mở đầu sử dụng @fig-ai-triad để phác thảo bức tranh khái niệm. Ở đây, @fig-dam-axis-triad biến bản đồ đó thành một quy trình chẩn đoán. Đầu tiên, hãy xác định trục gây ràng buộc, sau đó xem xét một sự can thiệp vào trục đó sẽ làm thay đổi hai trục còn lại như thế nào.
 
-::: {#fig-dam-axis-triad fig-env="figure" fig-pos="htb" fig-cap="**Bộ ba Trục D·A·M**: Một cái nhìn chẩn đoán nhỏ gọn về Dữ liệu, Thuật toán và Máy móc dưới dạng ba trục phụ thuộc lẫn nhau. Các liên kết hai chiều nhấn mạnh rằng một sự can thiệp vào một trục sẽ thay đổi các ràng buộc trên hai trục còn lại." fig-alt="Hình tam giác với các vòng tròn tại các đỉnh được dán nhãn Thuật toán ở trên cùng, Dữ liệu ở phía dưới bên trái và Máy móc ở phía dưới bên phải. Các mũi tên màu tím hai đầu nối cả ba, thể hiện sự phụ thuộc hai chiều. Các biểu tượng mô tả một mạng nơ-ron, các hình trụ cơ sở dữ liệu và một máy chủ đám mây."}
+::: {#fig-dam-axis-triad fig-env="figure" fig-pos="htb" fig-cap="**Bộ ba Trục D·A·M**: Một góc nhìn chẩn đoán súc tích về Dữ liệu, Thuật toán và Máy móc dưới dạng ba trục phụ thuộc lẫn nhau. Các liên kết hai chiều nhấn mạnh rằng một sự can thiệp vào một trục sẽ thay đổi các ràng buộc trên hai trục còn lại." fig-alt="Hình tam giác với các vòng tròn tại các đỉnh được dán nhãn Thuật toán ở trên cùng, Dữ liệu ở phía dưới bên trái và Máy móc ở phía dưới bên phải. Các mũi tên màu tím hai đầu nối cả ba, thể hiện sự phụ thuộc hai chiều. Các biểu tượng mô tả một mạng nơ-ron, các hình trụ cơ sở dữ liệu và một máy chủ đám mây."}
 
 ```{.tikz}
 \scalebox{0.85}{
@@ -179,7 +179,7 @@ scale=0.55, every node/.append style={transform shape}]
 
 :::
 
-Sau khi trục ban đầu được xác định, @tbl-dam-intersections mở rộng các giao điểm từng cặp và ba chiều thành các kỹ thuật kỹ thuật cụ thể và các chương sách chính của chúng.
+Sau khi đã xác định được trục chính ban đầu, @tbl-dam-intersections mở rộng các giao điểm từng cặp và giao điểm ba chiều thành các kỹ thuật cụ thể cùng các chương sách liên quan.
 
 ```{=latex}
 \begingroup
@@ -204,35 +204,35 @@ Sau khi trục ban đầu được xác định, @tbl-dam-intersections mở r�
 
 Trong từ viết tắt D·A·M, Dữ liệu, Thuật toán và Máy móc là các trục phân loại. Chúng không phải là các biến toán học; các đại lượng hình thức vẫn tuân theo chương ký hiệu, trong đó $D$ biểu thị kích thước tập dữ liệu hoặc các token huấn luyện.
 
-Các vùng tập trung vào trục chứa các khái niệm chủ yếu thuộc về một trục: các định dạng lưu trữ và phân phối nhấn mạnh Dữ liệu, các hàm mất mát và gradient nhấn mạnh Thuật toán, và vật lý silicon và FLOP/s đỉnh nhấn mạnh Máy móc. Chuyên môn đơn miền có thể giới thiệu chúng, nhưng hành vi được triển khai vẫn có thể phụ thuộc vào các trục khác.
+Các vùng tập trung vào trục chứa các khái niệm chủ yếu thuộc về một trục: ví dụ, định dạng lưu trữ và phân phối nhấn mạnh Dữ liệu; các hàm mất mát và gradient nhấn mạnh Thuật toán; còn vật lý silicon và FLOP/s đỉnh nhấn mạnh Máy móc. Chuyên môn một miền có thể giới thiệu chúng, nhưng hành vi khi triển khai vẫn có thể phụ thuộc vào các trục khác.
 
-Các giao điểm từng cặp\index{DAM taxonomy@D·A·M taxonomy!axis intersections} là nơi tư duy hệ thống bắt đầu. $\mathsf{Dữ liệu} \cap \mathsf{Thuật toán}$ (*Học từ gì*) bao gồm lựa chọn dữ liệu, học theo chương trình, học tích cực và các định luật mở rộng quy mô như Chinchilla ($D \approx 20P$ cho chế độ mô hình ngôn ngữ tự hồi quy dày đặc được nghiên cứu) [@hoffmann2022chinchilla]---tất cả đều đòi hỏi suy luận chung về nội dung thông tin và năng lực thuật toán. Thêm dữ liệu mà không xem xét liệu mô hình có thể học từ nó hay không sẽ lãng phí tài nguyên tính toán; việc chọn kiến trúc mà không xem xét tính khả dụng của dữ liệu sẽ lãng phí thời gian kỹ thuật. $\mathsf{Dữ liệu} \cap \mathsf{Máy móc}$ (*Cách di chuyển thông tin*) bao gồm băng thông I/O, các chiến lược tìm nạp trước, định dạng dữ liệu và bất biến di chuyển năng lượng. Giao điểm này là nơi trọng lực dữ liệu biểu hiện: chi phí vật lý của việc di chuyển byte qua hệ thống phân cấp bộ nhớ xác định liệu máy có thể được cấp dữ liệu đủ nhanh hay không. $\mathsf{Thuật toán} \cap \mathsf{Máy móc}$ (*Cách thực thi hiệu quả*) bao gồm lượng tử hoá, tỉa (pruning), hợp nhất kernel, độ chính xác hỗn hợp và tối ưu hóa đồ thị tính toán. Một chiến lược tỉa (pruning) làm giảm FLOPs nhưng phá vỡ các mẫu truy cập bộ nhớ có thể *làm chậm* quá trình thực thi trên phần cứng thực tế.
+Các giao điểm đôi một\index{DAM taxonomy@D·A·M taxonomy!axis intersections} là nơi tư duy hệ thống bắt đầu. $\mathsf{Data} \cap \mathsf{Algorithm}$ (*Học từ gì*) bao gồm việc chọn dữ liệu, học theo chương trình (curriculum learning), học tích cực (active learning) và các quy luật mở rộng quy mô như Chinchilla ($D \approx 20P$ cho chế độ mô hình ngôn ngữ tự hồi quy dày đặc được nghiên cứu) [@hoffmann2022chinchilla]. Tất cả những điều này đều đòi hỏi suy luận đồng thời về nội dung thông tin và năng lực thuật toán. Thêm dữ liệu mà không xét xem mô hình có học được từ đó hay không sẽ lãng phí tài nguyên tính toán; chọn kiến trúc mà không tính đến dữ liệu sẵn có sẽ lãng phí thời gian kỹ thuật. $\mathsf{Data} \cap \mathsf{Machine}$ (*Cách di chuyển thông tin*) bao quát băng thông I/O, các chiến lược tìm nạp trước (prefetching), định dạng dữ liệu và bất biến di chuyển năng lượng. Ở giao điểm này, “trọng lực dữ liệu” bộc lộ rõ: chi phí vật lý để di chuyển các byte qua hệ thống phân cấp bộ nhớ quyết định liệu máy có được cấp dữ liệu đủ nhanh hay không. $\mathsf{Algorithm} \cap \mathsf{Machine}$ (*Cách thực thi hiệu quả*) trải từ lượng tử hoá, tỉa (pruning), hợp nhất kernel, độ chính xác hỗn hợp đến tối ưu hóa đồ thị tính toán. Một chiến lược tỉa (pruning) làm giảm FLOPs nhưng phá vỡ mẫu truy cập bộ nhớ có thể *làm chậm* việc thực thi trên phần cứng thực.
 
-Trung tâm---$\mathsf{Data} \cap \mathsf{Algorithm} \cap \mathsf{Machine}$---là nơi cả ba trục hội tụ. Định luật sắt, Mô hình Roofline, các vòng lặp huấn luyện end-to-end, các pipeline phục vụ (serving), và benchmark toàn diện đều đòi hỏi suy luận đồng thời về luồng dữ liệu, độ phức tạp thuật toán, và việc sử dụng phần cứng. Trung tâm này không phải là một kỹ thuật đơn lẻ; nó chính là một lĩnh vực.
+Trung tâm---$\mathsf{Data} \cap \mathsf{Algorithm} \cap \mathsf{Machine}$---là điểm hội tụ của cả ba trục. Định luật sắt, Mô hình Roofline, các vòng lặp huấn luyện end-to-end, các pipeline phục vụ (serving) và benchmark toàn diện đều đòi hỏi suy luận đồng thời về luồng dữ liệu, độ phức tạp thuật toán và mức độ sử dụng phần cứng. Trung tâm này không phải là một kỹ thuật đơn lẻ; nó chính là bản thân lĩnh vực này.
 
-Hiểu rõ bối cảnh cho thấy *nơi* một kỹ thuật tồn tại. Bước tiếp theo là định lượng *trục nào chiếm ưu thế* đối với một khối lượng công việc (workload) nhất định---và điều đó đòi hỏi định luật sắt.
+Hiểu bức tranh tổng thể cho thấy *một kỹ thuật nằm ở đâu*. Bước tiếp theo là định lượng xem *trục nào chiếm ưu thế* với một khối lượng công việc (workload) cụ thể---và điều đó đòi hỏi định luật sắt.
 
 ## Ánh xạ Định luật Sắt {#sec-appdx-dam-taxonomy-iron-law-mapping-05db}
 
-Đối với các pha tuần tự, định luật sắt\index{Iron law of ML systems!appendix refresher} ánh xạ công việc trên các trục D·A·M tới thời gian thực thi. Ở đây, $T$ và $L_{\text{lat}}$ là thời gian tính bằng giây; $D_{\text{vol}}$ là số byte được di chuyển và $\text{BW}$ là số byte mỗi giây; $O$ là công việc tính bằng FLOPs, $R_{\text{peak}}$ là FLOP/s, và $\eta_{\text{hw}}$ là hiệu suất phần cứng không thứ nguyên. Các đại lượng này ánh xạ tới các trục như sau:
+Với các pha tuần tự, định luật sắt\index{Iron law of ML systems!appendix refresher} ánh xạ khối lượng công việc trên các trục D·A·M sang thời gian thực thi. Ở đây, $T$ và $L_{\text{lat}}$ là thời gian (tính bằng giây); $D_{\text{vol}}$ là số byte đã di chuyển và $\text{BW}$ là băng thông (số byte mỗi giây); $O$ là khối lượng công việc tính bằng FLOPs, $R_{\text{peak}}$ là FLOP/s, và $\eta_{\text{hw}}$ là hiệu suất phần cứng không thứ nguyên. Các đại lượng này được ánh xạ tới các trục như sau:
 $$ T = \underbrace{ \frac{D_{\text{vol}}}{\text{BW}} }_{\text{Data/Machine}} + \underbrace{ \frac{O}{R_{\text{peak}} \cdot \eta_{\text{hw}}} }_{\text{Algorithm/Machine}} + \underbrace{ L_{\text{lat}} }_{\text{Cross-axis overhead}} $$
 
-Thuật toán và Máy chia sẻ thuật ngữ tính toán, được phân tách bởi biến mà kỹ sư kiểm soát. Giảm tổng số phép toán ($O$) là một đòn bẩy Thuật toán, trong khi cải thiện thông lượng đỉnh của phần cứng ($R_{\text{peak}}$) hoặc mức sử dụng ($\eta_{\text{hw}}$) là một đòn bẩy Máy.
+Thuật toán và Máy đều liên quan đến khía cạnh tính toán, nhưng khác nhau ở biến số mà kỹ sư có thể kiểm soát. Giảm tổng số phép toán ($O$) là đòn bẩy thuộc về Thuật toán, còn cải thiện thông lượng đỉnh của phần cứng ($R_{\text{peak}}$) hoặc hệ số sử dụng ($\eta_{\text{hw}}$) là đòn bẩy thuộc về Máy.
 
-Phương trình này biến việc gỡ lỗi hiệu suất từ một trò đoán mò định tính thành một vấn đề kỹ thuật định lượng. Chi phí đo được chiếm ưu thế xuất hiện trong một trong các thuật ngữ này. Một hệ thống chậm có thể di chuyển quá nhiều dữ liệu ($D_{\text{vol}}$), thiếu băng thông ($\text{BW}$), thực hiện quá nhiều phép toán ($O$), không sử dụng được khả năng đỉnh của phần cứng ($\eta_{\text{hw}}$), hoặc phải chịu chi phí chung giữa các trục ($L_{\text{lat}}$). Các đòn bẩy dưới đây ánh xạ các tối ưu hóa cụ thể tới các biến mà chúng cải thiện.
+Phương trình này biến việc gỡ lỗi hiệu suất từ một trò đoán mò định tính thành một bài toán kỹ thuật định lượng. Khoản chi phí lớn nhất đo được sẽ xuất hiện trong một trong các hạng mục này. Một hệ thống chậm có thể do di chuyển quá nhiều dữ liệu ($D_{\text{vol}}$), thiếu băng thông ($\text{BW}$), thực hiện quá nhiều phép toán ($O$), không tận dụng được khả năng đỉnh của phần cứng ($\eta_{\text{hw}}$), hoặc chịu chi phí chéo trục ($L_{\text{lat}}$). Các đòn bẩy dưới đây liên hệ những tối ưu hoá cụ thể với các biến số mà chúng cải thiện.
 
 ### Các đòn bẩy thành phần {#sec-appdx-dam-taxonomy-component-levers-d441}
 
-*   Đòn bẩy Dữ liệu: Giảm số byte được di chuyển ($D_{\text{vol}}$) thông qua loại bỏ trùng lặp, chọn lọc, hoặc biểu diễn độ chính xác thấp hơn, hoặc tăng băng thông I/O ($\text{BW}$).
-*   Đòn bẩy Thuật toán: Giảm số phép toán ($O$) thông qua tỉa (pruning) hoặc tinh chỉnh kiến trúc. Lượng tử hoá thu hẹp biểu diễn và có thể tăng thông lượng phần cứng; nó thường không làm giảm số lượng phép toán.
-*   Đòn bẩy Máy: Tăng mẫu số của thuật ngữ tính toán bằng cách cải thiện thông lượng đỉnh ($R_{\text{peak}}$) hoặc tăng hệ số sử dụng ($\eta_{\text{hw}}$) thông qua hợp nhất kernel.
+*   Đòn bẩy Dữ liệu: Giảm số byte được di chuyển ($D_{\text{vol}}$) thông qua loại bỏ trùng lặp, lựa chọn, hoặc dùng biểu diễn độ chính xác thấp hơn, hoặc tăng băng thông I/O ($\text{BW}$).
+*   Đòn bẩy Thuật toán: Giảm số phép toán ($O$) thông qua tỉa (pruning) hoặc tinh chỉnh kiến trúc. Lượng tử hoá thu hẹp biểu diễn và có thể tăng thông lượng phần cứng; nói chung nó không làm giảm số lượng phép toán.
+*   Đòn bẩy Máy: Tăng mẫu số của thành phần tính toán bằng cách cải thiện thông lượng đỉnh ($R_{\text{peak}}$) hoặc tăng hệ số sử dụng ($\eta_{\text{hw}}$) thông qua hợp nhất kernel.
 
 ### Phối hợp D·A·M: Từ tổng đến tối đa {#sec-appdx-dam-taxonomy-dam-coordination-sum-max-92bb}
 
-Định luật sắt cộng tính biểu thị việc thực thi tuần tự\index{Iron law of ML systems!sequential execution}. Gọi $T_{\text{sequential}}$ là thời gian không có chồng chéo và $T_{\text{pipelined}}$ là thời gian đo được có chồng chéo. Chồng chéo có thể dịch chuyển tổng về phía giá trị tối đa, nhưng các phụ thuộc, tranh chấp và chồng chéo không hoàn chỉnh giữ thời gian đo được cao hơn giới hạn dưới lý tưởng này:
+Định luật sắt cộng tính biểu diễn thực thi tuần tự\index{Iron law of ML systems!sequential execution}. Gọi $T_{\text{sequential}}$ là thời gian không có chồng chéo và $T_{\text{pipelined}}$ là thời gian đo được có chồng chéo. Sự chồng chéo có thể đưa tổng thời gian tiến gần đến giá trị lớn nhất, nhưng các phụ thuộc, tranh chấp và chồng chéo không hoàn chỉnh khiến thời gian đo được vẫn cao hơn giới hạn dưới lý tưởng này:
 $$ T_{\text{sequential}} = \frac{D_{\text{vol}}}{\text{BW}} + \frac{O}{R_{\text{peak}} \cdot \eta_{\text{hw}}} + L_{\text{lat}} \quad \xrightarrow{\text{overlap}} \quad T_{\text{pipelined}} \geq \max\left(\frac{D_{\text{vol}}}{\text{BW}}, \frac{O}{R_{\text{peak}} \cdot \eta_{\text{hw}}}\right) + L_{\text{lat}} $$
 
-Công việc của kỹ sư hệ thống là làm cho các thành phần này chạy song song, chứ không phải nối tiếp. @Tbl-dam-overlap tóm tắt các kỹ thuật phối hợp D·A·M chính giúp chồng chéo công việc trên các trục:
+Nhiệm vụ của kỹ sư hệ thống là làm cho các thành phần này chạy song song, không phải nối tiếp. @Tbl-dam-overlap tóm tắt các kỹ thuật phối hợp D·A·M chính giúp chồng chéo công việc trên các trục:
 
 | **Technique**           | **D·A·M Axes Overlapped**    | **Implementation**                                             |
 |:------------------------|:-----------------------------|:---------------------------------------------------------------|
@@ -241,41 +241,41 @@ Công việc của kỹ sư hệ thống là làm cho các thành phần này ch
 | **Async Gradient Sync** | M (communication) overlaps A | Overlap bucketed AllReduce with remaining backward computation |
 | **Double Buffering**    | D overlaps M                 | Fill buffer N+1 while computing on buffer N                    |
 
-: **Các Kỹ thuật Chồng chéo D·A·M**: Mỗi kỹ thuật chồng chéo công việc trên các trục, dịch chuyển thời gian Dữ liệu/Máy và Thuật toán/Máy được cộng tuần tự về phía giới hạn dưới lý tưởng của chúng: giá trị lớn hơn trong hai thuật ngữ. Các phụ thuộc và tranh chấp giới hạn sự chồng chéo thực tế. {#tbl-dam-overlap tbl-colwidths="[19,27,54]"}
+: **Các Kỹ thuật Chồng chéo D·A·M**: Mỗi kỹ thuật giúp chồng chéo công việc trên các trục, đưa thời gian Dữ liệu/Máy và Thuật toán/Máy (vốn được cộng tuần tự) tiến gần hơn đến giới hạn dưới lý tưởng của chúng: tức là giá trị lớn hơn trong hai hạng mục. Các phụ thuộc và tranh chấp sẽ giới hạn mức độ chồng chéo thực tế đạt được. {#tbl-dam-overlap tbl-colwidths="[19,27,54]"}
 
-Các chồng chéo mang lại tốc độ tăng tương đối lớn nhất khi các thuật ngữ thời gian D·A·M được cân bằng hợp lý. Nếu một thuật ngữ chiếm ưu thế (ví dụ, bị giới hạn nghiêm trọng bởi bộ nhớ), việc chồng chéo thuật ngữ nhỏ hơn với thuật ngữ lớn hơn sẽ mang lại lợi ích không đáng kể—giá trị tối đa vẫn bị chi phối bởi cùng một nút thắt cổ chai. Sự cân bằng này xảy ra gần $D_{\text{vol}}/\text{BW} \approx O/(R_{\text{peak}} \cdot \eta_{\text{hw}})$. Thuật ngữ độ trễ đòi hỏi xử lý riêng.
+Việc chồng chéo mang lại tăng tốc lớn nhất khi các thành phần thời gian D·A·M tương đối cân bằng. Nếu một thành phần lấn át (ví dụ bị giới hạn nặng bởi bộ nhớ), chồng chéo phần nhỏ hơn với phần lớn hơn hầu như không giúp gì—giới hạn tối đa vẫn bị chi phối bởi đúng nút thắt cổ chai đó. Sự cân bằng này xuất hiện khi $D_{\text{vol}}/\text{BW} \approx O/(R_{\text{peak}} \cdot \eta_{\text{hw}})$. Thành phần độ trễ cần được xử lý riêng.
 
-::: {#psp-appendix-dam-overhead-cannot-hide .callout-perspective title="Chi phí chung không thể che giấu"}
+::: {#psp-appendix-dam-overhead-cannot-hide .callout-perspective title="Overhead không thể ẩn"}
 
-Thuật ngữ độ trễ không thể che giấu $L_{\text{lat}}$ (khởi chạy kernel, rào cản đồng bộ hóa, điều phối Python) chứa các điểm tuần tự hóa không thể chồng chéo hoàn toàn. Hợp nhất kernel có thể giảm thuật ngữ này bằng cách kết hợp các phép toán, nhưng nó không loại bỏ tất cả chi phí chung khởi chạy, lập lịch hoặc đồng bộ hóa.
+Thành phần độ trễ không thể ẩn $L_{\text{lat}}$ (khởi chạy kernel, rào cản đồng bộ, điều phối Python) chứa các điểm tuần tự hóa không thể chồng chéo hoàn toàn. Hợp nhất kernel có thể giảm thành phần này bằng cách gộp các phép toán, nhưng không thể loại bỏ hết overhead khởi chạy, lập lịch hay đồng bộ.
 
 :::
 
-Định luật sắt cho kỹ sư biết *mỗi thuật ngữ tiêu tốn bao nhiêu* thời gian. Một câu hỏi quan trọng vẫn còn: liệu việc di chuyển dữ liệu hay thông lượng số học đặt ra giới hạn trên hoạt động? Câu trả lời nằm ở một tỷ lệ duy nhất.
+Định luật sắt cho kỹ sư biết *mỗi thành phần mất bao nhiêu* thời gian. Còn một câu hỏi then chốt: trần hiệu năng do di chuyển dữ liệu hay do thông lượng tính toán quyết định? Câu trả lời nằm ở một tỉ lệ duy nhất.
 
-## Ranh giới Cường độ Số học {#sec-appdx-dam-taxonomy-arithmetic-intensity-boundary-7f5e}
+## Ranh giới cường độ số học {#sec-appdx-dam-taxonomy-arithmetic-intensity-boundary-7f5e}
 
-Ranh giới giữa thuật ngữ bộ nhớ *Dữ liệu/Máy* và thuật ngữ tính toán *Thuật toán/Máy* không phải là tùy ý; nó được định nghĩa toán học bởi cường độ số học[^fn-arithmetic-intensity-ratio] ($I$) của khối lượng công việc (workload).
+Ranh giới giữa thành phần bộ nhớ *Dữ liệu/Máy* và thành phần tính toán *Thuật toán/Máy* không phải tùy tiện; nó được xác định một cách toán học bởi cường độ số học[^fn-arithmetic-intensity-ratio] ($I$) của khối lượng công việc (workload).
 
-[^fn-arithmetic-intensity-ratio]: **Cường độ số học**\index{Arithmetic intensity!appendix refresher}: Cuốn sách này sử dụng thuật ngữ này cho số phép toán dấu phẩy động trên mỗi byte được truyền. @williams2009 gọi đại lượng DRAM đo được là *cường độ hoạt động* trong Mô hình Roofline. So sánh tỷ lệ khối lượng công việc (workload) với điểm đỉnh phần cứng ($R_{\text{peak}}/\text{BW}$) đưa ra chẩn đoán giới hạn trên về việc thực thi bị giới hạn bởi bộ nhớ hay tính toán.
+[^fn-arithmetic-intensity-ratio]: **Cường độ số học**\index{Arithmetic intensity!appendix refresher}: Trong cuốn sách này, thuật ngữ này được dùng để chỉ số phép toán dấu phẩy động trên mỗi byte dữ liệu truyền đi. @williams2009 gọi đại lượng DRAM đo được là *cường độ hoạt động* trong Mô hình Roofline. So sánh tỉ lệ của khối lượng công việc với điểm đỉnh phần cứng ($R_{\text{peak}}/\text{BW}$) cho phép chẩn đoán ở mức giới hạn trên việc thực thi đang bị giới hạn bởi bộ nhớ hay bởi tính toán.
 
-Mô hình Roofline cung cấp một giới hạn hiệu suất trên khi lưu lượng và tốc độ đạt được được đo lường một cách nhất quán. Giữa một sự cố sản xuất, các heuristic sàng lọc nhanh hơn có thể chỉ ra các phép đo cần thu thập tiếp theo.
+Mô hình Roofline cung cấp một giới hạn hiệu suất tối đa khi lưu lượng và tốc độ đạt được được đo nhất quán. Trong lúc xử lý sự cố sản xuất, các heuristic sàng lọc nhanh có thể chỉ ra những phép đo cần thu thập tiếp theo.
 
-## Nguyên tắc chung {#sec-appdx-dam-taxonomy-rules-thumb-f94f}
+## Nguyên tắc kinh nghiệm {#sec-appdx-dam-taxonomy-rules-thumb-f94f}
 
-Trong lúc nóng bỏng của một sự cố sản xuất, hiếm khi có thời gian để giải phương trình định luật sắt đầy đủ. Thay vào đó, các kỹ sư hệ thống kỳ cựu dựa vào các heuristic định lượng để nhanh chóng thu hẹp không gian tìm kiếm; các ngưỡng dưới đây là các tín hiệu sàng lọc cần được kiểm tra đối với các dấu vết profiler và bộ đếm phần cứng.
+Giữa một sự cố sản xuất, hiếm khi có thời gian để giải trọn vẹn phương trình định luật sắt. Các kỹ sư hệ thống dày dạn thường dựa vào các heuristic định lượng để nhanh chóng thu hẹp không gian tìm kiếm; các ngưỡng dưới đây là tín hiệu sàng lọc cần được đối chiếu với dấu vết từ profiler và bộ đếm phần cứng.
 
-*   Mức sử dụng bộ tăng tốc thấp ($<$ 80 phần trăm): Sàng lọc tình trạng thiếu dữ liệu, CPU hoặc khởi chạy. Xác nhận bằng cách chờ pipeline đầu vào, bão hòa CPU máy chủ, bộ đếm băng thông bộ nhớ và các khoảng trống dấu vết.
-*   Mức sử dụng bộ tăng tốc cao ($>$ 95 phần trăm): Coi đây là giới hạn máy chỉ khi các đơn vị tính toán bận rộn và băng thông bộ nhớ không bị bão hòa. Nếu băng thông bộ nhớ bị bão hòa, nút thắt cổ chai vẫn nằm ở ranh giới Dữ liệu/Máy.
-*   Nếu kích thước batch là một: Coi đây là một cảnh báo rằng độ trễ hoặc chi phí chung khởi chạy có thể quan trọng; xác nhận bằng các dấu vết trước khi gán nhãn thuật toán là nút thắt cổ chai.
-*   Cường độ số học thấp (dưới điểm đỉnh của phần cứng): Khối lượng công việc (workload) có khả năng bị giới hạn bởi bộ nhớ (ranh giới Dữ liệu/Máy). Ranh giới chính xác là $R_{\text{peak}}/\text{BW}$ và phụ thuộc vào phần cứng và độ chính xác.
-*   Nếu hệ thống hoạt động trong môi trường dev nhưng thất bại trong môi trường prod: Hãy coi trôi dữ liệu (data drift) là một giả thuyết bên cạnh các khác biệt về cấu hình, tải, phụ thuộc và runtime.
+*   Mức sử dụng bộ tăng tốc thấp (< 80%): Rà soát nguy cơ thiếu dữ liệu, thiếu CPU hoặc thiếu nguồn cho khởi chạy. Xác nhận bằng các chỉ số: thời gian chờ của pipeline đầu vào, mức bão hòa CPU máy chủ, bộ đếm băng thông bộ nhớ, và các khoảng trống trong trace.
+*   Mức sử dụng bộ tăng tốc cao (> 95%): Chỉ coi đây là bị giới hạn bởi Máy (machine bound) khi các đơn vị tính toán luôn bận và băng thông bộ nhớ chưa bão hòa. Nếu băng thông bộ nhớ đã bão hòa, nút thắt vẫn ở ranh giới Dữ liệu/Máy.
+*   Nếu kích thước batch là 1: Xem đây là cảnh báo rằng độ trễ hoặc chi phí khởi chạy có thể quan trọng; hãy xác nhận bằng trace trước khi gán nhãn bản thân thuật toán là nút thắt cổ chai.
+*   Cường độ tính toán thấp (dưới ngưỡng ridge của phần cứng): Khối lượng công việc (workload) nhiều khả năng bị giới hạn bởi bộ nhớ (ranh giới Dữ liệu/Máy). Ranh giới chính xác là $R_{\text{peak}}/\text{BW}$ và phụ thuộc vào phần cứng và độ chính xác.
+*   Nếu hệ thống chạy ổn ở dev nhưng hỏng ở prod: Xem trôi dữ liệu (data drift) là một giả thuyết, bên cạnh khác biệt về cấu hình, tải, phụ thuộc và runtime.
 
-Các nhãn ngành phổ biến giao nhau trên các trục. Thực thi bị giới hạn bởi bộ nhớ nằm trên ranh giới Dữ liệu/Máy vì cả số byte di chuyển và băng thông khả dụng đều quan trọng. Thực thi bị giới hạn bởi tính toán kết hợp công việc Thuật toán với thông lượng của Máy. Thực thi bị giới hạn bởi độ trễ có thể phản ánh độ sâu tuần tự của thuật toán, điều phối runtime, đồng bộ hóa hoặc xếp hàng.
+Các nhãn phổ biến trong ngành có thể cắt ngang các trục. Thực thi bị giới hạn bởi bộ nhớ (memory-bound execution) nằm trên ranh giới Dữ liệu/Máy vì cả số byte di chuyển và băng thông khả dụng đều quan trọng. Thực thi bị giới hạn bởi tính toán (compute-bound execution) gắn công việc của Thuật toán với thông lượng của Máy. Thực thi bị giới hạn bởi độ trễ (latency-bound execution) có thể phản ánh độ sâu tuần tự của thuật toán, điều phối runtime, đồng bộ hóa, hoặc xếp hàng.
 
 ### Chẩn đoán nút thắt cổ chai {#sec-appdx-dam-taxonomy-bottleneck-diagnostic-3fc9}
 
-Khi việc lập hồ sơ đã xác định được thuật ngữ chi phối trong định luật sắt, các tối ưu hóa phải nhắm mục tiêu vào trục cụ thể đó. @Tbl-bottleneck-actions đối chiếu các biện pháp can thiệp mang lại tăng tốc từ đầu đến cuối với các tối ưu hóa không ràng buộc gây lãng phí công sức kỹ thuật:
+Khi profiling đã xác định được thành phần chi phối trong "định luật sắt", các tối ưu hóa phải nhắm đúng vào trục đó. @Tbl-bottleneck-actions đối chiếu các can thiệp đem lại tăng tốc end-to-end với những tối ưu hóa không ràng buộc, gây lãng phí công sức kỹ thuật:
 
 | **If the workload is...** |              **Dominant Term**               | **Optimization That Works**                                                                           | **Optimization That is Wasted**                             |
 |:--------------------------|:--------------------------------------------:|:------------------------------------------------------------------------------------------------------|:------------------------------------------------------------|
@@ -283,51 +283,51 @@ Khi việc lập hồ sơ đã xác định được thuật ngữ chi phối tr
 | **Compute-Bound**         | $O/(R_{\text{peak}} \cdot \eta_{\text{hw}})$ | Better kernels, Tensor Cores, faster accelerator, lower precision                                     | More memory bandwidth (not the binding term)                |
 | **Latency-Bound**         |               $L_{\text{lat}}$               | Reduce serial depth; fuse or dispatch asynchronously; batch within budget                             | More compute or bandwidth unless the trace shows it binding |
 
-: **Điều gì hiệu quả so với Điều gì lãng phí**: Tối ưu hóa một thuật ngữ không ràng buộc mang lại ít hoặc không có cải thiện từ đầu đến cuối. Một mô hình ngôn ngữ lớn bị giới hạn bởi bộ nhớ sẽ không hưởng lợi từ việc tăng thêm FLOP/s đỉnh đơn thuần, mặc dù một bộ tăng tốc có băng thông bộ nhớ lớn hơn có thể hữu ích. {#tbl-bottleneck-actions tbl-colwidths="[19,17,32,32]"}
+: **Điều gì hiệu quả và Điều gì lãng phí**: Tối ưu hóa một yếu tố không phải nút thắt cổ chai sẽ đem lại rất ít hoặc không cải thiện được end-to-end. Ví dụ, một mô hình ngôn ngữ lớn bị giới hạn bởi bộ nhớ sẽ không được lợi nhiều chỉ từ việc tăng thêm FLOP/s đỉnh, dù một bộ tăng tốc có băng thông bộ nhớ lớn hơn có thể giúp. {#tbl-bottleneck-actions tbl-colwidths="[19,17,32,32]"}
 
-Biết điều gì hiệu quả cũng có nghĩa là nhận ra điều gì không hiệu quả. Trong thực tế, các nhóm chịu áp lực thời hạn thường xuyên rơi vào những cái bẫy tương tự—tối ưu hóa sai trục một cách tự tin. Những chế độ lỗi này đủ phổ biến để có tên riêng.
+Biết điều gì hiệu quả cũng đồng nghĩa với việc nhận ra điều gì không hiệu quả. Trên thực tế, các nhóm làm việc dưới áp lực thời hạn thường lặp lại cùng một cái bẫy—tự tin tối ưu hóa nhầm trục. Những kiểu lỗi này phổ biến đến mức xứng đáng có tên gọi riêng.
 
-## Các mẫu phản diện {#sec-appdx-dam-taxonomy-antipatterns-72e1}
+## Phản mẫu {#sec-appdx-dam-taxonomy-antipatterns-72e1}
 
-Chẩn đoán hệ thống thường là một quá trình loại trừ. Trước khi cam kết tối ưu hóa kernel phức tạp, hãy chú ý đến những cạm bẫy phổ biến này gây lãng phí chu kỳ kỹ thuật.
+Chẩn đoán hệ thống thường là một quá trình loại trừ. Trước khi lao vào các tối ưu hóa kernel phức tạp, hãy để ý những cái bẫy phổ biến sau có thể khiến công sức kỹ thuật bị lãng phí.
 
-*   Nạng phần cứng: Mua các bộ tăng tốc (*Máy*) nhanh hơn để khắc phục trình tải dữ liệu Python (*Dữ liệu*) chậm. Phần cứng mới sẽ chỉ chạy không tải nhanh hơn.
-*   Sự điều chỉnh mô hình: Thay đổi kiến trúc mạng nơ-ron (*Thuật toán*) khi nút thắt cổ chai thực sự là băng thông mạng hoặc I/O đĩa.
-*   Optimizer non trẻ: Viết các kernel CUDA tùy chỉnh (*Máy*) trước khi xác minh xem Thuật toán có đơn giản là đang thực hiện quá nhiều phép toán không cần thiết hay không.
+*   Cậy phần cứng: Mua bộ tăng tốc (*Machine*) nhanh hơn để chữa trình tải dữ liệu Python (*Data*) chậm. Phần cứng mới sẽ chỉ… nhàn rỗi nhanh hơn.
+*   Điều chỉnh mô hình vô tội vạ: Thay đổi kiến trúc mạng nơ-ron (*Algorithm*) trong khi nút thắt cổ chai thực sự là băng thông mạng hoặc I/O đĩa.
+*   Tối ưu sớm: Viết các kernel CUDA tùy chỉnh (*Machine*) trước khi kiểm chứng xem Algorithm có đang làm quá nhiều phép toán không cần thiết hay không.
 
-Mỗi mẫu phản diện đều có cùng một nguyên nhân gốc rễ: hành động trước khi chẩn đoán. Các nghiên cứu điển hình sau đây cho thấy chẩn đoán đúng đắn trông như thế nào—bắt đầu từ một triệu chứng khó hiểu và thu hẹp một cách có hệ thống đến trục D·A·M chi phối.
+Mỗi phản mẫu đều có cùng một nguyên nhân gốc: hành động trước khi chẩn đoán. Các nghiên cứu điển hình sau đây cho thấy chẩn đoán đúng nên như thế nào—bắt đầu từ một triệu chứng khó hiểu và lần lượt thu hẹp có hệ thống về trục D·A·M chi phối.
 
 ## Các nghiên cứu điển hình D·A·M {#sec-appdx-dam-taxonomy-dam-case-studies-593f}
 
-Các ràng buộc lý thuyết thường biểu hiện thành các triệu chứng khó hiểu trong sản xuất. Các kịch bản đại diện này minh họa cách áp dụng phân loại. Mỗi trường hợp tuân theo ba bước chẩn đoán giống nhau: triệu chứng, chẩn đoán và khắc phục.
+Những ràng buộc lý thuyết thường hiện ra thành các triệu chứng khó hiểu trong môi trường sản xuất. Các kịch bản đại diện dưới đây minh họa cách áp dụng hệ thống phân loại. Mỗi ca đều theo cùng ba bước chẩn đoán: triệu chứng, chẩn đoán và khắc phục.
 
 ### Trường hợp 1: Bộ tăng tốc bị đói (Dữ liệu) {#sec-appdx-dam-taxonomy-case-1-starving-accelerator-data-9a56}
 
-Một nhóm cấp phát một phiên bản GPU A100 lớn để tăng tốc huấn luyện, nhưng thời gian huấn luyện hầu như không cải thiện và `nvidia-smi` cho thấy mức sử dụng GPU dao động từ 10 đến 40 phần trăm. Mẫu này cho thấy bộ tăng tốc bị đói nhưng không xác định nguyên nhân. Nếu các dấu vết cho thấy khoảng trống chờ đầu vào với độ bão hòa giải mã của bộ nhớ hoặc CPU, thì đường dẫn dữ liệu đang bị ràng buộc. Biện pháp can thiệp hữu ích sau đó nằm ở phía trước mô hình. Tối ưu hóa đường dẫn trích xuất, chuyển đổi, tải (ETL) bằng cách chuyển từ các tệp JPEG thô với giải mã CPU nặng sang các định dạng tuần tự như TFRecords hoặc WebDataset, tăng song song hóa trình tải dữ liệu và tìm nạp trước các batch vào bộ nhớ bộ tăng tốc.
+Một nhóm cấp phát một phiên bản GPU A100 lớn để tăng tốc huấn luyện, nhưng thời gian huấn luyện hầu như không cải thiện và `nvidia-smi` cho thấy mức sử dụng GPU dao động từ 10 đến 40 phần trăm. Mẫu này gợi ý bộ tăng tốc đang bị đói nhưng chưa rõ nguyên nhân. Nếu các trace cho thấy có khoảng chờ đầu vào kèm bão hòa ở lưu trữ hoặc CPU do giải mã, thì đường dẫn dữ liệu đang ràng buộc. Khi đó cần can thiệp ở phía trước mô hình. Hãy tối ưu quy trình trích xuất, chuyển đổi, tải (ETL) bằng cách chuyển từ JPEG thô tốn CPU giải mã sang các định dạng tuần tự như TFRecords hoặc WebDataset, tăng mức song song của data loader, và prefetch các batch vào bộ nhớ của bộ tăng tốc.
 
 ### Trường hợp 2: Vách đá độ trễ (đa trục) {#sec-appdx-dam-taxonomy-case-2-latency-cliff-algorithm-8ee2}
 
-Một dịch vụ đề xuất thời gian thực không đáp ứng được thỏa thuận mức dịch vụ (SLA) độ trễ 20 ms, trong khi mức sử dụng bộ tăng tốc thấp và kích thước batch là một. Sự kết hợp đó cho thấy chi phí khởi tạo, lưu lượng bộ nhớ hoặc độ sâu mô hình tuần tự chứ không phải một chip bị bão hòa. Nếu một dấu vết xác nhận rằng đường dẫn lớp tuần tự chiếm ưu thế, việc thêm phần cứng sẽ không loại bỏ được nó, vì vậy tỉa (pruning) hoặc chưng cất tri thức có thể giảm công việc của mô hình. Nếu lưu lượng trọng số chiếm ưu thế, lượng tử hoá có thể giảm số byte di chuyển bằng cách sử dụng INT8 ở những nơi độ chính xác cho phép. Các phép đo sẽ chọn biện pháp khắc phục.
+Một dịch vụ đề xuất thời gian thực không đạt SLA về độ trễ 20 ms, trong khi mức sử dụng bộ tăng tốc thấp và kích thước batch là một. Sự kết hợp này gợi ý vấn đề nằm ở chi phí khởi chạy, lưu lượng bộ nhớ hoặc độ sâu tuần tự của mô hình, chứ không phải do chip bị bão hòa. Nếu dấu vết (trace) xác nhận đường dẫn các lớp tuần tự chiếm ưu thế, thêm phần cứng cũng không loại bỏ được nút thắt này; khi đó, tỉa (pruning) hoặc chưng cất tri thức có thể giảm khối lượng công việc cho mô hình. Ngược lại, nếu lưu lượng trọng số chiếm ưu thế, lượng tử hoá có thể giảm số byte phải di chuyển bằng cách dùng INT8, miễn là độ chính xác cho phép. Các phép đo sẽ quyết định cách xử lý.
 
 ### Trường hợp 3: Bức tường tính toán (Máy) {#sec-appdx-dam-taxonomy-case-3-compute-wall-machine-3a0a}
 
-Mức sử dụng bộ tăng tốc được cố định ở 99 phần trăm, băng thông bộ nhớ vẫn chưa bão hòa, và huấn luyện ổn định nhưng mất ba tuần. Nếu các bộ đếm profiler cũng cho thấy mức chiếm dụng pipeline tính toán và mức sử dụng FLOPs của mô hình (MFU) cao, thì khối lượng công việc (workload) bị giới hạn bởi tính toán. Đường dẫn dữ liệu đang cung cấp đủ cho bộ tăng tốc, vì vậy bước tiếp theo phải thay đổi thuật ngữ tính toán trong định luật sắt. Nhóm có thể mở rộng từ bộ tăng tốc A100 lên bộ tăng tốc lớp H100, mở rộng thông qua song song hóa dữ liệu, hoặc giảm độ chính xác từ FP32/TF32 xuống BF16 ở những nơi an toàn về mặt số học. Trên các đường dẫn NVIDIA Tensor Core, thông lượng đỉnh BF16 thường gấp khoảng 2$\times$ thông lượng đỉnh TF32, với tốc độ tăng thực tế phụ thuộc vào các kernel và nút thắt cổ chai [@choquette2023]. Tổng hợp lại, ba trường hợp cho thấy tại sao cùng một con số sử dụng có thể ngụ ý các bước tiếp theo khác nhau tùy thuộc vào hành vi mất mát, kích thước batch và áp lực bộ nhớ.
+Bộ tăng tốc được sử dụng tới 99%, băng thông bộ nhớ chưa bão hòa, và quá trình huấn luyện ổn định nhưng kéo dài ba tuần. Nếu các bộ đếm của profiler cũng cho thấy mức chiếm dụng pipeline tính toán cao và Model FLOPs Utilization (MFU) cao, thì khối lượng công việc (workload) bị giới hạn bởi tính toán (compute bound). Đường dữ liệu đang nuôi đủ cho bộ tăng tốc, nên bước tiếp theo phải thay đổi hạng mục tính toán trong “định luật sắt”. Nhóm có thể nâng cấp từ A100 lên bộ tăng tốc lớp H100, mở rộng theo hướng song song dữ liệu, hoặc hạ độ chính xác từ FP32/TF32 xuống BF16 khi an toàn về số học. Trên các đường NVIDIA Tensor Core, thông lượng đỉnh của BF16 thường khoảng 2$\times$ TF32, còn mức tăng tốc thực tế phụ thuộc vào các kernel và nút thắt cổ chai [@choquette2023]. Tổng lại, ba trường hợp cho thấy cùng một con số sử dụng có thể dẫn đến các bước tiếp theo khác nhau, tùy thuộc vào hành vi hàm mất mát, kích thước batch và áp lực bộ nhớ.
 
 ::: {#chk-appendix-dam-diagnosis-check .callout-checkpoint title="Kiểm tra chẩn đoán D·A·M"}
 
-1. Một công việc huấn luyện cho thấy 95 phần trăm mức sử dụng bộ tăng tốc nhưng mất mát đã chững lại trong hai epoch. Các trục D·A·M nào có thể chịu trách nhiệm, và tại sao chỉ riêng mức sử dụng lại không đủ để phân biệt chúng?
-2. Đồng nghiệp của bạn đề xuất thêm nhiều worker tải dữ liệu vào một công việc mà `nvidia-smi` cho thấy 98 phần trăm mức sử dụng GPU. Cần bằng chứng dấu vết nào trước khi quyết định liệu điều này có hữu ích hay không?
-3. Một máy chủ suy luận đáp ứng SLO độ trễ ở kích thước batch 1 nhưng thất bại ở kích thước batch 16. Các thuật ngữ định luật sắt và hiệu ứng xếp hàng nào có thể đã thay đổi, và các phép đo nào xác định chế độ ràng buộc?
+1. Một tác vụ huấn luyện cho thấy bộ tăng tốc được sử dụng 95% nhưng hàm mất mát đã chững lại trong hai epoch. Những trục D·A·M nào có thể là nguyên nhân, và tại sao chỉ riêng mức độ sử dụng lại không đủ để phân biệt các nguyên nhân này?
+2. Đồng nghiệp của bạn đề xuất thêm worker cho bộ tải dữ liệu (data loader) vào một tác vụ mà `nvidia-smi` báo cáo GPU đang được sử dụng 98%. Cần những bằng chứng theo dõi (trace evidence) nào trước khi quyết định liệu việc này có hiệu quả hay không?
+3. Một máy chủ suy luận đáp ứng được mục tiêu mức độ dịch vụ (SLO) về độ trễ khi kích thước batch là 1, nhưng lại thất bại khi kích thước batch là 16. Những yếu tố nào trong “định luật sắt” và những hiệu ứng xếp hàng nào có thể đã thay đổi, và những phép đo nào sẽ giúp xác định yếu tố gây tắc nghẽn?
 
 :::
 
-Ba trường hợp này minh họa các nút thắt cổ chai có thể giao nhau trên các trục. Các sự cố sản xuất hiếm khi gọn gàng như vậy—các triệu chứng thường chồng chéo, và trục chi phối có thể thay đổi trong quá trình gỡ lỗi. Phần tiếp theo cung cấp một ma trận khắc phục sự cố có hệ thống cho các kịch bản phức tạp hơn gặp phải trong thực tế.
+Ba trường hợp này cho thấy các nút thắt cổ chai có thể vượt qua ranh giới giữa các trục. Sự cố sản xuất hiếm khi gọn gàng như vậy—các triệu chứng thường chồng chéo, và trục chi phối có thể thay đổi trong lúc gỡ lỗi. Phần tiếp theo cung cấp một ma trận khắc phục sự cố có hệ thống cho những kịch bản thực tế phức tạp hơn.
 
 ## Khắc phục sự cố sản xuất {#sec-appdx-dam-taxonomy-production-troubleshooting-02fb}
 
-Xác định nguyên nhân gốc rễ của các nút thắt cổ chai hiệu suất đòi hỏi loại trừ có hệ thống. @Tbl-dam-troubleshooting cung cấp một ma trận chẩn đoán cho các chế độ lỗi phổ biến được quan sát thấy trong các triển khai sản xuất.
+Để xác định nguyên nhân gốc của các nút thắt cổ chai về hiệu suất, cần loại trừ một cách có hệ thống. @Tbl-dam-troubleshooting cung cấp một ma trận chẩn đoán cho các kiểu lỗi phổ biến thường thấy trong quá trình triển khai sản xuất.
 
-Ma trận chẩn đoán chỉ ra *điều gì* cần nghi ngờ. Câu hỏi tiếp theo là *làm thế nào* để xác nhận nghi ngờ đó bằng bằng chứng---điều này đòi hỏi các công cụ phân tích hiệu năng phù hợp.
+Ma trận chẩn đoán gợi ý *nghi ngờ điều gì*. Câu hỏi tiếp theo là *làm sao* xác nhận nghi ngờ đó bằng bằng chứng—điều này đòi hỏi các công cụ phân tích hiệu năng (profiling tools) phù hợp.
 
 | **Symptom**                     | **Hypothesis**             | **Confirm With**                                  | **Act After Confirmation**                    |
 |:--------------------------------|:---------------------------|:--------------------------------------------------|:----------------------------------------------|
@@ -337,11 +337,11 @@ Ma trận chẩn đoán chỉ ra *điều gì* cần nghi ngờ. Câu hỏi ti�
 | **High Inter-GPU Overhead**     | Communication bound        | Device trace; collective gaps                     | Bucket AllReduce; tune data-parallel overlap. |
 | **Out-of-Memory (OOM)**         | Algorithm/Machine fit      | Peak weights, states, activations                 | Checkpoint, shard, quantize, or shrink batch. |
 
-: **Ma trận chẩn đoán D·A·M**: Các giả thuyết và phép đo ban đầu cho các lỗi phổ biến. Xác nhận thành phần ràng buộc trước khi can thiệp. {#tbl-dam-troubleshooting tbl-colwidths="[25,21,29,25]"}
+: **Ma trận chẩn đoán D·A·M**: Các giả thuyết và phép đo ban đầu cho những lỗi thường gặp. Hãy xác nhận yếu tố gây tắc nghẽn trước khi can thiệp. {#tbl-dam-troubleshooting tbl-colwidths="[25,21,29,25]"}
 
 ## Bản đồ công cụ {#sec-appdx-dam-taxonomy-tooling-map-e09b}
 
-Khi một giả thuyết tồn tại (ví dụ, "khối lượng công việc (workload) dường như bị ràng buộc bởi Máy"), cần có bằng chứng để xác nhận nó. Các khái niệm trừu tượng phải được đo lường bằng các tiện ích cụ thể. @Tbl-dam-tooling kết nối các thành phần lý thuyết với các công cụ phân tích hiệu năng cụ thể của Linux và Python để xác nhận chúng.
+Khi đã có giả thuyết (ví dụ: "khối lượng công việc (workload) có vẻ bị ràng buộc bởi 'Machine'"), chúng ta cần bằng chứng để xác nhận. Các khái niệm trừu tượng phải được đo lường bằng những tiện ích cụ thể. @Tbl-dam-tooling kết nối các thành phần lý thuyết với các công cụ phân tích hiệu năng cụ thể của Linux và Python để kiểm chứng chúng.
 
 | **Axis**      | **Key Metric**                        | **Primary Tool**         | **Secondary Tool**            |
 |:--------------|:--------------------------------------|:-------------------------|:------------------------------|
@@ -349,15 +349,15 @@ Khi một giả thuyết tồn tại (ví dụ, "khối lượng công việc (w
 | **Algorithm** | FLOPs, Model Depth                    | PyTorch Profiler         | DeepSpeed Flops Profiler      |
 | **Machine**   | Accelerator Utilization, SM Occupancy | Nsight Compute           | `nvidia-smi`, Nsight Systems  |
 
-: **Bản đồ công cụ D·A·M**: Các tiện ích phân tích hiệu năng để chẩn đoán các nút thắt cổ chai dọc theo mỗi trục D·A·M. Bắt đầu với công cụ chính để phân loại nhanh; sử dụng các công cụ phụ để phân tích chuyên sâu khi kết quả của công cụ chính không thuyết phục. {#tbl-dam-tooling tbl-colwidths="[12,37,20,31]"}
+: **Bản đồ công cụ D·A·M**: Các tiện ích phân tích hiệu năng dùng để chẩn đoán các nút thắt cổ chai theo từng trục D·A·M. Hãy bắt đầu với công cụ chính để phân loại nhanh; dùng các công cụ phụ để phân tích chuyên sâu khi kết quả từ công cụ chính chưa đủ thuyết phục. {#tbl-dam-tooling tbl-colwidths="[12,37,20,31]"}
 
-Các công cụ phân tích hiệu năng tạo ra các số liệu thô---tỷ lệ sử dụng, số lượng FLOP và các phép đo băng thông. Chúng chỉ trở nên hữu ích trong ngữ cảnh khối lượng công việc (workload) và phần cứng. Thẻ điểm D·A·M\index{DAM taxonomy@D·A·M taxonomy!scorecard} cung cấp các tín hiệu sàng lọc thay vì các tiêu chuẩn phổ quát, thu hẹp phạm vi các phép đo và can thiệp cần được chú ý.
+Các công cụ phân tích hiệu năng tạo ra những con số thô—tỷ lệ sử dụng, số lượng FLOP và các phép đo băng thông. Chúng chỉ hữu ích khi đặt trong ngữ cảnh của khối lượng công việc (workload) và phần cứng. Thẻ điểm D·A·M\index{DAM taxonomy@D·A·M taxonomy!scorecard} cung cấp các tín hiệu sàng lọc chứ không phải tiêu chuẩn chung, giúp thu hẹp những phép đo và biện pháp can thiệp đáng chú ý.
 
 ## Thẻ điểm D·A·M {#sec-appdx-dam-taxonomy-dam-scorecard-94e9}
 
-Để vượt ra ngoài việc phỏng đoán định tính, các chỉ số hiệu quả trong @tbl-dam-scorecard giúp quyết định điều gì cần điều tra tiếp theo. Chế độ xem thẻ báo cáo này hỗ trợ so sánh ban đầu, nhưng không có hàng nào cung cấp một điểm số phổ quát. MFU[^fn-mfu-hardware-scorecard] đặc biệt hữu ích cho việc huấn luyện mô hình lớn.
+Để vượt khỏi việc phỏng đoán định tính, các chỉ số hiệu quả trong @tbl-dam-scorecard giúp quyết định bước điều tra tiếp theo. Cách trình bày dạng thẻ báo cáo này hỗ trợ so sánh ban đầu, nhưng không có hàng nào đưa ra điểm số chung cho mọi trường hợp. MFU[^fn-mfu-hardware-scorecard] đặc biệt hữu ích cho việc huấn luyện các mô hình lớn.
 
-[^fn-mfu-hardware-scorecard]: **MFU (mức sử dụng FLOP của mô hình)**\index{Model FLOPs utilization!appendix refresher}: Tỷ lệ giữa FLOP/s của mô hình đạt được so với FLOP/s đỉnh lý thuyết của phần cứng, được giới thiệu trong bài báo PaLM [@chowdhery2022palm]. Không giống như mức sử dụng bộ tăng tốc thô (chỉ tính bất kỳ công việc nào mà bộ tăng tốc thực hiện), MFU đo tốc độ tính toán của mô hình so với thông lượng phần cứng đỉnh, do đó công việc không liên quan đến mô hình và chi phí hệ thống không được tính là FLOP của mô hình đạt được. @Sec-model-training-identifying-bottlenecks-f57f phát triển MFU như một công cụ chẩn đoán huấn luyện.
+[^fn-mfu-hardware-scorecard]: **MFU (mức sử dụng FLOPs của mô hình)**\index{Model FLOPs utilization!appendix refresher}: Tỷ lệ giữa FLOP/s mà mô hình thực sự đạt được so với FLOP/s đỉnh lý thuyết của phần cứng, được giới thiệu trong bài báo PaLM [@chowdhery2022palm]. Khác với mức sử dụng bộ tăng tốc ở dạng thô (tính mọi công việc mà bộ tăng tốc thực hiện), MFU đo tốc độ tính toán của mô hình so với thông lượng đỉnh của phần cứng, nên các công việc không thuộc mô hình và chi phí hệ thống không được tính vào FLOPs mô hình đạt được. @Sec-model-training-identifying-bottlenecks-f57f trình bày MFU như một công cụ chẩn đoán trong huấn luyện.
 
 ```{=latex}
 \begingroup
@@ -370,43 +370,43 @@ Các công cụ phân tích hiệu năng tạo ra các số liệu thô---tỷ l
 | **Algorithm** | Avoidable Work |      Profiler or ablation finds redundant operations       |  Redundant work found  | End-to-end work falls |
 | **Machine**   | MFU            | $\dfrac{\text{Achieved model FLOP/s}}{\text{Peak FLOP/s}}$ | $<$ 30% (large models) | $>$ 50% (same regime) |
 
-: **Các chỉ số sàng lọc D·A·M**: Các tín hiệu phụ thuộc ngữ cảnh để điều tra, không phải là điểm số phổ quát. {#tbl-dam-scorecard tbl-colwidths="[25,25,25,25]"}
+: **Các chỉ số sàng lọc D·A·M**: Đây là những tín hiệu phụ thuộc ngữ cảnh để phục vụ điều tra, không phải điểm số mang tính phổ quát. {#tbl-dam-scorecard tbl-colwidths="[25,25,25,25]"}
 
 ```{=latex}
 \endgroup
 ```
 
-Thẻ điểm và Mô hình Roofline đều trả lời các câu hỏi về hiệu quả, nhưng ở các quy mô khác nhau. Thẻ điểm sàng lọc hệ thống hiện tại bằng cách sử dụng các chỉ số phụ thuộc ngữ cảnh. Các quy luật mở rộng và phép ẩn dụ đường mái thông tin đặt câu hỏi về những gì có thể xảy ra khi hệ thống mở rộng *vượt ra ngoài* kích thước hiện tại của nó.
+Thẻ điểm và Mô hình Roofline đều trả lời các câu hỏi về hiệu quả, nhưng ở các thang khác nhau. Thẻ điểm sàng lọc hệ thống hiện tại bằng các chỉ số tùy ngữ cảnh. Còn các quy luật mở rộng và ẩn dụ roofline về thông tin đặt câu hỏi về những gì có thể xảy ra khi hệ thống mở rộng *vượt ra ngoài* kích thước hiện tại.
 
 ## Các quy luật mở rộng so với Roofline {#sec-appdx-dam-taxonomy-scaling-laws-vs-roofline-b290}
 
-Kỹ thuật hệ thống đòi hỏi phải phân biệt giữa *quỹ đạo tăng trưởng* và *giới hạn cơ bản*.
+Trong kỹ thuật hệ thống, cần phân biệt giữa *quỹ đạo tăng trưởng* và *giới hạn cơ bản*.
 
 ### Các quy luật mở rộng (hành trình) {#sec-appdx-dam-taxonomy-scaling-laws-journey-4085}
 
-Các quy luật mở rộng[^fn-scaling-law-exponent] là các quy luật lũy thừa thực nghiệm dự đoán sự thay đổi của độ lỗi trên tập giữ lại khi tài nguyên tăng lên trong chế độ phù hợp. Hai kết quả quan trọng là mở rộng Kaplan [@kaplan2020scaling], nghiên cứu độ lỗi theo số lượng tham số ($P$), dữ liệu ($D$) và tổng số phép toán ($O$), và mở rộng Chinchilla [@hoffmann2022chinchilla], ước tính sự cân bằng tối ưu về tính toán cho chế độ mô hình ngôn ngữ tự hồi quy dày đặc được nghiên cứu, thường được tóm tắt là khoảng 20 training token trên mỗi tham số ($D \approx 20P$). 
+Các quy luật mở rộng[^fn-scaling-law-exponent] là những quy luật lũy thừa thực nghiệm, dự đoán độ lỗi trên tập giữ lại thay đổi ra sao khi tăng tài nguyên trong phạm vi đã được khớp. Hai kết quả tiêu biểu là quy luật mở rộng của Kaplan [@kaplan2020scaling], nghiên cứu độ lỗi theo số lượng tham số ($P$), dữ liệu ($D$), và tổng số phép toán ($O$); và quy luật mở rộng của Chinchilla [@hoffmann2022chinchilla], ước tính điểm cân bằng tối ưu về tính toán cho miền mô hình ngôn ngữ tự hồi quy dày đặc được nghiên cứu, thường được tóm tắt là khoảng 20 token huấn luyện cho mỗi tham số ($D \approx 20P$).
 
-[^fn-scaling-law-exponent]: **Các quy luật mở rộng**\index{Scaling laws!appendix refresher}: Các mối quan hệ thực nghiệm, thường là các quy luật lũy thừa với số mũ âm được điều chỉnh, dự đoán độ lỗi của mô hình dưới dạng hàm của kích thước tập dữ liệu, số lượng tham số hoặc ngân sách tính toán. @kaplan2020scaling đã nghiên cứu các mối quan hệ này cho các mô hình ngôn ngữ thần kinh tại OpenAI; @hoffmann2022chinchilla sau đó đã ước tính sự đánh đổi huấn luyện tối ưu về tính toán cho chế độ mô hình ngôn ngữ dày đặc được nghiên cứu. @Sec-data-selection-computeoptimal-frontier-24ba phát triển chi tiết biên giới tối ưu về tính toán và chẩn đoán thiếu dữ liệu của nó.
+[^fn-scaling-law-exponent]: **Các quy luật mở rộng**\index{Scaling laws!appendix refresher}: Đây là các mối quan hệ thực nghiệm, thường là các quy luật lũy thừa với số mũ âm đã được khớp, dùng để dự đoán loss của mô hình dựa trên kích thước tập dữ liệu, số lượng tham số hoặc ngân sách tính toán. @kaplan2020scaling đã nghiên cứu các mối quan hệ này cho các mô hình ngôn ngữ thần kinh tại OpenAI; sau đó, @hoffmann2022chinchilla ước tính sự đánh đổi huấn luyện tối ưu về mặt tính toán cho miền mô hình ngôn ngữ dày đặc mà họ khảo sát. @Sec-data-selection-computeoptimal-frontier-24ba phát triển chi tiết biên tối ưu theo tính toán và phép chẩn đoán thiếu dữ liệu đi kèm.
 
-Với vai trò là hướng dẫn kinh tế, các phép khớp này ước tính sự thay đổi của độ lỗi trên tập giữ lại theo tính toán trong chế độ quan sát được. Chúng không đảm bảo giảm tỷ lệ lỗi tác vụ hoặc ngoại suy không đổi trên các kiến trúc và phân phối dữ liệu.
+Ở góc độ kinh tế, các mô hình khớp này ước tính loss trên tập giữ lại thay đổi theo mức compute như thế nào trong phạm vi đã quan sát. Chúng không đảm bảo giảm tỷ lệ lỗi của tác vụ, và cũng không thể ngoại suy nguyên xi sang các kiến trúc và phân phối dữ liệu khác.
 
 ### Đường mái thông tin (điểm đến) {#sec-appdx-dam-taxonomy-information-roofline-destination-6426}
 
-*Đường mái thông tin*\index{Information roofline!definition} được sử dụng ở đây như một phép ẩn dụ chẩn đoán hơn là một quy luật định lượng tiêu chuẩn. Hình ảnh điểm đến của nó chỉ ra các giới hạn về những gì có thể học được từ dữ liệu có sẵn. Đối với phân loại dưới một phân phối dữ liệu và độ lỗi cố định, tỷ lệ lỗi Bayes[^fn-bayes-error-rate] là một *ngưỡng* lỗi không thể giảm được, chứ không phải là một trần. Nhiễu, sự mơ hồ của nhãn, khoảng trống bao phủ và sự dịch chuyển phân phối có thể tạo ra các giới hạn về chất lượng dữ liệu, nhưng chúng không định nghĩa một độ dốc hoặc điểm ngắt phổ quát.
+*Đường mái thông tin*\index{Information roofline!definition} ở đây được dùng như một ẩn dụ mang tính chẩn đoán, chứ không phải một quy luật định lượng tiêu chuẩn. Hình ảnh “điểm đến” của nó gợi ý những giới hạn về những gì có thể học được từ dữ liệu sẵn có. Trong bài toán phân loại, với một phân phối dữ liệu và hàm lỗi cố định, tỷ lệ lỗi Bayes[^fn-bayes-error-rate] là một *ngưỡng* lỗi tối thiểu không thể giảm được (error *floor*), chứ không phải là một giới hạn trên (ceiling). Nhiễu, nhãn mơ hồ, lỗ hổng độ bao phủ, và dịch chuyển phân phối có thể tạo ra các giới hạn về chất lượng dữ liệu, nhưng chúng không xác định một độ dốc hay điểm gãy phổ quát nào.
 
-[^fn-bayes-error-rate]: **Tỷ lệ lỗi Bayes**\index{Bayes error rate!appendix refresher}: Tỷ lệ lỗi thấp nhất có thể đạt được dưới độ lỗi 0–1 cho bất kỳ bộ phân loại nào trên một phân phối dữ liệu nhất định, được xác định bởi các tiên nghiệm lớp và sự chồng lấn giữa các phân phối có điều kiện theo lớp [@goodfellow2016deep]. Không có lượng dữ liệu, tham số hay tính toán nào có thể giảm lỗi xuống dưới ngưỡng lý thuyết này.
+[^fn-bayes-error-rate]: **Tỷ lệ lỗi Bayes**\index{Bayes error rate!appendix refresher}: Tỷ lệ lỗi thấp nhất có thể đạt được với hàm mất mát 0–1 cho bất kỳ bộ phân loại nào trên một phân phối dữ liệu nhất định, được xác định bởi xác suất tiên nghiệm của các lớp và mức độ chồng lấn giữa các phân phối điều kiện theo lớp [@goodfellow2016deep]. Dù có bao nhiêu dữ liệu, tham số hay tài nguyên tính toán cũng không thể giảm lỗi xuống dưới mức sàn lý thuyết này.
 
-Bài học chẩn đoán hẹp hơn. Các quy luật mở rộng mô tả một quỹ đạo cải thiện được khớp, trong khi phép ẩn dụ đường mái thông tin thúc đẩy việc tìm kiếm các giới hạn chất lượng dữ liệu. Nếu đường cong độ lỗi phẳng ra so với xu hướng được khớp, hãy điều tra tối ưu hóa, dung lượng, nhiễu đánh giá và chất lượng dữ liệu; việc phẳng ra đơn thuần không xác định nguyên nhân nào chiếm ưu thế. Ngưỡng Bayes mô tả bộ phân loại tốt nhất có thể đạt được cho phân phối đã chỉ định. Việc thêm bộ tăng tốc hoặc tham số chỉ vô ích sau khi các phép đo xác định rằng chất lượng dữ liệu là yếu tố ràng buộc. Dù là gỡ lỗi một bước huấn luyện, đánh giá mức sử dụng phần cứng hay lập kế hoạch cho một chiến dịch mở rộng, hãy đo lường trục nào đang ràng buộc trước khi chọn một đòn bẩy.
+Bài học chẩn đoán ở đây hẹp hơn. Các định luật mở rộng mô tả một quỹ đạo cải thiện đã được khớp, trong khi ẩn dụ 'đường mái thông tin' gợi ý ta tìm các giới hạn do chất lượng dữ liệu đặt ra. Nếu đường cong hàm mất mát chững lại so với xu hướng đã khớp, hãy kiểm tra tối ưu hóa, năng lực mô hình, nhiễu trong đánh giá và chất lượng dữ liệu; bản thân việc đường cong chững lại không cho biết nguyên nhân nào là chủ đạo. Mức sàn Bayes mô tả bộ phân loại tốt nhất có thể đạt được cho phân bố đã chỉ định. Việc thêm bộ tăng tốc hay tham số chỉ vô ích sau khi các phép đo xác nhận rằng chất lượng dữ liệu đang là yếu tố giới hạn. Dù bạn đang gỡ lỗi một bước huấn luyện, đánh giá mức sử dụng phần cứng, hay lập kế hoạch mở rộng, hãy đo xem trục nào đang là giới hạn trước khi chọn đòn bẩy.
 
 ## Tóm tắt {#sec-appdx-dam-taxonomy-summary-1521}
 
-Các công cụ này tạo thành một quy trình làm việc chẩn đoán duy nhất. D·A·M định vị các nguyên nhân tiềm năng trên Dữ liệu, Thuật toán và Máy. Định luật sắt và cường độ số học chuyển đổi các nguyên nhân đó thành thời gian, phép toán và byte, trong khi các nghiên cứu điển hình, các mẫu phản diện, bản đồ công cụ và bảng điểm cho thấy cách kiểm tra chúng trong môi trường sản xuất. Các định luật mở rộng và đường giới hạn thông tin sau đó tách biệt các quỹ đạo cải tiến quan sát được khỏi các giới hạn chất lượng dữ liệu. Sử dụng framework như một vòng lặp thay vì một nhãn.
+Các công cụ này tạo thành một quy trình chẩn đoán thống nhất. D·A·M giúp xác định các nguyên nhân tiềm năng trên ba khía cạnh: Dữ liệu, Thuật toán và Máy. Định luật sắt và cường độ số học chuyển các nguyên nhân đó thành thời gian, phép toán và byte, trong khi các nghiên cứu điển hình, các anti-pattern, bản đồ công cụ và bảng điểm cho thấy cách kiểm tra chúng trong môi trường sản xuất. Các định luật mở rộng và 'đường mái thông tin' sau đó giúp tách quỹ đạo cải thiện quan sát được khỏi các giới hạn do chất lượng dữ liệu. Hãy dùng framework này như một vòng lặp, không phải như một cái nhãn.
 
-::: {.callout-takeaways title="Nên bắt đầu tìm ở đâu"}
+::: {.callout-takeaways title="Nên bắt đầu từ đâu"}
 
-* Bắt đầu với các giả thuyết đa trục; một triệu chứng hiếm khi xác định được nguyên nhân của nó.
-* Chuyển đổi mỗi giả thuyết thành thuật ngữ định luật sắt liên quan và một phép đo có thể bác bỏ nó.
-* Sử dụng cường độ số học và bảng điểm để xác định ràng buộc giới hạn, không phải để gán điểm chung chung.
-* Áp dụng đòn bẩy tương ứng và đo lại từ đầu đến cuối; một cải thiện cục bộ mà không làm thay đổi thuật ngữ giới hạn thì không phải là một cải tiến hệ thống.
+* Hãy bắt đầu với các giả thuyết cắt ngang các khía cạnh; một triệu chứng hiếm khi tự chỉ ra nguyên nhân.
+* Chuyển mỗi giả thuyết thành thuật ngữ tương ứng trong định luật sắt và một phép đo có thể bác bỏ nó.
+* Sử dụng cường độ số học và bảng điểm để xác định yếu tố đang giới hạn, chứ không phải để chấm điểm chung chung.
+* Áp dụng đòn bẩy tương ứng và đo lường lại từ đầu đến cuối; một lợi ích cục bộ mà không làm thay đổi yếu tố đang giới hạn thì không phải là cải tiến ở cấp hệ thống.
 
 :::

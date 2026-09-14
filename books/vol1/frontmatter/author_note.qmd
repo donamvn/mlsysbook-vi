@@ -16,17 +16,17 @@ number-sections: false
 
 ::: {.content-visible unless-format="pdf"}
 
-Thế giới đang vội vã xây dựng các hệ thống AI; nhưng chưa thực sự thiết kế kỹ thuật chúng.
+Thế giới đang hối hả xây dựng các hệ thống AI; nhưng vẫn chưa thật sự đưa chúng vào khuôn khổ kỹ thuật.
 
-Câu đó là lý do cuốn sách này ra đời. Một mô hình chiến thắng trên một benchmark chưa phải là một hệ thống, và khoảng cách giữa hai thứ này không phải là một chi tiết triển khai. Đó là kỹ thuật: công việc tạo ra thứ gì đó có thể chịu đựng được các ràng buộc không thể thỏa hiệp. Một bản demo không phải chịu trách nhiệm với ai. Một hệ thống phải đáp ứng các giới hạn độ trễ, giới hạn bộ nhớ, giới hạn công suất, và chi phí của việc mắc lỗi trước người dùng thực.
+Câu đó là lý do cuốn sách này tồn tại. Một mô hình chiến thắng trên một benchmark chưa phải là một hệ thống, và khoảng cách giữa hai thứ này không phải là một chi tiết triển khai. Đó là kỹ thuật: công việc làm cho một thứ hoạt động vững dưới những ràng buộc không thương lượng. Một bản demo không phải trả lời ai. Còn một hệ thống phải đáp ứng các giới hạn về độ trễ, bộ nhớ, công suất, và cả chi phí của việc sai trước người dùng thực.
 
 :::
 
-Điều khiến đây trở thành một lĩnh vực riêng biệt là sự kết hợp bất thường. Một bộ xử lý phải tuân theo vật lý của máy, chu kỳ xung nhịp, dòng cache, và lượng nhiệt nó có thể tản ra. Một mô hình thống kê phải tuân theo toán học của học máy, độ chệch (bias), phương sai, và cách tổng quát hóa thay đổi theo dữ liệu và dung lượng mô hình. Một hệ thống machine learning phải đáp ứng cả hai điều này cùng lúc, trong cùng một quyết định, và hai điều này không phải lúc nào cũng đồng thuận. Một thay đổi làm hài lòng phần cứng có thể làm mô hình thiếu đi độ chính xác hoặc thông lượng cần thiết để hội tụ; một thay đổi giúp ích cho mô hình có thể yêu cầu silicon nhiều bộ nhớ hoặc băng thông hơn khả năng cung cấp. Hãy giữ sự căng thẳng đó trong tâm trí và lĩnh vực này sẽ không còn trông giống như một đống công cụ mà bắt đầu trông giống như một cấu trúc mà bạn có thể suy luận.
+Điều khiến đây trở thành một lĩnh vực riêng là một kết hợp khác thường. Một bộ xử lý bị chi phối bởi vật lý của máy, bởi chu kỳ xung nhịp, các dòng cache, và lượng nhiệt nó có thể tản. Một mô hình thống kê bị chi phối bởi toán học của việc học, bởi độ chệch (bias), phương sai, và cách khả năng khái quát hóa thay đổi theo dữ liệu và dung lượng mô hình. Một hệ thống machine learning phải đáp ứng cả hai cùng lúc, ngay trong cùng một quyết định, và hai phía không phải lúc nào cũng đồng thuận. Một thay đổi làm phần cứng hài lòng có thể khiến mô hình thiếu độ chính xác hoặc thông lượng cần để hội tụ; một thay đổi giúp mô hình có thể đòi silicon nhiều bộ nhớ hoặc băng thông hơn khả năng cung cấp. Giữ sự căng thẳng đó trong đầu và bạn sẽ thấy lĩnh vực này không còn như một đống công cụ nữa, mà hiện ra như một cấu trúc có thể suy luận.
 
-Cuốn sách này sẽ cung cấp cho bạn cấu trúc đó. Không phải framework đang thịnh hành năm nay hay bộ tăng tốc nhanh nhất quý này, mà là cách tư duy tồn tại lâu hơn chúng. Các framework thay đổi, phần cứng được thay thế sau vài năm, và các benchmark được đặt lại; nhưng các lực lượng cơ bản vẫn giữ nguyên. Nếu cuốn sách này hữu ích, bạn sẽ hoàn thành nó với khả năng nhìn vào bất kỳ hệ thống machine learning nào, từ một cảm biến tiêu thụ microwatt đến một trang trại máy chủ tiêu thụ megawatt, và thấy cùng một tập hợp nhỏ các lực lượng quyết định điều gì là khả thi.
+Cuốn sách này trao cho bạn cấu trúc đó. Không phải framework đang thịnh hành năm nay hay bộ tăng tốc nhanh nhất quý này, mà là cách tư duy bền hơn chúng. Frameworks thay đổi, phần cứng được thay thế vài năm một lần, và các benchmark được đặt lại; còn các lực chi phối bên dưới thì không. Nếu cuốn sách này hiệu quả, bạn sẽ kết thúc nó với khả năng nhìn vào bất kỳ hệ thống machine learning nào, từ một cảm biến tiêu thụ microwatt đến một trang trại máy chủ tiêu thụ megawatt, và thấy cùng một vài lực chi phối nhỏ quyết định điều gì là khả thi.
 
-Những cuốn sách giáo khoa đã thay đổi tôi khi tôi còn là sinh viên không cung cấp cho tôi các sự thật. Chúng đã cho tôi một cách nhìn, và các sự thật tự sắp xếp xung quanh nó. Đó là điều tôi đã cố gắng thực hiện ở đây.
+Những cuốn sách giáo khoa đã thay đổi tôi khi còn là sinh viên không nhồi cho tôi các sự thật. Chúng trao cho tôi một cách nhìn, và các sự thật tự sắp xếp quanh nó. Đó là điều tôi đã cố gắng làm ở đây.
 
 ```{=latex}
 \vspace{2mm}

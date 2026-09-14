@@ -1,31 +1,31 @@
-# Nguyên tắc Phát triển {.unnumbered}
+# Nguyên tắc phát triển {.unnumbered}
 
-Xây dựng một hệ thống machine learning đòi hỏi nhiều hơn là việc lắp ráp các thành phần mô hình; nó đòi hỏi việc quản lý luồng thông tin và năng lượng qua silicon. Phần I đã xác định rằng dữ liệu vừa là chương trình vừa là điểm tựa vật lý của mọi hệ thống ML. Với điểm tựa đó, Phần II chuyển sang tương tác giữa thuật toán và máy: *cách* các mô hình toán học được đồng thiết kế dựa trên các giới hạn vật lý của phần cứng phải thực thi chúng. Các nguyên tắc ở đây bắt đầu bằng việc phân tích lý do tại sao một số kiến trúc thành công trong khi những kiến trúc khác thất bại ở quy mô lớn.
+Xây dựng một hệ thống machine learning không chỉ là ghép các thành phần mô hình; còn phải quản lý dòng thông tin và năng lượng đi qua silicon. Phần I đã khẳng định dữ liệu vừa là chương trình, vừa là điểm tựa vật lý của mọi hệ thống ML. Dựa trên đó, Phần II chuyển sang tương tác giữa thuật toán và máy: *cách* các mô hình toán học được đồng thiết kế xung quanh các giới hạn vật lý của phần cứng sẽ thực thi chúng. Các nguyên tắc ở đây bắt đầu từ cách tính toán để lý giải vì sao một số kiến trúc thành công, còn những kiến trúc khác lại thất bại khi mở rộng quy mô.
 
-::: {#pri-iron-law .callout-principle title="Quy luật sắt của các hệ thống ML"}
+::: {#pri-iron-law .callout-principle title="Quy luật sắt của các hệ thống machine learning"}
 
-**Bất biến**: Gọi $T$ là thời gian thực tế lý tưởng tính bằng giây. Trong đó $D_{\text{vol}}$ là dung lượng dữ liệu tính bằng byte, $\text{BW}$ là băng thông hiệu quả của đường dẫn bộ nhớ hoặc mạng liên quan tính bằng byte/s, $O$ là tổng số phép toán dấu phẩy động, $R_{\text{peak}}$ là tốc độ tính toán đỉnh tính bằng FLOP/s, $\eta_{\text{hw}}$ là hiệu suất sử dụng phần cứng không thứ nguyên, và $L_{\text{lat}}$ là chi phí độ trễ cố định tính bằng giây, chẳng hạn như khởi chạy kernel hoặc chuyến đi khứ hồi mạng. Khi di chuyển dữ liệu, tính toán và chi phí cố định thực hiện nối tiếp, thời gian lý tưởng của chúng được cộng lại:
+**Bất biến**: Gọi $T$ là thời gian thực (wall-clock time) lý tưởng tính bằng giây. Ở đây $D_{\text{vol}}$ là khối lượng dữ liệu tính bằng byte, $\text{BW}$ là băng thông hiệu quả của đường dẫn bộ nhớ hoặc mạng tương ứng tính bằng byte/s, $O$ là tổng số phép toán dấu phẩy động, $R_{\text{peak}}$ là tốc độ tính toán đỉnh tính bằng FLOP/s, $\eta_{\text{hw}}$ là hiệu suất sử dụng phần cứng không thứ nguyên, và $L_{\text{lat}}$ là độ trễ cố định tính bằng giây, chẳng hạn như khởi chạy kernel hoặc một vòng truyền/nhận qua mạng. Khi việc di chuyển dữ liệu, tính toán và chi phí cố định được thực hiện nối tiếp, thời gian lý tưởng sẽ bằng tổng của chúng:
 $$ T \approx \frac{D_{\text{vol}}}{\text{BW}} + \frac{O}{R_{\text{peak}} \cdot \eta_{\text{hw}}} + L_{\text{lat}} $$
 Nội dung chi tiết có trong @sec-introduction-iron-law-ml-systems-c32a.
 
-Khi việc di chuyển dữ liệu và tính toán chồng chéo trên phần cứng hiện đại, thời gian thực tế tuân theo đường găng và không thể ngắn hơn giai đoạn chậm hơn trong số đó cộng với bất kỳ độ trễ cố định nào nằm ngoài phần chồng chéo. Bài học thực tế là về **sự chi phối**, chứ không phải tổng không điều kiện.
+Khi việc di chuyển dữ liệu và tính toán chồng lấn trên phần cứng hiện đại, thời gian thực (wall-clock time) sẽ đi theo đường găng và không thể ngắn hơn giai đoạn chậm hơn trong hai giai đoạn đó, cộng với bất kỳ độ trễ cố định nào không nằm trong phần chồng lấn. Bài học thực tế ở đây là về **sự chi phối**, chứ không phải phép cộng vô điều kiện.
 
-**Hàm ý**: Tối ưu hóa hiếm khi không có sự đánh đổi. Giảm một yếu tố thường chuyển điểm nghẽn sang yếu tố khác. Ví dụ, việc khai thác tính thưa thớt không cấu trúc có thể giảm số phép toán số học được thực hiện, nhưng các biểu diễn thưa thớt và kernel có thể làm giảm băng thông hiệu quả hoặc tăng lưu lượng truy cập chỉ mục, làm tăng thời gian di chuyển dữ liệu $(D_{\text{vol}}/\text{BW})$. Một sự tối ưu hóa chỉ cải thiện thời gian thực tế trong phạm vi nó rút ngắn đường găng trên phần cứng mục tiêu.
+**Hàm ý**: Tối ưu hóa hiếm khi không có đánh đổi. Giảm một yếu tố thường đẩy điểm nghẽn sang yếu tố khác. Ví dụ, khai thác độ thưa không cấu trúc có thể giảm số phép toán số học thực thi, nhưng các biểu diễn thưa và kernel có thể làm giảm băng thông hiệu quả hoặc thêm lưu lượng chỉ mục, làm tăng thời gian di chuyển dữ liệu $(D_{\text{vol}}/\text{BW})$. Một tối ưu hóa chỉ cải thiện thời gian thực (wall-clock time) nếu nó rút ngắn đường găng trên phần cứng mục tiêu.
 
 :::
 
-Quy luật sắt xác định *cái gì* cần tối ưu, nhưng không phải *cách nào*. Kiến trúc quyết định *cách nào* trước khi bắt đầu triển khai.
+Quy luật sắt chỉ ra *cái gì* cần tối ưu, chứ không phải *cách* tối ưu. Kiến trúc quyết định *cách* trước khi triển khai.
 
 ::: {#pri-silicon-contract .callout-principle title="Hợp đồng silicon"}
 
-**Bất biến**: Mọi kiến trúc mô hình và chế độ khối lượng công việc (workload) đưa ra một cam kết ngầm với phần cứng, một sự đặt cược vào tài nguyên nào nó sẽ bão hòa trước tiên.
+**Bất biến**: Mọi kiến trúc mô hình và chế độ khối lượng công việc (workload) ngầm cam kết với phần cứng, đặt cược vào việc tài nguyên nào sẽ bị bão hòa trước.
 
-- **ResNet-50** giả định tính toán dấu phẩy động mật độ cao. Trong huấn luyện hoặc suy luận theo batch trên các bộ tăng tốc, nó thường bị giới hạn bởi tính toán: hiệu suất bị giới hạn bởi $O/(R_{\text{peak}} \cdot \eta_{\text{hw}})$.
-- **Llama 3 8 tỷ tham số** giả định truy cập bộ nhớ băng thông cao trong quá trình giải mã tự hồi quy. Với kích thước batch nhỏ, nó thường bị giới hạn bởi băng thông: hiệu suất bị giới hạn bởi $D_{\text{vol}}/\text{BW}$.
-- **DLRM** giả định các bảng embedding lớn và tra cứu thưa thớt. Nó được định hình bởi cả dung lượng và băng thông: hiệu suất phụ thuộc vào việc các bảng embedding có vừa với hệ thống phân cấp bộ nhớ khả dụng hay không và tốc độ truy cập thưa thớt có thể được phục vụ nhanh đến mức nào.
+- **ResNet-50** giả định khối lượng phép tính dấu phẩy động mật độ cao. Khi huấn luyện hoặc suy luận theo batch trên các bộ tăng tốc, nó thường bị giới hạn bởi năng lực tính toán: hiệu suất bị chi phối bởi $O/(R_{\text{peak}} \cdot \eta_{\text{hw}})$.
+- **Llama 3 8 tỷ tham số** giả định truy cập bộ nhớ băng thông cao trong quá trình giải mã tự hồi quy. Khi kích thước batch nhỏ, nó thường bị giới hạn bởi băng thông: hiệu suất bị chi phối bởi $D_{\text{vol}}/\text{BW}$.
+- **DLRM** giả định các bảng embedding rất lớn và các phép tra cứu thưa thớt. Nó chịu tác động bởi cả dung lượng và băng thông: hiệu suất phụ thuộc vào việc các bảng embedding có vừa với hệ thống phân cấp bộ nhớ hiện có hay không, và các truy cập thưa thớt được phục vụ nhanh đến mức nào.
 
-**Hàm ý**: Thiết kế một mô hình mà không biết tài nguyên phần cứng nào nó sẽ bão hòa giống như thiết kế một cây cầu mà không biết độ bền của thép. Thiết kế phải nhắm vào điểm nghẽn.
+**Hệ quả**: Thiết kế một mô hình mà không biết nó sẽ bão hòa tài nguyên phần cứng nào cũng giống như thiết kế một cây cầu mà không biết độ bền của thép. Thiết kế phải nhắm đúng điểm nghẽn.
 
 :::
 
-Cùng với nhau, quy luật sắt và hợp đồng silicon định hình mọi quyết định thiết kế trong Phần II. Các chương tiếp theo chuyển đổi các nguyên tắc này thành các thành phần của ngăn xếp ML: các nền tảng toán học của luồng gradient, các mẫu kiến trúc cam kết với các tài nguyên phần cứng cụ thể, các framework ánh xạ các hoạt động của mô hình lên phần cứng, và các hệ thống huấn luyện thực thi cùng một vật lý ở quy mô lớn.
+Kết hợp lại, quy luật sắt và hợp đồng silicon định hình mọi quyết định thiết kế trong Phần II. Các chương tiếp theo sẽ chuyển các nguyên tắc này thành các thành phần của ngăn xếp ML: nền tảng toán học của luồng gradient, các mẫu kiến trúc gắn với các tài nguyên phần cứng cụ thể, các framework ánh xạ các thao tác của mô hình lên phần cứng, và các hệ thống huấn luyện thi hành cùng những quy luật vật lý đó ở quy mô lớn.

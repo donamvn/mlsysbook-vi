@@ -2,6 +2,6 @@
 number-sections: false
 ---
 
-# Lưu ý về Hỗ trợ AI {.unnumbered}
+# Một lưu ý về hỗ trợ AI {.unnumbered}
 
 {{< include ../../shared/_partials/_ai_use_body.qmd >}}

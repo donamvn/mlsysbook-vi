@@ -34,24 +34,24 @@ format:
 </div>
 ```
 
-<p id="learning-path" class="unnumbered" style="font-size: 1.45rem; font-weight: 600; line-height: 1.25; margin: 1.5rem 0 0.75rem;">Lộ trình học tập</p>
+<p id="learning-path" class="unnumbered" style="font-size: 1.45rem; font-weight: 600; line-height: 1.25; margin: 1.5rem 0 0.75rem;">Lộ trình học</p>
 
-Cuốn sách được trình bày qua bốn giai đoạn:
+Cuốn sách đi qua bốn giai đoạn:
 
-- **Phần I: Nền tảng**: Thiết lập nền tảng khái niệm và các mô hình tư duy làm cơ sở cho công việc hệ thống hiệu quả.
-- **Phần II: Xây dựng**: Thiết kế các quy trình làm việc hoàn chỉnh từ các pipeline dữ liệu đến hạ tầng huấn luyện.
-- **Phần III: Tối ưu hóa**: Chuyển đổi hiểu biết lý thuyết thành các hệ thống hoạt động hiệu quả trong môi trường hạn chế tài nguyên.
-- **Phần IV: Triển khai**: Điều hướng các hoạt động phục vụ (serving), vận hành và các thực hành kỹ thuật có trách nhiệm.
+- **Phần I: Nền tảng**: Thiết lập nền tảng khái niệm và mô hình tư duy làm cơ sở cho công việc hệ thống hiệu quả.
+- **Phần II: Xây dựng**: Thiết kế các luồng công việc hoàn chỉnh, từ pipeline dữ liệu đến hạ tầng huấn luyện.
+- **Phần III: Tối ưu hóa**: Biến hiểu biết lý thuyết thành các hệ thống chạy hiệu quả trong môi trường hạn chế tài nguyên.
+- **Phần IV: Triển khai**: Xử lý phục vụ (serving), vận hành và các thực hành kỹ thuật có trách nhiệm.
 
 <p id="prerequisites" class="unnumbered" style="font-size: 1.45rem; font-weight: 600; line-height: 1.25; margin: 1.5rem 0 0.75rem;">Điều kiện tiên quyết</p>
 
 Cuốn sách này giả định bạn có:
 
-- **Thành thạo lập trình** Python với sự quen thuộc NumPy
+- **Thành thạo lập trình** Python và quen thuộc với NumPy
 - **Nền tảng toán học** về đại số tuyến tính, giải tích và xác suất ở trình độ đại học
 - Kinh nghiệm về machine learning trước đây rất hữu ích nhưng không bắt buộc; @sec-neural-computation cung cấp kiến thức nền tảng cần thiết
 
-<p id="support-our-mission" class="unnumbered" style="font-size: 1.45rem; font-weight: 600; line-height: 1.25; margin: 1.5rem 0 0.75rem;">Ủng hộ Sứ mệnh của Chúng tôi</p>
+<p id="support-our-mission" class="unnumbered" style="font-size: 1.45rem; font-weight: 600; line-height: 1.25; margin: 1.5rem 0 0.75rem;">Ủng hộ sứ mệnh của chúng tôi</p>
 
 ```{=html}
 <div class="support-mission">
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', fetchGitHubStars);
 </script>
 ```
 
-<p id="listen-to-the-machine-learning-systems-podcast" class="unnumbered" style="font-size: 1.45rem; font-weight: 600; line-height: 1.25; margin: 1.5rem 0 0.75rem;">Nghe Podcast về Hệ thống Machine Learning</p>
+<p id="listen-to-the-machine-learning-systems-podcast" class="unnumbered" style="font-size: 1.45rem; font-weight: 600; line-height: 1.25; margin: 1.5rem 0 0.75rem;">Nghe podcast Machine Learning Systems</p>
 
 ```{=html}
 <div class="podcast-section">
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', fetchGitHubStars);
 :::
 
 ::: {.content-visible when-format="pdf"}
-Đây là một dự án hợp tác. Hướng dẫn đóng góp của dự án giải thích cách tham gia, và phản hồi, sửa lỗi cùng các ý tưởng mới được hoan nghênh thông qua trình theo dõi vấn đề (issue tracker) trên GitHub tại kho lưu trữ của sách (`harvard-edge/cs249r_book`).
+Đây là một dự án hợp tác. Hướng dẫn đóng góp của dự án giải thích cách tham gia, và mọi phản hồi, sửa lỗi, ý tưởng mới đều được hoan nghênh thông qua hệ thống theo dõi issue trên GitHub tại kho lưu trữ của sách (`harvard-edge/cs249r_book`).
 :::
 
 :::

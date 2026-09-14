@@ -2,23 +2,23 @@
 engine: jupyter
 ---
 
-# Nền tảng Máy {#sec-appdx-machine-foundations dropcap="chapter-opening"}
+# Nền tảng Máy tính {#sec-appdx-machine-foundations dropcap="chapter-opening"}
 
-Một bảng dữ liệu báo cáo thông lượng đỉnh; một khối lượng công việc (workload) hầu như không bao giờ đạt được mức đó. Để thu hẹp khoảng cách này, cần biết giới hạn vật lý nào ràng buộc thực thi trước tiên: độ trễ, băng thông bộ nhớ, cường độ số học hay năng lượng. Phụ lục này tập hợp các mô hình phần cứng bền vững và các giá trị theo bậc độ lớn làm nền tảng cho lập luận trên một nút đơn xuyên suốt cuốn sách, cung cấp các đường cơ sở toán học nơi các ước tính của chương có thể được kiểm tra hoặc mở rộng. Các mô hình giả định kiến thức nền tảng ở bậc đại học về kiến trúc máy tính, đặc biệt là hệ thống phân cấp bộ nhớ.
+Một bảng thông số kỹ thuật thường nêu thông lượng đỉnh; nhưng khối lượng công việc (workload) gần như không bao giờ đạt được mức đó. Để thu hẹp khoảng cách, cần biết giới hạn vật lý nào kìm hãm việc thực thi trước tiên: độ trễ, băng thông bộ nhớ, cường độ tính toán hay năng lượng. Phụ lục này tập hợp các mô hình phần cứng ổn định và các giá trị theo bậc độ lớn, làm điểm tựa cho lập luận trên một nút đơn xuyên suốt cuốn sách. Nó cung cấp các chuẩn toán học để kiểm tra hoặc mở rộng các ước tính trong các chương. Các mô hình này giả định người đọc có nền tảng kiến trúc máy tính ở bậc đại học, đặc biệt là về hệ thống phân cấp bộ nhớ.
 
 ## Cách sử dụng Phụ lục này {.unnumbered}
 
-Phụ lục này được thiết kế như một tài liệu tham khảo. Khi chẩn đoán các vấn đề về hiệu suất, hãy sử dụng phụ lục này để chuyển một triệu chứng mơ hồ ("nó chậm") thành một ràng buộc cụ thể ("bị giới hạn bởi bộ nhớ ở kích thước batch một") và sau đó chọn đòn bẩy thực sự có thể thay đổi.
+Phụ lục này được dùng như tài liệu tham khảo. Khi chẩn đoán vấn đề hiệu suất, hãy dùng phụ lục này để chuyển một triệu chứng mơ hồ ("nó chậm") thành một ràng buộc cụ thể ("bị giới hạn bởi bộ nhớ khi kích thước batch là một"), rồi chọn đúng đòn bẩy có thể tạo ra thay đổi.
 
-Các quy ước được sử dụng ở đây tuân theo ký hiệu chung của sách (ví dụ, $B$ được dành cho kích thước batch và $\text{BW}$ cho băng thông).
+Các quy ước ở đây tuân theo ký hiệu dùng chung trong toàn bộ sách (ví dụ, $B$ đại diện cho kích thước batch và $\text{BW}$ cho băng thông).
 
-- Kiểm tra tính khả thi: Bắt đầu với @sec-appdx-machine-foundations-numbers-know-b531 để biết các con số theo bậc độ lớn.
-- Chẩn đoán giới hạn chi phối: Sử dụng Mô hình Roofline trong @sec-appdx-machine-foundations-roofline-model-2529 để quyết định xem khối lượng công việc (workload) bị giới hạn bởi tính toán hay bộ nhớ.
-- Suy luận về các giới hạn mở rộng: Sử dụng Định luật Amdahl và Gustafson trong @sec-appdx-machine-foundations-amdahls-law-gustafsons-law-b741 để hiểu tại sao việc thêm bộ tăng tốc có thể không làm giảm thời gian huấn luyện.
-- Chọn độ chính xác phù hợp: Sử dụng @sec-appdx-machine-foundations-floatingpoint-format-comparison-1836 để suy luận về FP32 so với BF16/FP16 so với INT8 như một đánh đổi của hệ thống.
-- Theo dõi cách xử lý của chương: Để có toàn bộ nội dung tường thuật, hãy sử dụng @sec-hardware-acceleration, @sec-model-training và @sec-model-serving.
+- Kiểm tra tính khả thi: Bắt đầu với @sec-appdx-machine-foundations-numbers-know-b531 để tham khảo các con số theo bậc độ lớn.
+- Chẩn đoán giới hạn chi phối: Sử dụng Mô hình Roofline trong @sec-appdx-machine-foundations-roofline-model-2529 để xác định xem khối lượng công việc (workload) bị giới hạn bởi tính toán (compute-bound) hay bởi bộ nhớ (memory-bound).
+- Suy luận về các giới hạn mở rộng: Sử dụng Định luật Amdahl và Gustafson trong @sec-appdx-machine-foundations-amdahls-law-gustafsons-law-b741 để hiểu lý do việc thêm bộ tăng tốc có thể không làm giảm thời gian huấn luyện.
+- Chọn độ chính xác phù hợp: Sử dụng @sec-appdx-machine-foundations-floatingpoint-format-comparison-1836 để suy luận về sự đánh đổi giữa FP32, BF16/FP16 và INT8 trong một hệ thống.
+- Tham khảo nội dung chi tiết của chương: Để có cái nhìn đầy đủ, hãy xem @sec-hardware-acceleration, @sec-model-training và @sec-model-serving.
 
-Mặc dù phần cứng hiện đại bao gồm các kiến trúc bộ tăng tốc đa dạng, cấu trúc liên kết kết nối và các tùy chọn đóng gói, nhưng các định luật vật lý và mô hình nút thắt cổ chai được trình bày chi tiết ở đây chi phối tất cả chúng.
+Dù phần cứng hiện đại rất đa dạng về kiến trúc bộ tăng tốc, cấu trúc liên kết kết nối và tùy chọn đóng gói, các định luật vật lý và các mô hình điểm nghẽn trình bày tại đây vẫn chi phối tất cả.
 
 ## Các con số cần biết {#sec-appdx-machine-foundations-numbers-know-b531}
 
@@ -168,25 +168,25 @@ class NumbersToKnow:
     training_state_footprint_gb_str = fmt_memory(training_state_footprint, unit=GB, precision=0, commas=False)
 ```
 
-Giống như "Latency Numbers Every Programmer Should Know"[^fn-jeff-dean-latency] của Jeff Dean đã định hình một thế hệ kỹ sư hệ thống, những con số tham chiếu này cung cấp trực giác về bậc độ lớn thiết yếu cho thiết kế hệ thống ML. Mặc dù các giá trị tuyệt đối và tỷ lệ thay đổi theo công nghệ và khối lượng công việc (workload), nhưng hệ thống phân cấp bền vững hơn. Hãy ghi nhớ các mối quan hệ; sử dụng các con số cụ thể để kiểm tra tính hợp lý.
+Tương tự như danh sách "Latency Numbers Every Programmer Should Know"[^fn-jeff-dean-latency] của Jeff Dean đã định hình cả một thế hệ kỹ sư hệ thống, những con số tham chiếu này giúp hình thành trực giác theo bậc độ lớn, rất cần cho thiết kế hệ thống ML. Dù các giá trị tuyệt đối và tỷ lệ có thể thay đổi theo công nghệ và khối lượng công việc (workload), nhưng thứ bậc thì bền vững hơn. Hãy ghi nhớ các mối quan hệ; dùng các con số cụ thể để kiểm tra tính hợp lý.
 
 ::: {#psp-appendix-machine-three-numbers .callout-perspective title="Ba con số quan trọng nhất"}
 
-* Tỷ lệ năng lượng: Trong tài liệu tham khảo 45 nm được trích dẫn, một lần đọc DRAM 32-bit sử dụng ~`{python} NumbersToKnow.dram_vs_compute_ratio_mult_str` năng lượng của một phép nhân FP16. Điều này thúc đẩy cường độ số học.
-* Dấu chân trạng thái huấn luyện: Trọng số mô hình (`{python} NumbersToKnow.fp16_bytes_per_param_str` FP16) + gradient (`{python} NumbersToKnow.fp16_bytes_per_param_str` FP16) + trọng số chính (`{python} NumbersToKnow.fp32_bytes_per_param_str` FP32) + trạng thái optimizer cho Ước lượng Moment Thích nghi (Adam) tại `{python} NumbersToKnow.adam_state_bytes_per_param_str`. Tổng cộng là `{python} NumbersToKnow.training_state_bytes_per_param_str` trên mỗi tham số, vì vậy một mô hình `{python} NumbersToKnow.training_model_params_b_str` cần `{python} NumbersToKnow.training_state_footprint_gb_str` chỉ để bắt đầu huấn luyện.
-* Giới hạn truyền dẫn sợi quang: Ánh sáng truyền đi khoảng 200 km/ms trong sợi quang. Chuyến đi khứ hồi xuyên quốc gia ~40 ms của bảng bao gồm chi phí phụ có thể giảm, nhưng sự truyền dẫn không thể được tối ưu hóa loại bỏ.
+* Tỷ lệ năng lượng: Theo tài liệu tham khảo 45 nm đã dẫn, một thao tác đọc DRAM 32-bit tiêu tốn năng lượng gấp khoảng ~`{python} NumbersToKnow.dram_vs_compute_ratio_mult_str` lần so với một phép nhân FP16. Điều này cho thấy vì sao cần tăng mật độ tính toán.
+* Dung lượng bộ nhớ cho trạng thái huấn luyện: Bao gồm trọng số mô hình (`{python} NumbersToKnow.fp16_bytes_per_param_str` FP16) + gradients (`{python} NumbersToKnow.fp16_bytes_per_param_str` FP16) + trọng số chính (`{python} NumbersToKnow.fp32_bytes_per_param_str` FP32) + trạng thái optimizer cho Adaptive Moment Estimation (Adam) với `{python} NumbersToKnow.adam_state_bytes_per_param_str`. Tổng cộng, mỗi tham số cần `{python} NumbersToKnow.training_state_bytes_per_param_str`. Vì vậy, một mô hình `{python} NumbersToKnow.training_model_params_b_str` cần `{python} NumbersToKnow.training_state_footprint_gb_str` chỉ để bắt đầu huấn luyện.
+* Giới hạn truyền dẫn sợi quang: Ánh sáng truyền trong sợi quang với tốc độ khoảng 200 km/ms. Chuyến đi khứ hồi xuyên quốc gia khoảng 40 ms được nêu trong bảng có bao gồm phần chi phí phụ có thể giảm bớt, nhưng bản thân truyền dẫn thì không thể tối ưu hóa để loại bỏ.
 
 :::
 
-[^fn-jeff-dean-latency]: **Jeff Dean**\index{Dean, Jeff!latency numbers}: Một Nghiên cứu viên cao cấp của Google và là một trong những kiến trúc sư của cơ sở hạ tầng hệ thống phân tán của Google, bao gồm MapReduce, BigTable và TensorFlow. Các con số độ trễ của ông, ban đầu được trình bày cùng với Peter Norvig vào khoảng năm 2010, đã trở thành một tài liệu tham khảo kinh điển cho các kỹ sư hệ thống. Các con số đã được cập nhật qua nhiều năm khi phần cứng phát triển, nhưng *hệ thống phân cấp* độ trễ vẫn ổn định đáng kể; trực quan hóa tương tác của Colin Scott cho thấy hệ thống phân cấp độ trễ qua các thế hệ phần cứng [@scott2012latency].
+[^fn-jeff-dean-latency]: **Jeff Dean**\index{Dean, Jeff!latency numbers}: Là Nghiên cứu viên cao cấp của Google và là một trong những kiến trúc sư của cơ sở hạ tầng hệ thống phân tán của Google, bao gồm MapReduce, BigTable và TensorFlow. Các con số độ trễ của ông, ban đầu được trình bày cùng với Peter Norvig vào khoảng năm 2010, đã trở thành tài liệu tham khảo kinh điển cho các kỹ sư hệ thống. Các con số này đã được cập nhật qua nhiều năm khi phần cứng phát triển, nhưng *thứ bậc* độ trễ vẫn ổn định đáng kể; trực quan hóa tương tác của Colin Scott cho thấy thứ bậc độ trễ qua các thế hệ phần cứng [@scott2012latency].
 
 ### Các mối quan hệ tham chiếu {.unnumbered}
 
 Các mối quan hệ này kết hợp các giới hạn vật lý hoặc số học với các phép đo đặc thù công nghệ; chỉ các giới hạn là bất biến.
 
-#### Chi phí tốc độ ánh sáng {.unnumbered}
+#### Chi phí do tốc độ ánh sáng {.unnumbered}
 
-@Tbl-speed-of-light-ref cho thấy các đường cơ sở khứ hồi xấp xỉ. Thành phần truyền dẫn của chúng là không thể giảm được.
+@Tbl-speed-of-light-ref trình bày các mốc thời gian khứ hồi xấp xỉ. Phần thời gian do truyền dẫn là không thể giảm bớt.
 
 | **Distance**           | **Round-Trip Latency** | **Implication**                      |
 |:-----------------------|:----------------------:|:-------------------------------------|
@@ -195,11 +195,11 @@ Các mối quan hệ này kết hợp các giới hạn vật lý hoặc số h�
 | **Cross-Atlantic**     |         ~60 ms         | Further reduces the request budget   |
 | **Cross-Pacific**      |        ~100 ms         | Data locality is critical            |
 
-: **Tham chiếu Tốc độ Ánh sáng**: Ánh sáng trong sợi quang truyền đi ~200 km/ms. Các chuyến đi khứ hồi xấp xỉ này bao gồm chi phí phụ có thể giảm; chỉ sự truyền dẫn là không thể giảm được. {#tbl-speed-of-light-ref tbl-colwidths="[34,33,33]"}
+: **Tham chiếu tốc độ ánh sáng**: Ánh sáng trong sợi quang đi được khoảng ~200 km/ms. Các con số khứ hồi xấp xỉ này có bao gồm phần chi phí phụ có thể giảm; chỉ độ trễ do lan truyền là không thể giảm. {#tbl-speed-of-light-ref tbl-colwidths="[34,33,33]"}
 
 #### Hệ thống phân cấp năng lượng {.unnumbered}
 
-@Tbl-energy-ratios-ref định lượng chi phí năng lượng của việc di chuyển dữ liệu so với tính toán—lý do cơ bản tại sao cường độ số học chi phối tối ưu hóa hiệu suất ML.[^fn-horowitz-energy-app]
+@Tbl-energy-ratios-ref định lượng chi phí năng lượng của việc di chuyển dữ liệu so với tính toán—lý do cơ bản vì sao cường độ số học chi phối tối ưu hóa hiệu suất ML.[^fn-horowitz-energy-app]
 
 | **Relationship**                  |                   **Reference Ratio**                    | **Source and Interpretation**                                             |
 |:----------------------------------|:--------------------------------------------------------:|:--------------------------------------------------------------------------|
@@ -208,13 +208,13 @@ Các mối quan hệ này kết hợp các giới hạn vật lý hoặc số h�
 | **FP32 vs. FP16 energy**          |  ~`{python} NumbersToKnow.fp32_vs_fp16_ratio_mult_str`   | Horowitz 45 nm; narrower arithmetic reduces switching and datapath energy |
 | **L1 SRAM vs. register**          |    ~`{python} NumbersToKnow.l1_vs_reg_ratio_mult_str`    | Illustrative on-chip hierarchy anchor; distance to the arithmetic unit    |
 
-: **Tỷ lệ Tham chiếu Năng lượng**: Ba tỷ lệ đầu tiên sử dụng các phép đo 45 nm của Horowitz; tỷ lệ L1/thanh ghi là một điểm neo minh họa cho hệ thống phân cấp trên chip. {#tbl-energy-ratios-ref tbl-colwidths="[35,10,55]"}
+: **Tỷ lệ tham chiếu năng lượng**: Ba tỷ lệ đầu tiên sử dụng các đo đạc 45 nm của Horowitz; tỷ lệ L1/thanh ghi là một mốc tham chiếu minh họa cho hệ thống phân cấp trên chip. {#tbl-energy-ratios-ref tbl-colwidths="[35,10,55]"}
 
-[^fn-horowitz-energy-app]: **Nguồn hệ thống phân cấp năng lượng**\index{Energy hierarchy!reference sources}: Các giá trị DRAM và số học đến từ @horowitz2014 (45 nm). Tỷ lệ L1 SRAM/thanh ghi là một điểm neo minh họa cho hệ thống phân cấp, không phải là phép đo của Horowitz. Tỷ lệ tiêu đề so sánh truy cập DRAM 32-bit với phép nhân dấu phẩy động 16-bit. Cả giá trị tuyệt đối và tỷ lệ đều thay đổi theo quy trình, mạch, công nghệ bộ nhớ và độ rộng toán hạng; khoảng cách dây dẫn giúp giải thích tại sao việc di chuyển vẫn tốn kém.
+[^fn-horowitz-energy-app]: **Nguồn hệ thống phân cấp năng lượng**\index{Energy hierarchy!reference sources}: Các giá trị DRAM và số học lấy từ @horowitz2014 (45 nm). Tỷ lệ L1 SRAM/thanh ghi là một mốc tham chiếu minh họa cho hệ thống phân cấp, không phải số đo của Horowitz. Tỷ lệ tiêu đề so sánh một lần truy cập DRAM 32-bit với một phép nhân dấu phẩy động 16-bit. Cả giá trị tuyệt đối lẫn tỷ lệ đều thay đổi theo quy trình, mạch, công nghệ bộ nhớ và độ rộng toán hạng; độ dài dây dẫn giúp giải thích vì sao việc di chuyển dữ liệu vẫn tốn kém.
 
 #### Hệ thống phân cấp bộ nhớ {.unnumbered}
 
-@Tbl-memory-ratios-ref cho thấy tại sao hệ thống phân cấp bộ nhớ không đồng đều: các bước nhảy gần nhau trên gói chỉ có thể khác nhau vài lần, trong khi các tầng ngoài chip, lưu trữ và mạng tạo ra các bước nhảy theo bậc độ lớn.
+@Tbl-memory-ratios-ref cho thấy vì sao hệ thống phân cấp bộ nhớ không đồng đều: các chặng gần trên cùng gói có thể chỉ chênh nhau vài lần, trong khi các tầng ngoài chip, lưu trữ và mạng lại tạo ra các bước nhảy chênh lệch tới hàng bậc độ lớn.
 
 | **Relationship**                                                   |                            **Ratio**                             | **Why It Persists**               |
 |:-------------------------------------------------------------------|:----------------------------------------------------------------:|:----------------------------------|
@@ -223,11 +223,11 @@ Các mối quan hệ này kết hợp các giới hạn vật lý hoặc số h�
 | **Network vs. local memory**                                       | ~`{python} NumbersToKnow.network_vs_local_ratio_mult_str` slower | Speed of light + switching        |
 | **Accelerator memory BW vs. CPU$\leftrightarrow$Accelerator link** |  ~`{python} NumbersToKnow.gpu_bw_vs_pcie_ratio_mult_str` faster  | Architectural investment priority |
 
-: **Hệ thống phân cấp Độ trễ**: Các mối quan hệ độ trễ được chọn trong hệ thống phân cấp bộ nhớ. Khoảng cách lớn nhất đến từ việc vượt qua các ranh giới vật lý: bộ nhớ ngoài chip, liên kết ngoại vi, lưu trữ và cấu trúc mạng. {#tbl-memory-ratios-ref tbl-colwidths="[47,23,30]"}
+: **Hệ thống phân cấp độ trễ**: Các mối quan hệ độ trễ tiêu biểu trong hệ thống phân cấp bộ nhớ. Các khoảng cách lớn nhất xuất hiện khi vượt qua ranh giới vật lý: bộ nhớ ngoài chip, liên kết ngoại vi, lưu trữ và cấu trúc mạng. {#tbl-memory-ratios-ref tbl-colwidths="[47,23,30]"}
 
-#### Các định luật mở rộng {.unnumbered}
+#### Các quy luật mở rộng {.unnumbered}
 
-@Tbl-scaling-rules-ref tập hợp các mối quan hệ số học chi phối các yêu cầu về bộ nhớ và tính toán cho huấn luyện và suy luận.[^fn-training-memory-footprint]
+@Tbl-scaling-rules-ref tổng hợp các mối quan hệ số học quy định yêu cầu bộ nhớ và tính toán cho huấn luyện và suy luận.[^fn-training-memory-footprint]
 
 | **Rule**                          |             **Formula**              |                **Example**                 |
 |:----------------------------------|:------------------------------------:|:------------------------------------------:|
@@ -237,13 +237,13 @@ Các mối quan hệ này kết hợp các giới hạn vật lý hoặc số h�
 | **Inference FLOPs (transformer)** |   ~2$\times$ parameters per token    |        7B model → ~14 GFLOPs/token         |
 | **Training FLOPs**                | ~6$\times$ parameters$\times$ tokens | 7B on 1T tokens → $4 \times 10^{22}$ FLOPs |
 
-: **Quy tắc mở rộng**: Đây là các quy tắc thuộc số học, không đặc thù phần cứng. Bộ nhớ huấn luyện bao gồm trọng số FP16 (2 byte), gradient FP16 (2 byte), trọng số chính FP32 (4 byte) và trạng thái optimizer Adam (8 byte cho động lượng + phương sai). {#tbl-scaling-rules-ref tbl-colwidths="[34,33,33]"}
+: **Quy tắc mở rộng**: Đây là các quy tắc mang tính số học, không phụ thuộc vào phần cứng cụ thể. Bộ nhớ huấn luyện bao gồm trọng số FP16 (2 byte), gradient FP16 (2 byte), trọng số gốc FP32 (4 byte) và trạng thái optimizer Adam (8 byte cho động lượng + phương sai). {#tbl-scaling-rules-ref tbl-colwidths="[34,33,33]"}
 
-[^fn-training-memory-footprint]: **Bộ nhớ huấn luyện (Adam)**\index{Training memory!Adam storage model}: Quy tắc 16 byte/tham số giả định huấn luyện độ chính xác hỗn hợp với Adam. Tối ưu hóa ZeRO có thể giảm bộ nhớ trên mỗi bộ tăng tốc bằng cách phân mảnh trạng thái optimizer trên các bộ tăng tốc, nhưng tổng bộ nhớ trên tất cả các bộ tăng tốc vẫn là ~16$\times$ tham số.
+[^fn-training-memory-footprint]: **Bộ nhớ huấn luyện (Adam)**\index{Training memory!Adam storage model}: Quy tắc 16 byte/mỗi tham số áp dụng cho huấn luyện độ chính xác hỗn hợp với Adam. ZeRO có thể giảm bộ nhớ trên mỗi bộ tăng tốc bằng cách chia nhỏ trạng thái optimizer giữa các bộ tăng tốc, nhưng tổng bộ nhớ trên toàn bộ các bộ tăng tốc vẫn khoảng ~16$\times$ tham số.
 
 ### Ngân sách độ trễ minh họa {.unnumbered}
 
-Ngân sách độ trễ phụ thuộc vào các yêu cầu an toàn đặc thù ứng dụng, kỳ vọng người dùng và mục tiêu mức dịch vụ. @Tbl-latency-targets-ref liệt kê các mục tiêu minh họa thay vì giới hạn chung.
+Ngân sách độ trễ phụ thuộc vào các yêu cầu an toàn riêng của từng ứng dụng, kỳ vọng người dùng và mục tiêu mức dịch vụ. @Tbl-latency-targets-ref liệt kê các mục tiêu minh họa thay vì giới hạn phổ quát.
 
 | **Application**        | **Budget** | **Constraint**                       |
 |:-----------------------|:----------:|:-------------------------------------|
@@ -253,15 +253,15 @@ Ngân sách độ trễ phụ thuộc vào các yêu cầu an toàn đặc thù 
 | **Video streaming**    |    <1 s    | Buffer tolerance                     |
 | **Batch training**     | hours–days | Throughput dominates latency         |
 
-: **Mục tiêu độ trễ minh họa**: Yêu cầu sản xuất phụ thuộc vào ứng dụng và các mục tiêu mức dịch vụ của nó. {#tbl-latency-targets-ref tbl-colwidths="[34,33,33]"}
+: **Mục tiêu độ trễ minh họa**: Các yêu cầu trong môi trường sản phẩm phụ thuộc vào ứng dụng và các mục tiêu mức dịch vụ (SLO) của ứng dụng đó. {#tbl-latency-targets-ref tbl-colwidths="[34,33,33]"}
 
 ### Tham chiếu phần cứng hiện tại (khoảng năm 2024) {.unnumbered}
 
-Những con số này phản ánh thế hệ hiện tại. Hãy sử dụng chúng cho các tính toán sơ bộ và kiểm tra lại với phần cứng hiện tại.
+Những con số này phản ánh thế hệ phần cứng hiện tại. Hãy dùng chúng để tính toán sơ bộ và kiểm tra lại với phần cứng hiện tại.
 
 #### Độ trễ và băng thông bộ nhớ {.unnumbered}
 
-@Tbl-memory-current-ref cung cấp các điểm neo độ trễ và băng thông đại diện trên hệ thống phân cấp bộ nhớ.
+@Tbl-memory-current-ref trình bày các giá trị độ trễ và băng thông tiêu biểu ở các cấp khác nhau trong hệ thống phân cấp bộ nhớ.
 
 | **Level**                               |                **Latency**                |                   **Bandwidth**                   |
 |:----------------------------------------|:-----------------------------------------:|:-------------------------------------------------:|
@@ -274,14 +274,14 @@ Những con số này phản ánh thế hệ hiện tại. Hãy sử dụng chú
 | **InfiniBand (network)**                |  ~`{python} NumbersToKnow.lat_ib_ns_str`  |    `{python} NumbersToKnow.bw_ib_gb_per_s_str`    |
 | **NVMe SSD**                            |  ~`{python} NumbersToKnow.lat_ssd_ns_str` |   `{python} NumbersToKnow.bw_nvme_gb_per_s_str`   |
 
-: **Hệ thống phân cấp bộ nhớ (khoảng năm 2024)**: Các điểm neo độ trễ và băng thông đại diện trên thanh ghi, cache, bộ nhớ, kết nối nội bộ, mạng và lưu trữ. Cùng nhau, chúng cho thấy tại sao tính cục bộ và di chuyển dữ liệu định hình hiệu suất. {#tbl-memory-current-ref tbl-colwidths="[34,33,33]"}
+: **Hệ thống phân cấp bộ nhớ (khoảng năm 2024)**: Các giá trị độ trễ và băng thông tiêu biểu trải dài từ thanh ghi, cache, bộ nhớ, các kết nối, mạng cho đến bộ lưu trữ. Nhìn chung, chúng cho thấy vì sao tính cục bộ (locality) và việc di chuyển dữ liệu lại ảnh hưởng lớn đến hiệu suất. {#tbl-memory-current-ref tbl-colwidths="[34,33,33]"}
 
 ```{=latex}
 \newpage
 ```
 #### Thông lượng tính toán {.unnumbered}
 
-@Tbl-compute-current-ref so sánh thông lượng đỉnh và công suất đại diện cho GPU trung tâm dữ liệu và NPU di động.
+@Tbl-compute-current-ref so sánh thông lượng đỉnh và công suất tiêu biểu của GPU trung tâm dữ liệu và NPU di động.
 
 | **Platform**               |                   **FP16/BF16**                    |                      **INT8/FP8-class**                      | **Power** |
 |:---------------------------|:--------------------------------------------------:|:------------------------------------------------------------:|:---------:|
@@ -289,11 +289,11 @@ Những con số này phản ánh thế hệ hiện tại. Hãy sử dụng chú
 | **Data center GPU (A100)** | `{python} NumbersToKnow.a100_fp16_tflop_per_s_str` |                           624 TOPS                           |   400 W   |
 | **Mobile NPU**             |                         —                          |        `{python} NumbersToKnow.mobile_int8_tops_str`         |   3–5 W   |
 
-: **Tham chiếu tính toán (khoảng năm 2024)**: Thông lượng đỉnh và công suất đại diện cho GPU trung tâm dữ liệu và NPU di động. Vì các hàng sử dụng các chế độ độ chính xác và quy ước hoạt động khác nhau, chỉ so sánh chúng trong ngữ cảnh khối lượng công việc (workload) và độ chính xác phù hợp. {#tbl-compute-current-ref tbl-colwidths="[33,20,32,15]"}
+: **Thông số tính toán tham khảo (khoảng năm 2024)**: Thông lượng đỉnh và công suất tiêu biểu của GPU trung tâm dữ liệu và NPU di động. Vì các dòng trong bảng dùng các chế độ độ chính xác và quy ước hoạt động khác nhau, bạn chỉ nên so sánh chúng trong cùng một ngữ cảnh về khối lượng công việc (workload) và độ chính xác. {#tbl-compute-current-ref tbl-colwidths="[33,20,32,15]"}
 
 #### Các điểm đỉnh Roofline {.unnumbered}
 
-@Tbl-ridge-current-ref định nghĩa các ngưỡng cường độ số học xác định liệu một khối lượng công việc (workload) bị giới hạn bởi bộ nhớ hay giới hạn bởi tính toán.
+@Tbl-ridge-current-ref định nghĩa các ngưỡng cường độ số học, giúp xác định liệu một khối lượng công việc (workload) đang bị giới hạn bởi bộ nhớ hay bởi khả năng tính toán.
 
 | **Accelerator** |                  **Ridge Point**                  | **Implication**              |
 |:----------------|:-------------------------------------------------:|:-----------------------------|
@@ -304,23 +304,23 @@ Những con số này phản ánh thế hệ hiện tại. Hãy sử dụng chú
 
 ::: {#psp-appendix-machine-gpus-and-accelerators-terminology .callout-perspective title="Lưu ý về thuật ngữ: GPU và bộ tăng tốc"}
 
-Trong suốt cuốn sách này, "bộ tăng tốc" là thuật ngữ chung cho tăng tốc phần cứng. Các nguyên tắc—phân tích roofline, hệ thống phân cấp bộ nhớ, độ chính xác số học và mô hình hóa hiệu suất—áp dụng cho GPU, Bộ xử lý Tensor (TPU), NPU, mạch tích hợp chuyên dụng ứng dụng và các bộ tăng tốc AI chuyên dụng khác. Các tính năng đặc thù nhà cung cấp như CUDA và NVLink được xác định rõ ràng.
+Xuyên suốt cuốn sách này, "bộ tăng tốc" là thuật ngữ chung chỉ phần cứng tăng tốc. Các nguyên tắc—phân tích roofline, phân cấp bộ nhớ, độ chính xác số học và mô hình hóa hiệu năng—áp dụng cho GPU, TPU, NPU, mạch tích hợp chuyên dụng (ASIC) và các bộ tăng tốc AI chuyên dụng khác. Các tính năng đặc thù của nhà cung cấp như CUDA và NVLink sẽ được nêu rõ.
 
 :::
 
-Biết các con số chỉ là bước đầu tiên. Sức mạnh thực sự đến từ các mô hình nhỏ gọn tiết lộ *con số nào* quan trọng đối với nút thắt hiện tại. Mô hình Roofline bắt đầu chẩn đoán đó bằng cách chuyển đổi thông số kỹ thuật phần cứng thô thành các giới hạn hiệu suất có thể hành động.
+Việc biết các con số chỉ là bước đầu. Sức mạnh thực sự đến từ các mô hình gọn, cho thấy *con số nào* quan trọng với nút thắt hiện tại. Mô hình Roofline mở đầu quá trình chẩn đoán bằng cách chuyển các thông số phần cứng thô thành các trần hiệu suất có thể hành động.
 
-## Vật lý tính toán {#sec-appdx-machine-foundations-physics-computing-c77f}
+## Vật lý của tính toán {#sec-appdx-machine-foundations-physics-computing-c77f}
 
-Thông số kỹ thuật phần cứng thô—TFLOP/s, TB/s, ngân sách watt—là cần thiết nhưng không đủ cho lý luận hiệu suất. Nếu không có các mô hình phân tích nhỏ gọn, một kỹ sư không thể phân biệt khối lượng công việc (workload) giới hạn bởi tính toán với khối lượng công việc (workload) giới hạn bởi bộ nhớ, hoặc dự đoán liệu việc tăng gấp đôi số GPU có giảm một nửa thời gian huấn luyện hay không. Các mô hình trong phần này biến những khác biệt đó thành các kiểm tra định lượng.
+Các thông số phần cứng thô—TFLOP/s, TB/s, công suất (watt)—là cần thiết nhưng chưa đủ để suy luận về hiệu suất. Nếu không có các mô hình phân tích gọn, kỹ sư khó phân biệt khối lượng công việc (workload) bị giới hạn bởi tính toán hay bởi bộ nhớ, hoặc dự đoán liệu tăng gấp đôi số GPU có giúp giảm một nửa thời gian huấn luyện hay không. Các mô hình trong phần này biến những khác biệt đó thành các kiểm tra định lượng.
 
 ### Mô hình Roofline {#sec-appdx-machine-foundations-roofline-model-2529}
 
-Mô hình Roofline\index{Roofline model!appendix refresher} [@williams2009] giới hạn tốc độ chạy của một khối lượng công việc (workload) trên một mục tiêu phần cứng nhất định. Câu trả lời phụ thuộc vào việc khối lượng công việc (workload) hết tài nguyên tính toán hay băng thông bộ nhớ trước.
+Mô hình Roofline\index{Roofline model!appendix refresher} [@williams2009] đặt ra giới hạn tốc độ một khối lượng công việc (workload) có thể chạy trên một phần cứng cụ thể. Kết quả phụ thuộc vào việc khối lượng công việc (workload) cạn tính toán hay băng thông bộ nhớ trước.
 
-Mọi phép toán đều có một **cường độ số học**\index{Arithmetic intensity!appendix refresher}: tỷ lệ giữa số phép tính được thực hiện và số byte di chuyển từ bộ nhớ. Phép nhân ma trận có cường độ số học cao vì mỗi phần tử được tải được tái sử dụng nhiều lần. Các phép toán theo phần tử như đơn vị tuyến tính chỉnh lưu (ReLU) có cường độ thấp vì mỗi phép toán tải một số, thực hiện một phép tính và ghi lại. Như @fig-roofline minh họa, mỗi khối lượng công việc (workload) bị giới hạn bởi băng thông bộ nhớ hoặc thông lượng tính toán, và cường độ số học của nó xác định giới hạn nào nó đạt đến trước.
+Mọi phép toán đều có **cường độ số học**\index{Arithmetic intensity!appendix refresher}: tỷ lệ giữa số phép tính thực hiện và số byte lấy từ bộ nhớ. Phép nhân ma trận có cường độ số học cao vì mỗi phần tử nạp lên được tái sử dụng nhiều lần. Ngược lại, các phép theo phần tử như ReLU (rectified linear unit) có cường độ thấp vì mỗi phép chỉ nạp một giá trị, thực hiện một phép tính rồi ghi kết quả lại. Như @fig-roofline minh họa, mỗi khối lượng công việc (workload) bị giới hạn bởi băng thông bộ nhớ hoặc thông lượng tính toán, và cường độ số học quyết định trần nào chạm tới trước.
 
-::: {#fig-roofline fig-env="figure" fig-pos="htb" fig-cap="**Mô hình Roofline**: Giới hạn băng thông bộ nhớ dốc và giới hạn tính toán đỉnh ngang gặp nhau tại điểm đỉnh. Vẽ đồ thị một khối lượng công việc (workload) theo cường độ số học xác định giới hạn roofline nào được áp dụng." fig-alt="Một đồ thị với cường độ số học trên trục x và hiệu suất trên trục y. Hai đường tạo thành hình dạng roofline: một đường chéo đi lên từ gốc tọa độ được dán nhãn giới hạn bởi bộ nhớ, và một đường ngang được dán nhãn giới hạn bởi tính toán. Chúng gặp nhau tại điểm đỉnh."}
+::: {#fig-roofline fig-env="figure" fig-pos="htb" fig-cap="**Mô hình Roofline**: Đường trần băng thông bộ nhớ (nghiêng) và đường trần thông lượng tính toán (nằm ngang) gặp nhau tại điểm ridge. Khi vẽ một khối lượng công việc (workload) theo cường độ số học, ta xác định được trần roofline nào chi phối." fig-alt="Một đồ thị với trục hoành là cường độ số học và trục tung là hiệu suất. Hai đường tạo thành hình roofline: một đường chéo đi lên từ gốc tọa độ được ghi chú là 'giới hạn bởi bộ nhớ', và một đường ngang được ghi chú là 'giới hạn bởi tính toán'. Hai đường này gặp nhau tại điểm ridge (ridge point)."}
 ```{.tikz}
 \begin{tikzpicture}[font=\small\sffamily, scale=1.1]
   \tikzset{
@@ -343,7 +343,7 @@ Mọi phép toán đều có một **cường độ số học**\index{Arithmeti
 ```
 :::
 
-**Điểm đỉnh**\index{Ridge point!appendix refresher} xác định sự cân bằng của phần cứng. Nếu cường độ của khối lượng công việc (workload) nằm dưới điểm này, nó bị giới hạn bởi bộ nhớ (vùng dốc). Nếu nằm trên, nó bị giới hạn bởi tính toán (vùng phẳng).
+**Điểm ridge (ridge point)**\index{Ridge point!appendix refresher} xác định điểm cân bằng của phần cứng. Nếu cường độ số học của một khối lượng công việc (workload) thấp hơn điểm này, khối lượng công việc đó bị giới hạn bởi bộ nhớ (nằm trong vùng dốc). Ngược lại, nếu cường độ số học cao hơn, khối lượng công việc đó bị giới hạn bởi tính toán (nằm trong vùng phẳng).
 \begin{gather*}
 \text{Arithmetic Intensity} = \frac{\text{FLOPs}}{\text{bytes accessed}}
 \qquad\qquad
@@ -352,12 +352,12 @@ Mọi phép toán đều có một **cường độ số học**\index{Arithmeti
 
 ::: {#psp-appendix-machine-batch-size-arithmetic-intensity .callout-perspective title="Kích thước batch kiểm soát cường độ số học"}
 
-Đối với phép nhân ma trận, cường độ số học tỷ lệ với chiều batch. Đối với $\mathbf{Y} = \mathbf{X}\mathbf{W}$, trong đó $\mathbf{X}$ có kích thước $(B\times d_{\text{in}})$ và $\mathbf{W}$ có kích thước $(d_{\text{in}}\times d_{\text{out}})$:
+Đối với phép nhân ma trận, cường độ số học tỷ lệ theo kích thước batch. Ví dụ, với phép tính $\mathbf{Y} = \mathbf{X}\mathbf{W}$, trong đó $\mathbf{X}$ có kích thước $(B\times d_{\text{in}})$ và $\mathbf{W}$ có kích thước $(d_{\text{in}}\times d_{\text{out}})$:
 
 - FLOPs: $2 \times B \times d_{\text{in}} \times d_{\text{out}}$ (phép nhân-cộng)
-- Byte: Di chuyển $X$, $W$ và $Y$ tốn khoảng $s_{\text{elem}}(B d_{\text{in}} + d_{\text{in}}d_{\text{out}} + B d_{\text{out}})$ byte.
+- Bytes: Việc di chuyển $X$, $W$ và $Y$ tốn khoảng $s_{\text{elem}}(B d_{\text{in}} + d_{\text{in}}d_{\text{out}} + B d_{\text{out}})$ byte.
 
-Tăng gấp đôi $B$ sẽ tăng gấp đôi FLOPs trong khi lưu lượng trọng số gần như không đổi khi trọng số chiếm ưu thế, làm tăng cường độ số học. Đây là lý do tại sao batching thường giúp phục vụ (serving) suy luận, mặc dù lưu lượng activation, hành vi cache, hình dạng, độ chính xác và điểm đỉnh xác định liệu nó có đạt đến giới hạn tính toán hay không.
+Khi $B$ tăng gấp đôi, FLOPs cũng tăng gấp đôi, trong khi lưu lượng trọng số gần như không đổi (khi trọng số chiếm ưu thế), nhờ đó cường độ số học tăng lên. Đây là lý do tại sao batching thường giúp phục vụ (serving) suy luận, mặc dù việc có đạt tới trần tính toán hay không còn phụ thuộc vào lưu lượng activation, hành vi cache, hình dạng, độ chính xác và điểm ridge (ridge point).
 
 :::
 
@@ -394,42 +394,42 @@ class A100RooflineExample:
     relu_util_str = fmt_percent(relu_utilization_value / 100, precision=2, commas=False, style='prose')
 ```
 
-Hãy xem xét một GPU NVIDIA A100\index{A100!roofline analysis} với hiệu năng Tensor Core FP16 là `{python} A100RooflineExample.a100_fp16_tflop_per_s_str` và băng thông HBM2e là `{python} A100RooflineExample.a100_bw_tb_per_s_str`. Điểm đỉnh (ridge point) là `{python} A100RooflineExample.a100_fp16_tflop_per_s_str`/`{python} A100RooflineExample.a100_bw_tb_per_s_str` = `{python} A100RooflineExample.ridge_point_flops_per_byte_str` (các tiền tố Tera triệt tiêu, cho ra FLOP/byte).
+Hãy xem xét một GPU NVIDIA A100\index{A100!roofline analysis} với hiệu năng Tensor Core FP16 là `{python} A100RooflineExample.a100_fp16_tflop_per_s_str` và băng thông HBM2e là `{python} A100RooflineExample.a100_bw_tb_per_s_str`. Điểm ridge (ridge point) là `{python} A100RooflineExample.a100_fp16_tflop_per_s_str`/`{python} A100RooflineExample.a100_bw_tb_per_s_str` = `{python} A100RooflineExample.ridge_point_flops_per_byte_str` (các tiền tố Tera triệt tiêu nhau, cho ra đơn vị FLOP/byte).
 
-Hai phép toán phổ biến nằm ở hai phía đối diện của điểm đỉnh đó. Phép nhân ma trận tổng quát (GEMM)\index{GEMM!arithmetic intensity} trên hai ma trận vuông kích thước `{python} A100RooflineExample.n_gemm_str` nhân `{python} A100RooflineExample.n_gemm_str` có cường độ số học (arithmetic intensity) xấp xỉ `{python} A100RooflineExample.gemm_intensity_str`, do đó `{python} A100RooflineExample.gemm_intensity_str` > `{python} A100RooflineExample.ridge_point_flops_per_byte_str` và phép toán này bị giới hạn bởi tính toán (compute bound). Một phép toán ReLU\index{ReLU!arithmetic intensity} theo từng phần tử trên một tensor FP16 thực hiện 1 phép so sánh trong khi đọc 2 byte và ghi 2 byte (tổng cộng 4 byte), cho cường độ số học chỉ $1/4 =$ `{python} A100RooflineExample.relu_intensity_str`. Bởi vì `{python} A100RooflineExample.relu_intensity_str` $\ll$ `{python} A100RooflineExample.ridge_point_flops_per_byte_str`, phép toán này bị giới hạn nghiêm trọng bởi bộ nhớ (memory bound), chỉ đạt khoảng `{python} A100RooflineExample.relu_util_str` của TFLOP/s đỉnh. Sự tương phản này giải thích tại sao các framework hiện đại lại hợp nhất các phép toán. Việc kết hợp trực tiếp ReLU với kernel MatMul trước đó giúp tránh ghi kết quả trung gian vào bộ nhớ, từ đó bảo toàn băng thông bộ nhớ một cách hiệu quả.
+Có hai phép toán phổ biến nằm ở hai phía đối diện của điểm đỉnh đó. Phép nhân ma trận tổng quát (GEMM)\index{GEMM!arithmetic intensity} trên hai ma trận vuông kích thước `{python} A100RooflineExample.n_gemm_str` x `{python} A100RooflineExample.n_gemm_str` có cường độ số học xấp xỉ `{python} A100RooflineExample.gemm_intensity_str`, nên `{python} A100RooflineExample.gemm_intensity_str` > `{python} A100RooflineExample.ridge_point_flops_per_byte_str` và phép toán này bị giới hạn bởi tính toán (compute bound). Một phép toán ReLU\index{ReLU!arithmetic intensity} theo từng phần tử trên một tensor FP16 thực hiện 1 phép so sánh, đồng thời đọc 2 byte và ghi 2 byte (tổng 4 byte), cho cường độ số học chỉ $1/4 =$ `{python} A100RooflineExample.relu_intensity_str`. Vì `{python} A100RooflineExample.relu_intensity_str` $\ll$ `{python} A100RooflineExample.ridge_point_flops_per_byte_str`, phép toán này bị giới hạn nghiêm trọng bởi bộ nhớ (memory bound), chỉ đạt khoảng `{python} A100RooflineExample.relu_util_str` so với TFLOP/s đỉnh. Sự tương phản này giải thích vì sao các framework hiện đại thường hợp nhất các phép toán. Kết hợp ReLU trực tiếp với kernel MatMul ngay trước đó giúp tránh ghi kết quả trung gian ra bộ nhớ, qua đó giữ được băng thông bộ nhớ.
 
 ### Phân tích thứ nguyên {#sec-appdx-machine-foundations-dimensional-analysis-76b3}
 
-Mô hình Roofline giúp chẩn đoán *nơi* xảy ra tắc nghẽn. Tuy nhiên, trước khi áp dụng bất kỳ phương trình hiệu năng nào, nó phải được xác minh là có ý nghĩa vật lý. Phân tích thứ nguyên cung cấp kiểm tra tính hợp lý này: bất kỳ phương trình hợp lệ nào cũng phải **thuần nhất về thứ nguyên**\index{Dimensional homogeneity!appendix refresher}—mọi số hạng phải quy về cùng một đơn vị. Nếu không, phương trình đó chứa lỗi.
+Mô hình Roofline giúp xác định *vị trí* tắc nghẽn. Tuy nhiên, trước khi áp dụng bất kỳ phương trình hiệu năng nào, ta cần kiểm tra xem nó có ý nghĩa vật lý hay không. Phân tích thứ nguyên cung cấp phép kiểm tra “tỉnh táo” này: bất kỳ phương trình hợp lệ nào cũng phải **thuần nhất về thứ nguyên**\index{Dimensional homogeneity!appendix refresher}—nghĩa là mọi số hạng phải có cùng đơn vị. Nếu không, phương trình đó có lỗi.
 
-Đối với các pha tuần tự hóa, hãy xem xét định luật sắt của các hệ thống ML\index{Iron law of ML systems!appendix refresher} (nguyên lý \ref{pri-iron-law}) được giới thiệu trong @sec-introduction-iron-law-ml-systems-c32a:
+Đối với các giai đoạn xử lý tuần tự, chúng ta hãy xem xét định luật sắt của các hệ thống ML\index{Iron law of ML systems!appendix refresher} (nguyên lý \ref{pri-iron-law}) đã được giới thiệu trong @sec-introduction-iron-law-ml-systems-c32a:
 $$ T = \frac{D_{\text{vol}}}{\text{BW}} + \frac{O}{R_{\text{peak}} \cdot \eta_{\text{hw}}} + L_{\text{lat}} $$
 
-Tính đúng đắn được xác minh bằng cách xác nhận rằng mọi số hạng đều quy về thời gian (giây):
+Để kiểm tra tính đúng đắn, ta xác nhận rằng mọi số hạng đều có đơn vị là thời gian (giây):
 $$ T [s] = \underbrace{ \frac{D_{\text{vol}} [\text{bytes}]}{\text{BW} [\text{bytes/s}]} }_{\text{seconds}} + \underbrace{ \frac{O [\text{FLOPs}]}{R_{\text{peak}} [\text{FLOP/s}] \cdot \eta_{\text{hw}} [1]} }_{\text{seconds}} + \underbrace{ L_{\text{lat}} [s] }_{\text{seconds}} $$
 
 *   Số hạng dữ liệu: $\frac{\text{bytes}}{\text{bytes/s}} = \text{bytes} \times \frac{\text{s}}{\text{bytes}} = \mathbf{s}$
 *   Số hạng tính toán: $\frac{\text{FLOPs}}{\text{FLOP/s}} = \text{FLOPs} \times \frac{\text{s}}{\text{FLOP}} = \mathbf{s}$
-*   Số hạng độ trễ: Đã tính bằng giây.
+*   Số hạng độ trễ: Đã có đơn vị là giây.
 
-Phương trình này nhất quán về mặt vật lý. Áp dụng kỹ thuật này cho bất kỳ phương trình hệ thống nào: nếu các thứ nguyên không khớp, công thức đó là sai. 
+Phương trình này nhất quán về mặt vật lý. Hãy áp dụng kỹ thuật này cho bất kỳ phương trình hệ thống nào: nếu các thứ nguyên không khớp, công thức đó là sai. "FLOPs" và "băng thông" không thể hoán đổi trực tiếp vì chúng có đơn vị khác nhau. Mọi sự đánh đổi giữa chúng đều phải quy đổi qua thời gian, và đó chính xác là điều mà định luật sắt định lượng.
 
-Khi một phương trình đã thuần nhất về thứ nguyên, câu hỏi tiếp theo là các số hạng thời gian của nó mở rộng như thế nào trên các thiết bị. @Sec-appdx-machine-foundations-amdahls-law-gustafsons-law-b741 trả lời câu hỏi đó bằng hai giới hạn bổ sung.
+Khi một phương trình đã nhất quán về thứ nguyên, câu hỏi tiếp theo là các số hạng thời gian của nó sẽ mở rộng như thế nào trên các thiết bị khác nhau. @Sec-appdx-machine-foundations-amdahls-law-gustafsons-law-b741 trả lời câu hỏi đó bằng hai cận bổ sung.
 
 ### Định luật Amdahl và Định luật Gustafson {#sec-appdx-machine-foundations-amdahls-law-gustafsons-law-b741}
 
-Song song hóa là công cụ chính để mở rộng quy mô ML, nhưng giới hạn của nó phụ thuộc vào *cách* khối lượng công việc (workload) mở rộng. Hai định luật này tạo nên sự căng thẳng cơ bản trong điện toán song song. **Định luật Amdahl**\index{Amdahl's law!appendix refresher} là quan điểm của người bi quan, chi phối việc một tác vụ *cố định* có thể chạy nhanh hơn bao nhiêu (tối ưu hóa độ trễ). **Định luật Gustafson**\index{Gustafson's law!appendix refresher} là quan điểm của người lạc quan, chi phối việc có thể thực hiện *nhiều* công việc hơn bao nhiêu trong cùng một khoảng thời gian (tối ưu hóa thông lượng).
+Song song hóa là công cụ chính để mở rộng ML, nhưng giới hạn của nó phụ thuộc vào *cách* khối lượng công việc (workload) được mở rộng. Hai định luật này khuôn khổ hóa mâu thuẫn căn bản trong điện toán song song. **Định luật Amdahl**\index{Amdahl's law!appendix refresher} là góc nhìn bi quan, cho biết một tác vụ *cố định* có thể chạy nhanh hơn bao nhiêu (tối ưu hóa độ trễ). **Định luật Gustafson**\index{Gustafson's law!appendix refresher} là góc nhìn lạc quan, cho biết có thể làm *nhiều* việc hơn bao nhiêu trong cùng một khoảng thời gian (tối ưu hóa thông lượng).
 
 #### Mở rộng mạnh (Định luật Amdahl) {#sec-appdx-machine-foundations-strong-scaling-amdahls-law-c6c2}
 
-**Mở rộng mạnh**\index{Strong scaling!appendix refresher} đo lường mức độ nhanh hơn của một bài toán có kích thước cố định khi thêm bộ xử lý.
+**Mở rộng mạnh**\index{Strong scaling!appendix refresher} đo lường một bài toán có kích thước cố định có thể chạy nhanh hơn bao nhiêu khi tăng số lượng bộ xử lý.
 
-Định luật Amdahl [@amdahl1967] phát biểu rằng tốc độ tăng được giới hạn bởi phần tuần tự của tác vụ.[^fn-amdahl-scaling-appendix] Nếu một phần $s$ của tác vụ là tuần tự (không thể song song hóa) và $p = 1-s$ có thể song song hóa, thì tốc độ tăng tối đa với $n$ bộ xử lý là:
+Định luật Amdahl [@amdahl1967] phát biểu rằng mức tăng tốc bị giới hạn bởi phần tuần tự của tác vụ.[^fn-amdahl-scaling-appendix] Nếu một phần $s$ của tác vụ là tuần tự (không thể thực hiện song song) và phần còn lại $p = 1-s$ có thể thực hiện song song, thì mức tăng tốc tối đa với $n$ bộ xử lý là:
 $$ \text{Speedup}(n) = \frac{1}{s + \frac{1-s}{n}} $$
 
 [^fn-amdahl-scaling-appendix]: **Gene Amdahl (1922–2015)**\index{Amdahl, Gene|seealso{Amdahl's law}}: Một kiến trúc sư máy tính huyền thoại tại IBM, nơi ông là kiến trúc sư trưởng của System/360. Sau đó, ông thành lập Amdahl Corporation để cạnh tranh với IBM trên thị trường máy tính lớn (mainframe).
 
-Khi $n \to \infty$, số hạng $\frac{1-s}{n} \to 0$, và tốc độ tăng hội tụ về $1/s$.
+Khi $n \to \infty$, số hạng $\frac{1-s}{n} \to 0$, và độ tăng tốc hội tụ về $1/s$.
 
 ```{python}
 #| echo: false
@@ -470,7 +470,7 @@ class AmdahlSetup:
     p_str = fmt(parallel_fraction, precision=2, commas=False)
 ```
 
-Để thấy Định luật Amdahl trong thực tế, giả sử `{python} AmdahlSetup.s_pct_str` của một bước huấn luyện là chi phí tuần tự (ví dụ: khóa trình thông dịch toàn cục Python (GIL), độ trễ khởi chạy kernel) và `{python} AmdahlSetup.p_pct_str` là phép toán ma trận có thể song song hóa:
+Để thấy Định luật Amdahl trong thực tế, giả sử `{python} AmdahlSetup.s_pct_str` của một bước huấn luyện là chi phí tuần tự (ví dụ: khóa trình thông dịch toàn cục Python (GIL), độ trễ khởi chạy kernel) và `{python} AmdahlSetup.p_pct_str` là phần tính toán ma trận có thể song song hóa:
 
 ```{python}
 #| echo: false
@@ -511,24 +511,24 @@ class AmdahlExample:
     amdahl_inf_speedup_mult_str = fmt_multiple(amdahl_inf, precision=0, commas=False)
 ```
 
-*   Với $n=1$, tốc độ tăng là 1.
-*   Với $n=$ `{python} AmdahlSetup.n_8_str`, tốc độ tăng là 1/(`{python} AmdahlSetup.s_str` + `{python} AmdahlSetup.p_str`/`{python} AmdahlSetup.n_8_str`) ≈ `{python} AmdahlExample.amdahl_8_speedup_mult_str`.
-*   Với $n \to \infty$, tốc độ tăng bị giới hạn ở 1/`{python} AmdahlSetup.s_str` = `{python} AmdahlExample.amdahl_inf_speedup_mult_str`.
+*   Với $n=1$, độ tăng tốc là 1.
+*   Với $n=$ `{python} AmdahlSetup.n_8_str`, độ tăng tốc là 1/(`{python} AmdahlSetup.s_str` + `{python} AmdahlSetup.p_str`/`{python} AmdahlSetup.n_8_str`) ≈ `{python} AmdahlExample.amdahl_8_speedup_mult_str`.
+*   Với $n \to \infty$, độ tăng tốc bị giới hạn ở 1/`{python} AmdahlSetup.s_str` = `{python} AmdahlExample.amdahl_inf_speedup_mult_str`.
 
 Bất kể có bao nhiêu bộ tăng tốc được thêm vào, khối lượng công việc (workload) cố định này không thể chạy nhanh hơn `{python} AmdahlExample.amdahl_inf_speedup_mult_str`.
 
 #### Mở rộng yếu (Định luật Gustafson) {#sec-appdx-machine-foundations-weak-scaling-gustafsons-law-eb7e}
 
-**Mở rộng yếu**\index{Weak scaling!appendix refresher} đo lường mức độ lớn hơn của một bài toán có thể trở thành trong khi giữ runtime cố định khi thêm bộ xử lý.[^fn-gustafsons-law-scaling]
+**Mở rộng yếu**\index{Weak scaling!appendix refresher} đo xem bài toán có thể tăng lên bao nhiêu trong khi vẫn giữ nguyên runtime khi thêm bộ xử lý.[^fn-gustafsons-law-scaling]
 
-Đây là thực tế của các Mô hình Ngôn ngữ Lớn. Thay vì sử dụng 1.000 bộ tăng tốc để huấn luyện một mô hình trên một tập dữ liệu nhỏ trong vài mili giây, chúng được sử dụng để huấn luyện trên một tập dữ liệu lớn hơn 1.000$\times$ trong thời gian hợp lý.
+Đây là thực tế của các mô hình ngôn ngữ lớn. Thay vì dùng 1.000 bộ tăng tốc để huấn luyện một mô hình trên một tập dữ liệu nhỏ trong vài mili giây, chúng được dùng để huấn luyện trên một tập dữ liệu lớn hơn 1.000$\times$ trong thời gian hợp lý.
 
-Đối với $n$ bộ xử lý, gọi $s$ là phần tuần tự của thời gian thực thi được đo trên các bộ xử lý đó cho khối lượng công việc (workload) đã mở rộng. Định luật Gustafson [@gustafson1988] mô hình hóa 
+Với $n$ bộ xử lý, ký hiệu $s$ là phần thời gian thực thi chạy tuần tự, được đo trên các bộ xử lý đó cho khối lượng công việc (workload) đã mở rộng. Định luật Gustafson [@gustafson1988] mô hình hóa "độ tăng tốc theo tỷ lệ" này:
 $$ \text{Scaled Speedup}(n) = n - s(n - 1) $$
 
 [^fn-gustafsons-law-scaling]: **John Gustafson**\index{Gustafson, John|seealso{Gustafson's law}}: Một nhà khoa học máy tính nổi tiếng với công trình về điện toán song song và việc giới thiệu định dạng Unum (số phổ quát). Định luật của ông là phản ứng trực tiếp trước những "giới hạn" được nhận thấy của Định luật Amdahl khi áp dụng cho quy mô lớn.
 
-Vì phần song song tăng tuyến tính theo $n$ trong khi $s$ vẫn cố định, khả năng mở rộng yếu có thể duy trì hiệu quả cao khi bài toán phát triển.
+Vì phần song song tăng tuyến tính theo $n$ trong khi $s$ vẫn cố định, mở rộng yếu có thể giữ hiệu quả cao khi bài toán lớn dần.
 
 ```{python}
 #| echo: false
@@ -608,11 +608,11 @@ class GustafsonExample:
     n_1000_minus_1_str = fmt(processor_count_1000 - 1, precision=0, commas=False)
 ```
 
-*   Với $n=1$, tăng tốc là 1.
-*   Với $n=$ `{python} GustafsonExample.n_8_g_str`, Tăng tốc theo tỷ lệ là `{python} GustafsonExample.n_8_g_str` − `{python} GustafsonSetup.s_g_str` $\times$ (`{python} GustafsonExample.n_8_g_minus_1_str`) = `{python} GustafsonExample.n_8_g_str` − `{python} GustafsonExample.gustafson_8_serial_str` = `{python} GustafsonExample.gustafson_8_speedup_mult_str`.
-*   Với $n=$ `{python} GustafsonExample.n_1000_str`, Tăng tốc theo tỷ lệ là `{python} GustafsonExample.n_1000_str` − `{python} GustafsonSetup.s_g_str` $\times$ (`{python} GustafsonExample.n_1000_minus_1_str`) ≈ `{python} GustafsonExample.gustafson_1000_speedup_mult_str`.
+*   Với $n=1$, độ tăng tốc là 1.
+*   Với $n=$ `{python} GustafsonExample.n_8_g_str`, độ tăng tốc mở rộng là `{python} GustafsonExample.n_8_g_str` − `{python} GustafsonSetup.s_g_str` $\times$ (`{python} GustafsonExample.n_8_g_minus_1_str`) = `{python} GustafsonExample.n_8_g_str` − `{python} GustafsonExample.gustafson_8_serial_str` = `{python} GustafsonExample.gustafson_8_speedup_mult_str`.
+*   Với $n=$ `{python} GustafsonExample.n_1000_str`, độ tăng tốc mở rộng là `{python} GustafsonExample.n_1000_str` − `{python} GustafsonSetup.s_g_str` $\times$ (`{python} GustafsonExample.n_1000_minus_1_str`) ≈ `{python} GustafsonExample.gustafson_1000_speedup_mult_str`.
 
-Trong khả năng mở rộng yếu, hiệu quả vẫn cao vì công việc hữu ích (huấn luyện mô hình) mở rộng để làm lu mờ các chi phí cố định.
+Trong khả năng mở rộng yếu (weak scaling), hiệu quả vẫn cao vì khối lượng công việc hữu ích (huấn luyện mô hình) được mở rộng đủ lớn để lấn át các chi phí cố định.
 
 ```{python}
 #| echo: false
@@ -679,39 +679,39 @@ class TrainingTimeRef:
     )
 ```
 
-Cùng một lăng kính mở rộng biến kích thước mô hình, kích thước dữ liệu, số lượng phần cứng và mức độ sử dụng thành một ước tính thời gian huấn luyện duy nhất\index{Training!time estimation}.
+Cùng một lăng kính mở rộng gom kích thước mô hình, kích thước dữ liệu, số lượng phần cứng và mức độ sử dụng thành một ước tính thời gian huấn luyện duy nhất\index{Training!time estimation}.
 
 ::: {#nbk-appendix-machine-training-time-equation .callout-notebook title="Phương trình thời gian huấn luyện"}
 
-**Bài toán**: Huấn luyện transformer dày đặc mất bao lâu cho một kích thước mô hình, số lượng token, số lượng bộ tăng tốc, tốc độ đỉnh và mức độ sử dụng đã cho?
+**Bài toán**: Huấn luyện một mô hình transformer dày đặc với kích thước mô hình, số lượng token, số lượng bộ tăng tốc, tốc độ đỉnh và mức độ sử dụng đã định sẽ mất bao lâu?
 
 **Công thức**:
 $$ T \approx \frac{6 \cdot P \cdot D}{N_{\text{GPU}} \cdot R_{\text{peak}} \cdot \eta_{\text{hw}}} $$
 
 **Các biến**:
 
-*   Hệ số FLOP huấn luyện: Hệ số 6 bắt nguồn từ $2P\text{ FLOP/token}$ cho lượt truyền xuôi và $4P\text{ FLOP/token}$ cho lượt truyền ngược ($2P$ cho gradient của activation và $2P$ cho gradient của trọng số), tổng cộng là $6PD\text{ FLOP}$ trên $D$ token huấn luyện.
+*   Hệ số FLOP huấn luyện: Hệ số 6 này xuất phát từ $2P\text{ FLOP/token}$ cho quá trình truyền xuôi (forward pass) và $4P\text{ FLOP/token}$ cho quá trình truyền ngược (backward pass) ($2P$ cho gradient của activation và $2P$ cho gradient của trọng số), tổng cộng là $6PD\text{ FLOP}$ trên $D$ token huấn luyện.
 *   $P$: Số lượng tham số mô hình.
 *   $D$: Số lượng token huấn luyện.
 *   $N_{\text{GPU}}$: Số lượng GPU.
 *   $R_{\text{peak}}$: FLOP/s đỉnh của một bộ tăng tốc.
-*   $\eta_{\text{hw}}$: Mức độ sử dụng phần cứng, thường là 30%–50% trong ước tính huấn luyện này.
+*   $\eta_{\text{hw}}$: Mức độ sử dụng phần cứng, thường dao động từ 30%–50% trong ước tính thời gian huấn luyện này.
 
-**Ví dụ**: Huấn luyện một mô hình tham số `{python} TrainingTimeRef.p_params_str` trên `{python} TrainingTimeRef.d_tokens_str` token sử dụng `{python} TrainingTimeRef.n_gpus_str` A100 (`{python} TrainingTimeRef.a100_fp16_tflop_per_s_str`) với mức độ sử dụng `{python} TrainingTimeRef.u_mfu_pct_str`.
+**Ví dụ**: Huấn luyện một mô hình có `{python} TrainingTimeRef.p_params_str` tham số trên `{python} TrainingTimeRef.d_tokens_str` token sử dụng `{python} TrainingTimeRef.n_gpus_str` A100 (`{python} TrainingTimeRef.a100_fp16_tflop_per_s_str`) với mức độ sử dụng là `{python} TrainingTimeRef.u_mfu_pct_str`.
 `{python} TrainingTimeRef.total_flops_math`.
 `{python} TrainingTimeRef.throughput_math`.
 `{python} TrainingTimeRef.time_math`.
 
-**Thông tin chuyên sâu về hệ thống**: Theo các giả định này, huấn luyện mất `{python} TrainingTimeRef.T_seconds_str` (≈ `{python} TrainingTimeRef.T_minutes_str`, hoặc khoảng `{python} TrainingTimeRef.T_days_str`); ước tính này biến quy mô mô hình, quy mô dữ liệu, thông lượng bộ tăng tốc hiệu quả và mức độ sử dụng thành các đòn bẩy rõ ràng.
+**Thông tin chuyên sâu về hệ thống**: Theo các giả định này, quá trình huấn luyện mất `{python} TrainingTimeRef.T_seconds_str` (≈ `{python} TrainingTimeRef.T_minutes_str`, hoặc khoảng `{python} TrainingTimeRef.T_days_str`); ước tính này cho thấy rõ quy mô mô hình, quy mô dữ liệu, thông lượng hiệu quả của bộ tăng tốc và mức độ sử dụng là những đòn bẩy ảnh hưởng trực tiếp đến thời gian huấn luyện.
 
 :::
 
 ### Định luật Little {#sec-appdx-machine-foundations-littles-law-21a3}
 
-Để lập kế hoạch dung lượng trong các hệ thống suy luận ổn định, **Định luật Little**\index{Little's law!appendix refresher} [@little1961] liên hệ giữa độ đồng thời trung bình dài hạn ($Q_{\text{req}}$), tốc độ đến trung bình ($\lambda_{\text{arr}}$) và thời gian trung bình trong hệ thống ($T_{\text{lat}}$):[^fn-littles-law-appendix]
+Để lập kế hoạch dung lượng cho các hệ thống suy luận ổn định, **Định luật Little**\index{Little's law!appendix refresher} [@little1961] thiết lập mối quan hệ giữa số lượng yêu cầu đồng thời trung bình trong dài hạn ($Q_{\text{req}}$), tốc độ đến trung bình ($\lambda_{\text{arr}}$) và thời gian trung bình một yêu cầu nằm trong hệ thống ($T_{\text{lat}}$):[^fn-littles-law-appendix]
 $$ Q_{\text{req}} = \lambda_{\text{arr}} \times T_{\text{lat}} $$
 
-[^fn-littles-law-appendix]: **John Little**\index{Little, John|seealso{Little's law}}: Một Giáo sư Viện tại MIT và là người tiên phong trong lĩnh vực nghiên cứu vận hành. Định luật của ông, được chứng minh vào năm 1961, là nền tảng của lý thuyết hàng đợi và được sử dụng trong nhiều lĩnh vực từ sản xuất đến phân tích mạng máy tính.
+[^fn-littles-law-appendix]: **John Little**\index{Little, John|seealso{Little's law}}: Ông là Giáo sư tại MIT và là người tiên phong trong lĩnh vực nghiên cứu vận hành. Định luật của ông, được chứng minh năm 1961, là nền tảng của lý thuyết hàng đợi và được ứng dụng rộng rãi trong nhiều lĩnh vực, từ sản xuất đến phân tích mạng máy tính.
 
 ```{python}
 #| echo: false
@@ -762,15 +762,15 @@ class LittlesLawExample:
     )
 ```
 
-Để thấy điều này trong thực tế, hãy xem xét việc duy trì `{python} LittlesLawExample.lambda_qps_str` với độ trễ trung bình `{python} LittlesLawExample.w_latency_ms_str`. Định luật quy định rằng hệ thống phải hỗ trợ `{python} LittlesLawExample.lambda_qps_value_str` $\times$ `{python} LittlesLawExample.w_latency_s_str` = `{python} LittlesLawExample.L_concurrent_str` yêu cầu đồng thời.
+Để thấy điều này trong thực tế, hãy xem xét việc duy trì `{python} LittlesLawExample.lambda_qps_str` với độ trễ trung bình `{python} LittlesLawExample.w_latency_ms_str`. Định luật cho biết hệ thống phải hỗ trợ `{python} LittlesLawExample.lambda_qps_value_str` $\times$ `{python} LittlesLawExample.w_latency_s_str` = `{python} LittlesLawExample.L_concurrent_str` yêu cầu đồng thời.
 
-Điều này định cỡ các nhóm worker, nhưng bộ nhớ cần một giả định khác. Nếu mỗi yêu cầu trong hệ thống đồng thời giữ `{python} LittlesLawExample.mem_per_req_gb_str` trạng thái thiết bị, số lượng trung bình ngụ ý `{python} LittlesLawExample.total_mem_gb_str`; các yêu cầu trong hàng đợi có thể ở trong bộ nhớ máy chủ hoặc chia sẻ trạng thái theo batch. Nếu `{python} LittlesLawExample.max_concurrent_str` khe thiết bị mỗi khe vẫn bị chiếm dụng trong `{python} LittlesLawExample.w_latency_ms_str`, đại diện thông lượng của chúng là `{python} LittlesLawExample.max_throughput_math`; chỉ riêng Định luật Little không đặt ra giới hạn vật lý tối đa.
+Điều này giúp xác định kích thước các nhóm worker, nhưng với bộ nhớ, chúng ta cần thêm một giả định khác. Nếu mỗi yêu cầu đang ở trong hệ thống đồng thời giữ `{python} LittlesLawExample.mem_per_req_gb_str` trạng thái trên thiết bị, thì quy mô trung bình ngụ ý cần `{python} LittlesLawExample.total_mem_gb_str` bộ nhớ; các yêu cầu đang chờ có thể ở trong bộ nhớ máy chủ (host memory) hoặc chia sẻ trạng thái theo batch. Nếu `{python} LittlesLawExample.max_concurrent_str` slot trên thiết bị mỗi slot bị chiếm trong `{python} LittlesLawExample.w_latency_ms_str`, thì ước lượng thông lượng của chúng là `{python} LittlesLawExample.max_throughput_math`. Riêng Định luật Little không đặt ra giới hạn vật lý tối đa nào.
 
-Các mô hình dựa trên vật lý này—Roofline, Amdahl, Gustafson và Little—chẩn đoán *nơi* các nút thắt cổ chai nằm. Tuy nhiên, việc chuyển đổi những chẩn đoán đó thành các tối ưu hóa có thể thực hiện được đòi hỏi phải hiểu các cấu trúc phần cứng cụ thể gây ra chúng: cache, bus bộ nhớ và các kết nối.
+Các mô hình dựa trên vật lý—Roofline, Amdahl, Gustafson và Little—giúp chẩn đoán *nơi* các nút thắt cổ chai nằm. Tuy vậy, để biến những chẩn đoán đó thành các tối ưu hóa có thể thực thi, ta cần hiểu rõ các cấu trúc phần cứng cụ thể áp đặt chúng: cache, bus bộ nhớ và các kết nối.
 
-## Những điều cơ bản về Kiến trúc Máy tính {#sec-appdx-machine-foundations-computer-architecture-essentials-10c2}
+## Những điều cốt yếu của kiến trúc máy tính {#sec-appdx-machine-foundations-computer-architecture-essentials-10c2}
 
-Một GPU quảng cáo 1.000 TFLOP/s, nhưng một kernel chỉ đạt được 30 TFLOP/s. Khoảng cách này có thể phản ánh việc di chuyển dữ liệu, song song hóa không đủ, đồng bộ hóa, chi phí khởi tạo hoặc hiệu quả phần mềm kém. Trong khi vật lý đặt ra các giới hạn hiệu suất lý thuyết, kiến trúc máy tính định nghĩa bộ máy xác định mức độ gần mà một khối lượng công việc (workload) thực tế có thể đạt được. Phần thảo luận sau đây đề cập đến các đánh đổi về độ trễ, băng thông và năng lượng định hình thiết kế hệ thống.
+Một GPU công bố 1.000 TFLOP/s, nhưng một kernel chỉ đạt 30 TFLOP/s. Khoảng cách này có thể đến từ việc di chuyển dữ liệu, mức độ song song chưa đủ, đồng bộ hóa, chi phí khởi chạy (launch overhead), hoặc hiệu suất phần mềm kém. Vật lý đặt ra các giới hạn hiệu suất lý thuyết, còn kiến trúc máy tính định nghĩa bộ máy quyết định một khối lượng công việc (workload) thực tế có thể tiến gần đến giới hạn đó tới mức nào. Phần tiếp theo bàn về các đánh đổi giữa độ trễ, băng thông và năng lượng định hình thiết kế hệ thống.
 
 ```{python}
 #| echo: false
@@ -875,7 +875,7 @@ class ArchReferenceTables:
 
 ### Các độ trễ mà mọi lập trình viên nên biết {#sec-appdx-machine-foundations-latencies-every-programmer-know-e89f}
 
-Bước đầu tiên để có trực giác về hệ thống là hiểu chi phí của khoảng cách. @Tbl-latency-hierarchy định lượng thời gian bộ xử lý chờ dữ liệu từ các cấp khác nhau của hệ thống phân cấp bộ nhớ. Nếu truy cập một thanh ghi giống như nhặt một cây bút chì gần đó, lấy từ bộ nhớ băng thông cao (HBM) là đi bộ qua văn phòng, và lấy từ đĩa là bay lên mặt trăng.
+Bước đầu để có trực giác về hệ thống là hiểu chi phí của khoảng cách. @Tbl-latency-hierarchy cho biết bộ xử lý phải chờ dữ liệu từ các cấp khác nhau của hệ thống phân cấp bộ nhớ trong bao lâu. Nếu truy cập một thanh ghi giống như nhặt cây bút chì ngay bên cạnh, thì lấy dữ liệu từ bộ nhớ băng thông cao (HBM) là đi bộ qua văn phòng, còn lấy từ đĩa là như bay lên mặt trăng.
 
 | **Component**            |                **Latency (ns)**               | **Cycles (Approx)** |               **Relative "Distance"**                |
 |:-------------------------|:---------------------------------------------:|:-------------------:|:----------------------------------------------------:|
@@ -888,11 +888,11 @@ Bước đầu tiên để có trực giác về hệ thống là hiểu chi ph�
 | **InfiniBand (Network)** |   ~`{python} ArchReferenceTables.ib_ns_str`   |    15,000 cycles    |    `{python} ArchReferenceTables.ib_distance_str`    |
 | **SSD (NVMe)**           |   ~`{python} ArchReferenceTables.ssd_ns_str`  |    300,000 cycles   |   `{python} ArchReferenceTables.ssd_distance_str`    |
 
-: **Hệ thống phân cấp độ trễ**: Thời gian truy cập tiêu biểu cho phần cứng AI hiện đại; số chu kỳ gần đúng sử dụng đồng hồ tham chiếu 3 GHz. Sự chênh lệch lớn từ cache SRAM đến HBM làm cho tính cục bộ của cache trở thành một yếu tố hiệu suất quan trọng. {#tbl-latency-hierarchy tbl-colwidths="[25,25,25,25]"}
+: **Hệ thống phân cấp độ trễ**: Thời gian truy cập điển hình cho phần cứng AI hiện đại; số chu kỳ ước tính dựa trên xung nhịp tham chiếu 3 GHz. Khoảng cách lớn về độ trễ giữa cache SRAM và HBM khiến tính cục bộ của cache trở thành yếu tố then chốt quyết định hiệu năng. {#tbl-latency-hierarchy tbl-colwidths="[25,25,25,25]"}
 
 ### Bảng tóm tắt phần cứng AI (tham chiếu hiện đại) {#sec-appdx-machine-foundations-ai-hardware-cheat-sheet-modern-reference-4dc1}
 
-Độ trễ đo thời gian chờ đợi byte *đầu tiên*; băng thông đo số lượng byte theo sau. @Tbl-hardware-cheatsheet cung cấp các hằng số cho các phép tính 
+Độ trễ đo thời gian chờ byte *đầu tiên*; băng thông đo số lượng byte theo sau. @Tbl-hardware-cheatsheet cung cấp các hằng số cho các phép tính "Roofline" nhanh gọn. Đây là các "đơn vị tính toán tiêu chuẩn" cho kỷ nguyên machine learning hiện nay.
 
 | **Spec**             |                      **NVIDIA H100 (SXM)**                       |                                  **Google TPU v5p**                                  | **System Impact**                     |
 |:---------------------|:----------------------------------------------------------------:|:------------------------------------------------------------------------------------:|:--------------------------------------|
@@ -902,13 +902,13 @@ Bước đầu tiên để có trực giác về hệ thống là hiểu chi ph�
 | **On-chip SRAM**     |         `{python} ArchReferenceTables.h100_l2_mb_str` L2         |             `{python} ArchReferenceTables.tpuv5_sram_mib_str` VMEM/chip              | Critical for Operator Fusion          |
 | **Interconnect**     | `{python} ArchReferenceTables.h100_nvlink_gb_per_s_str` (NVLink) | `{python} ArchReferenceTables.tpuv5_ici_gb_per_s_str` (Inter-Chip Interconnect, ICI) | Determines Model Parallelism Scaling  |
 
-: **Thông số tham chiếu**: Các hằng số chính để phân tích định lượng. Luôn kiểm tra các bảng dữ liệu cụ thể; dung lượng HBM tuân theo đơn vị của nhà cung cấp và băng thông kết nối là tổng hợp hai chiều, do đó cấu trúc liên kết và hướng truyền tải là quan trọng. {#tbl-hardware-cheatsheet tbl-colwidths="[22,23,20,35]"}
+: **Thông số tham chiếu**: Các hằng số chính để phân tích định lượng. Luôn kiểm tra các datasheet cụ thể; dung lượng HBM được tính theo đơn vị của nhà cung cấp, và băng thông liên kết là tổng băng thông hai chiều, nên cấu trúc liên kết và hướng truyền dữ liệu đều quan trọng. {#tbl-hardware-cheatsheet tbl-colwidths="[22,23,20,35]"}
 
 ### Hệ thống phân cấp bộ nhớ {#sec-appdx-machine-foundations-memory-hierarchy-2278}
 
-Các hệ thống máy tính sử dụng một hệ thống phân cấp vì không có công nghệ đơn lẻ nào cung cấp cả dung lượng cao và độ trễ thấp. @Fig-memory-hierarchy cho thấy sự đánh đổi này: việc giữ dữ liệu ở các cấp cao hơn trong kim tự tháp (thanh ghi/cache) làm giảm độ trễ truy cập khi việc di chuyển dữ liệu nằm trên đường dẫn quan trọng.
+Các hệ thống máy tính sử dụng hệ thống phân cấp bộ nhớ vì không có công nghệ đơn lẻ nào vừa có dung lượng cao vừa có độ trễ thấp. @Fig-memory-hierarchy minh họa sự đánh đổi này: giữ dữ liệu ở các cấp cao hơn trong kim tự tháp (thanh ghi/cache) giúp giảm độ trễ truy cập khi việc di chuyển dữ liệu nằm trên đường găng hiệu năng.
 
-::: {#fig-memory-hierarchy fig-env="figure" fig-pos="htb" fig-cap="**Hệ thống phân cấp bộ nhớ**: Hiệu suất phụ thuộc vào sự gần gũi của dữ liệu. Truy cập HBM chậm hơn thanh ghi khoảng 1.000$\times$; truy cập SSD chậm hơn khoảng 300.000$\times$." fig-alt="Kim tự tháp với bốn cấp, từ trên xuống dưới: thanh ghi, cache L1/L2/L3, HBM/DRAM và bộ nhớ lưu trữ (SSD/đĩa). Một mũi tên hướng lên ghi “Tốc độ nhanh hơn, Độ trễ thấp hơn,” và một mũi tên hướng xuống ghi “Dung lượng lớn hơn, Chi phí thấp hơn.”"}
+::: {#fig-memory-hierarchy fig-env="figure" fig-pos="htb" fig-cap="**Hệ thống phân cấp bộ nhớ**: Hiệu năng phụ thuộc vào mức độ gần của dữ liệu. Truy cập HBM chậm hơn thanh ghi khoảng 1.000$\times$; truy cập SSD chậm hơn khoảng 300.000$\times$." fig-alt="Kim tự tháp với bốn cấp, từ trên xuống dưới: thanh ghi, cache L1/L2/L3, HBM/DRAM và bộ nhớ lưu trữ (SSD/đĩa). Một mũi tên hướng lên ghi “Tốc độ nhanh hơn, Độ trễ thấp hơn,” và một mũi tên hướng xuống ghi “Dung lượng lớn hơn, Chi phí thấp hơn.”"}
 ```{.tikz}
 \scalebox{0.8}{%
 \begin{tikzpicture}[line cap=round, line join=round, font=\sffamily\small]
@@ -983,25 +983,25 @@ Hệ thống phân cấp bộ nhớ\index{Memory hierarchy!appendix refresher} l
 | **Network (Fabric)** | InfiniBand NDR |   ~`{python} ArchReferenceTables.ib_ns_str`   |   `{python} ArchReferenceTables.bw_net_gb_per_s_str`  |                      —                       |
 | **Storage (Local)**  |    NVMe SSD    |   ~`{python} ArchReferenceTables.ssd_ns_str`  |   `{python} ArchReferenceTables.bw_ssd_gb_per_s_str`  |                      —                       |
 
-: **Các thuộc tính vật lý của hệ thống phân cấp bộ nhớ (khoảng năm 2024)**: Các điểm neo độ trễ và băng thông đại diện trên toàn hệ thống phân cấp bộ nhớ. Hệ thống phân cấp này trải dài khoảng năm bậc độ lớn về độ trễ. NVLink là tổng hợp hai chiều; chỉ năng lượng DRAM 45 nm được trích dẫn được hiển thị vì các cấp khác là đặc thù triển khai. Do đó, việc giữ dữ liệu ở các cấp cao hơn trong hệ thống phân cấp có thể mang lại những cải thiện lớn về hiệu suất. {#tbl-physical-hierarchy-ref tbl-colwidths="[20,20,20,20,20]"}
+: **Các thuộc tính vật lý của hệ thống phân cấp bộ nhớ (khoảng năm 2024)**: Các mốc độ trễ và băng thông tiêu biểu trong hệ thống phân cấp bộ nhớ. Hệ thống phân cấp này có độ trễ trải dài khoảng năm bậc độ lớn. NVLink là tổng băng thông hai chiều; chỉ hiển thị số liệu năng lượng DRAM 45 nm được trích dẫn vì các cấp khác phụ thuộc vào cách triển khai cụ thể. Do đó, giữ dữ liệu ở các cấp cao hơn trong hệ thống phân cấp có thể mang lại mức cải thiện hiệu suất rất lớn. {#tbl-physical-hierarchy-ref tbl-colwidths="[20,20,20,20,20]"}
 
-Chi phí năng lượng của hệ thống phân cấp cho thấy lý do tại sao việc di chuyển dữ liệu chiếm ưu thế trong thiết kế hệ thống hiện đại.
+Chi phí năng lượng trong hệ thống phân cấp cho thấy vì sao việc di chuyển dữ liệu chi phối thiết kế hệ thống hiện đại.
 
 ::: {#psp-appendix-machine-high-cost-data-movement .callout-perspective title="Chi phí cao của việc di chuyển dữ liệu"}
 
-Trong tài liệu tham khảo 45 nm được trích dẫn, việc tìm nạp một giá trị 32-bit từ DRAM tốn khoảng `{python} ArchReferenceTables.energy_ratio_mult_str` năng lượng của một phép nhân FP16 (~`{python} ArchReferenceTables.dram_pj_str` so với ~`{python} ArchReferenceTables.flop_pj_str`). Tỷ lệ này là đặc thù nền tảng và không tự nó xác định năng lượng của khối lượng công việc (workload), điều này cũng phụ thuộc vào số lần truy cập và khả năng tái sử dụng. Tuy nhiên, nó giải thích tại sao cường độ số học lại quan trọng.
+Trong tài liệu tham khảo 45 nm được trích dẫn, việc nạp một giá trị 32-bit từ DRAM tiêu tốn năng lượng gấp khoảng `{python} ArchReferenceTables.energy_ratio_mult_str` lần so với một phép nhân FP16 (~`{python} ArchReferenceTables.dram_pj_str` so với ~`{python} ArchReferenceTables.flop_pj_str`). Tỷ lệ này phụ thuộc vào từng nền tảng cụ thể và không tự nó quyết định năng lượng tiêu thụ của khối lượng công việc (workload); năng lượng còn phụ thuộc vào số lần truy cập và mức tái sử dụng. Dù vậy, điều này giải thích vì sao cường độ số học lại quan trọng.
 
 :::
 
 ### Băng thông so với độ trễ {#sec-appdx-machine-foundations-bandwidth-vs-latency-5320}
 
-Băng thông\index{Bandwidth!latency trade-off} (thông lượng) và độ trễ\index{Latency!bandwidth trade-off} (độ trễ) là những ràng buộc riêng biệt. Đối với khối lượng dữ liệu $D_{\text{vol}}$ được gửi qua băng thông hiệu dụng $\text{BW}$ với độ trễ đường dẫn cố định $L_{\text{lat}}$, và giả sử chi phí độ trễ và tuần tự hóa không chồng chéo, tổng thời gian truyền là:
+Băng thông\index{Bandwidth!latency trade-off} (thông lượng) và độ trễ\index{Latency!bandwidth trade-off} (độ trễ) là hai ràng buộc khác nhau. Với lượng dữ liệu $D_{\text{vol}}$ được gửi qua băng thông hiệu dụng $\text{BW}$ và độ trễ đường truyền cố định $L_{\text{lat}}$, và giả sử chi phí độ trễ và chi phí tuần tự hóa không chồng chéo, tổng thời gian truyền là:
 $$ T = L_{\text{lat}} + \frac{D_{\text{vol}}}{\text{BW}} $$
 
 Điểm giao nhau là kích thước truyền tải mà tại đó hai số hạng bằng nhau:
 $$ D_{\text{vol,cross}} = L_{\text{lat}} \times \text{BW} $$
 
-Đối với các truyền tải dưới $D_{\text{vol,cross}}$ (ví dụ: các yêu cầu nhỏ hoặc thông điệp điều khiển), độ trễ chiếm ưu thế. Đối với các truyền tải trên mức đó (ví dụ: tải trọng số), băng thông chiếm ưu thế.
+Đối với lượng dữ liệu truyền dưới $D_{\text{vol,cross}}$ (ví dụ: yêu cầu nhỏ hoặc thông điệp điều khiển), độ trễ sẽ chi phối. Đối với lượng dữ liệu truyền trên mức đó (ví dụ: tải trọng số), băng thông sẽ chi phối.
 
 ```{python}
 #| echo: false
@@ -1040,7 +1040,7 @@ class BandwidthLatencySetup:
     crossover_data_mb_str = fmt_qty(crossover_data, unit=MB, precision=1, commas=False)
 ```
 
-Hãy xem xét việc gửi dữ liệu qua một liên kết `{python} BandwidthLatencySetup.bw_gbit_per_s_str` với độ trễ yêu cầu/phản hồi cơ bản là `{python} BandwidthLatencySetup.base_latency_ms_str`. Kích thước giao nhau là `{python} BandwidthLatencySetup.crossover_data_mb_str`, do đó, số hạng chiếm ưu thế phụ thuộc vào việc truyền tải nằm ở phía nào của ngưỡng đó.
+Hãy xem xét việc gửi dữ liệu qua một đường truyền `{python} BandwidthLatencySetup.bw_gbit_per_s_str` với độ trễ cơ bản cho yêu cầu/phản hồi là `{python} BandwidthLatencySetup.base_latency_ms_str`. Kích thước giao nhau là `{python} BandwidthLatencySetup.crossover_data_mb_str`, do đó, yếu tố chi phối sẽ phụ thuộc vào việc lượng dữ liệu truyền nằm ở phía nào của ngưỡng đó.
 
 ```{python}
 #| echo: false
@@ -1087,24 +1087,24 @@ class BandwidthLatencyExample:
     )
 ```
 
-*   Gói bị giới hạn bởi độ trễ (`{python} BandwidthLatencySetup.data_kb_str`):
+*   Gói dữ liệu bị giới hạn bởi độ trễ (`{python} BandwidthLatencySetup.data_kb_str`):
     *   Truyền tải: `{python} BandwidthLatencySetup.data_kb_str` $\times$ 8/`{python} BandwidthLatencySetup.bw_gbit_per_s_str` ≈ `{python} BandwidthLatencyExample.tx_time_us_str`.
     *   Tổng thời gian ≈ `{python} BandwidthLatencySetup.base_latency_ms_str` + `{python} BandwidthLatencyExample.tx_time_us_str` ≈ `{python} BandwidthLatencySetup.base_latency_ms_str`.
-    *   *Kết quả*: Độ trễ đường dẫn và giao thức cố định chiếm ưu thế; sự lan truyền là một thành phần.
+    *   *Kết quả*: Độ trễ cố định từ đường đi và giao thức chiếm ưu thế; độ trễ lan truyền chỉ là một thành phần.
 *   checkpoint bị giới hạn bởi băng thông (`{python} BandwidthLatencyExample.large_data_gb_str`):
-    *   Truyền tải: `{python} BandwidthLatencyExample.large_tx_math`.
+    *   Truyền: `{python} BandwidthLatencyExample.large_tx_math`.
     *   Tổng thời gian `{python} BandwidthLatencyExample.large_total_math`.
-    *   *Kết quả*: Độ trễ cơ bản là không đáng kể; băng thông là nút thắt cổ chai.
+    *   *Kết quả*: Độ trễ cơ bản không đáng kể; băng thông là nút thắt cổ chai.
 
-Kiến trúc xác định tốc độ di chuyển của dữ liệu, nhưng độ chính xác số học\index{Precision!numerical format trade-offs} trực tiếp kiểm soát *lượng* dữ liệu cần di chuyển. Giảm một nửa độ chính xác từ FP32 xuống FP16 sẽ giảm một nửa số byte trên mỗi tham số và có thể gần như tăng gấp đôi băng thông hữu ích khi phần cứng, kernel và độ chính xác của mô hình hỗ trợ điều đó. Để hiểu những đánh đổi này, cần xem xét kỹ hơn cách các số được biểu diễn trong phần cứng.
+Kiến trúc quyết định dữ liệu có thể di chuyển nhanh đến đâu, còn độ chính xác số\index{Precision!numerical format trade-offs} kiểm soát trực tiếp *lượng* dữ liệu phải di chuyển. Giảm độ chính xác từ FP32 xuống FP16 còn một nửa sẽ giảm số byte trên mỗi tham số đi một nửa và có thể gần như tăng gấp đôi thông lượng hữu ích, nếu phần cứng, các kernel và độ chính xác của mô hình hỗ trợ. Để hiểu rõ các đánh đổi này, chúng ta cần xem kỹ cách các số được biểu diễn trong phần cứng.
 
-## Biểu diễn số học {#sec-appdx-machine-foundations-numerical-representations-c889}
+## Biểu diễn số {#sec-appdx-machine-foundations-numerical-representations-c889}
 
-Thống kê đặc trưng hóa các phân phối dữ liệu; các biểu diễn số học xác định cách hệ thống lưu trữ các giá trị đó. Trong các hệ thống ML, lựa chọn độ chính xác (FP32 so với BF16 so với INT8) là một sự đánh đổi trực tiếp giữa độ trung thực thống kê và thông lượng phần cứng.
+Thống kê mô tả các phân phối dữ liệu; còn các biểu diễn số quyết định cách hệ thống lưu trữ các giá trị đó. Trong các hệ thống ML, việc lựa chọn độ chính xác (FP32 vs. BF16 vs. INT8) là sự đánh đổi trực tiếp giữa độ trung thực thống kê và thông lượng phần cứng.
 
-### So sánh định dạng dấu phẩy động {#sec-appdx-machine-foundations-floatingpoint-format-comparison-1836}
+### So sánh các định dạng dấu phẩy động {#sec-appdx-machine-foundations-floatingpoint-format-comparison-1836}
 
-Các định dạng IEEE 754 như FP32 và FP16, cùng với các định dạng dành riêng cho AI như BF16 và FP8, định nghĩa các sự đánh đổi khác nhau giữa dải động (phạm vi các giá trị có thể biểu diễn) và độ chính xác (độ chi tiết của các giá trị trong dải đó). @Tbl-numerical-formats tóm tắt các định dạng chính và trường hợp sử dụng của chúng, trong khi @fig-float-formats trực quan hóa việc phân bổ bit.
+Các định dạng IEEE 754 như FP32 và FP16, cùng với các định dạng dành riêng cho AI như BF16 và FP8, đưa ra các đánh đổi khác nhau giữa dải động (phạm vi giá trị có thể biểu diễn) và độ chính xác (độ mịn của các giá trị trong dải đó). @Tbl-numerical-formats tóm tắt các định dạng chính và trường hợp sử dụng của chúng, còn @fig-float-formats minh họa cách phân bổ bit.
 
 | **Format** | **Bits** | **Exponent** | **Mantissa** |                  **Dynamic Range**                  | **Typical Use Case**                           |
 |:-----------|:--------:|:------------:|:------------:|:---------------------------------------------------:|:-----------------------------------------------|
@@ -1114,9 +1114,9 @@ Các định dạng IEEE 754 như FP32 và FP16, cùng với các định dạng
 | **FP8**    |    8     |    4 or 5    |    3 or 2    |                        Varies                       | Training/inference on supported hardware       |
 | **INT8**   |    8     |     N/A      |     N/A      |                     -128 to 127                     | Inference after quantization                   |
 
-: **So sánh định dạng số học**: Mỗi định dạng đánh đổi giữa độ chính xác, dải động, dung lượng bộ nhớ và thông lượng tính toán. BF16 chia sẻ dải số mũ bình thường của FP32 trong khi sử dụng một nửa dung lượng lưu trữ. {#tbl-numerical-formats tbl-colwidths="[8,8,11,9,20,44]"}
+: **So sánh các định dạng số**: Mỗi định dạng đều có sự đánh đổi giữa độ chính xác, dải động, dung lượng bộ nhớ và thông lượng tính toán. BF16 có cùng dải số mũ bình thường với FP32 nhưng chỉ sử dụng một nửa dung lượng lưu trữ. {#tbl-numerical-formats tbl-colwidths="[8,8,11,9,20,44]"}
 
-::: {#fig-float-formats fig-env="figure" fig-pos="htb" fig-cap="**Bố cục bit định dạng số học**: Một so sánh trực quan về việc phân bổ bit. BF16 bảo toàn số mũ 8-bit của FP32 và do đó là dải số mũ bình thường của nó. FP16 đánh đổi dải động lấy độ chính xác và thường sử dụng *loss scaling* để giảm thiểu tràn dưới." fig-alt="Các thanh ngang xếp chồng thể hiện sự phân chia bit. FP32: 1 bit Dấu, 8 bit Số mũ, 23 bit Phần định trị. BF16: 1 bit Dấu, 8 bit Số mũ, 7 bit Phần định trị. FP16: 1 bit Dấu, 5 bit Số mũ, 10 bit Phần định trị. INT8: 8 bit Số nguyên."}
+::: {#fig-float-formats fig-env="figure" fig-pos="htb" fig-cap="**Bố cục bit của các định dạng số**: So sánh trực quan cách phân bổ bit. BF16 giữ nguyên số mũ 8-bit của FP32, do đó có cùng dải số mũ bình thường. FP16 đánh đổi dải động để có độ chính xác cao hơn và thường dùng *loss scaling* để giảm thiểu hiện tượng tràn dưới." fig-alt="Các thanh ngang xếp chồng thể hiện cách phân chia bit. FP32: 1 bit Dấu, 8 bit Số mũ, 23 bit Phần định trị. BF16: 1 bit Dấu, 8 bit Số mũ, 7 bit Phần định trị. FP16: 1 bit Dấu, 5 bit Số mũ, 10 bit Phần định trị. INT8: 8 bit Số nguyên."}
 ```{.tikz}
 \begin{tikzpicture}[font=\small\sffamily, scale=0.9, every node/.append style={scale=0.9}]
   \tikzset{
@@ -1163,37 +1163,37 @@ Các định dạng IEEE 754 như FP32 và FP16, cùng với các định dạng
 ```
 :::
 
-Ngoài độ rộng bit, việc phân bổ bit giữa số mũ và phần định trị quyết định phạm vi giá trị mà mỗi định dạng có thể biểu diễn.
+Ngoài độ rộng bit, cách phân bổ số bit cho phần mũ và phần định trị sẽ quyết định dải giá trị mà mỗi định dạng có thể biểu diễn.
 
-Trong số các định dạng này, BF16\index{BF16!appendix refresher}[^fn-bf16-precision-appendix] đáng được quan tâm đặc biệt [@google_bfloat16; @kalamkar2019]. Nó chiếm cùng một lớp lưu trữ 16-bit như FP16 nhưng hoạt động khác trong quá trình huấn luyện, do đó chỉ riêng độ rộng danh nghĩa không thể dự đoán gánh nặng vận hành. Quan điểm hệ thống sau đây liên kết việc phân bổ bit với lưu lượng bộ nhớ, độ ổn định số và hiệu quả triển khai.
+Trong số các định dạng này, BF16\index{BF16!appendix refresher}[^fn-bf16-precision-appendix] rất đáng chú ý [@google_bfloat16; @kalamkar2019]. Nó nằm trong cùng lớp 16-bit như FP16 nhưng lại hành xử khác khi huấn luyện, nên chỉ dựa vào độ rộng danh nghĩa không dự đoán được gánh nặng vận hành. Từ góc độ hệ thống, phần sau sẽ nối việc phân bổ bit với lưu lượng truy cập bộ nhớ, độ ổn định số và hiệu quả triển khai.
 
-[^fn-bf16-precision-appendix]: **BF16 (brain floating point 16)**\index{BF16!appendix refresher}: Ban đầu được giới thiệu cùng với Google TPUv2 và sau đó được Intel, Arm và NVIDIA áp dụng, BF16 đã trở thành một định dạng huấn luyện phổ biến trên các hệ sinh thái bộ tăng tốc. Việc áp dụng nó đã biến hỗ trợ định dạng trong phần cứng, kernel và thư viện huấn luyện phân tán thành một mối lo ngại về tính di động hơn là một tính năng dành riêng cho nhà cung cấp.
+[^fn-bf16-precision-appendix]: **BF16 (brain floating point 16)**\index{BF16!appendix refresher}: Ban đầu được giới thiệu lần đầu cùng với Google TPUv2 và sau đó được Intel, Arm và NVIDIA sử dụng, BF16 đã trở thành một định dạng huấn luyện phổ biến trong các hệ sinh thái bộ tăng tốc. Việc áp dụng BF16 khiến việc hỗ trợ định dạng này trong phần cứng, kernel và các thư viện huấn luyện phân tán trở thành một vấn đề về khả năng di động, chứ không còn là một tính năng riêng của từng nhà cung cấp nữa.
 
-::: {#psp-appendix-machine-dynamic-range-wall .callout-perspective title="Bức tường dải động"}
+::: {#psp-appendix-machine-dynamic-range-wall .callout-perspective title="Giới hạn dải động"}
 
-Việc lựa chọn định dạng số là một ứng dụng trực tiếp của định luật sắt của các hệ thống ML (nguyên tắc \ref{pri-iron-law}). Giảm độ chính xác từ FP32 xuống BF16 hoặc FP16 làm giảm một nửa thuật ngữ khối lượng dữ liệu, có khả năng tăng gấp đôi thông lượng trên các khối lượng công việc (workload) bị giới hạn bởi bộ nhớ. Tuy nhiên, *loại* định dạng 16-bit quyết định độ phức tạp kỹ thuật:
+Việc lựa chọn định dạng số là một ứng dụng trực tiếp của định luật sắt trong các hệ thống ML (nguyên tắc \ref{pri-iron-law}). Giảm độ chính xác từ FP32 xuống BF16 hoặc FP16 sẽ giảm một nửa lượng dữ liệu, từ đó có thể tăng gấp đôi thông lượng đối với các khối lượng công việc (workload) bị giới hạn bởi bộ nhớ. Tuy nhiên, *loại* định dạng 16-bit sẽ quyết định độ phức tạp kỹ thuật:
 
-*   Dải động (số mũ): BF16 giữ nguyên số mũ tám bit của FP32 và do đó có cùng phạm vi số mũ bình thường [@kalamkar2019].
-*   Độ chính xác (phần định trị): FP16\index{FP16!appendix refresher} có phần định trị 10 bit lớn hơn BF16 (7 bit), mang lại độ chính xác cao hơn cho các giá trị trong phạm vi của nó. Tuy nhiên, số mũ năm bit của nó làm tăng nguy cơ tràn số âm. Do đó, huấn luyện FP16 thường sử dụng **chia tỷ lệ tổn thất**\index{Loss scaling!appendix refresher}, một bước vận hành nhân các gradient với một hằng số lớn để giữ cho nhiều giá trị có thể biểu diễn được [@micikevicius2017mixed].
-*   Hiệu quả năng lượng: Các phép toán INT8\index{INT8!appendix refresher} có thể hiệu quả hơn đáng kể so với các phép toán dấu phẩy động tương đương vì chúng di chuyển ít dữ liệu hơn và sử dụng các đường dẫn số học số nguyên đơn giản hơn. Chuyển sang INT8 để suy luận là một đòn bẩy chính để triển khai các mạng nơ-ron trong các ngân sách bộ nhớ, độ trễ hoặc công suất eo hẹp [@jacob20118; @krishnamoorthi2018quantizing].
+*   Dải động (phần mũ): BF16 giữ nguyên phần mũ tám bit của FP32, do đó có cùng dải số mũ thông thường [@kalamkar2019].
+*   Độ chính xác (phần định trị): FP16\index{FP16!appendix refresher} có phần định trị 10 bit lớn hơn BF16 (7 bit), cho độ chính xác cao hơn với các giá trị trong dải của nó. Tuy nhiên, phần mũ năm bit của nó làm tăng nguy cơ tràn dưới (underflow). Vì vậy, huấn luyện FP16 thường dùng **loss scaling**\index{Loss scaling!appendix refresher}, một bước vận hành nhân gradient với một hằng số lớn để giữ cho nhiều giá trị vẫn biểu diễn được [@micikevicius2017mixed].
+*   Hiệu quả năng lượng: Các phép toán INT8\index{INT8!appendix refresher} hiệu quả hơn đáng kể so với các phép toán dấu phẩy động tương đương, vì chúng di chuyển ít dữ liệu hơn và sử dụng các đường tính toán số học số nguyên đơn giản hơn. Chuyển sang INT8 để suy luận là yếu tố then chốt để triển khai các mạng nơ-ron khi có các ràng buộc chặt chẽ về bộ nhớ, độ trễ hoặc công suất [@jacob2018; @krishnamoorthi2018quantizing].
 
 :::
 
 ### Lượng tử hoá số nguyên {#sec-appdx-machine-foundations-integer-quantization-5442}
 
-Lượng tử hoá\index{Quantization!appendix refresher} ánh xạ các giá trị dấu phẩy động liên tục sang các số nguyên rời rạc, điển hình là INT8. Thách thức chính là lựa chọn cách ánh xạ phạm vi dấu phẩy động sang số nguyên. Có hai phương pháp chính.
+Lượng tử hoá\index{Quantization!appendix refresher} ánh xạ các giá trị dấu phẩy động (liên tục) sang các số nguyên rời rạc, thường là INT8. Thách thức chính là chọn cách ánh xạ khoảng giá trị dấu phẩy động sang số nguyên. Có hai cách tiếp cận chính.
 
-Đối với lượng tử hoá đối xứng\index{Quantization!symmetric}, đặt $s_{\text{quant}} = \max |x|$ trên phạm vi đã hiệu chỉnh và giả sử $x$ được cắt đến $[-s_{\text{quant}}, s_{\text{quant}}]$. Mã INT8 có dấu là:
+Với lượng tử hoá đối xứng\index{Quantization!symmetric}, đặt $s_{\text{quant}} = \max |x|$ trên khoảng đã hiệu chỉnh và giả sử $x$ được giới hạn trong $[-s_{\text{quant}}, s_{\text{quant}}]$. Khi đó, mã INT8 có dấu là:
 $$ x_{\text{int}} = \text{round}\left(\frac{x}{s_{\text{quant}}} \times 127\right) $$
-Ánh xạ này hoạt động tốt cho các phân bố trọng số tập trung quanh số 0.
+Ánh xạ này phù hợp với các phân bố trọng số tập trung quanh 0.
 
-Lượng tử hoá bất đối xứng\index{Quantization!asymmetric} xử lý các phân bố không tập trung (phổ biến sau ReLU, vốn chỉ tạo ra các giá trị không âm) bằng cách dịch chuyển phạm vi trước khi chia tỷ lệ. Đặt $x_{\min}$ và $x_{\max}$ giới hạn phạm vi đã hiệu chỉnh, đặt khoảng chuẩn hóa $s_{\text{quant}} = x_{\max} - x_{\min}$, và cắt $x$ đến $[x_{\min}, x_{\max}]$. Một ánh xạ 8-bit không dấu phổ biến là:
+Lượng tử hoá bất đối xứng\index{Quantization!asymmetric} xử lý các phân bố không tập trung quanh 0 (thường gặp sau hàm ReLU, vốn chỉ tạo ra các giá trị không âm) bằng cách dịch chuyển khoảng giá trị trước khi chia tỷ lệ. Đặt $x_{\min}$ và $x_{\max}$ là các cận của khoảng đã hiệu chỉnh, xác định khoảng chuẩn hoá $s_{\text{quant}} = x_{\max} - x_{\min}$, và giới hạn $x$ trong $[x_{\min}, x_{\max}]$. Một ánh xạ 8-bit không dấu phổ biến là:
 $$ x_{\text{uint8}} = \text{round}\left(\frac{x - x_{\min}}{s_{\text{quant}}} \times 255\right) $$
 
-Việc lựa chọn giữa lượng tử hoá đối xứng và bất đối xứng phụ thuộc vào phân bố của tensor và có những ảnh hưởng đáng kể đến độ chính xác.
+Việc lựa chọn giữa lượng tử hoá đối xứng và bất đối xứng phụ thuộc vào phân bố của tensor và có tác động đo được tới độ chính xác.
 
 ## Tóm tắt {.unnumbered}
 
-Chẩn đoán phía máy bắt đầu với các đơn vị, giới hạn trên và tập làm việc. Các số tham chiếu thiết lập các bậc độ lớn; Mô hình Roofline và định luật sắt xác định xem các phép toán, byte hay độ trễ là yếu tố ràng buộc; Định luật Amdahl, Định luật Gustafson và Định luật Little kiểm tra các tuyên bố về tăng tốc, mở rộng quy mô và đồng thời; và phân tích thứ nguyên phát hiện các kết quả bất khả thi. Hệ thống phân cấp bộ nhớ và kết nối cho thấy những giới hạn đó xuất hiện dưới dạng các ràng buộc về độ trễ và băng thông, trong khi các biểu diễn số cho thấy dải động, độ chính xác và lượng tử hoá thay đổi cách lưu trữ, năng lượng, thông lượng và độ chính xác như thế nào.
+Chẩn đoán hiệu năng hệ thống (từ góc độ phần cứng) bắt đầu từ các đơn vị, giới hạn trần và tập làm việc. Các con số tham chiếu giúp xác định bậc độ lớn; Mô hình Roofline và quy luật cơ bản (iron law) cho biết liệu phép toán, lượng dữ liệu (bytes) hay độ trễ là nút thắt; Định luật Amdahl, Định luật Gustafson và Định luật Little kiểm chứng các tuyên bố về tăng tốc, khả năng mở rộng và xử lý đồng thời; còn phân tích thứ nguyên giúp phát hiện các kết quả bất khả thi. Hệ thống phân cấp bộ nhớ và kết nối cho thấy những giới hạn đó xuất hiện dưới dạng các ràng buộc về độ trễ và băng thông, trong khi các biểu diễn số cho thấy dải động, độ chính xác và lượng tử hoá làm thay đổi việc lưu trữ, năng lượng, thông lượng và độ chính xác như thế nào.
 
-Hãy coi các thông số kỹ thuật đỉnh là giới hạn trên, không phải dự đoán. So sánh một phép đo với giới hạn trên có liên quan, sau đó truy tìm khoảng cách còn lại đến mức sử dụng, di chuyển dữ liệu, chi phí runtime, kiến trúc hoặc phần mềm. Một ước tính sơ bộ hữu ích khi nó nêu rõ các giả định và đơn vị của nó, đồng thời làm cho phép đo tiếp theo trở nên rõ ràng.
+Hãy coi các thông số đỉnh như những giới hạn trần, không phải dự đoán hiệu năng. So sánh phép đo với giới hạn trần tương ứng, rồi lần theo phần chênh lệch còn lại đến mức độ sử dụng, luân chuyển dữ liệu, chi phí runtime, kiến trúc hoặc phần mềm. Một ước tính sơ bộ hữu ích khi nó nêu rõ giả định và đơn vị, và khiến phép đo tiếp theo trở nên hiển nhiên.

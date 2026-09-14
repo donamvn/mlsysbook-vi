@@ -1,32 +1,32 @@
 ## Quy ước {#sec-about-conventions-1a2b .unlisted}
 
-Cuốn sách này sử dụng một tập hợp nhỏ các quy ước kiểu chữ để đánh dấu chức năng của từng đoạn văn.
+Cuốn sách này dùng một số quy ước định dạng để cho biết mỗi đoạn văn đang làm gì.
 
 ### Chữ **đậm** đánh dấu định nghĩa đầu tiên {#sec-about-bold-3c4d}
 
-Một thuật ngữ được in **đậm** trong văn bản là lần giới thiệu chính thức đầu tiên của nó trong cuốn sách. Mỗi thuật ngữ chỉ được xử lý theo cách này đúng một lần. Các lần xuất hiện sau đó sẽ không được in đậm; khi đó thuật ngữ đã trở thành một phần của vốn từ vựng làm việc mà chương tiếp tục sử dụng.
+Một thuật ngữ in **đậm** trong phần nội dung chính là lần đầu tiên nó được giới thiệu chính thức trong cuốn sách. Mỗi thuật ngữ chỉ được trình bày như vậy đúng một lần. Những lần xuất hiện sau đó sẽ không còn in đậm nữa; khi đó, thuật ngữ đã trở thành một phần của vốn từ vựng mà chương sẽ tiếp tục dùng.
 
-> Mọi hệ thống machine learning đều có một **nhiệm vụ kép**: nó phải quản lý đồng thời sự bất định thống kê và các ràng buộc vật lý.
+> Mọi hệ thống machine learning đều có một **nhiệm vụ kép**: nó phải quản lý đồng thời bất định thống kê và các ràng buộc vật lý.
 
-Chữ đậm là một hợp đồng: hãy ghi nhớ thuật ngữ này vì nó sẽ lặp lại. Một mục chỉ mục tương ứng ở cuối sách sẽ chỉ đến lần xuất hiện định nghĩa (dưới mục con `definition`), cung cấp cách để quay lại nó. Các thuật ngữ kỹ thuật chính cũng được tổng hợp trong bảng chú giải.
+Việc in đậm là một cam kết: hãy ghi nhớ thuật ngữ này vì nó sẽ xuất hiện nhiều lần. Một mục chỉ mục tương ứng ở cuối sách sẽ dẫn đến lần xuất hiện định nghĩa (trong mục con `definition`), giúp bạn dễ dàng tra cứu lại. Các thuật ngữ kỹ thuật quan trọng cũng được tổng hợp trong bảng chú giải.
 
-Chữ đậm cũng xuất hiện trong một vai trò cấu trúc thứ hai: như một nhãn chức năng ở đầu một mục bên trong hộp chú thích hoặc một dấu đầu dòng tóm tắt—ví dụ, **Khuyến nghị**, **Đánh đổi**, hoặc **Kết quả**. Trong ngữ cảnh đó, chữ đậm là một cấu trúc hỗ trợ chứ không phải là một định nghĩa đầu tiên.
+Chữ đậm cũng xuất hiện trong một vai trò cấu trúc thứ hai: như một nhãn chức năng ở đầu một mục trong hộp chú thích hoặc một gạch đầu dòng tóm tắt—ví dụ, **Khuyến nghị**, **Đánh đổi**, hoặc **Kết quả**. Trong ngữ cảnh đó, chữ đậm là phần khung đỡ chứ không phải là định nghĩa đầu tiên.
 
-### Chữ *nghiêng* đảm nhiệm các vai trò tu từ cụ thể {#sec-about-italics-5e6f}
+### Chữ *nghiêng* đảm nhiệm các vai trò diễn đạt cụ thể {#sec-about-italics-5e6f}
 
 Chữ nghiêng không được dùng để nhấn mạnh chung chung. Mọi đoạn chữ nghiêng trong cuốn sách này đều thực hiện một trong số ít các vai trò cụ thể sau:
 
 - **Đối lập trực tiếp**: *huấn luyện* so với *suy luận*, *logic* so với *vật lý*.
-- **Điều không thể, được nêu dưới dạng định luật vật lý, toán học hoặc logic**: 
-- **Từ được dùng như một từ**: 
+- **Điều không thể, được nêu dưới dạng định luật vật lý, toán học hoặc logic**: "các hệ thống có độ trễ dưới 10 ms *không thể* dùng hạ tầng đám mây ở xa—vật lý không cho phép."
+- **Từ được dùng như một từ**: "thuật ngữ *gradient* chỉ một vector các đạo hàm riêng."
 - **Tên tác phẩm**: *Computer Architecture: A Quantitative Approach*.
 - **Luận điểm chính**: Một câu in nghiêng duy nhất tóm tắt ý tưởng chủ đạo của một phần, ví dụ *Dữ liệu là Mã nguồn.*
 
-Một từ được in nghiêng đang thực hiện một trong các vai trò này. Một từ không được in nghiêng không mang ý nghĩa nhấn mạnh ngầm định nào.
+Một từ được in nghiêng đang thực hiện một trong các vai trò này. Một từ không được in nghiêng không mang nhấn mạnh ngầm định nào.
 
 ### Các hộp chú thích có đặc điểm hình ảnh phù hợp với chức năng của chúng {#sec-about-callouts-7a8b}
 
-Các hộp chú thích không phải là vật trang trí. Mỗi loại báo hiệu một loại nội dung cụ thể, vì vậy đặc điểm hình ảnh sẽ thông báo nội dung của hộp trước khi người đọc tìm hiểu.
+Các hộp chú thích không phải là vật trang trí. Mỗi loại báo hiệu một kiểu nội dung cụ thể, nên đặc điểm hình ảnh sẽ cho biết hộp chứa gì trước khi người đọc bắt đầu xem.
 
 ::: {tbl-colwidths="[17,85]"}
 
@@ -47,4 +47,4 @@ Các hộp chú thích không phải là vật trang trí. Mỗi loại báo hi�
 
 :::
 
-Khi một hộp chú thích chứa một bảng, hình hoặc phương trình, thì tạo phẩm đó là một phần của đơn vị sư phạm của hộp chú thích, chứ không phải là vật trang trí. Hồ sơ của một ngọn hải đăng *chính là* đặc điểm của nó. Các bảng trung gian của hộp tính toán nhanh *chính là* phép toán đã được thực hiện. Đọc những thứ này như các tạo phẩm riêng biệt sẽ làm mất đi mạch giảng dạy. Ngược lại, các bảng tham chiếu độc lập nằm giữa các đoạn văn dưới dạng các tạo phẩm được đánh số mà người đọc có thể quay lại thông qua các tham chiếu chéo. Cả hai hình thức đều hợp lệ; dấu hiệu trực quan (hộp chú thích so với độc lập) cho người đọc biết họ đang xem loại nào.
+Khi một hộp chú thích chứa bảng, hình hoặc phương trình, thì những thành phần đó thuộc đơn vị giảng dạy của chính hộp chú thích, không phải để trang trí. Hình dáng của một ngọn hải đăng *chính là* đặc điểm nhận dạng của nó. Các bảng trung gian trong hộp tính toán nhanh *chính là* phần bài toán đã được triển khai. Đọc chúng như những thành phần tách rời sẽ làm đứt mạch giảng dạy. Ngược lại, các bảng tham chiếu độc lập thường nằm giữa các đoạn văn dưới dạng các bảng được đánh số, để người đọc quay lại thông qua tham chiếu chéo. Cả hai hình thức đều đúng; tín hiệu thị giác (hộp chú thích so với bảng độc lập) cho người đọc biết họ đang xem loại nào.

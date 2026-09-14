@@ -30,6 +30,6 @@ number-sections: false
 
 # Lời đề tặng {.unnumbered}
 
-*Kính dâng hương hồn cha tôi, người mà niềm đam mê học hỏi suốt đời và sự tận tâm không ngừng nghỉ với chất lượng vẫn luôn thôi thúc tôi mỗi ngày phấn đấu vì sự xuất sắc. Và với lòng biết ơn sâu sắc nhất gửi đến mẹ tôi, người mà sự rộng lượng thường ngày đã dạy tôi, bằng hành động hơn là lời nói, rằng bất cứ điều gì đáng có đều đáng được chia sẻ.*
+*Kính nhớ cha tôi, người có niềm đam mê học hỏi suốt đời và sự bền bỉ theo đuổi chất lượng, những điều vẫn nhắc tôi mỗi ngày phải nỗ lực hướng tới sự xuất sắc. Và xin gửi lời biết ơn sâu sắc nhất tới mẹ tôi, người bằng sự rộng lượng thường ngày đã dạy tôi—bằng tấm gương hơn là lời nói—rằng mọi điều đáng có đều đáng sẻ chia.*
 
 :::

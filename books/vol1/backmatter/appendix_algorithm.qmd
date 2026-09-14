@@ -207,7 +207,7 @@ Một tensor\index{Tensor!appendix refresher} là một view (khung nhìn) lên 
 *   **Shape**: Các chiều của tensor (ví dụ, `(3, 4)`).
 *   **Stride**: Số lượng phần tử cần bỏ qua trong bộ nhớ để di chuyển đến phần tử tiếp theo trong một chiều.
 
-Các phép toán như `transpose()` hoặc `view()` thường chỉ thay đổi *strides*, chứ không phải dữ liệu trong bộ nhớ. Điều này nhanh ($\mathcal{O}(1)$) nhưng có thể tạo ra các tensor không liên tục, khiến chúng không hoạt động được trong các kernel yêu cầu dữ liệu liên tục. Trong những trường hợp như vậy, gọi `contiguous()` sẽ buộc sao chép bộ nhớ $\mathcal{O}(N)`. Thao tác này có thể chiếm phần lớn thời gian runtime nếu bị lặp lại bên trong một vòng lặp.
+Các phép toán như `transpose()` hoặc `view()` thường chỉ thay đổi *strides*, chứ không phải dữ liệu trong bộ nhớ. Điều này nhanh ($\mathcal{O}(1)$) nhưng có thể tạo ra các tensor không liên tục, khiến chúng không hoạt động được trong các kernel yêu cầu dữ liệu liên tục. Trong những trường hợp như vậy, gọi `contiguous()` sẽ buộc sao chép bộ nhớ $\mathcal{O}(N)$. Thao tác này có thể chiếm phần lớn thời gian runtime nếu bị lặp lại bên trong một vòng lặp.
 
 ### Broadcasting {#sec-appdx-algorithm-foundations-broadcasting-ec16}
 

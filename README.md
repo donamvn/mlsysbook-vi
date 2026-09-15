@@ -6,6 +6,11 @@ thực hiện với sự đồng ý của tác giả, nhằm **đóng góp cho c
 > Đây là **Tập I – Nhập môn Hệ thống Học máy** (Introduction to Machine Learning Systems).
 > Bản dịch máy có bảng thuật ngữ thống nhất, **chưa hiệu đính toàn diện** — hoan nghênh mọi góp ý.
 
+
+## 🌐 Đọc online
+
+**Website đầy đủ (điều hướng, tìm kiếm, sơ đồ, callout):** https://donamvn.github.io/mlsysbook-vi/
+
 ## 📥 Tải bản dịch để đọc/soát
 
 Bản dịch Tập I (đã qua 2 lượt tinh chỉnh) được xuất sẵn để đọc lại một lượt:

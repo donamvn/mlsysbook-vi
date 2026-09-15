@@ -1,0 +1,331 @@
+# SocratiQ AI {.unnumbered}
+
+::: {.content-visible unless-format="html:js"}
+## Trợ lý học tập AI trực tuyến {#sec-socratiq-ai-online-companion}
+
+**SocratiQ** (phát âm là "Socratic") là một trợ lý học tập AI chỉ có sẵn trong phiên bản trực tuyến của sách giáo khoa này tại [mlsysbook.ai](https://mlsysbook.ai). Lấy cảm hứng từ phương pháp giảng dạy Socratic, SocratiQ cung cấp:
+
+- **Các câu đố tương tác** được điều chỉnh cho từng phần với phản hồi tức thì
+- **Giải thích cá nhân hóa** khi bạn chọn văn bản và đặt câu hỏi
+- **Theo dõi tiến độ** với huy hiệu thành tích và phân tích hiệu suất
+- **Hỗ trợ đàm thoại** cho các khái niệm hệ thống ML phức tạp
+
+Để trải nghiệm đầy đủ khả năng của SocratiQ, hãy truy cập phiên bản trực tuyến nơi bạn có thể:
+
+- Bật SocratiQ bằng một nút gạt đơn giản
+- Làm các câu đố tự động tạo sau mỗi phần
+- Nhận trợ giúp theo ngữ cảnh bằng cách chọn bất kỳ văn bản nào
+- Theo dõi tiến độ học tập của bạn với bảng điều khiển cá nhân
+
+Tìm hiểu thêm về thiết kế và phương pháp sư phạm của SocratiQ trong bài nghiên cứu của chúng tôi: [SocratiQ: A Generative AI-Powered Learning Companion for Personalized Education and Broader Accessibility](https://arxiv.org/abs/2502.00341)
+
+**Truy cập [mlsysbook.ai](https://mlsysbook.ai) để sử dụng các tính năng học tập tương tác này.**
+:::
+
+::: {.content-visible when-format="html:js"}
+## Trợ lý học tập AI {#sec-socratiq-ai-ai-learning-companion-bc63}
+
+Chào mừng bạn đến với SocratiQ (phát âm là ``Socratic''), một trợ lý học tập AI được tích hợp liền mạch trong toàn bộ tài liệu này. Lấy cảm hứng từ phương pháp giảng dạy Socratic—nhấn mạnh các câu hỏi và câu trả lời sâu sắc để kích thích tư duy phản biện—SocratiQ là một phần trong thử nghiệm của chúng tôi với cái mà chúng tôi gọi là *Học tập Sinh tạo*. Bằng cách kết hợp các câu đố tương tác, hỗ trợ cá nhân hóa và phản hồi theo thời gian thực, SocratiQ nhằm mục đích củng cố sự hiểu biết của bạn và giúp bạn tạo ra những kết nối mới. *SocratiQ vẫn đang trong quá trình phát triển và chúng tôi hoan nghênh phản hồi của bạn.*
+
+Tìm hiểu thêm: Đọc bài nghiên cứu của chúng tôi [SocratiQ: A Generative AI-Powered Learning Companion for Personalized Education and Broader Accessibility](https://arxiv.org/abs/2502.00341).
+
+```{=html}
+Listen to this AI-generated podcast about SocratiQ. </br></br>
+
+    <audio controls>
+    <source src="./audio/socratiq_ai_podcast.mp3" type="audio/mpeg">
+    </audio>
+    <p></p>
+```
+
+Bạn có thể bật SocratiQ bằng cách nhấp vào nút bên dưới:
+
+<!-- Add this to your Quarto document -->
+<div style="display: flex; align-items: center; gap: 10px;">
+  <label for="socratiq-toggle" style="margin: 0; font-weight: bold;">SocratiQ:</label>
+  <button id="socratiq-toggle" class="toggle-btn" onclick="toggleSocratiQ()">TẮT</button>
+</div>
+
+<style>
+  /* Toggle button styles */
+  .toggle-btn {
+    background-color: #ccc; /* Default (OFF) background */
+    color: black;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .toggle-btn.on {
+    background-color: green; /* ON background color */
+    color: white; /* Text color for ON */
+  }
+</style>
+
+<script>
+  // Function to get the value of a specific cookie
+  function getCookie(name) {
+    const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+    for (const cookie of cookies) {
+      const [key, value] = cookie.split('=');
+      if (key === name) return value;
+    }
+    return null;
+  }
+
+  // Function to set a cookie
+  function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+  }
+
+  // Initialize the button state based on the "socratiq" cookie
+  const toggleButton = document.getElementById('socratiq-toggle');
+  const isSocratiQActive = getCookie('socratiq') === 'true';
+  if (isSocratiQActive) {
+    toggleButton.classList.add('on');
+    toggleButton.textContent = 'ON';
+  }
+
+  // Function to handle the toggle button click
+  function toggleSocratiQ() {
+    const isActive = toggleButton.classList.toggle('on');
+    toggleButton.textContent = isActive ? 'ON' : 'OFF';
+    setCookie('socratiq', isActive, 7); // Save the state in a cookie for 7 days
+  }
+</script>
+
+::: {.callout-tip title="Truy cập URL trực tiếp"}
+
+Bạn có thể điều khiển SocratiQ trực tiếp bằng cách thêm các tham số `?socratiq=` vào URL của mình:
+
+- Để kích hoạt: [mlsysbook.ai/?socratiq=true](https://mlsysbook.ai/?socratiq=true)
+- Để hủy kích hoạt: [mlsysbook.ai/?socratiq=false](https://mlsysbook.ai/?socratiq=false)
+
+Điều này giúp bạn truy cập nhanh để bật/tắt chức năng của SocratiQ trực tiếp từ thanh địa chỉ của trình duyệt, mà không cần quay lại đây.
+
+:::
+
+Mục tiêu của SocratiQ là thích ứng với nhu cầu của bạn trong khi tạo ra các câu hỏi có mục tiêu và tham gia vào đối thoại có ý nghĩa về tài liệu. Không giống như việc học sách giáo khoa truyền thống, SocratiQ mang đến trải nghiệm học tập tương tác, cá nhân hóa có thể giúp bạn hiểu rõ hơn và ghi nhớ các khái niệm phức tạp. Nó chỉ có sẵn dưới dạng một tính năng trực tuyến.
+
+## Hướng dẫn Bắt đầu Nhanh {#sec-socratiq-ai-quick-start-guide-986f}
+
+1. Bật SocratiQ bằng nút bên dưới hoặc tham số URL
+2. Sử dụng phím tắt (`Cmd/Ctrl + /`) để mở SocratiQ bất cứ lúc nào
+3. Đặt trình độ học vấn của bạn trong Cài đặt
+4. Bắt đầu học! Tìm các nút câu đố ở cuối các phần
+
+Xin lưu ý rằng đây là một tính năng thử nghiệm. Chúng tôi đang thử nghiệm ý tưởng tạo ra trải nghiệm học tập năng động và cá nhân hóa bằng cách khai thác sức mạnh của AI sinh tạo. Chúng tôi hy vọng rằng cách tiếp cận này sẽ thay đổi cách bạn tương tác và tiếp thu các khái niệm phức tạp.
+
+::: {.callout-warning title="Về phản hồi của AI"}
+
+**Về Phản hồi của AI**: Mặc dù SocratiQ sử dụng AI tiên tiến để tạo câu đố và cung cấp hỗ trợ, nhưng giống như tất cả các hệ thống AI, đôi khi nó có thể cung cấp các câu trả lời không hoàn hảo hoặc không đầy đủ. Tuy nhiên, chúng tôi đã thiết kế và thử nghiệm nó để đảm bảo nó hiệu quả trong việc hỗ trợ hành trình học tập của bạn. Nếu bạn không chắc chắn về bất kỳ phản hồi nào, hãy tham khảo nội dung sách giáo khoa hoặc hỏi giảng viên của bạn.
+
+:::
+
+Khi bạn đã bật SocratiQ, nó sẽ luôn có sẵn khi bạn truy cập trang web này.
+
+Bạn có thể truy cập SocratiQ bất cứ lúc nào bằng phím tắt hiển thị trong @fig-main-shortcut, phím tắt này sẽ hiển thị giao diện được minh họa trong @fig-main-interface.
+
+::: {#fig-main-shortcut fig-env="figure" fig-pos="htb" fig-cap="**Trợ lý học tập AI SocratiQ**: Hình ảnh hiển thị phím tắt (Ctrl + /) được cung cấp để dễ dàng truy cập SocratiQ, thể hiện sự tích hợp của nó với môi trường người dùng." fig-alt="Trợ lý học tập AI SocratiQ: Hình ảnh hiển thị phím tắt (Ctrl + /) được cung cấp để dễ dàng truy cập SocratiQ, thể hiện sự tích hợp của nó với môi trường người dùng."}
+![](images/png/shortcut.png)
+:::
+
+::: {#fig-main-interface fig-env="figure" fig-pos="htb" fig-cap="**Trợ lý học tập AI**: Hình ảnh này giới thiệu SocratiQ, một công cụ học tập được hỗ trợ bởi AI được thiết kế để nâng cao sự hiểu biết về các khái niệm hệ thống ML. Giao diện có phần cài đặt cho trình độ học vấn và các nút câu đố ở cuối các phần gợi ý các cơ hội học tập tương tác. SocratiQ đóng vai trò là một công cụ thiết yếu cho sinh viên khoa học máy tính quan tâm đến việc nắm bắt các khái niệm hệ thống ML." fig-alt="Trợ lý học tập AI: Hình ảnh này giới thiệu SocratiQ, một công cụ học tập được hỗ trợ bởi AI được thiết kế để nâng cao sự hiểu biết về các khái niệm hệ thống ML. Giao diện có phần cài đặt cho trình độ học vấn và các nút câu đố ở cuối các phần gợi ý các cơ hội học tập tương tác. SocratiQ đóng vai trò là một công cụ thiết yếu cho sinh viên khoa học máy tính quan tâm đến việc nắm bắt các khái niệm hệ thống ML."}
+![](images/png/interface.png)
+:::
+
+## Tổng quan về nút {#sec-socratiq-ai-button-overview-c175}
+
+Thanh điều hướng trên cùng (@fig-top-menu) cung cấp quyền truy cập nhanh vào các tính năng sau:
+
+1. Điều chỉnh [cài đặt](#sec-socratiq-ai-personalize-learning-1d9c) của bạn bất cứ lúc nào.
+2. Theo dõi [tiến độ](#sec-socratiq-ai-tracking-progress-d563) của bạn bằng cách xem bảng điều khiển.
+3. Bắt đầu mới hoặc lưu [cuộc trò chuyện](#sec-socratiq-ai-learning-socratiq-d17d) của bạn với SocratiQ.
+
+::: {#fig-top-menu fig-env="figure" fig-pos="htb" fig-cap="**Menu Điều hướng trên cùng**: Chế độ xem menu điều hướng trên cùng." fig-alt="Chế độ xem menu điều hướng trên cùng."}
+![](images/png/top_menu.png)
+:::
+
+## Cá nhân hóa việc học của bạn {#sec-socratiq-ai-personalize-learning-1d9c}
+
+Trước khi đi sâu vào việc học, hãy dành chút thời gian để cấu hình SocratiQ cho trình độ học vấn của bạn. Thiết lập ban đầu này đảm bảo rằng tất cả các tương tác, từ câu hỏi đố vui đến giải thích, đều được điều chỉnh phù hợp với kiến thức nền tảng của bạn. @Fig-settings-panel cho thấy nơi bạn có thể điều chỉnh các tùy chọn này.
+
+Bạn có thể bổ trợ bất kỳ phản hồi nào của AI SocratiQ bằng cách sử dụng menu thả xuống ở đầu mỗi tin nhắn, cho phép bạn điều chỉnh mức độ khó như thể hiện trong @fig-adjust_message_difficulty.
+
+::: {#fig-settings-panel fig-env="figure" fig-pos="htb" fig-cap="**Tùy chỉnh Ưu tiên Học tập**: Hình ảnh hiển thị giao diện người dùng cho phép cá nhân hóa một công cụ học tập dựa trên AI, chẳng hạn như SocratiQ, để điều chỉnh tương tác phù hợp với trình độ học vấn của người học. Bảng cài đặt ở phía bên phải màn hình hiển thị các tùy chọn để điều chỉnh ưu tiên liên quan đến câu hỏi trắc nghiệm và giải thích. Việc tùy chỉnh này đảm bảo rằng thông tin được trình bày phù hợp với kiến thức nền của người học, từ đó nâng cao sự hiểu biết về các khái niệm hệ thống ML." fig-alt="Tùy chỉnh Ưu tiên Học tập: Hình ảnh hiển thị giao diện người dùng cho phép cá nhân hóa một công cụ học tập dựa trên AI, chẳng hạn như SocratiQ, để điều chỉnh tương tác phù hợp với trình độ học vấn của người học. Bảng cài đặt ở phía bên phải màn hình hiển thị các tùy chọn để điều chỉnh ưu tiên liên quan đến câu hỏi trắc nghiệm và giải thích. Việc tùy chỉnh này đảm bảo rằng thông tin được trình bày phù hợp với kiến thức nền của người học, từ đó nâng cao sự hiểu biết về các khái niệm hệ thống ML."}
+![](images/png/settings.png)
+:::
+
+## Học tập với SocratiQ {#sec-socratiq-ai-learning-socratiq-d17d}
+
+SocratiQ cung cấp một số tính năng tương tác để hỗ trợ hành trình học tập của bạn: hệ thống câu đố để củng cố kiến thức, cách nhận trợ giúp với các khái niệm khó, và các cách để đào sâu hiểu biết của bạn thông qua các gợi ý nội dung liên quan.
+
+### Câu đố {#sec-socratiq-ai-quizzes-fa20}
+
+Khi bạn tiến bộ qua mỗi phần của sách giáo khoa, bạn có tùy chọn yêu cầu SocratiQ tự động tạo các câu đố được điều chỉnh để củng cố các khái niệm chính. Các câu đố này được chèn thuận tiện vào cuối mỗi tiểu mục chính (ví dụ: 1.1, 1.2, 1.3, v.v.), như minh họa trong @fig-quiz-interface. Trải nghiệm câu đố hoàn chỉnh, bao gồm cả câu hỏi và câu trả lời, được hiển thị trong @fig-quizzes.
+
+::: {#fig-adjust_message_difficulty fig-env="figure" fig-pos="htb" fig-cap="**Tùy chỉnh Phản hồi AI**: Làm lại một tin nhắn AI bằng cách chọn một cấp độ trải nghiệm mới." fig-alt="Tùy chỉnh Phản hồi AI: Làm lại một tin nhắn AI bằng cách chọn một cấp độ trải nghiệm mới."}
+![](images/gif/adjust_message_difficulty.gif)
+:::
+
+::: {#fig-quiz-interface fig-env="figure" fig-pos="htb" fig-cap="**Câu đố do AI tạo**: Hình ảnh này giới thiệu SocratiQ, một công cụ học tập dựa trên AI được tích hợp vào sách giáo khoa để cung cấp trải nghiệm giáo dục cá nhân hóa cho sinh viên khoa học máy tính cấp đại học. Bằng cách tạo ra các câu đố tùy chỉnh với câu hỏi trắc nghiệm và giải thích chi tiết, SocratiQ tạo điều kiện cho sự hiểu biết sâu sắc hơn về các khái niệm hệ thống ML thông qua phản hồi tức thì và đánh giá thích ứng. Các câu đố này được chèn vào cuối các tiểu mục chính trong tài liệu sách giáo khoa, cho phép sinh viên đánh giá mức độ hiểu của họ về các phần trước đó đồng thời củng cố các khái niệm chính. Mô hình LLM được SocratiQ sử dụng giúp tăng cường việc học và hiểu các hệ thống ML của sinh viên." fig-alt="Câu đố do AI tạo: Hình ảnh này giới thiệu SocratiQ, một công cụ học tập dựa trên AI được tích hợp vào sách giáo khoa để cung cấp trải nghiệm giáo dục cá nhân hóa cho sinh viên khoa học máy tính cấp đại học. Bằng cách tạo ra các câu đố tùy chỉnh với câu hỏi trắc nghiệm và giải thích chi tiết, SocratiQ tạo điều kiện cho sự hiểu biết sâu sắc hơn về các khái niệm hệ thống ML thông qua phản hồi tức thì và đánh giá thích ứng. Các câu đố này được chèn vào cuối các tiểu mục chính trong tài liệu sách giáo khoa, cho phép sinh viên đánh giá mức độ hiểu của họ về các phần trước đó đồng thời củng cố các khái niệm chính. Mô hình LLM được SocratiQ sử dụng giúp tăng cường việc học và hiểu các hệ thống ML của sinh viên."}
+![](images/png/quiz_button2.png)
+:::
+
+Mỗi câu đố thường bao gồm 3-5 câu hỏi trắc nghiệm và chỉ mất 1-2 phút để hoàn thành. Các câu hỏi này được thiết kế để đánh giá sự hiểu biết của bạn về tài liệu đã được đề cập trong phần trước, như thể hiện trong @fig-quiz-questions.
+
+Sau khi bạn gửi câu trả lời, SocratiQ cung cấp phản hồi tức thì cùng với giải thích chi tiết cho mỗi câu hỏi, như được minh họa trong @fig-quiz-answers.
+
+::: {#fig-quizzes layout="[[43,-14,43]]" fig-env="figure" fig-pos="htb" fig-cap="**Giao diện Câu đố SocratiQ**: Giao diện tạo câu đố (trái) và phản hồi câu trả lời (phải) minh họa cách SocratiQ tích hợp các đánh giá do AI tạo vào quy trình học tập." fig-alt="Hai ảnh chụp màn hình đặt cạnh nhau hiển thị giao diện câu đố SocratiQ: bảng bên trái hiển thị các câu hỏi trắc nghiệm, bảng bên phải hiển thị phản hồi câu trả lời kèm giải thích."}
+::: {#fig-quiz-questions fig-env="figure" fig-pos="htb" fig-cap="**Câu đố cá nhân hóa do AI tạo**: Hình ảnh này giới thiệu một công cụ học tập dựa trên AI có tên SocratiQ, cung cấp cho sinh viên khoa học máy tính cấp đại học trải nghiệm giáo dục tùy chỉnh để tạo điều kiện hiểu sâu hơn về các khái niệm hệ thống ML thông qua các câu đố tương tác, cá nhân hóa. Được tích hợp vào tài liệu sách giáo khoa, các câu đố này bao gồm các câu hỏi trắc nghiệm và giải thích chi tiết cho mỗi câu trả lời, được thiết kế để đánh giá mức độ hiểu các phần trước đó và củng cố các khái niệm chính bằng cách sử dụng phản hồi tức thì. SocratiQ sử dụng một mô hình ngôn ngữ lớn (LLM) để tự động tạo và chấm điểm các câu đố thích ứng này, mang đến cho sinh viên trải nghiệm giáo dục giúp nâng cao khả năng học tập và hiểu biết của họ về các hệ thống ML." fig-alt="Câu đố cá nhân hóa do AI tạo: Hình ảnh này giới thiệu một công cụ học tập dựa trên AI có tên SocratiQ, cung cấp cho sinh viên khoa học máy tính cấp đại học trải nghiệm giáo dục tùy chỉnh để tạo điều kiện hiểu sâu hơn về các khái niệm hệ thống ML thông qua các câu đố tương tác, cá nhân hóa. Được tích hợp vào tài liệu sách giáo khoa, các câu đố này bao gồm các câu hỏi trắc nghiệm và giải thích chi tiết cho mỗi câu trả lời, được thiết kế để đánh giá mức độ hiểu các phần trước đó và củng cố các khái niệm chính bằng cách sử dụng phản hồi tức thì. SocratiQ sử dụng một mô hình ngôn ngữ lớn (LLM) để tự động tạo và chấm điểm các câu đố thích ứng này, mang đến cho sinh viên trải nghiệm giáo dục giúp nâng cao khả năng học tập và hiểu biết của họ về các hệ thống ML."}
+![](images/png/quiz_questions.png)
+:::
+
+::: {#fig-quiz-answers fig-env="figure" fig-pos="htb" fig-cap="**Bài kiểm tra cá nhân hóa do AI tạo**: Hình ảnh này giới thiệu một công cụ học tập do AI điều khiển có tên SocratiQ, cung cấp cho sinh viên khoa học máy tính cấp đại học những trải nghiệm giáo dục tùy chỉnh thông qua các bài kiểm tra tương tác, cá nhân hóa. Được tích hợp vào tài liệu giáo trình, các bài kiểm tra này tạo điều kiện hiểu sâu hơn về các khái niệm hệ thống ML bằng cách củng cố các khái niệm chính thông qua phản hồi tức thì và đánh giá thích ứng. Mỗi bài kiểm tra thường bao gồm 3-5 câu hỏi trắc nghiệm và chỉ mất 1-2 phút để hoàn thành." fig-alt="Bài kiểm tra cá nhân hóa do AI tạo: Hình ảnh này giới thiệu một công cụ học tập do AI điều khiển có tên SocratiQ, cung cấp cho sinh viên khoa học máy tính cấp đại học những trải nghiệm giáo dục tùy chỉnh thông qua các bài kiểm tra tương tác, cá nhân hóa. Được tích hợp vào tài liệu giáo trình, các bài kiểm tra này tạo điều kiện hiểu sâu hơn về các khái niệm hệ thống ML bằng cách củng cố các khái niệm chính thông qua phản hồi tức thì và đánh giá thích ứng. Mỗi bài kiểm tra thường bao gồm 3-5 câu hỏi trắc nghiệm và chỉ mất 1-2 phút để hoàn thành."}
+![](images/png/quiz_answers.png)
+:::
+
+SocratiQ sử dụng một mô hình ngôn ngữ lớn (LLM) để tự động tạo và chấm điểm các bài kiểm tra.
+:::
+
+### Luồng học tập ví dụ {#sec-socratiq-ai-example-learning-flow-d861}
+
+1. Đọc một phần
+2. Chọn văn bản khó → Hỏi SocratiQ để được giải thích
+3. Làm bài kiểm tra của phần
+4. Xem lại các gợi ý nội dung liên quan
+5. Theo dõi tiến độ trong bảng điều khiển
+
+### Nhận trợ giúp về các khái niệm {#sec-socratiq-ai-getting-help-concepts-c968}
+
+Khi bạn gặp phải các khái niệm khó, SocratiQ cung cấp hai cách mạnh mẽ để nhận trợ giúp. Đầu tiên, bạn có thể chọn bất kỳ văn bản nào từ giáo trình và yêu cầu giải thích chi tiết, như được minh họa trong @fig-text-selection.
+
+::: {#fig-text-selection fig-env="figure" fig-pos="htb" fig-cap="**Công cụ học tập hỗ trợ AI: SocratiQ**: Hình ảnh giới thiệu một công cụ học tập được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học làm sâu sắc thêm sự hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ, thúc đẩy kỹ năng tự học và tư duy phản biện. SocratiQ cung cấp gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng." fig-alt="Công cụ học tập hỗ trợ AI: SocratiQ: Hình ảnh giới thiệu một công cụ học tập được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học làm sâu sắc thêm sự hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ, thúc đẩy kỹ năng tự học và tư duy phản biện. SocratiQ cung cấp gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng."}
+![](images/png/chat_context.png)
+:::
+
+Sau khi bạn đã chọn văn bản, bạn có thể đặt câu hỏi về nó, và SocratiQ sẽ cung cấp giải thích chi tiết dựa trên ngữ cảnh đó, như được minh họa trong @fig-context-explanation.
+
+::: {#fig-context-explanation fig-env="figure" fig-pos="htb" fig-cap="**Công cụ học tập hỗ trợ AI: SocratiQ**: Hình ảnh giới thiệu một công cụ học tập được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học làm sâu sắc thêm sự hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ, thúc đẩy kỹ năng tự học và tư duy phản biện. SocratiQ cung cấp gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng." fig-alt="Công cụ học tập hỗ trợ AI: SocratiQ: Hình ảnh giới thiệu một công cụ học tập được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học làm sâu sắc thêm sự hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ, thúc đẩy kỹ năng tự học và tư duy phản biện. SocratiQ cung cấp gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng."}
+![](images/png/chat_ask.png)
+:::
+
+@Fig-interactive-chat hiển thị phản hồi cho yêu cầu trong @fig-context-explanation.
+
+Ngoài ra, bạn cũng có thể tham chiếu trực tiếp các phần, như được hiển thị trong @fig-reference-sections, tiểu mục và từ khóa khi bạn trò chuyện với SocratiQ. Sử dụng ký hiệu `@` để tham chiếu một phần, tiểu mục hoặc từ khóa. Bạn cũng có thể nhấp vào nút `+ Context` ngay phía trên ô nhập liệu.
+
+::: {#fig-interactive-chat fig-env="figure" fig-pos="htb" fig-cap="**Công cụ học tập hỗ trợ AI**: Hình ảnh minh họa một công cụ học tập sáng tạo được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học nâng cao hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ. Điều này thúc đẩy kỹ năng tự học và tư duy phản biện bằng cách đưa ra gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng. SocratiQ thúc đẩy sự hiểu biết sâu sắc về các hệ thống ML bằng cách cung cấp các giải thích chi tiết dựa trên ngữ cảnh đã chọn." fig-alt="Công cụ học tập hỗ trợ AI: Hình ảnh minh họa một công cụ học tập sáng tạo được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học nâng cao hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ. Điều này thúc đẩy kỹ năng tự học và tư duy phản biện bằng cách đưa ra gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng. SocratiQ thúc đẩy sự hiểu biết sâu sắc về các hệ thống ML bằng cách cung cấp các giải thích chi tiết dựa trên ngữ cảnh đã chọn."}
+![](images/png/chat_explanation.png)
+:::
+
+::: {#fig-reference-sections fig-env="figure" fig-pos="htb" fig-cap="**Tham chiếu phần**: Tham chiếu các phần khác nhau từ giáo trình." fig-alt="Tham chiếu các phần khác nhau từ sách giáo khoa."}
+![](images/gif/reference.gif)
+:::
+
+Để nâng cao trải nghiệm học tập của bạn, SocratiQ không chỉ trả lời câu hỏi mà còn đề xuất nội dung liên quan từ sách giáo khoa có thể hữu ích cho việc hiểu sâu hơn, như minh họa trong @fig-related-content.
+
+::: {#fig-related-content fig-env="figure" fig-pos="htb" fig-cap="**Công cụ học tập hỗ trợ AI SocratiQ**: Một công cụ học tập được hỗ trợ bởi AI, được thiết kế dành cho sinh viên khoa học máy tính cấp đại học nhằm nâng cao hiểu biết về các khái niệm machine learning (ML) đầy thách thức. Bằng cách chọn bất kỳ phần nào của sách giáo khoa và yêu cầu giải thích chi tiết, sinh viên có thể tiếp cận hỗ trợ cá nhân hóa, tương tác phù hợp với mục tiêu học tập của mình, từ đó thúc đẩy kỹ năng tự học và tư duy phản biện. Công cụ AI này tăng cường học tập bằng cách cung cấp các gợi ý về nội dung liên quan từ sách giáo khoa và hướng dẫn người dùng thông qua các chủ đề ML phức tạp một cách dễ dàng." fig-alt="Công cụ học tập hỗ trợ AI SocratiQ: Một công cụ học tập được hỗ trợ bởi AI, được thiết kế dành cho sinh viên khoa học máy tính cấp đại học nhằm nâng cao hiểu biết về các khái niệm machine learning (ML) đầy thách thức. Bằng cách chọn bất kỳ phần nào của sách giáo khoa và yêu cầu giải thích chi tiết, sinh viên có thể tiếp cận hỗ trợ cá nhân hóa, tương tác phù hợp với mục tiêu học tập của mình, từ đó thúc đẩy kỹ năng tự học và tư duy phản biện. Công cụ AI này tăng cường học tập bằng cách cung cấp các gợi ý về nội dung liên quan từ sách giáo khoa và hướng dẫn người dùng thông qua các chủ đề ML phức tạp một cách dễ dàng."}
+![](images/png/chat_related.png)
+:::
+
+## Theo dõi tiến độ của bạn {#sec-socratiq-ai-tracking-progress-d563}
+
+SocratiQ giúp bạn theo dõi hành trình học tập của mình thông qua các bảng điều khiển trực quan và thành tích được trò chơi hóa. Các tính năng này cung cấp động lực và cái nhìn sâu sắc về khả năng nắm vững các khái niệm hệ thống ML của bạn.
+
+### Bảng điều khiển hiệu suất {#sec-socratiq-ai-performance-dashboard-ac3e}
+
+SocratiQ duy trì một hồ sơ toàn diện về hành trình học tập của bạn. Bảng điều khiển tiến độ (@fig-progress-dashboard) hiển thị số liệu thống kê hiệu suất bài kiểm tra, chuỗi học tập và huy hiệu thành tích của bạn. Bảng điều khiển này cập nhật theo thời gian thực.
+
+::: {#fig-progress-dashboard fig-env="figure" fig-pos="htb" fig-cap="**Bảng điều khiển học tập hỗ trợ AI**: Hình ảnh mô tả bảng điều khiển hiệu suất của SocratiQ, một nền tảng học tập hỗ trợ AI cho phép sinh viên theo dõi tiến độ nắm vững các khái niệm hệ thống ML. Bảng điều khiển hiển thị các số liệu thống kê chính như hiệu suất bài kiểm tra, chuỗi học tập và huy hiệu thành tích. Bằng cách tương tác nhất quán với tài liệu, sinh viên có thể kiếm được nhiều huy hiệu khác nhau để công nhận tiến độ và củng cố sự hiểu biết của họ về các khái niệm ML thiết yếu. Các tính năng này giúp sinh viên theo dõi hành trình học tập, hình dung sự phát triển và tạo động lực cho bản thân để cải thiện liên tục." fig-alt="Bảng điều khiển học tập hỗ trợ AI: Hình ảnh mô tả bảng điều khiển hiệu suất của SocratiQ, một nền tảng học tập hỗ trợ AI cho phép sinh viên theo dõi tiến độ nắm vững các khái niệm hệ thống ML. Bảng điều khiển hiển thị các số liệu thống kê chính như hiệu suất bài kiểm tra, chuỗi học tập và huy hiệu thành tích. Bằng cách tương tác nhất quán với tài liệu, sinh viên có thể kiếm được nhiều huy hiệu khác nhau để công nhận tiến độ và củng cố sự hiểu biết của họ về các khái niệm ML thiết yếu. Các tính năng này giúp sinh viên theo dõi hành trình học tập, hình dung sự phát triển và tạo động lực cho bản thân để cải thiện liên tục."}
+![](images/png/dashboard.png){width=80 percent}
+:::
+
+Khi bạn tiếp tục tương tác với tài liệu và hoàn thành các bài kiểm tra, bạn sẽ kiếm được nhiều huy hiệu khác nhau để công nhận tiến độ của mình, như minh họa trong @fig-achievement-badges.
+
+::: {#fig-achievement-badges fig-env="figure" fig-pos="htb" fig-cap="**Bảng điều khiển học tập hỗ trợ AI**: Bảng điều khiển hiệu suất của SocratiQ là một nền tảng học tập hỗ trợ AI cho phép sinh viên theo dõi tiến độ nắm vững các khái niệm hệ thống ML. Bằng cách tương tác nhất quán với tài liệu, sinh viên có thể kiếm được nhiều huy hiệu thành tích khác nhau để công nhận tiến độ và củng cố sự hiểu biết của họ về các khái niệm ML thiết yếu. Bảng điều khiển hiển thị các số liệu thống kê chính như hiệu suất bài kiểm tra, chuỗi học tập và huy hiệu thành tích." fig-alt="Bảng điều khiển học tập hỗ trợ AI: Bảng điều khiển hiệu suất của SocratiQ là một nền tảng học tập hỗ trợ AI cho phép sinh viên theo dõi tiến độ nắm vững các khái niệm hệ thống ML. Bằng cách tương tác nhất quán với tài liệu, sinh viên có thể kiếm được nhiều huy hiệu thành tích khác nhau để công nhận tiến độ và củng cố sự hiểu biết của họ về các khái niệm ML thiết yếu. Bảng điều khiển hiển thị các số liệu thống kê chính như hiệu suất bài kiểm tra, chuỗi học tập và huy hiệu thành tích."}
+![](images/png/badges.png)
+:::
+
+### Huy hiệu thành tích {#sec-socratiq-ai-achievement-badges-63fc}
+
+Khi bạn hoàn thành các bài kiểm tra, bạn sẽ kiếm được các huy hiệu đặc biệt để đánh dấu thành tích của mình! Dưới đây là những gì bạn có thể kiếm được:
+
+| **Huy hiệu** | **Tên** | **Cách kiếm được** |
+|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------|:------------------------------------|
+| **![🎯](images/png/dart.png){width=20px}** | Những bước đầu tiên | Hoàn thành bài kiểm tra đầu tiên của bạn |
+| **![🔢](images/png/1234.png){width=20px}** | Đang có chuỗi thành tích | Duy trì chuỗi điểm tuyệt đối |
+| **![🏆](images/png/trophy.png){width=20px}** | Người đạt huy chương Quiz | Hoàn thành 10 bài kiểm tra |
+| **![🏆](images/png/trophy.png){width=20px}![🏆](images/png/trophy.png){width=20px}** | Nhà vô địch Quiz | Hoàn thành 20 bài kiểm tra |
+| **![🏆](images/png/trophy.png){width=20px}![🏆](images/png/trophy.png){width=20px}![🏆](images/png/trophy.png){width=20px}** | Huyền thoại Quiz | Hoàn thành 30 bài kiểm tra |
+| **![🏆](images/png/trophy.png){width=20px}![🏆](images/png/trophy.png){width=20px}![🏆](images/png/trophy.png){width=20px}![🏆](images/png/trophy.png){width=20px} x n** | Siêu nhân AGI Quiz | Hoàn thành 40 bài kiểm tra trở lên |
+
+::: {.callout-tip title="Thu thập huy hiệu thành tích"}
+
+Hãy tiếp tục làm bài kiểm tra để thu thập tất cả các huy hiệu và cải thiện hành trình học tập của bạn! Các huy hiệu hiện tại của bạn sẽ xuất hiện trong bảng điều khiển thống kê bài kiểm tra.
+
+:::
+
+Nếu bạn muốn có hồ sơ về tiến độ của mình, bạn có thể tạo một báo cáo PDF (@fig-download-report). Báo cáo này sẽ hiển thị tiến độ, hiệu suất trung bình và tất cả các câu hỏi bạn đã thử. Tệp PDF được tạo với một mã băm duy nhất và có thể được xác thực duy nhất.
+
+## Lưu trữ dữ liệu {#sec-socratiq-ai-data-storage-5ea5}
+
+Nền tảng đồng hành lưu trữ dữ liệu học tập của bạn cục bộ, điều này có ý nghĩa quan trọng đối với tính bền vững của dữ liệu.
+
+::: {.callout-important title="Bộ nhớ trình duyệt cục bộ"}
+
+**Lưu ý quan trọng**: Tất cả dữ liệu tiến độ được lưu trữ cục bộ trong trình duyệt của bạn. Xóa lịch sử trình duyệt hoặc cache sẽ xóa toàn bộ lịch sử học tập của bạn, bao gồm điểm bài kiểm tra, chuỗi học tập và huy hiệu thành tích.
+
+:::
+
+Bạn cũng có thể xóa tất cả các cuộc trò chuyện đã lưu của mình bằng cách nhấp vào nút New Chat (Trò chuyện mới) trên thanh điều hướng, như minh họa trong @fig-previous-conversations.
+
+```{=latex}
+\clearpage
+```
+
+## Yêu cầu kỹ thuật {#sec-socratiq-ai-technical-requirements-d774}
+
+Để sử dụng SocratiQ hiệu quả, bạn sẽ cần:
+
+- Trình duyệt Chrome hoặc Safari
+- Đã bật JavaScript
+- Kết nối internet ổn định
+
+::: {#fig-download-report fig-env="figure" fig-pos="htb" fig-cap="**Quy trình tải báo cáo**: Bạn có thể nhấp vào nút Download Report (Tải báo cáo) để xem báo cáo của mình. Bạn có thể xác minh rằng tệp PDF của mình đã được SocratiQ tạo bằng cách nhấp vào nút verify (xác minh) và tải lên tệp PDF đã tạo của bạn." fig-alt="Bạn có thể nhấp vào nút Download Report (Tải báo cáo) để xem báo cáo của mình. Bạn có thể xác minh rằng tệp PDF của mình đã được SocratiQ tạo bằng cách nhấp vào nút verify (xác minh) và tải lên tệp PDF đã tạo của bạn."}
+![](images/png/download_report.png)
+:::
+
+::: {#fig-previous-conversations fig-env="figure" fig-pos="htb" fig-cap="**Menu các cuộc trò chuyện trước**: Tải hoặc xóa các cuộc trò chuyện trước đó hoặc bắt đầu một cuộc trò chuyện mới." fig-alt="Tải hoặc xóa các cuộc trò chuyện trước đó hoặc bắt đầu một cuộc trò chuyện mới."}
+![](images/png/prev_conversations.png)
+:::
+
+## Các vấn đề thường gặp và khắc phục sự cố {#sec-socratiq-ai-common-issues-troubleshooting-cba6}
+
+- Nếu SocratiQ không phản hồi: Làm mới trang
+- Nếu bài kiểm tra không tải: Kiểm tra kết nối internet của bạn
+- Nếu tiến độ không được lưu: Đảm bảo cookie đã được bật
+
+Đối với các vấn đề dai dẳng, vui lòng liên hệ với chúng tôi tại vj[@]eecs.harvard.edu.
+
+## Gửi phản hồi {#sec-socratiq-ai-providing-feedback-873e}
+
+Phản hồi của bạn giúp chúng tôi cải thiện SocratiQ.
+
+Bạn có thể báo cáo các vấn đề kỹ thuật, đề xuất cải tiến câu hỏi bài kiểm tra hoặc chia sẻ suy nghĩ về phản hồi của AI bằng cách sử dụng các nút phản hồi nằm rải rác trong giao diện. Bạn có thể gửi một [GitHub issue](https://github.com/harvard-edge/cs249r_book/issues).
+
+<!-- If you prefer leaving feedback via Google Form, you are welcome to do so via this link:
+
+<div class="btn btn-primary"
+     style="display: flex; align-items: center; justify-content: center; width: 200px; height: 50px; margin: 10px auto; text-align: center; font-size: 16px; padding-top: 4 percent"
+     onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSeK8RXgc6kbT1lbWljyUhwowp3x1ySbAjUQQqztdDs5ccmnQ/viewform?embedded=true', '_blank')">
+  Share Your Feedback
+</div> -->
+
+:::
+
+```{=latex}
+\part{key:vol1_foundations}
+```

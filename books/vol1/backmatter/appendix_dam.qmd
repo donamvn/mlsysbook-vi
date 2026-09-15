@@ -194,7 +194,7 @@ Sau khi đã xác định được trục chính ban đầu, @tbl-dam-intersecti
 | **Dữ liệu $\cap$ Máy** | Cách di chuyển thông tin | Băng thông I/O, tìm nạp trước, định dạng dữ liệu | @sec-data-engineering, @sec-hardware-acceleration |
 | **Thuật toán $\cap$ Máy** | Cách thực thi hiệu quả | Lượng tử hoá, tỉa (pruning), hợp nhất kernel, độ chính xác hỗn hợp | @sec-ml-frameworks, @sec-model-compression |
 | **Máy** | Vật lý | Silicon, hệ thống phân cấp bộ nhớ, FLOP/s đỉnh | @sec-hardware-acceleration |
-| **Dữ liệu $\cap$ Thuật toán $\cap$ Máy** | Kỹ thuật Hệ thống ML | Iron law, Roofline, các vòng lặp huấn luyện, phục vụ (serving) | @sec-huấn luyện mô hình, @sec-phục vụ (serving) mô hình, @sec-benchmarking |
+| **Dữ liệu $\cap$ Thuật toán $\cap$ Máy** | Kỹ thuật Hệ thống ML | Iron law, Roofline, các vòng lặp huấn luyện, phục vụ (serving) | @sec-model-training, @sec-model-serving, @sec-benchmarking |
 
 : **Tham chiếu Giao điểm D·A·M**: Mỗi vùng ánh xạ các kỹ thuật cụ thể đến các trục mà chúng bao phủ và các chương đề cập đến chúng. Các giao điểm từng cặp đòi hỏi phải suy luận về hai miền đồng thời; phần trung tâm đòi hỏi cả ba. {#tbl-dam-intersections tbl-colwidths="[17,25,37,21]"}
 

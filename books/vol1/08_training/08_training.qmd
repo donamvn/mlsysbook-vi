@@ -256,14 +256,14 @@ $$T_{\text{train}} = \frac{O}{R_{\text{peak}} \times \eta_{\text{hw}}}$$ {#eq-tr
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Technique**                   | **Term Affected**               | **Mechanism**                                                                  |
+| **Kỹ thuật** | **Thuật ngữ bị ảnh hưởng** | **Cơ chế** |
 |:--------------------------------|:--------------------------------|:-------------------------------------------------------------------------------|
-| **Mixed Precision (FP16/BF16)** | Peak Throughput ↑               | Uses supported lower-precision hardware paths                                  |
-| **Data Prefetching**            | Utilization ↑                   | Reduces accelerator idle time waiting for data                                 |
-| **Gradient Checkpointing**      | Memory ↓, Operations ↑          | Reduces saved activations by recomputing selected values                       |
-| **Gradient Accumulation**       | Memory ↓, Synchronization ↓     | Builds an effective batch from serialized micro-batches                        |
-| **Operator Fusion**             | Memory Traffic ↓, Overhead ↓    | Avoids intermediate transfers and reduces kernel launches                      |
-| **FlashAttention**              | Memory Traffic ↓, Utilization ↑ | Same asymptotic FLOPs, much lower HBM IO; backward recomputation may add FLOPs |
+| **Độ chính xác hỗn hợp (FP16/BF16)** | Thông lượng đỉnh ↑ | Sử dụng các đường dẫn phần cứng độ chính xác thấp hơn được hỗ trợ |
+| **Tìm nạp trước dữ liệu** | Tỷ lệ sử dụng ↑ | Giảm thời gian nhàn rỗi của bộ tăng tốc khi chờ dữ liệu |
+| **Kiểm tra gradient** | Bộ nhớ ↓, Thao tác ↑ | Giảm các activation đã lưu bằng cách tính toán lại các giá trị được chọn |
+| **Tích lũy gradient** | Bộ nhớ ↓, Đồng bộ hóa ↓ | Xây dựng một batch hiệu quả từ các micro-batch được tuần tự hóa |
+| **Hợp nhất toán tử** | Lưu lượng bộ nhớ ↓, Chi phí phụ trội ↓ | Tránh các lần truyền trung gian và giảm số lần khởi chạy kernel |
+| **FlashAttention** | Lưu lượng bộ nhớ ↓, Tỷ lệ sử dụng ↑ | Cùng FLOPs tiệm cận, HBM IO thấp hơn nhiều; tính toán lại ngược có thể thêm FLOPs |
 
 : **Ánh xạ tối ưu hóa theo định luật sắt**: Ánh xạ các kỹ thuật tối ưu hóa vào các thuật ngữ của định luật sắt. Hiểu kỹ thuật tác động đến thuật ngữ nào sẽ giúp chọn chiến lược tối ưu hóa phù hợp. {#tbl-iron-law-mapping tbl-colwidths="[25,27,48]"}
 
@@ -345,12 +345,12 @@ GPT-2 (1.5 tỷ tham số) được chọn làm nghiên cứu tình huống chí
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Property**     |                         **Specification**                         | **Systems Implication**                                                                                                                                        |
+| **Thuộc tính** |                         **Thông số kỹ thuật** | **Hàm ý hệ thống** |
 |:-----------------|:-----------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Parameters**   |       `{python} GPT2LighthouseSpecs.gpt2_params_b_str` (XL)       | Requires ~`{python} GPT2LighthouseSpecs.gpt2_weights_fp16_gb_str` (FP16) or ~`{python} GPT2LighthouseSpecs.gpt2_weights_fp32_gb_str` (FP32) for weights alone. |
-| **Architecture** |                        48 Layers, 1600 Dim                        | Deep pipeline creates heavy activation memory pressure.                                                                                                        |
-| **Dataset**      | WebText (`{python} GPT2LighthouseSpecs.gpt2_dataset_size_gb_str`) | Preprocessing, shuffling, and delivery must sustain the selected training configuration.                                                                       |
-| **Compute**      |       ~ `{python} GPT2LighthouseSpecs.gpt2_total_flops_str`       | Training duration depends on achieved throughput and accelerator count.                                                                                        |
+| **Tham số** |       `{python} GPT2LighthouseSpecs.gpt2_params_b_str` (XL) | Yêu cầu ~`{python} GPT2LighthouseSpecs.gpt2_weights_fp16_gb_str` (FP16) hoặc ~`{python} GPT2LighthouseSpecs.gpt2_weights_fp32_gb_str` (FP32) chỉ riêng cho các trọng số. |
+| **Kiến trúc** |                        48 Lớp, 1600 Chiều | Áp lực bộ nhớ activation lớn do pipeline sâu tạo ra. |
+| **Tập dữ liệu** | WebText (`{python} GPT2LighthouseSpecs.gpt2_dataset_size_gb_str`) | Tiền xử lý, xáo trộn và phân phối phải duy trì cấu hình huấn luyện đã chọn. |
+| **Tính toán** |       ~ `{python} GPT2LighthouseSpecs.gpt2_total_flops_str`       | Thời lượng huấn luyện phụ thuộc vào thông lượng đạt được và số lượng bộ tăng tốc. |
 
 : **Thông số kỹ thuật của mô hình GPT-2 (1.5 tỷ tham số) làm ví dụ điển hình**: Bảng này trình bày số lượng tham số, độ sâu kiến trúc, kích thước tập dữ liệu và tổng lượng tính toán cần cho huấn luyện, cùng với những tác động của chúng lên hệ thống. Mỗi hàng ghép một thuộc tính của mô hình với ràng buộc kỹ thuật tương ứng—như bộ nhớ cho trọng số, áp lực lên bộ nhớ activation do pipeline sâu, yêu cầu về thông lượng I/O và nhu cầu song song hoá. {#tbl-training-gpt2-lighthouse-specs tbl-colwidths="[20,26,54]"}
 
@@ -690,12 +690,12 @@ Các bộ tăng tốc hiện đại có thể triển khai các hàm này bằng
 
 @Tbl-compare-activations tóm tắt cách các hành vi này chuyển thành các ràng buộc hệ thống.
 
-| **Function** | **Key Advantages**                                             | **Key Disadvantages**                                                | **System Implications**                                                            |
+| **Chức năng** | **Ưu điểm chính** | **Nhược điểm chính** | **Hàm ý hệ thống** |
 |:-------------|:---------------------------------------------------------------|:---------------------------------------------------------------------|:-----------------------------------------------------------------------------------|
-| **Sigmoid**  | Smooth; bounded output in $(0, 1)$.                            | Gradients saturate at large magnitudes; output is not zero-centered. | Uses exponential or approximation kernels whose cost depends on the target.        |
-| **Tanh**     | Smooth; zero-centered output in $(-1, 1)$.                     | Gradients saturate at large magnitudes.                              | Uses special-function or approximation kernels similar in structure to sigmoid.    |
-| **ReLU**     | Simple threshold operation; nonsaturating for positive inputs. | Can produce persistently inactive units.                             | Often inexpensive and fusible; exploitable sparsity depends on downstream support. |
-| **Softmax**  | Produces a normalized distribution over an axis.               | Requires reductions and cross-element coordination.                  | Parallel implementations coordinate maximum, sum, and normalization stages.        |
+| **Sigmoid** | Mượt mà; đầu ra bị chặn trong $(0, 1)$. | Độ dốc bão hòa ở các độ lớn lớn; đầu ra không tập trung vào 0. | Sử dụng các kernel hàm mũ hoặc xấp xỉ mà chi phí của chúng phụ thuộc vào mục tiêu. |
+| **Tanh** | Mượt mà; đầu ra tập trung vào 0 trong $(-1, 1)$. | Độ dốc bão hòa ở các độ lớn lớn. | Sử dụng các kernel hàm đặc biệt hoặc xấp xỉ có cấu trúc tương tự sigmoid. |
+| **ReLU** | Thao tác ngưỡng đơn giản; không bão hòa đối với đầu vào dương. | Có thể tạo ra các đơn vị không hoạt động liên tục. | Thường không tốn kém và có thể kết hợp; độ thưa thớt có thể khai thác phụ thuộc vào hỗ trợ hạ nguồn. |
+| **Softmax** | Tạo ra một phân phối được chuẩn hóa trên một trục. | Yêu cầu các phép giảm và phối hợp giữa các phần tử. | Các triển khai song song phối hợp các giai đoạn tìm giá trị lớn nhất, tổng và chuẩn hóa. |
 
 : **So sánh các hàm activation trong hệ thống**: Các hàm activation khác nhau về hành vi toán học, chi phí kernel, cơ hội hợp nhất và mẫu truy cập bộ nhớ. {#tbl-compare-activations tbl-colwidths="[10,28,23,39]"}
 
@@ -923,14 +923,14 @@ Việc lựa chọn thuật toán tối ưu hóa tạo ra các kiểu tính toá
 \renewcommand{\arraystretch}{1.25}
 ```
 
-| **Property**                    |         **SGD**          |     **Momentum**     |         **RMSprop**         |                 **Adam**                |
+| **Thuộc tính** |         **SGD** |     **Momentum** |         **RMSprop** |                 **Adam** |
 |:--------------------------------|:------------------------:|:--------------------:|:---------------------------:|:---------------------------------------:|
-| **Memory Overhead**             |           None           |    Velocity terms    |      Squared gradients      |   Both velocity and squared gradients   |
-| **Parameter + optimizer state** |        1$\times$         |      2$\times$       |          2$\times$          |                3$\times$                |
-| **Dense State Access**          | Parameters and gradients |    Adds velocity     | Adds squared-gradient state |   Adds first- and second-moment state   |
-| **Update Work**                 |  Lowest auxiliary work   | Adds momentum update |    Adds adaptive scaling    | Adds moment updates and bias correction |
-| **Hardware Efficiency**         |          Varies          |        Varies        |            Varies           |                  Varies                 |
-| **Convergence Behavior**        |          Varies          |        Varies        |            Varies           |                  Varies                 |
+| **Chi phí bộ nhớ** |           Không có |    Các số hạng vận tốc |      Độ dốc bình phương |   Cả vận tốc và độ dốc bình phương |
+| **Tham số + trạng thái optimizer** |        1$\times$         |      2$\times$       |          2$\times$          |                3$\times$                |
+| **Truy cập trạng thái dày đặc** | Tham số và độ dốc |    Thêm vận tốc | Thêm trạng thái độ dốc bình phương |   Thêm trạng thái mô men bậc nhất và bậc hai |
+| **Công việc cập nhật** |  Công việc phụ trợ thấp nhất | Thêm cập nhật momentum |    Thêm tỷ lệ thích ứng | Thêm cập nhật mô men và hiệu chỉnh độ chệch (bias). |
+| **Hiệu suất phần cứng** |          Thay đổi |        Thay đổi |            Thay đổi |                  Thay đổi |
+| **Hành vi hội tụ** |          Thay đổi |        Thay đổi |            Thay đổi |                  Thay đổi |
 
 : **Dung lượng bộ nhớ của Optimizer**: Các thuật toán optimizer khác nhau tạo ra chi phí trạng thái phụ trợ khác nhau do phải lưu các giá trị trung gian như velocity và bình phương gradient. Dòng hệ số nhân tính số tham số cộng với trạng thái phụ trợ của optimizer, và không tính gradient lẫn activation; để có tổng bộ nhớ huấn luyện đầy đủ, cần cộng rõ ràng các phần đó. Những đánh đổi này chi phối các triển khai bị hạn chế tài nguyên và việc huấn luyện mô hình quy mô lớn. {#tbl-optimizer-properties tbl-colwidths="[26,10,13,17,34]"}
 
@@ -1383,12 +1383,12 @@ Các phép toán có cường độ số học cao là các phép toán bị gi�
 
 @Tbl-training-arithmetic-intensity tóm tắt các xu hướng chung, không phải các phép đo cố định. Phép nhân ma trận dày đặc có thể tái sử dụng toán hạng đủ nhiều để đạt cường độ số học cao, trong khi các kernel xử lý từng phần tử (elementwise) và kernel rút gọn (reduction) độc lập thường thực hiện ít công việc hơn trên mỗi byte dữ liệu di chuyển. Điểm đỉnh của phần cứng mục tiêu sẽ quyết định chế độ hoạt động tương ứng.
 
-| **Operation**            | **Arithmetic-intensity tendency**                             | **Classification condition**                         |
+| **Thao tác** | **Xu hướng cường độ số học** | **Điều kiện phân loại** |
 |:-------------------------|:--------------------------------------------------------------|:-----------------------------------------------------|
-| **Dense MatMul (large)** | High when shapes and tiling provide substantial operand reuse | Compute-bound only when intensity exceeds the ridge  |
-| **Activation functions** | Usually low as standalone elementwise kernels                 | Often memory-sensitive unless fusion removes traffic |
-| **LayerNorm/BatchNorm**  | Reduction and elementwise work with multiple tensor passes    | Depends on fusion, shape, and target ridge point     |
-| **Attention softmax**    | Reduction and normalization over the attention axis           | Depends on materialization, tiling, and fusion       |
+| **Phép nhân ma trận đặc (lớn)** | Cao khi hình dạng và phân ô cung cấp khả năng tái sử dụng toán hạng đáng kể | Giới hạn bởi tính toán chỉ khi cường độ vượt quá ngưỡng |
+| **Các hàm activation** | Thường thấp dưới dạng các kernel theo từng phần tử độc lập | Thường nhạy cảm với bộ nhớ trừ khi hợp nhất loại bỏ lưu lượng |
+| **LayerNorm/BatchNorm** | Tác vụ giảm và theo từng phần tử với nhiều lượt tensor | Phụ thuộc vào hợp nhất, hình dạng và điểm ngưỡng mục tiêu |
+| **Attention softmax** | Giảm và chuẩn hóa trên trục attention | Phụ thuộc vào hiện thực hóa, phân ô và hợp nhất |
 
 : **Điều kiện phân loại phép toán huấn luyện**: Các họ phép toán thường có xu hướng cường độ số học giống nhau, nhưng để phân loại phải so sánh bản triển khai đã đo đạc với điểm đỉnh của phần cứng mục tiêu. Các kernel nhạy với bộ nhớ có thể hưởng lợi từ việc giảm lưu lượng dữ liệu hoặc tăng hợp nhất (fusion), trong khi các kernel bị giới hạn bởi tính toán sẽ hưởng lợi từ việc tăng thêm thông lượng số học. {#tbl-training-arithmetic-intensity tbl-colwidths="[34,33,33]"}
 
@@ -2550,7 +2550,7 @@ Một lỗi phổ biến trong các hệ thống ML là bỏ qua đơn vị th�
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Independent Work Items**                      |                    **Warps Needed**                   |              **Lane Utilization**              |                      **Relative Time**                      |
+| **Các mục công việc độc lập** |                    **Số lượng Warps cần thiết** |              **Mức sử dụng Lane** |                      **Thời gian tương đối** |
 |:------------------------------------------------|:-----------------------------------------------------:|:----------------------------------------------:|:-----------------------------------------------------------:|
 | `{python} TrainingDimensions.wave_batch_32_str` | `{python} TrainingDimensions.wave_warps_32_value_str` |                      100%                      |                          1$\times$                          |
 | `{python} TrainingDimensions.wave_batch_33_str` | `{python} TrainingDimensions.wave_warps_33_value_str` | `{python} TrainingDimensions.wave_util_33_str` | ~`{python} TrainingDimensions.wave_time_33_factor_mult_str` |
@@ -3192,11 +3192,11 @@ class MFUExampleCalc:
 
 Các nút thắt cổ chai trong quá trình huấn luyện có thể được phân tích theo ba nhóm, tương ứng với phân loại D·A·M\index{DAM Taxonomy@D·A·M Taxonomy!bottleneck classification} (Dữ liệu, Thuật toán, Máy). Phần @sec-appdx-dam-taxonomy cung cấp framework chẩn đoán đầy đủ, ma trận khắc phục sự cố và Thẻ điểm D·A·M. Bảng @Tbl-dam-training-bottlenecks liên kết từng trục với một nút thắt cổ chai phổ biến trong huấn luyện, các triệu chứng dễ nhận biết và các kỹ thuật tối ưu hóa liên quan. Đây là điểm khởi đầu để chẩn đoán, không phải ánh xạ cố định.
 
-| **D·A·M Axis** | **Bottleneck** | **Symptoms**                                                                                                          | **Primary Solutions**                                                  |
+| **Trục D·A·M** | **Nút thắt cổ chai** | **Triệu chứng** | **Các giải pháp chính** |
 |:---------------|:---------------|:----------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------|
-| **Algorithm**  | Compute-bound  | High arithmetic-unit activity; additional bandwidth does not improve throughput; arithmetic throughput is limiting    | Reduced precision, more efficient algorithms, faster compute hardware  |
-| **Machine**    | Memory-bound   | High memory-bandwidth use relative to arithmetic throughput; kernels stall on data movement                           | Operator fusion, memory-efficient attention, reduced precision formats |
-| **Data**       | Data-bound     | Periodic accelerator utilization drops to near-zero; CPU fully busy during gaps; pipeline cannot feed GPU fast enough | Prefetching, pipeline overlap, faster storage, DataLoader parallelism  |
+| **Thuật toán** | Giới hạn bởi tính toán | Hoạt động của đơn vị số học cao; băng thông bổ sung không cải thiện thông lượng; thông lượng số học là yếu tố giới hạn | Độ chính xác giảm, thuật toán hiệu quả hơn, phần cứng tính toán nhanh hơn |
+| **Máy** | Giới hạn bởi bộ nhớ | Mức sử dụng băng thông bộ nhớ cao so với thông lượng số học; các kernel bị đình trệ do di chuyển dữ liệu | Hợp nhất toán tử, attention hiệu quả bộ nhớ, định dạng độ chính xác giảm |
+| **Dữ liệu** | Giới hạn bởi dữ liệu | Mức sử dụng bộ tăng tốc định kỳ giảm xuống gần bằng 0; CPU bận hoàn toàn trong các khoảng trống; pipeline không thể cung cấp dữ liệu cho GPU đủ nhanh | Tìm nạp trước, chồng chéo pipeline, lưu trữ nhanh hơn, song song hóa DataLoader |
 
 : **Áp dụng phân loại D·A·M cho các nút thắt cổ chai trong huấn luyện**: Mỗi hàng liên kết một trục D·A·M với một nút thắt cổ chai phổ biến cùng các triệu chứng đặc trưng. Profiling sẽ chỉ ra yếu tố giới hạn của khối lượng công việc (workload) và hướng dẫn người thực hiện tới kỹ thuật tối ưu hóa phù hợp. {#tbl-dam-training-bottlenecks tbl-colwidths="[12,16,40,32]"}
 
@@ -3227,12 +3227,12 @@ Bốn công cụ được tích hợp trong các framework machine learning cung
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Tool**                                | **Scope**                         | **Best signal**                                                                    |
+| **Công cụ** | **Phạm vi** | **Tín hiệu tốt nhất** |
 |:----------------------------------------|:----------------------------------|:-----------------------------------------------------------------------------------|
-| **PyTorch Profiler** (`torch.profiler`) | Framework-level operation trace   | Time spent in each operation, memory allocation patterns, and GPU kernel execution |
-| **TensorFlow Profiler**                 | Framework-level training timeline | Input pipeline bottlenecks and device placement                                    |
-| **NVIDIA Nsight Systems**               | System-level GPU trace            | Kernel execution, memory transfers, and synchronization points                     |
-| **NVIDIA Nsight Compute**               | Kernel-level GPU analysis         | Arithmetic intensity, memory throughput, and occupancy                             |
+| **PyTorch Profiler** (`torch.profiler`) | Dấu vết hoạt động cấp framework | Thời gian dành cho mỗi hoạt động, các mẫu cấp phát bộ nhớ và thực thi kernel GPU |
+| **TensorFlow Profiler** | Dòng thời gian huấn luyện cấp framework | Các nút thắt cổ chai của pipeline đầu vào và bố trí thiết bị |
+| **NVIDIA Nsight Systems** | Dấu vết GPU cấp hệ thống | Thực thi kernel, truyền bộ nhớ và các điểm đồng bộ hóa |
+| **NVIDIA Nsight Compute** | Phân tích GPU cấp kernel | Cường độ số học, thông lượng bộ nhớ và mức độ chiếm dụng |
 
 : **Các công cụ lập hồ sơ để tìm nút thắt cổ chai trong huấn luyện**: Các profiler của framework cho thấy timeline hoạt động và các điểm tắc ở input pipeline, trong khi các công cụ NVIDIA Nsight hiển thị thực thi GPU ở cấp hệ thống và hành vi bộ nhớ ở cấp kernel. {#tbl-training-profiler-tools tbl-colwidths="[24,26,50]"}
 
@@ -3312,12 +3312,12 @@ Ngay cả các kiến trúc pipeline được thiết kế tốt cũng hiếm kh
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Bottleneck**               | **Primary Solution(s)**                          |
+| **Nút thắt cổ chai** | **Giải pháp chính** |
 |:-----------------------------|:-------------------------------------------------|
-| **Data Movement Latency**    | Prefetching & Pipeline Overlapping               |
-| **Compute Throughput**       | Mixed-Precision Training                         |
-| **Memory Capacity**          | Gradient Accumulation & Activation Checkpointing |
-| **Memory Bandwidth (Attn.)** | FlashAttention (IO-aware tiling)                 |
+| **Độ trễ di chuyển dữ liệu** | Tìm nạp trước & Chồng chéo Pipeline |
+| **Thông lượng tính toán** | Huấn luyện độ chính xác hỗn hợp |
+| **Dung lượng bộ nhớ** | Tích lũy Gradient & Checkpointing Activation |
+| **Băng thông bộ nhớ (Attn.)** | FlashAttention (xếp lát nhận biết IO) |
 
 : **Lộ trình kỹ thuật tối ưu hóa**: Mỗi loại nút thắt cổ chai chính đều có các giải pháp nhắm mục tiêu để xử lý các ràng buộc hiệu suất cụ thể, bằng cách đối chiếu kỹ thuật với kết quả profiling để tối ưu hóa có hệ thống. {#tbl-optimization-roadmap}
 
@@ -3818,12 +3818,12 @@ class MixedPrecisionHardwareTable:
     a100_fp16_speedup_mult_str = fmt_multiple(a100_fp16_speedup, precision=0, commas=False)
 ```
 
-| **Property**                   |  **FP32**  |                              **FP16**                             |                              **BF16**                             |
+| **Thuộc tính** |  **FP32** |                              **FP16** |                              **BF16** |
 |:-------------------------------|:----------:|:-----------------------------------------------------------------:|:-----------------------------------------------------------------:|
-| **Exponent bits**              |     8      |                                 5                                 |                                 8                                 |
-| **Mantissa bits**              |     23     |                                 10                                |                                 7                                 |
-| **Min normal value**           | $10^{-38}$ |                        $6.1 \times 10^{-5}$                       |                             $10^{-38}$                            |
-| **A100 peak throughput ratio** | 1$\times$  | `{python} MixedPrecisionHardwareTable.a100_fp16_speedup_mult_str` | `{python} MixedPrecisionHardwareTable.a100_fp16_speedup_mult_str` |
+| **Bit số mũ** |     8      |                                 5                                 |                                 8                                 |
+| **Bit phần định trị** |     23     |                                 10                                |                                 7                                 |
+| **Giá trị chuẩn nhỏ nhất** | $10^{-38}$ |                        $6.1 \times 10^{-5}$                       |                             $10^{-38}$                            |
+| **Tỷ lệ thông lượng đỉnh của A100** | 1$\times$  | `{python} MixedPrecisionHardwareTable.a100_fp16_speedup_mult_str` | `{python} MixedPrecisionHardwareTable.a100_fp16_speedup_mult_str` |
 
 : **So sánh định dạng độ chính xác**: Việc chọn giữa FP16 và BF16 tùy thuộc vào việc phạm vi động (điểm mạnh của BF16) hay độ chính xác (lợi thế của FP16) quan trọng hơn với khối lượng công việc (workload) cụ thể. Các giá trị bình thường tối thiểu nêu ra là ngưỡng thực tế cho huấn luyện, vì nhiều GPU có thể đưa các giá trị dưới chuẩn về 0. Trên A100, Tensor Cores FP16 và BF16 đạt `{python} MixedPrecisionHardwareTable.a100_fp16_speedup_mult_str` lần đỉnh hiệu năng của CUDA core FP32. {#tbl-precision-comparison tbl-colwidths="[40,20,20,20]"}
 
@@ -4215,12 +4215,12 @@ Kiến trúc Hopper (H100) của NVIDIA hỗ trợ FP8\index{FP8!hardware accele
 
 Huấn luyện với FP8 giúp tăng gấp đôi thông lượng của Tensor Core một lần nữa (`{python} MixedPrecisionHardwareDetail.h100_fp8_pflop_per_s_str` trên H100 ở chế độ dense so với `{python} MixedPrecisionHardwareDetail.h100_fp16_pflop_per_s_str` cho FP16 ở chế độ dense, không có sparsity). Tuy nhiên, độ chính xác rất hạn chế của FP8 đòi hỏi các hệ số tỉ lệ theo từng tensor phải được duy trì ở độ chính xác cao hơn, làm tăng độ phức tạp thuật toán. @Tbl-precision-decision-tree tóm tắt khi nào mỗi độ chính xác phù hợp:
 
-| **Precision** | **When to Use**                                      |   **Hardware Requirement** |
+| **Độ chính xác** | **Khi nào sử dụng** |   **Yêu cầu phần cứng** |
 |:--------------|:-----------------------------------------------------|---------------------------:|
-| **FP8**       | Throughput-oriented training with validated scaling  |     Supported FP8 hardware |
-| **BF16**      | Wide exponent range without FP16 loss scaling        | Supported BF16 accelerator |
-| **FP16**      | Higher mantissa precision with managed loss scaling  | Supported FP16 accelerator |
-| **FP32**      | Higher precision or unsupported lower-precision path |                        GPU |
+| **FP8** | Huấn luyện hướng thông lượng với khả năng mở rộng đã được xác thực |     Phần cứng FP8 được hỗ trợ |
+| **BF16** | Dải số mũ rộng không cần điều chỉnh tỷ lệ mất mát FP16 | Bộ tăng tốc BF16 được hỗ trợ |
+| **FP16** | Độ chính xác phần định trị cao hơn với điều chỉnh tỷ lệ mất mát được quản lý | Bộ tăng tốc FP16 được hỗ trợ |
+| **FP32** | Độ chính xác cao hơn hoặc đường dẫn độ chính xác thấp hơn không được hỗ trợ |                        GPU |
 
 : **Hướng dẫn lựa chọn độ chính xác**: Việc chọn định dạng phụ thuộc vào hỗ trợ phần cứng, độ phủ của kernel, hành vi số học và kết quả xác thực. FP8 yêu cầu chiến lược scaling rõ ràng; BF16 có dải số mũ rộng hơn FP16; FP16 thường cần loss scaling; và FP32 vẫn được dùng cho các phép toán nhạy cảm hoặc khi các đường dẫn độ chính xác thấp hơn chưa được hỗ trợ. {#tbl-precision-decision-tree}
 
@@ -4312,11 +4312,11 @@ for inputs, targets in dataloader:
 
 :::
 
-| **Architecture**  | **Recommended Precision**    | **Key Considerations**                                                                                               |
+| **Kiến trúc** | **Độ chính xác khuyến nghị** | **Các cân nhắc chính** |
 |:------------------|:-----------------------------|:---------------------------------------------------------------------------------------------------------------------|
-| **V100 (Volta)**  | FP16 with loss scaling       | No native BF16 Tensor Core path; clipping depends on the training recipe                                             |
-| **A100 (Ampere)** | BF16 or FP16                 | BF16 avoids FP16 loss scaling; TF32 can accelerate eligible FP32 matrix operations                                   |
-| **H100 (Hopper)** | BF16, FP16, or validated FP8 | FP8 requires an FP8-aware recipe; `{python} MixedPrecisionHardwareDetail.h100_fp8_tflop_per_s_str` is a peak ceiling |
+| **V100 (Volta)** | FP16 với điều chỉnh tỷ lệ mất mát | Không có đường dẫn Tensor Core BF16 gốc; cắt xén phụ thuộc vào công thức huấn luyện. |
+| **A100 (Ampere)** | BF16 hoặc FP16 | BF16 tránh được việc mở rộng thang đo mất mát của FP16; TF32 có thể tăng tốc các phép toán ma trận FP32 đủ điều kiện. |
+| **H100 (Hopper)** | BF16, FP16, hoặc FP8 đã được xác thực | FP8 yêu cầu một công thức nhận biết FP8; `{python} MixedPrecisionHardwareDetail.h100_fp8_tflop_per_s_str` là mức trần cao nhất. |
 
 : **Chiến lược độ chính xác theo kiến trúc GPU**: V100 hỗ trợ huấn luyện dùng Tensor Core FP16, A100 bổ sung hỗ trợ BF16 gốc, và H100 bổ sung các đường FP8; việc sử dụng chúng cần được xác thực theo từng công thức cụ thể. {#tbl-hw-precision-strategy tbl-colwidths="[13,28,59]"}
 
@@ -4590,12 +4590,12 @@ class FlashAttentionSpeedup:
 
 ::: {tbl-colwidths="[14,14,14,15,14,15,14]"}
 
-| **Sequence Length**                           |                 **Standard Forward**                 |                   **Flash Forward**                    |                **Standard Backward**                 |                   **Flash Backward**                   | **Memory (Standard)** | **Memory (Flash)** |
+| **Độ dài chuỗi** |                 **Chuyển tiếp tiêu chuẩn** |                   **Chuyển tiếp Flash** |                **Lan truyền ngược tiêu chuẩn** |                   **Lan truyền ngược Flash** | **Bộ nhớ (Tiêu chuẩn)** | **Bộ nhớ (Flash)** |
 |:----------------------------------------------|:----------------------------------------------------:|:------------------------------------------------------:|:----------------------------------------------------:|:------------------------------------------------------:|:---------------------:|:------------------:|
-| 512                                           |                        12 ms                         |                          8 ms                          |                        35 ms                         |                         18 ms                          |         4.2 GB        |       2.8 GB       |
-| `{python} FlashAttentionSpeedup.seq_2048_str` | `{python} FlashAttentionSpeedup.std_fwd_2048_ms_str` | `{python} FlashAttentionSpeedup.flash_fwd_2048_ms_str` | `{python} FlashAttentionSpeedup.std_bwd_2048_ms_str` | `{python} FlashAttentionSpeedup.flash_bwd_2048_ms_str` |         18 GB         |        6 GB        |
-| 4096                                          |                         OOM                          |                         32 ms                          |                         OOM                          |                         85 ms                          |        $>40$ GB       |       12 GB        |
-| 8192                                          |                         OOM                          |                         68 ms                          |                         OOM                          |                         180 ms                         |        $>80$ GB       |       24 GB        |
+| 512                                           |                        12 ms |                          8 ms |                        35 ms |                         18 ms |         4.2 GB |       2.8 GB |
+| `{python} FlashAttentionSpeedup.seq_2048_str` | `{python} FlashAttentionSpeedup.std_fwd_2048_ms_str` | `{python} FlashAttentionSpeedup.flash_fwd_2048_ms_str` | `{python} FlashAttentionSpeedup.std_bwd_2048_ms_str` | `{python} FlashAttentionSpeedup.flash_bwd_2048_ms_str` |         18 GB |        6 GB |
+| 4096                                          |                         OOM |                         32 ms |                         OOM |                         85 ms |        $>40$ GB |       12 GB |
+| 8192                                          |                         OOM |                         68 ms |                         OOM |                         180 ms |        $>80$ GB |       24 GB |
 
 : **So sánh Benchmark FlashAttention**: Minh họa thời gian thực thi mỗi lần gọi và mức bộ nhớ đỉnh cho attention tiêu chuẩn so với FlashAttention trên cấu hình kiểu A100 40 GB, theo các độ dài chuỗi khác nhau. Ký hiệu OOM (Out Of Memory) đánh dấu các cấu hình mà attention tiêu chuẩn vượt quá giới hạn 40 GB; dòng 8192 token cũng cho thấy attention tiêu chuẩn sẽ vượt quá 80 GB. {#tbl-flashattention-benchmarks}
 
@@ -4740,11 +4740,11 @@ Tích lũy gradient là đánh đổi bộ nhớ lấy thời gian tính toán. 
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Dimension**   | **Effect**                                                                                                                                    |
+| **Chiều** | **Hiệu ứng** |
 |:----------------|:----------------------------------------------------------------------------------------------------------------------------------------------|
-| **Memory**      | $\mathcal{O}(b)$ instead of $\mathcal{O}(B)$, yielding a $k\times$ reduction in activation memory                                             |
-| **Computation** | Unchanged total FLOPs, as all $B$ examples are still processed                                                                                |
-| **Time**        | $k$ micro-batch forward and backward passes precede each optimizer step; smaller micro-batches can reduce utilization and add launch overhead |
+| **Bộ nhớ** | $\mathcal{O}(b)$ thay vì $\mathcal{O}(B)$, mang lại sự giảm $k\times$ trong bộ nhớ activation. |
+| **Tính toán** | Tổng FLOPs không thay đổi, vì tất cả $B$ ví dụ vẫn được xử lý. |
+| **Thời gian** | $k$ lượt chuyển tiếp và lan truyền ngược micro-batch diễn ra trước mỗi bước optimizer; các micro-batch nhỏ hơn có thể làm giảm mức sử dụng và tăng thêm chi phí khởi chạy. |
 
 : **Các đánh đổi khi tích lũy gradient**: Tích lũy giúp giảm bộ nhớ activations đang chiếm dụng và giữ nguyên tổng lượng tính toán ở cấp độ ví dụ. Chi phí thời gian thực phụ thuộc vào hiệu quả của micro-batch, chi phí khởi chạy kernel, và việc đồng bộ hóa phân tán có được hoãn đến lúc áp dụng bản cập nhật tích lũy hay không. {#tbl-gradient-accumulation-tradeoffs tbl-colwidths="[20,80]"}
 
@@ -4834,11 +4834,11 @@ Sự kết hợp giữa tích lũy gradient và checkpointing cho phép huấn l
 
 Với một mạng có $N_L$ lớp, mỗi lớp lưu $A$ byte activation, @tbl-checkpoint-tradeoffs định lượng cách số lượng và vị trí checkpoint quyết định sự đánh đổi giữa bộ nhớ và tính toán. Các chiến lược checkpointing dưới tuyến tính có thể giảm mức tiêu thụ bộ nhớ từ $\mathcal{O}(N_L)$ xuống $\mathcal{O}(\sqrt{N_L})$ trong khi chỉ tăng một phần nhỏ tổng thời gian tính toán, giúp huấn luyện các mô hình sâu hơn nhiều trên phần cứng hiện có.
 
-| **Strategy**            |        **Memory Cost**        | **Recompute Cost**    |
+| **Chiến lược** |        **Chi phí bộ nhớ** | **Chi phí tính toán lại** |
 |:------------------------|:-----------------------------:|:----------------------|
-| **No checkpointing**    |         $N_L \times A$        | 0 forward ops         |
-| **Retain one boundary** |              $A$              | $(N_L-1)$ forward ops |
-| **k checkpoints**       | $k\times A + (N_L/k)\times A$ | $(N_L-k)$ forward ops |
+| **Không checkpoint** |         $N_L \times A$        | 0 phép toán forward |
+| **Giữ lại một ranh giới** |              $A$              | $(N_L-1)$ phép toán forward |
+| **k checkpoint** | $k\times A + (N_L/k)\times A$ | $(N_L-k)$ phép toán forward |
 
 : **Sự đánh đổi giữa Bộ nhớ và Tính toán khi sử dụng Checkpointing**: Các chiến lược checkpoint khác nhau đánh đổi giữa việc tiết kiệm bộ nhớ và chi phí tính toán lại. Số lượng checkpoint tối ưu sẽ cân bằng các yếu tố này. {#tbl-checkpoint-tradeoffs}
 
@@ -4846,11 +4846,11 @@ Nếu ta đặt đạo hàm của tổng chi phí bộ nhớ $(k \times A + (N_L
 
 Không phải tất cả phép toán đều tốn kém như nhau khi tính lại, nên checkpointing có chọn lọc là hợp lý. @Tbl-selective-checkpoint-placement so sánh các trường hợp mà bộ nhớ activation đủ lớn để việc tính lại trở nên đáng làm.
 
-| **Layer type**          | **Memory cost**                                                         | **Recompute cost**                 | **Checkpointing strategy**                                           |
+| **Loại lớp** | **Chi phí bộ nhớ** | **Chi phí tính toán lại** | **Chiến lược checkpointing** |
 |:------------------------|:------------------------------------------------------------------------|:-----------------------------------|:---------------------------------------------------------------------|
-| **Attention blocks**    | Shape-dependent; materialized attention can add quadratic intermediates | High and sequence-length-dependent | Checkpoint block boundaries when saved state justifies recomputation |
-| **Feed-forward blocks** | Often dominated by expanded hidden activations                          | High and width-dependent           | Checkpoint when expanded activations dominate memory                 |
-| **Normalization**       | Small standalone outputs                                                | Low                                | Usually handled within a larger checkpointed block                   |
+| **Các khối Attention** | Phụ thuộc vào hình dạng; attention được hiện thực hóa có thể thêm các giá trị trung gian bậc hai | Cao và phụ thuộc vào độ dài chuỗi | Checkpoint các ranh giới khối khi trạng thái đã lưu biện minh cho việc tính toán lại |
+| **Các khối Feed-forward** | Thường bị chi phối bởi các activation ẩn được mở rộng | Cao và phụ thuộc vào chiều rộng | Checkpoint khi các activation được mở rộng chiếm ưu thế bộ nhớ |
+| **Chuẩn hóa** | Các đầu ra độc lập nhỏ | Thấp | Thường được xử lý trong một khối checkpointed lớn hơn |
 
 : **Đặt Checkpoint có Chọn lọc**: Kỹ thuật này so sánh trạng thái được lưu tại ranh giới của một khối với lượng công việc cần để tái tạo lại trạng thái đó. Chi phí của attention và feed-forward phụ thuộc vào độ dài chuỗi, chiều rộng, cách triển khai kernel và việc liệu attention tiết kiệm bộ nhớ đã được sử dụng hay chưa. {#tbl-selective-checkpoint-placement tbl-colwidths="[18,34,18,30]"}
 
@@ -5038,18 +5038,18 @@ Cả hai kỹ thuật đều có những đánh đổi rõ ràng. Activation che
 
 Các kỹ thuật này nhắm vào những ràng buộc khác nhau. Prefetching giúp xử lý tình trạng thiếu dữ liệu, mixed precision có thể tăng tốc các phép tính phù hợp và giảm nhu cầu lưu trữ tensor, FlashAttention giảm lưu lượng truy cập bộ nhớ của attention, còn gradient accumulation cho phép dùng các batch hiệu dụng mà nếu không sẽ vượt quá bộ nhớ activation. Lợi ích của từng kỹ thuật phụ thuộc vào nút thắt được đo đạc, và áp dụng một kỹ thuật không đảm bảo sẽ loại bỏ ràng buộc đầu-cuối.
 
-| **Aspect**                    | **Prefetching and Overlapping**                                    | **Mixed-Precision Training**                                             | **Gradient Accumulation and Checkpointing**                              |
+| **Khía cạnh** | **Prefetching và Overlapping** | **Huấn luyện độ chính xác hỗn hợp** | **Tích lũy Gradient và Checkpointing** |
 |:------------------------------|:-------------------------------------------------------------------|:-------------------------------------------------------------------------|:-------------------------------------------------------------------------|
-| **Primary Goal**              | Minimize data transfer delays and maximize accelerator utilization | Reduce tensor storage and accelerate eligible lower-precision operations | Overcome memory limitations during backpropagation and parameter updates |
-| **Key Mechanism**             | Asynchronous data loading and parallel processing                  | Combining lower- and higher-precision computation                        | Simulating larger batch sizes and selective activation storage           |
-| **Memory Impact**             | Increases memory usage for prefetch buffer                         | Can reduce weights, activations, and communicated tensors                | Reduces resident activations; parameter-gradient size is unchanged       |
-| **Computation Speed**         | Improves by reducing idle time                                     | Can accelerate eligible FP16/BF16 operations on supported hardware       | May slow down due to recomputations in checkpointing                     |
-| **Scalability**               | Highly scalable, especially for large datasets                     | Enables training of larger models                                        | Allows training deeper models on limited hardware                        |
-| **Hardware Requirements**     | Benefits from fast storage and multi-core CPUs                     | Supported lower-precision accelerator paths                              | Works on standard hardware                                               |
-| **Implementation Complexity** | Moderate (requires tuning of prefetch parameters)                  | Low to moderate (with framework support)                                 | Moderate (requires careful segmentation and accumulation)                |
-| **Main Benefits**             | Reduces training time, improves hardware utilization               | Faster training, larger models, reduced memory usage                     | Enables larger batch sizes and deeper models                             |
-| **Primary Challenges**        | Tuning buffer sizes, increased memory usage                        | Potential numerical instability; FP16 may require loss scaling           | Increased computational overhead, slower parameter updates               |
-| **Ideal Use Cases**           | Large datasets, complex preprocessing                              | Large-scale models, especially in NLP and computer vision                | Memory-constrained batches or activation-heavy models                    |
+| **Mục tiêu chính** | Giảm thiểu độ trễ truyền dữ liệu và tối đa hóa việc sử dụng bộ tăng tốc | Giảm lưu trữ tensor và tăng tốc các phép toán độ chính xác thấp đủ điều kiện | Khắc phục các giới hạn bộ nhớ trong quá trình lan truyền ngược và cập nhật tham số |
+| **Cơ chế chính** | Tải dữ liệu không đồng bộ và xử lý song song | Kết hợp tính toán độ chính xác thấp và cao hơn | Mô phỏng kích thước batch lớn hơn và lưu trữ activation có chọn lọc |
+| **Tác động bộ nhớ** | Tăng mức sử dụng bộ nhớ cho bộ đệm prefetch | Có thể giảm trọng số, activation và các tensor được truyền | Giảm các activation thường trú; kích thước gradient tham số không thay đổi |
+| **Tốc độ tính toán** | Cải thiện bằng cách giảm thời gian nhàn rỗi | Có thể tăng tốc các phép toán FP16/BF16 đủ điều kiện trên phần cứng được hỗ trợ | Có thể làm chậm do tính toán lại trong checkpointing |
+| **Khả năng mở rộng** | Có khả năng mở rộng cao, đặc biệt đối với các tập dữ liệu lớn | Cho phép huấn luyện các mô hình lớn hơn | Cho phép huấn luyện các mô hình sâu hơn trên phần cứng hạn chế |
+| **Yêu cầu phần cứng** | Hưởng lợi từ bộ nhớ nhanh và CPU đa nhân | Các đường dẫn bộ tăng tốc độ chính xác thấp hơn được hỗ trợ | Hoạt động trên phần cứng tiêu chuẩn |
+| **Độ phức tạp triển khai** | Trung bình (yêu cầu tinh chỉnh các tham số prefetch) | Thấp đến trung bình (với sự hỗ trợ của framework) | Trung bình (yêu cầu phân đoạn và tích lũy cẩn thận) |
+| **Lợi ích chính** | Giảm thời gian huấn luyện, cải thiện việc sử dụng phần cứng | Huấn luyện nhanh hơn, các mô hình lớn hơn, giảm mức sử dụng bộ nhớ | Cho phép kích thước batch lớn hơn và các mô hình sâu hơn |
+| **Thách thức chính** | Tinh chỉnh kích thước bộ đệm, tăng mức sử dụng bộ nhớ | Khả năng mất ổn định số; FP16 có thể yêu cầu loss scaling | Tăng chi phí tính toán, cập nhật tham số chậm hơn |
+| **Các trường hợp sử dụng lý tưởng** | Tập dữ liệu lớn, tiền xử lý phức tạp | Các mô hình quy mô lớn, đặc biệt trong NLP và thị giác máy tính | Các batch bị giới hạn bộ nhớ hoặc các mô hình nặng về activation |
 
 : **Các Chiến lược Tối ưu hóa**: Bảng so sánh prefetching, mixed precision, và việc kết hợp gradient accumulation với checkpointing. Kỹ thuật đầu tiên nhắm vào các điểm tắc ở đầu vào; kỹ thuật thứ hai thay đổi cách lưu trữ và các phép tính phù hợp; kỹ thuật thứ ba đánh đổi việc giữ ít activation thường trú hơn lấy overhead từ micro-batch hoặc việc tính toán lại. {#tbl-optimization}
 
@@ -5210,12 +5210,12 @@ Giải pháp đề xuất là chồng chéo việc chuẩn bị đầu vào vớ
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Metric**                  |                    **Naive**                     |                   **Optimized**                   |                          **Improvement**                           |
+| **Chỉ số** |                    **Cơ bản** |                   **Tối ưu hóa** |                          **Cải thiện** |
 |:----------------------------|:------------------------------------------------:|:-------------------------------------------------:|:------------------------------------------------------------------:|
-| **Memory**                  | `{python} GPT2WalkthroughCalc.total_fp32_gb_str` |  `{python} GPT2WalkthroughCalc.total_ckpt_gb_str` | `{python} GPT2WalkthroughCalc.memory_reduction_mult_str` reduction |
-| **Accelerator utilization** |                       N/A                        | `{python} GPT2WalkthroughCalc.util_optim_pct_str` |                             Trainable                              |
-| **Throughput**              |                       N/A                        |                   1,200 tokens/s                  |                                 —                                  |
-| **Time per epoch**          |                       N/A                        |                     8.3 hours                     |                                 —                                  |
+| **Bộ nhớ** | `{python} GPT2WalkthroughCalc.total_fp32_gb_str` |  `{python} GPT2WalkthroughCalc.total_ckpt_gb_str` | `{python} GPT2WalkthroughCalc.memory_reduction_mult_str` giảm |
+| **Sử dụng bộ tăng tốc** |                       N/A                        | `{python} GPT2WalkthroughCalc.util_optim_pct_str` |                             Có thể huấn luyện |
+| **Thông lượng** |                       N/A                        |                   1,200 tokens/s |                                 —                                  |
+| **Thời gian mỗi epoch** |                       N/A                        |                     8.3 hours |                                 —                                  |
 
 : **Hồ sơ tối ưu hóa GPT-2 minh họa**: Các số liệu bộ nhớ cho batch-4 được tính trong phần hướng dẫn; mức sử dụng, thông lượng và thời gian epoch là các giá trị giả định theo kịch bản, không phải kết quả benchmark. @Tbl-gpt2-summary báo cáo tổng số liệu cho kịch bản batch-32. {#tbl-training-gpt2-final-profile tbl-colwidths="[31,23,23,23]"}
 
@@ -5342,18 +5342,18 @@ class GPT2SummaryCalc:
 
 @Tbl-gpt2-summary tổng hợp các kết quả được suy ra từ những giả định ở cấp cụm đó.
 
-| **Metric**                                                             |                 **FP32 Baseline**                 |                   **Optimized**                   | **Technique Applied**                                                     |
+| **Chỉ số** |                 **Đường cơ sở FP32** |                   **Tối ưu hóa** | **Kỹ thuật được áp dụng** |
 |:-----------------------------------------------------------------------|:-------------------------------------------------:|:-------------------------------------------------:|:--------------------------------------------------------------------------|
-| **Parameters**                                                         |     `{python} GPT2SummaryCalc.b_param_gb_str`     |     `{python} GPT2SummaryCalc.o_param_gb_str`     | Mixed precision (FP16)                                                    |
-| **Gradients**                                                          |      `{python} GPT2SummaryCalc.b_grad_gb_str`     |      `{python} GPT2SummaryCalc.o_grad_gb_str`     | Mixed precision (FP16)                                                    |
-| **Master Weights**                                                     |     `{python} GPT2SummaryCalc.b_master_gb_str`    |     `{python} GPT2SummaryCalc.o_master_gb_str`    | AMP Overhead                                                              |
-| **Optimizer State (Adam)**                                             |      `{python} GPT2SummaryCalc.b_opt_gb_str`      |      `{python} GPT2SummaryCalc.o_opt_gb_str`      | Unchanged (FP32 moments)                                                  |
-| **Activations (batch=32)**                                             |      `{python} GPT2SummaryCalc.b_act_gb_str`      |      `{python} GPT2SummaryCalc.o_act_gb_str`      | Gradient checkpointing + FP16                                             |
-| **Total Memory**                                                       | **`{python} GPT2SummaryCalc.b_total_mem_gb_str`** | **`{python} GPT2SummaryCalc.o_total_mem_gb_str`** | —                                                                         |
-| **Training Time (32 V100s)**                                           |     `{python} GPT2SummaryCalc.b_time_days_str`    |     `{python} GPT2SummaryCalc.o_time_days_str`    | Data prefetching + utilization                                            |
-| **Energy Consumption**                                                 |    `{python} GPT2SummaryCalc.b_energy_kwh_str`    |    `{python} GPT2SummaryCalc.o_energy_kwh_str`    | Assumed constant cluster power over each duration                         |
-| **Electricity Cost (`{python} GPT2SummaryCalc.electricity_rate_str`)** |       `{python} GPT2SummaryCalc.b_cost_str`       |       `{python} GPT2SummaryCalc.o_cost_str`       | —                                                                         |
-| **Carbon Footprint**                                                   |   `{python} GPT2SummaryCalc.b_carbon_tonnes_str`  |   `{python} GPT2SummaryCalc.o_carbon_tonnes_str`  | Regional grid average (`{python} GPT2SummaryCalc.grid_ci_kg_per_kwh_str`) |
+| **Tham số** |     `{python} GPT2SummaryCalc.b_param_gb_str`     |     `{python} GPT2SummaryCalc.o_param_gb_str`     | Độ chính xác hỗn hợp (FP16) |
+| **Gradient** |      `{python} GPT2SummaryCalc.b_grad_gb_str`     |      `{python} GPT2SummaryCalc.o_grad_gb_str`     | Độ chính xác hỗn hợp (FP16) |
+| **Trọng số chính** |     `{python} GPT2SummaryCalc.b_master_gb_str`    |     `{python} GPT2SummaryCalc.o_master_gb_str`    | Chi phí AMP |
+| **Trạng thái Optimizer (Adam)** |      `{python} GPT2SummaryCalc.b_opt_gb_str`      |      `{python} GPT2SummaryCalc.o_opt_gb_str`      | Không thay đổi (mô men FP32) |
+| **Activations (batch=32)** |      `{python} GPT2SummaryCalc.b_act_gb_str`      |      `{python} GPT2SummaryCalc.o_act_gb_str`      | Gradient checkpointing + FP16 |
+| **Tổng bộ nhớ** | **`{python} GPT2SummaryCalc.b_total_mem_gb_str`** | **`{python} GPT2SummaryCalc.o_total_mem_gb_str`** | —                                                                         |
+| **Thời gian huấn luyện (32 V100s)** |     `{python} GPT2SummaryCalc.b_time_days_str`    |     `{python} GPT2SummaryCalc.o_time_days_str`    | Tìm nạp trước dữ liệu + sử dụng |
+| **Mức tiêu thụ năng lượng** |    `{python} GPT2SummaryCalc.b_energy_kwh_str`    |    `{python} GPT2SummaryCalc.o_energy_kwh_str`    | Giả định công suất cluster không đổi trong mỗi khoảng thời gian |
+| **Chi phí điện (`{python} GPT2SummaryCalc.electricity_rate_str`)** |       `{python} GPT2SummaryCalc.b_cost_str`       |       `{python} GPT2SummaryCalc.o_cost_str`       | —                                                                         |
+| **Dấu chân carbon** |   `{python} GPT2SummaryCalc.b_carbon_tonnes_str`  |   `{python} GPT2SummaryCalc.o_carbon_tonnes_str`  | Mức trung bình lưới điện khu vực (`{python} GPT2SummaryCalc.grid_ci_kg_per_kwh_str`) |
 
 : **Kịch bản huấn luyện GPT-2 minh họa**: Mô hình tensor cung cấp các tổng bộ nhớ đã nêu. Thời lượng huấn luyện, công suất cụm cố định, PUE, giá điện và cường độ carbon của lưới điện là các giả định cho kịch bản này; theo các giả định đó, runtime ngắn hơn sẽ làm giảm năng lượng tiêu thụ và phát thải theo vị trí một cách tương ứng. {#tbl-gpt2-summary tbl-colwidths="[30,18,18,34]"}
 
@@ -6288,11 +6288,11 @@ Các chiến lược lai kết hợp những cách tiếp cận này vì mỗi c
 
 Quy tắc sắp xếp này không tùy tiện; nó ánh xạ tần suất giao tiếp tới tầng băng thông nhanh nhất hiện có.
 
-| **Strategy**             | **Typical placement**      | **Communication pattern**                                    |
+| **Chiến lược** | **Vị trí điển hình** | **Mô hình giao tiếp** |
 |:-------------------------|:---------------------------|:-------------------------------------------------------------|
-| **Tensor parallelism**   | Within a node              | Frequent communication that exploits NVLink's high bandwidth |
-| **Pipeline parallelism** | Across nodes within a rack | Moderate communication at layer boundaries                   |
-| **Data parallelism**     | Across racks               | Gradient synchronization once per iteration                  |
+| **Song song hóa tensor** | Trong một node | Giao tiếp thường xuyên tận dụng băng thông cao của NVLink |
+| **Song song hóa pipeline** | Giữa các node trong một rack | Giao tiếp vừa phải tại ranh giới lớp |
+| **Song song hóa dữ liệu** | Giữa các rack | Đồng bộ hóa gradient một lần mỗi lần lặp |
 
 : **Sắp xếp song song hóa lai**: Một quy tắc kinh nghiệm phổ biến là đặt song song hóa tensor trong phạm vi các nút, song song hóa pipeline trong phạm vi các giá đỡ, và song song hóa dữ liệu giữa các giá đỡ. Việc sắp xếp thực tế còn phụ thuộc vào mô hình và cấu trúc liên kết. {#tbl-hybrid-parallelism-placement tbl-colwidths="[19,25,56]"}
 
@@ -6365,12 +6365,12 @@ Sự phát triển kiến trúc này cho thấy các hệ thống huấn luyện
 
 Trong thực tế, khi cấu hình một job huấn luyện đa-GPU, chúng ta cần chọn giữa các chiến lược song song hóa được phát triển để xử lý các kiểu tính toán khác nhau. Hiểu rõ các chiến lược này, những đánh đổi, chi phí giao tiếp và các tình huống lỗi sẽ giúp quyết định khi nào thêm phần cứng thật sự hữu ích và khi nào nó chỉ làm mọi thứ phức tạp hơn.
 
-| **Era**               | **Primary Workload**        | **Memory Patterns**           | **Processing Model**         |
+| **Kỷ nguyên** | **Khối lượng công việc (workload) chính** | **Các mẫu bộ nhớ** | **Mô hình xử lý** |
 |:----------------------|:----------------------------|:------------------------------|:-----------------------------|
-| **Mainframe**         | Sequential batch processing | Simple memory hierarchy       | Single instruction stream    |
-| **HPC**               | Scientific simulation       | Regular array access          | Synchronized parallel        |
-| **Warehouse-scale**   | Internet services           | Sparse, irregular access      | Independent parallel tasks   |
-| **AI Hypercomputing** | Neural network training     | Parameter-heavy, mixed access | Hybrid parallel, distributed |
+| **Mainframe** | Xử lý batch tuần tự | Hệ thống phân cấp bộ nhớ đơn giản | Luồng lệnh đơn |
+| **HPC** | Mô phỏng khoa học | Truy cập mảng đều đặn | Song song đồng bộ |
+| **Quy mô kho hàng** | Dịch vụ Internet | Truy cập thưa thớt, không đều | Các tác vụ song song độc lập |
+| **AI Hypercomputing** | Huấn luyện mạng nơ-ron | Nhiều tham số, truy cập hỗn hợp | Song song lai, phân tán |
 
 : **Đặc điểm kỷ nguyên tính toán**: Mỗi kỷ nguyên tính toán đều được tối ưu hóa cho các kiểu khối lượng công việc (workload) khác nhau, và các hệ thống huấn luyện hiện đại kế thừa những yêu cầu này từ nhiều thế hệ trước. Siêu điện toán AI kết hợp độc đáo khả năng tính toán số song song của HPC với xử lý phân tán ở quy mô kho dữ liệu, đồng thời bổ sung hỗ trợ chuyên biệt cho tối ưu hóa dựa trên gradient và quản lý trạng thái tham số khổng lồ – những yếu tố cốt lõi trong huấn luyện mạng nơ-ron. {#tbl-computing-eras}
 
@@ -6385,12 +6385,12 @@ Với vốn từ về các chiến lược song song hóa (dữ liệu, mô hìn
 
 @Tbl-scaling-decision biến nguyên tắc này thành một bảng tra cứu, sử dụng các giới hạn tài nguyên đã đo lường làm khóa, thay vì các ngưỡng số tham số chung.
 
-| **Observed constraint**                                  | **Candidate approach**                 | **Rationale**                                             |
+| **Ràng buộc quan sát được** | **Phương án tiếp cận tiềm năng** | **Lý do** |
 |:---------------------------------------------------------|:---------------------------------------|:----------------------------------------------------------|
-| Training state fits one device and time is acceptable    | Single GPU                             | Minimizes communication and operational complexity        |
-| State or throughput exceeds one device but fits one node | Single multi-GPU node                  | Uses fast local interconnects before crossing the network |
-| Required state or schedule exceeds one node              | Multi-node cluster                     | Adds aggregate memory or compute at a communication cost  |
-| Input service rate is below accelerator demand           | Parallel or distributed input pipeline | Adds input throughput where profiling shows it is needed  |
+| Trạng thái huấn luyện vừa với một thiết bị và thời gian chấp nhận được | Một GPU | Giảm thiểu giao tiếp và độ phức tạp vận hành |
+| Trạng thái hoặc thông lượng vượt quá một thiết bị nhưng vừa với một node | Một node đa GPU | Sử dụng các kết nối nội bộ nhanh trước khi vượt qua mạng |
+| Trạng thái hoặc lịch trình yêu cầu vượt quá một node | Cụm đa node | Thêm bộ nhớ tổng hợp hoặc tính toán với chi phí giao tiếp |
+| Tốc độ phục vụ đầu vào thấp hơn nhu cầu của bộ tăng tốc | Pipeline đầu vào song song hoặc phân tán | Tăng thông lượng đầu vào khi profiling cho thấy cần thiết |
 
 : **Hướng dẫn Quyết định Mở rộng Hệ thống**: Hãy chọn cấu hình phân tán ít phức tạp nhất mà vẫn đáp ứng được các yêu cầu về bộ nhớ, thông lượng và tiến độ đã đo lường. Kiến trúc mô hình, trạng thái huấn luyện, pipeline đầu vào, phần cứng và topology đều ảnh hưởng đến ranh giới này. {#tbl-scaling-decision}
 

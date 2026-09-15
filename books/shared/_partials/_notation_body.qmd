@@ -1,0 +1,198 @@
+<!-- PARTIAL FILE: do not render standalone. -->
+<!-- Included by vol1/frontmatter/notation.qmd (vol1 wrapper) and -->
+<!-- vol2/frontmatter/notation.qmd (vol2 wrapper, which then chains -->
+<!-- vol2/frontmatter/_notation_distributed.qmd for vol2-only content). -->
+<!-- Edits to this file appear in BOTH volumes by design. -->
+<!-- DO NOT add a YAML header. DO NOT add Markdown setext underlines. -->
+<!-- DO NOT add an H1. The chapter H1 lives in each wrapper so Quarto can -->
+<!-- extract it for the sidebar, browser tab, and title block. -->
+
+Hệ thống machine learning bao gồm *machine learning* (khoa học máy tính và thống kê) và *hệ thống* (kiến trúc máy tính và phần cứng). Mỗi lĩnh vực đã phát triển ký hiệu riêng của mình một cách độc lập, và nhiều ký hiệu có ý nghĩa khác nhau giữa các cộng đồng và ấn phẩm. Sự xung đột này tạo ra sự nhầm lẫn thực sự khi các ngành này hợp nhất. Các quy ước dưới đây thiết lập một ký hiệu thống nhất nhằm loại bỏ sự mơ hồ này.
+
+Hãy xem xét một phát biểu đơn giản: *"Tăng $B$ cải thiện thông lượng."* Đối với một nhà nghiên cứu ML, $B$ có nghĩa là kích thước batch. Đối với một kỹ sư phần cứng, $B$ có nghĩa là băng thông. Cả hai cách hiểu đều đúng trong lĩnh vực tương ứng của họ, nhưng trong Hệ thống ML, chúng ta cần cả hai khái niệm trong cùng một phương trình—do đó cần có một quy ước thống nhất, nhất quán.
+
+## Định luật Sắt của Hệ thống ML {#sec-notation-conventions-iron-law-ml-systems-ce9d .unlisted}
+
+Đối với các pha thực thi tuần tự, phân tách hiệu năng theo định luật sắt là:
+
+$$T = \underbrace{\frac{D_{\text{vol}}}{\text{BW}}}_{\text{Memory Time}} + \underbrace{\frac{O}{R_{\text{peak}} \cdot \eta_{\text{hw}}}}_{\text{Compute Time}} + \underbrace{L_{\text{lat}}}_{\text{Latency Overhead}}$$
+
+Mỗi biến được chọn một cách có chủ ý để tránh xung đột với thuật ngữ ML tiêu chuẩn.
+
+::: {tbl-colwidths="[8,12,8,72]"}
+
+| **Ký hiệu**             | **Định nghĩa**  | **Đơn vị** | **Tại sao lại là ký hiệu này?**                                                                                                                                                                                   |
+|:-----------------------|:----------------|:---------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **$T$**                | **Thời gian**        | giây  | Không mơ hồ. Thời gian thực tế (wall-clock time) cho một thao tác.                                                                                                                                                         |
+| **$D_{\text{vol}}$**   | **Dung lượng dữ liệu** | bytes    | **Tránh trùng lặp với $D$ (Kích thước tập dữ liệu)**. Trong các quy luật mở rộng (scaling laws), $D$ có nghĩa là số token huấn luyện. Ở đây chúng ta cần số bytes được di chuyển qua bộ nhớ. Chỉ số dưới giúp phân biệt.                                        |
+| **$\text{BW}$**        | **Băng thông**   | bytes/s  | **Tránh trùng lặp với $B$ (Kích thước batch)**. Tài liệu về hệ thống thường dùng $B$ cho băng thông, trong khi tài liệu machine learning thường dùng $B$ cho kích thước batch. Ký hiệu này giữ nguyên quy ước của machine learning.              |
+| **$O$**                | **Thao tác**  | FLOPs    | Tổng số phép toán dấu phẩy động. Rõ ràng trong các phương trình (so với "$\text{Ops}$").                                                                                                                              |
+| **$R_{\text{peak}}$**  | **Tốc độ đỉnh**   | FLOP/s   | **Tránh trùng lặp với $P$ (Tham số)**. Các trình bày Roofline thường dùng $P$ cho hiệu suất, trong khi tài liệu machine learning thường dùng $P$ cho số lượng tham số. Ký hiệu này giữ nguyên quy ước của machine learning. |
+| **$\eta_{\text{hw}}$** | **Hiệu suất**  | —        | Mức độ sử dụng phần cứng $(0 \le \eta_{\text{hw}} \le 1)$. Tránh trùng lặp với tốc độ học $(\eta)$.                                                                                                   |
+| **$L_{\text{lat}}$**   | **Độ trễ**     | giây  | **Tránh trùng lặp với $\mathcal{L}$ (Mất mát)**. Thời gian chi phí cố định (khởi chạy kernel, RTT mạng). Chỉ số dưới phân biệt với hàm mất mát.                                                  |
+
+:::
+
+### Tại sao những lựa chọn này lại quan trọng {#sec-notation-conventions-choices-matter-0c16}
+
+Nếu không có ký hiệu cẩn thận, các câu sẽ trở nên mơ hồ:
+
+> *"Giảm $D$ cải thiện hiệu năng."*
+
+Câu này có hai cách hiểu có thể:
+
+- Giảm **kích thước tập dữ liệu** (ít mẫu huấn luyện hơn) có thể tăng tốc huấn luyện nhưng có thể làm giảm độ chính xác.
+- Giảm **lượng dữ liệu di chuyển** (ví dụ, thông qua nén hoặc lượng tử hoá) có thể tăng tốc suy luận, với các ảnh hưởng đến độ chính xác phụ thuộc vào kỹ thuật và hiệu chuẩn.
+
+Với ký hiệu của chúng tôi, chúng ta có thể viết chính xác:
+
+> *"Giảm $D_{\text{vol}}$ thông qua lượng tử hoá FP32-sang-INT8 giúp giảm lưu lượng bộ nhớ tham số xuống còn một phần tư trong khi $D$ (dữ liệu huấn luyện) vẫn không thay đổi."*
+
+Ký hiệu của chúng tôi loại bỏ sự mơ hồ này: *"$\text{BW}$ giới hạn thông lượng"* chỉ có một cách hiểu.
+
+### Các biến thể có chỉ số dưới {#sec-notation-conventions-subscripted-variants}
+
+Một gốc thẳng đứng đặt tên cho đại lượng, và chỉ số dưới đặt tên cho trường hợp cụ thể được đề cập. Quy ước này giữ các phép đo có liên quan chặt chẽ tách biệt thay vì gộp chúng vào một ký hiệu duy nhất:
+
+- $\text{BW}_{\text{disk}}$, $\text{BW}_{\text{network}}$, $\text{BW}_{\text{accelerator}}$: băng thông tại ba điểm trên đường dẫn dữ liệu
+- $D_{\text{vol}}$, $R_{\text{peak}}$, $L_{\text{lat}}$, $\eta_{\text{hw}}$: các thuật ngữ của định luật sắt, mỗi thuật ngữ được giữ tách biệt khỏi một ký hiệu ML phổ biến
+- $E_{\text{move}}$, $E_{\text{compute}}$, $E_{\text{total}}$: một ngân sách năng lượng được chia thành các phần có thể đánh đổi
+
+Do đó, chỉ số dưới mang một phần của khẳng định. Băng thông ổ đĩa và bộ tăng tốc khác nhau nhiều bậc độ lớn, vì vậy một con số chỉ có thể tái tạo được khi chỉ số dưới cho biết nó được đo ở đâu.
+
+## Phương trình Suy giảm {#sec-notation-conventions-degradation-equation-ad12 .unlisted}
+
+Phương trình suy giảm là một mô hình cục bộ được khớp. Chỉ riêng sự phân kỳ không xác định được hướng thay đổi độ chính xác, vì vậy hãy ước tính $\lambda$ từ các kết quả được gán nhãn. Một số ký hiệu dưới đây, chẳng hạn như $\tau$, xuất hiện trong văn xuôi của chương hơn là trong phương trình.
+$$\text{Accuracy}(t) \approx \text{Accuracy}_0 - \lambda \cdot \mathcal{D}(P_t \lVert P_0)$$
+
+::: {tbl-colwidths="[10,20,13,57]"}
+
+| **Ký hiệu**                    | **Định nghĩa**             | **Đơn vị/Loại**  | **Ghi chú**                                                                                                                                                                |
+|:------------------------------|:---------------------------|:---------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| $\text{Accuracy}(t)$          | **Độ chính xác tại thời điểm $t$**   | Vô hướng         | Độ chính xác của mô hình sau khi mô hình đã được triển khai trong thời gian $t$.                                                                                                           |
+| $\text{Accuracy}_0$           | **Độ chính xác ban đầu**       | Vô hướng         | Độ chính xác của mô hình tại thời điểm triển khai.                                                                                                                                       |
+| $\lambda$                     | **Độ nhạy đã điều chỉnh**     | Vô hướng         | Hệ số cục bộ được ước tính từ kết quả trong một phạm vi đã nêu; không phải là hằng số phổ quát. *(Không phải bước sóng.)*                                                             |
+| $P_t$                         | **Phân phối hiện tại**   | Phân phối   | Phân phối dữ liệu tại thời điểm $t$. *(Không phải tham số—sử dụng $P$ cho số lượng tham số.)*                                                                                       |
+| $P_0$                         | **Phân phối huấn luyện**  | Phân phối   | Phân phối dữ liệu tại thời điểm huấn luyện.                                                                                                                                  |
+| $\mathcal{D}(P_t \lVert P_0)$ | **Độ phân kỳ thống kê** | Vô hướng $\ge 0$ | Đo lường mức độ $P_t$ đã trôi dạt so với $P_0$. Các lựa chọn phổ biến: độ phân kỳ KL, tổng biến thiên, Wasserstein. *(Dùng chữ viết hoa để tránh trùng lặp với $D$ = kích thước tập dữ liệu.)* |
+| $\tau$                        | **Ngưỡng phản hồi**     | Đại lượng vô hướng $> 0$   | Ngưỡng vận hành để điều tra; nó không tự động kích hoạt huấn luyện lại.                                                                                   |
+
+:::
+
+## Hệ quả Năng lượng {#sec-notation-conventions-energy-corollary-a1da .unlisted}
+
+Với chi phí hiệu quả trên mỗi byte và trên mỗi phép toán, năng lượng khối lượng công việc (workload) được xấp xỉ bằng:
+$$E_{\text{total}} \approx D_{\text{vol}} \times E_{\text{move}} + O \times E_{\text{compute}}$$
+
+::: {tbl-colwidths="[10,25,15,50]"}
+
+| **Ký hiệu**               | **Định nghĩa**            | **Đơn vị**    | **Ghi chú**                                                                                  |
+|:-------------------------|:--------------------------|:------------|:-------------------------------------------------------------------------------------------|
+| **$E_{\text{total}}$**   | **Tổng năng lượng**          | joules      | Tổng năng lượng tiêu thụ bởi một khối lượng công việc machine learning, được phân tách thành các thành phần di chuyển dữ liệu và tính toán.  |
+| **$E_{\text{move}}$**    | **Năng lượng trên mỗi Byte đã di chuyển** | joules/byte | Chi phí di chuyển hiệu quả; tổng năng lượng cũng phụ thuộc vào số byte đã di chuyển và các phép toán được thực hiện. |
+| **$E_{\text{compute}}$** | **Năng lượng trên mỗi Phép toán**  | joules/FLOP | Chi phí năng lượng của một phép toán số học đơn lẻ.                                              |
+
+:::
+
+## Ký hiệu Deep learning {#sec-notation-conventions-deep-learning-notation-b40d .unlisted}
+
+Cuốn sách này tuân theo các quy ước deep learning tiêu chuẩn [@goodfellow2016deep] với việc khử mơ hồ rõ ràng cho các biến hệ thống.
+
+::: {tbl-colwidths="[8,20,72]"}
+
+| **Ký hiệu**             | **Định nghĩa**                | **Kích thước/Loại**                                                                                                                                                    |
+|:-----------------------|:------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **$B$**                | **Kích thước batch**                | Số nguyên. Số lượng mẫu được xử lý song song. *(Không bao giờ là băng thông.)*                                                                                             |
+| **$P$**                | **Tham số**                | Số nguyên. Tổng số lượng tham số mô hình vô hướng, bao gồm trọng số và độ chệch (bias). *(Không bao giờ là FLOP/s đỉnh.)*                                                              |
+| **$D$**                | **Kích thước tập dữ liệu**              | Số nguyên. Số lượng mẫu huấn luyện hoặc token. *(Không bao giờ là dung lượng dữ liệu tính bằng byte—hãy dùng $D_{\text{vol}}$.)*                                                                    |
+| **$S$**                | **Độ dài trình tự**           | Số nguyên. Số lượng token hoặc bước thời gian.                                                                                                                               |
+| **$d$**                | **Chiều ẩn**          | Số nguyên. Kích thước của vectơ trạng thái ẩn.                                                                                                                              |
+| **$d_{\text{head}}$**  | **Chiều đầu attention**  | Số nguyên. Chiều ẩn trên mỗi đầu trong các lớp attention.                                                                                                                |
+| **$N_L$**              | **Số lượng lớp**          | Số nguyên. Tổng số lớp trong một mạng.                                                                                                                          |
+| **$N_{\text{heads}}$** | **Số lượng đầu attention** | Số nguyên. Số lượng đầu attention trong một lớp attention đa đầu.                                                                                                    |
+| **$H_{\text{KV}}$**    | **Số lượng đầu khóa-giá trị** | Số nguyên. Số lượng đầu khóa-giá trị trong attention truy vấn nhóm hoặc đa truy vấn.                                                                                          |
+| **$\ell$**             | **Chỉ số lớp**               | Số nguyên. Chỉ số cho một lớp. Sử dụng thay vì $L$ trần khi lập chỉ mục các lớp, vì $L$ trùng với mất mát và độ trễ.                                                    |
+| **$\mathcal{L}$**      | **Hàm mất mát**             | Đại lượng vô hướng. Hàm mục tiêu được tối thiểu hóa trong quá trình huấn luyện.                                                                                                              |
+| **$\eta$**             | **Tốc độ học**             | Đại lượng vô hướng. Kích thước bước cho optimizer. *(Không bao giờ là giá trị trần cho hiệu suất phần cứng—hãy dùng $\eta_{\text{hw}}$.)*                                                                    |
+| **$\theta$**           | **Tham số mô hình**          | Tập hợp tham số, thường được coi là một vectơ. Tập hợp tất cả các tham số có thể học được.                                                                                  |
+| **$p(x)$**             | **Phân phối**              | Khối lượng/mật độ xác suất cho một biến ngẫu nhiên. Sử dụng chữ thường $p(\cdot)$ cho các phân phối chung để tránh trùng với $P$ (số lượng tham số).                      |
+| **$p(y \mid x)$**      | **Phân phối có điều kiện**  | Xác suất/mật độ có điều kiện. Sử dụng dạng này cho các mối quan hệ nhãn chung; dành $P_0$ và $P_t$ cho các phân phối huấn luyện/hiện tại của phương trình suy giảm. |
+| **$\Pr(E)$**           | **Xác suất sự kiện**         | Xác suất của một sự kiện $E$. Sử dụng cho các phát biểu sự kiện như $\Pr(\text{batch}=0)$; sử dụng $p(x)$ và $p(y \mid x)$ cho các phân phối.                                   |
+
+:::
+
+Các ma trận và vector Latin được đặt in đậm ($\mathbf{W}$, $\mathbf{x}$); các đại lượng vô hướng, chiều, chỉ số và các phần tử ma trận riêng lẻ vẫn giữ nguyên in nghiêng ($N$, $d$, $i$, $W_{ij}$). Ký hiệu tham số chung $\theta$ là một ngoại lệ theo quy ước và vẫn giữ nguyên in nghiêng. Đại số ma trận cục bộ tuân theo cùng quy tắc in đậm: các toán hạng ma trận được in đậm ($\mathbf{A}$, $\mathbf{B}$, $\mathbf{C}$), như trong phép nhân ma trận tổng quát (GEMM) $\mathbf{C}=\alpha \mathbf{A}\mathbf{B}+\beta \mathbf{C}$. Dạng in đậm đánh dấu một toán hạng ma trận và khác biệt với kích thước batch vô hướng in nghiêng $B$, vốn vẫn là kích thước batch trong các ngữ cảnh vô hướng.
+
+## Ký hiệu Hiệu năng, Phục vụ (serving) và Bộ nhớ {#sec-notation-conventions-performance-serving-memory .unlisted}
+
+Các đại lượng hiệu năng và phục vụ (serving) có thể tái sử dụng tuân theo cùng quy tắc tránh xung đột như định luật sắt. Tốc độ sử dụng $R$ hoặc các ký hiệu Hy Lạp mô tả; số lượng yêu cầu sử dụng $Q_{\text{req}}$ thay vì quá tải $N$; mức độ sử dụng hàng đợi sử dụng $\rho$ có chỉ số dưới để $\rho$ trần vẫn có sẵn cho các mô hình tỷ lệ khác.
+
+```{=latex}
+\begingroup
+\renewcommand{\arraystretch}{1.3}
+```
+::: {tbl-colwidths="[10,23,13,54]"}
+
+| **Ký hiệu**                   | **Định nghĩa**              | **Đơn vị/Loại** | **Ghi chú**                                                                                                                                                                                                 |
+|:-----------------------------|:----------------------------|:--------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **$I$**                      | **Cường độ số học**    | FLOPS/byte     | Số FLOPS của khối lượng công việc (workload) trên mỗi byte được di chuyển. Mô hình Roofline sử dụng $I$ làm biến độc lập.                                                                                                                   |
+| **$I_{\text{ridge}}$**       | **Điểm đỉnh Roofline**    | FLOPS/byte     | $I_{\text{ridge}} = R_{\text{peak}}/\text{BW}$. Ưu tiên dạng tường minh này hơn dạng viết tắt có dấu sao để ý nghĩa vẫn rõ ràng trong văn xuôi.                                                                   |
+| **$R_{\text{attain}}$**      | **Tốc độ tính toán có thể đạt được** | FLOP/s        | Giới hạn Roofline: $R_{\text{attain}} \leq \min(R_{\text{peak}}, I \times \text{BW})$. Sử dụng $R$, không phải $T$, vì đại lượng này là một tốc độ.                                                                   |
+| **$\text{MFU}$**             | **Tỷ lệ sử dụng FLOPS của mô hình** | Không thứ nguyên | Số FLOPS/giây hữu ích của mô hình chia cho số FLOPS/giây đỉnh khả dụng. Từ viết tắt trong văn bản tránh làm quá tải $\eta$.                                                                                                             |
+| **$r_{\text{comp}}$**        | **Tỷ lệ nén**       | Không thứ nguyên | Kích thước chưa nén chia cho kích thước đã nén. Một tải trọng đã nén có kích thước bằng $1/r_{\text{comp}}$ so với kích thước chưa nén; chỉ số dưới tránh xung đột với $C$ trần.                                            |
+| **$Q_{\text{req}}$**         | **Số lượng yêu cầu đồng thời**     | yêu cầu      | Số lượng yêu cầu đang xử lý trung bình trong một hệ thống phục vụ (serving) ổn định ($Q_{\text{req}} = \lambda_{\text{arr}} \cdot T_{\text{lat}}$ theo Định luật Little). Tránh xung đột với $N$ là số lượng thiết bị trong các thiết lập phân tán. |
+| **$\lambda_{\text{arr}}$**   | **Tốc độ đến**            | yêu cầu/giây    | Tốc độ đến của yêu cầu. Chỉ số dưới tránh xung đột với $\lambda$ là độ nhạy suy giảm hoặc tỷ lệ lỗi.                                                                                           |
+| **$T_{\text{lat}}$**         | **Thời gian yêu cầu trong hệ thống**  | giây       | Độ trễ xếp hàng/phục vụ (serving) từ đầu đến cuối cho Định luật Little. Khác với $L_{\text{lat}}$, thuật ngữ độ trễ cố định trong định luật sắt.                                                                             |
+| **$T_{\text{svc}}(B)$**      | **Thời gian phục vụ batch**      | giây       | Thời gian để phục vụ một batch có kích thước $B$.                                                                                                                                                                        |
+| **$\mu_{\text{eff}}(B)$**    | **Tốc độ phục vụ hiệu quả**  | yêu cầu/giây    | Tốc độ phục vụ theo batch, thường là $\mu_{\text{eff}}(B) = B/T_{\text{svc}}(B)$.                                                                                                                              |
+| **$\rho_{\text{serv}}$**     | **Tỷ lệ sử dụng phục vụ (serving)**     | Không thứ nguyên | Tỷ lệ sử dụng hàng đợi/máy chủ. Sử dụng thay vì $\rho$ trần, vốn được dành cho tỷ lệ giao tiếp-tính toán trong các ngữ cảnh phân tán.                                                                      |
+| **$M_{\text{total}}$**       | **Tổng dung lượng bộ nhớ chiếm dụng**  | bytes         | Tổng các thành phần bộ nhớ tường minh; tránh sự mơ hồ của $M$ trần.                                                                                                                                             |
+| **$M_{\text{weights}}$**     | **Bộ nhớ trọng số**           | bytes         | Bộ nhớ bị chiếm bởi các tham số mô hình.                                                                                                                                                                      |
+| **$M_{\text{gradients}}$**   | **Bộ nhớ Gradient**         | bytes         | Bộ nhớ bị chiếm bởi các gradient đã lưu trữ.                                                                                                                                                                      |
+| **$M_{\text{optimizer}}$**   | **Bộ nhớ trạng thái optimizer**  | bytes         | Momentum, phương sai, trọng số chính và các bộ đệm optimizer liên quan.                                                                                                                                        |
+| **$M_{\text{activations}}$** | **Bộ nhớ activation**       | bytes         | Các activation được giữ lại cho lượt truyền ngược hoặc các giá trị trung gian phục vụ (serving).                                                                                                                                      |
+| **$s_{\text{elem}}$**        | **Kích thước lưu trữ phần tử**    | bytes/phần tử | Số byte trên mỗi phần tử tensor được lưu trữ.                                                                                                                                                                          |
+
+:::
+
+```{=latex}
+\endgroup
+```
+
+## Đơn vị và Độ chính xác {#sec-notation-conventions-units-precision-fdaf .unlisted}
+
+*   Đơn vị vật lý: Cuốn sách này sử dụng xuyên suốt các đơn vị SI (hệ mét), bao gồm mét, kilogam, giây, watt và °C, nhất quán với thực hành kỹ thuật và khoa học tiêu chuẩn. Nơi dữ liệu nguồn ban đầu được báo cáo bằng đơn vị hệ Anh, cuốn sách chuyển đổi sang SI và ghi chú các giá trị gốc trong ngoặc đơn. Luôn có một khoảng trắng tách số khỏi đơn vị (ví dụ: 100 ms, 2 TB/s).
+*   Dữ liệu và bộ nhớ: Cuốn sách này **chỉ sử dụng tiền tố SI thập phân**: KB = $10^3$ byte, MB = $10^6$, GB = $10^9$, TB = $10^{12}$. Các đơn vị có tiền tố nhị phân không xuất hiện trong văn xuôi; tất cả dung lượng, thông lượng và kích thước mô hình được báo cáo bằng đơn vị thập phân (ví dụ: 80 GB, 2 TB/s, 102 MB).
+*   Tính toán: Ký hiệu phân biệt số lượng phép toán với tốc độ. Tổng công việc sử dụng FLOPs (ví dụ: GFLOPs, TFLOPs), trong khi thông lượng sử dụng FLOP/s với tiền tố thập phân (ví dụ: GFLOP/s, TFLOP/s).
+    *   1 TFLOP = $10^{12}$ FLOPs
+    *   1 TFLOP/s = $10^{12}$ FLOPs mỗi giây
+    *   Cường độ số học thường sử dụng FLOP/byte làm tỷ lệ đơn vị (số phép toán dấu phẩy động trên mỗi byte di chuyển). Đây là một đơn vị tỷ lệ, không phải ký hiệu tổng công việc hay ký hiệu thông lượng.
+*   Tiền tệ: Số tiền đô la sử dụng ký hiệu đô la (`$`); trừ khi có ghi chú khác, chi phí tính bằng đô la là đô la Mỹ (USD).
+*   Độ chính xác:
+    *   **FP64**: Độ chính xác kép (8 byte)
+    *   **FP32**: Độ chính xác đơn (4 byte)
+    *   **TF32**: TensorFloat-32 (chế độ tính toán Tensor Core 19-bit; đầu vào và lưu trữ vẫn là FP32)
+    *   **FP16**: Độ chính xác nửa (2 byte, phạm vi tiêu chuẩn)
+    *   **BF16**: Brain float (2 byte, phạm vi động rộng)
+    *   **FP8**: Độ chính xác một phần tư (1 byte, định dạng E4M3 hoặc E5M2)
+    *   **FP4**: Định dạng dấu phẩy động 4-bit
+    *   **INT8**: Số nguyên 8-bit (1 byte)
+    *   **INT4**: Số nguyên 4-bit; các độ chính xác số nguyên thấp hơn tuân theo cùng mẫu `INTn` viết hoa (ví dụ: INT3, INT2)
+
+## Tham khảo nhanh: Giải quyết xung đột {#sec-notation-conventions-quick-reference-resolving-collisions-a9cf .unlisted}
+
+Các điểm xung đột phổ biến trong tài liệu về Hệ thống ML bao gồm:
+
+::: {tbl-colwidths="[15,20,25,40]"}
+
+| **Ký hiệu** | **Ý nghĩa trong machine learning** | **Ý nghĩa trong hệ thống** | **Quy ước trong sách**                                         |
+|:-----------|:---------------|:--------------------|:------------------------------------------------------------|
+| $B$        | Kích thước batch     | Băng thông           | **Kích thước batch**. Sử dụng $\text{BW}$ cho băng thông.              |
+| $P$        | Tham số     | FLOP/s đỉnh         | **Tham số**. Sử dụng $R_{\text{peak}}$ cho tốc độ đỉnh.        |
+| $D$        | Kích thước tập dữ liệu   | Dung lượng dữ liệu         | **Kích thước tập dữ liệu**. Sử dụng $D_{\text{vol}}$ cho số byte đã di chuyển.     |
+| $L$        | Mất mát           | Độ trễ             | **Mất mát** $(\mathcal{L})$. Sử dụng $L_{\text{lat}}$ cho độ trễ. |
+| $\eta$     | Tốc độ học  | Hiệu suất          | **Tốc độ học**. Sử dụng $\eta_{\text{hw}}$ cho hiệu suất.   |
+
+:::
+
+Theo nguyên tắc chung, các quy ước của ML được ưu tiên cho các chữ cái đơn, trong khi các khái niệm hệ thống được biểu thị bằng chỉ số dưới hoặc ký hiệu nhiều chữ cái. Điều này phản ánh đối tượng độc giả chính (những người thực hành ML đang học về hệ thống) và duy trì khả năng tương thích với kho tài liệu ML khổng lồ.

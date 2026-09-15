@@ -871,13 +871,13 @@ Không có một kiến trúc nào phù hợp với mọi khối lượng công 
 
 Vì vậy, việc tăng tốc AI hiện đại không chỉ nằm ở bản thân con chip. Để một bộ tăng tốc thực sự hữu ích, nó cần có sự hỗ trợ từ framework, trình biên dịch, thư viện, trình điều khiển và runtime cho các tác vụ như biến đổi đồ thị, chọn kernel, hợp nhất, lập lịch bộ nhớ và triển khai trên nhiều môi trường khác nhau, từ trung tâm dữ liệu đến thiết bị edge. Các thao tác không được hỗ trợ hoặc các lần truyền dữ liệu xung quanh có thể làm mất đi lợi ích đạt được ở cấp độ kernel.
 
-| Era                               | **Computational pattern**\index{Computational pattern!definition} | **Architecture examples**\index{Architecture examples!definition} | **Characteristics**\index{Characteristics!definition}                                               |
+| Kỷ nguyên | **Mô hình tính toán** | **Ví dụ kiến trúc** | **Đặc điểm** |
 |:----------------------------------|:------------------------------------------------------------------|:------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------|
-| **1980s**\index{1980s!definition} | Floating-Point & Signal Processing                                | FPU, DSP                                                          | • Single-purpose engines<br>• Focused instruction sets<br>• Coprocessor interfaces                  |
-| **1990s**\index{1990s!definition} | 3D Graphics & Multimedia                                          | GPU, SIMD Units                                                   | • Many identical compute units<br>• Regular data patterns<br>• Wide memory interfaces               |
-| **2000s**\index{2000s!definition} | Real-time Media Coding                                            | Media Codecs, Network Processors                                  | • Fixed-function pipelines<br>• High throughput processing<br>• Power-performance optimization      |
-| **2010s**\index{2010s!definition} | Deep Learning Tensor Operations                                   | TPU, GPU Tensor Cores                                             | • Matrix multiplication units<br>• Massive parallelism<br>• Memory bandwidth optimization           |
-| **2020s**\index{2020s!definition} | Application-Specific Acceleration                                 | ML Engines, Smart NICs, Domain Accelerators                       | • Workload-specific datapaths<br>• Customized memory hierarchies<br>• Application-optimized designs |
+| **Những năm 1980** | Xử lý dấu phẩy động & tín hiệu | FPU, DSP | • Các bộ máy chuyên dụng<br>• Tập lệnh tập trung<br>• Giao diện bộ đồng xử lý |
+| **Những năm 1990** | Đồ họa 3D & Đa phương tiện | GPU, Đơn vị SIMD | • Nhiều đơn vị tính toán giống hệt nhau<br>• Các mô hình dữ liệu thông thường<br>• Giao diện bộ nhớ rộng |
+| **Những năm 2000** | Mã hóa phương tiện thời gian thực | Bộ giải mã phương tiện, Bộ xử lý mạng | • Các pipeline chức năng cố định<br>• Xử lý thông lượng cao<br>• Tối ưu hóa công suất-hiệu năng |
+| **Những năm 2010** | Các phép toán Tensor của deep learning | TPU, GPU Tensor Cores | • Các đơn vị nhân ma trận<br>• Song song hóa lớn<br>• Tối ưu hóa băng thông bộ nhớ |
+| **Những năm 2020** | Tăng tốc chuyên biệt theo ứng dụng | Các bộ máy ML, Smart NIC, Bộ tăng tốc miền | • Các đường dẫn dữ liệu chuyên biệt theo khối lượng công việc<br>• Hệ thống phân cấp bộ nhớ tùy chỉnh<br>• Các thiết kế tối ưu hóa ứng dụng |
 
 : **Xu hướng chuyên biệt hóa phần cứng**: Qua các kỷ nguyên điện toán, phần cứng chuyên biệt ngày càng được tích hợp để tăng tốc các khối lượng công việc phổ biến, chuyển đổi từ CPU đa năng sang các kiến trúc chuyên biệt theo từng lĩnh vực, và cuối cùng là các bộ tăng tốc AI có thể tùy chỉnh. Việc điều chỉnh phần cứng để phù hợp với các mẫu tính toán giúp cải thiện hiệu suất và hiệu quả năng lượng, từ đó thúc đẩy đổi mới trong các hệ thống machine learning. {#tbl-hw-evolution tbl-colwidths="[10,27,28,35]"}
 
@@ -1254,13 +1254,13 @@ Trong chuỗi hợp ngữ này, lệnh nhân vector xử lý nhiều cặp phầ
 
 Các phép toán vector chủ chốt có mối liên hệ trực tiếp với các mẫu deep learning phổ biến. @Tbl-vector liệt kê cách các phép toán như rút gọn, gather, scatter và các phép toán có mặt nạ thường xuyên xuất hiện trong pooling, tra cứu embedding và các cơ chế attention, làm rõ sự ánh xạ trực tiếp giữa phần cứng vector cấp thấp và các khối lượng công việc (workload) machine learning cấp cao.
 
-| **Vector operation**\index{Vector operation!definition}               | Description                                               | **Neural network application**\index{Neural network application!definition} |
+| **Phép toán vector** | Mô tả | **Ứng dụng mạng nơ-ron** |
 |:----------------------------------------------------------------------|:----------------------------------------------------------|:----------------------------------------------------------------------------|
-| **Reduction**\index{Reduction!definition}                             | Combines elements across a vector (for example, sum, max) | Pooling layers, attention score computation                                 |
-| **Gather**\index{Gather!definition}                                   | Loads multiple nonconsecutive memory elements             | Embedding lookups, sparse operations                                        |
-| **Scatter**\index{Scatter!definition}                                 | Writes to multiple nonconsecutive memory locations        | Gradient updates for embeddings                                             |
-| **Masked operations**\index{Masked operations!definition}             | Selectively operates on vector elements                   | Attention masks, padding handling                                           |
-| **Vector-scalar broadcast**\index{Vector-scalar broadcast!definition} | Applies scalar to all vector elements                     | Bias addition, scaling operations                                           |
+| **Phép rút gọn (Reduction)** | Kết hợp các phần tử trong một vector (ví dụ: tổng, giá trị lớn nhất) | Các lớp Pooling, tính toán điểm attention |
+| **Phép thu thập (Gather)** | Tải nhiều phần tử bộ nhớ không liên tiếp | Tra cứu embedding, các phép toán thưa |
+| **Phép phân tán (Scatter)** | Ghi vào nhiều vị trí bộ nhớ không liên tiếp | Cập nhật gradient cho các embedding |
+| **Các phép toán có mặt nạ (Masked operations)** | Thao tác chọn lọc trên các phần tử vector | Mặt nạ attention, xử lý phần đệm (padding) |
+| **Phép broadcast vector-vô hướng** | Áp dụng scalar cho tất cả các phần tử vector | Cộng độ chệch (bias), các phép toán chia tỷ lệ |
 
 : **Các phép toán vector**: Các phép toán vector cốt lõi tương ứng trực tiếp với các phép toán cơ bản (primitives) trong deep learning: phép rút gọn dùng để triển khai các lớp pooling, phép gather giúp tra cứu embedding, phép scatter dùng để cập nhật gradient của embedding, và các phép toán dùng mặt nạ (masked operations) để xử lý mặt nạ attention. Những ánh xạ này cho thấy phần cứng vector hỗ trợ các phép toán cơ bản phổ biến trong machine learning như thế nào. {#tbl-vector}
 
@@ -1358,11 +1358,11 @@ Các phép toán ma trận và vector cùng nhau xử lý phần đại số tuy
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Operation type**\index{Operation type!definition} | Best For                  | Examples                                                          | **Key characteristic**\index{Key characteristic!definition} |
+| **Loại thao tác**\index{Operation type!definition} | Tốt nhất cho | Ví dụ | **Đặc điểm chính**\index{Key characteristic!definition} |
 |:----------------------------------------------------|:--------------------------|:------------------------------------------------------------------|:------------------------------------------------------------|
-| **Matrix Operations**                               | Many-to-many transforms   | Layer transformations, attention, convolutions                    | Each output depends on multiple inputs                      |
-| **Vector Operations**                               | Vector and reduction work | Activation functions, layer normalization, element-wise gradients | Uses element-wise operations and vector reductions          |
-| **Special-Function Paths**                          | Transcendental arithmetic | Exponential, logarithm, reciprocal square root                    | Uses architecture-specific approximation or dedicated logic |
+| **Các phép toán ma trận** | Các phép biến đổi nhiều-tới-nhiều | Các phép biến đổi lớp, attention, tích chập | Mỗi đầu ra phụ thuộc vào nhiều đầu vào |
+| **Các phép toán vector** | Công việc vector và giảm chiều | Các hàm activation, chuẩn hóa lớp, gradient theo từng phần tử | Sử dụng các phép toán theo từng phần tử và giảm chiều vector |
+| **Các đường dẫn hàm đặc biệt** | Số học siêu việt | Hàm mũ, logarit, nghịch đảo căn bậc hai | Sử dụng xấp xỉ dành riêng cho kiến trúc hoặc logic chuyên dụng |
 
 : **Đặc điểm hoạt động**: Các phép toán ma trận rất hiệu quả với các biến đổi nhiều-sang-nhiều, trong khi các đơn vị vector xử lý các phép toán theo phần tử và các phép rút gọn như activation và chuẩn hóa. Các đường dẫn hàm đặc biệt xử lý số học siêu việt thông qua phương pháp xấp xỉ đặc thù kiến trúc hoặc logic chuyên dụng. Cấu trúc phép toán sẽ quyết định nguyên thủy phần cứng nào là phù hợp. {#tbl-matrix tbl-colwidths="[18,17,35,30]"}
 
@@ -1473,12 +1473,12 @@ vrsqrt.v v5, v1          # Vector reciprocal-square-root path
 
 Các đường chức năng chuyên biệt thực hiện các phép toán cơ bản (nguyên thủy) phi tuyến và rút gọn bằng mạch điện được thiết kế theo từng kiến trúc. Một ReLU có thể dùng logic so sánh–chọn; còn căn bậc hai, hàm mũ và logarit có thể dùng xấp xỉ lặp, bảng tra cứu hoặc nội suy. @Tbl-sfu tóm tắt các cơ chế tiêu biểu và đặc tính độ trễ định tính của chúng.
 
-| **Function unit**\index{Function unit!definition}       | Operation               | **Implementation strategy**\index{Implementation strategy!definition} | **Illustrative latency**\index{Illustrative latency!definition} |
+| **Đơn vị hàm**\index{Function unit!definition} | Thao tác | **Chiến lược triển khai**\index{Implementation strategy!definition} | **Độ trễ minh họa**\index{Illustrative latency!definition} |
 |:--------------------------------------------------------|:------------------------|:----------------------------------------------------------------------|:----------------------------------------------------------------|
-| **Activation unit**\index{Activation unit!definition}   | ReLU                    | Compare-and-select or maximum                                         | Low; architecture-dependent                                     |
-| **Statistics unit**\index{Statistics unit!definition}   | Mean, variance          | Parallel reduction trees                                              | Grows with reduction depth                                      |
-| **Exponential unit**\index{Exponential unit!definition} | exp, log, sigmoid, tanh | Approximation, table lookup, and interpolation                        | Architecture-dependent                                          |
-| **Root/power unit**\index{Root/power unit!definition}   | sqrt, rsqrt             | Iterative or approximation hardware                                   | Architecture-dependent                                          |
+| **Đơn vị activation**\index{Activation unit!definition} | ReLU | So sánh và chọn hoặc cực đại | Thấp; phụ thuộc vào kiến trúc |
+| **Đơn vị thống kê**\index{Statistics unit!definition} | Trung bình, phương sai | Cây giảm chiều song song | Tăng theo độ sâu giảm chiều |
+| **Đơn vị hàm mũ**\index{Exponential unit!definition} | exp, log, sigmoid, tanh | Xấp xỉ, tra cứu bảng và nội suy | Phụ thuộc vào kiến trúc |
+| **Đơn vị căn/lũy thừa**\index{Root/power unit!definition} | sqrt, rsqrt | Phần cứng lặp hoặc xấp xỉ | Phụ thuộc vào kiến trúc |
 
 : **Các Đơn vị Chức năng Đặc biệt**: Các đường chuyên dụng giúp giảm chi phí lệnh khi thực hiện các phép toán cơ bản phi tuyến và rút gọn. Cách triển khai và độ trễ phụ thuộc vào kiến trúc; bảng này mô tả cơ chế, không nêu số chu kỳ mang tính phổ quát. {#tbl-sfu tbl-colwidths="[18,23,32,27]"}
 
@@ -2360,11 +2360,11 @@ Các kỹ thuật lượng tử hoá trong @sec-model-compression-quantization-p
 
 **Thử thách**: Mảng systolic phải chọn dữ liệu nào giữ cố định (trong thanh ghi) để giảm di chuyển. Lựa chọn này sẽ 'hard-code' sở thích của phần cứng đối với một số loại mô hình. @Tbl-hw-acceleration-systolic-dataflow giới thiệu ba chiến lược dữ liệu cố định (stationary-operand) và các khối lượng công việc (workload) mà mỗi chiến lược phù hợp; @sec-hardware-acceleration-dataflow-optimization-strategies-ce52 phát triển chi tiết từng chiến lược như một quyết định ánh xạ tổng quát.
 
-| Strategy                                                         | **Stationary item**\index{Stationary item!definition} | **Optimized for**\index{Optimized for!definition} | Example Workload                                                                        |
+| Chiến lược | **Mục cố định**\index{Stationary item!definition} | **Tối ưu hóa cho**\index{Optimized for!definition} | Khối lượng công việc (workload) ví dụ |
 |:-----------------------------------------------------------------|:------------------------------------------------------|:--------------------------------------------------|:----------------------------------------------------------------------------------------|
-| **Weight-stationary**\index{Weight-stationary!dataflow strategy} | Weights ($\mathbf{W}$)                                | High Reuse of Weights                             | CNNs (Conv2D): Filters are small and reused across the entire image.                    |
-| **Output-stationary**\index{Output-stationary!dataflow strategy} | Partial Sums ($\mathbf{C}$)                           | High Reuse of Accumulators                        | Large Batch MatMul: Accumulating results for many inputs against a large weight matrix. |
-| **Input-stationary**\index{Input-stationary!dataflow strategy}   | Inputs ($\mathbf{A}$)                                 | High Reuse of Activations                         | Transformers: The same activations feed many weight matrices across attention heads.    |
+| Weight-stationary | Trọng số ($\mathbf{W}$) | Tái sử dụng trọng số cao | CNNs (Conv2D): Các bộ lọc nhỏ và được tái sử dụng trên toàn bộ hình ảnh. |
+| Output-stationary | Tổng riêng phần ($\mathbf{C}$) | Tái sử dụng bộ tích lũy cao | Large Batch MatMul: Tích lũy kết quả cho nhiều đầu vào đối với một ma trận trọng số lớn. |
+| Input-stationary | Đầu vào ($\mathbf{A}$) | Tái sử dụng activation cao | Transformers: Cùng một activation cấp cho nhiều ma trận trọng số trên các attention head. |
 
 : **Chiến lược luồng dữ liệu của mảng systolic**: Ba lựa chọn toán hạng cố định (stationary-operand) cho mảng systolic, kiểu tái sử dụng mà mỗi lựa chọn tối đa hóa, và nhóm khối lượng công việc (workload) được hưởng lợi; qua đó cho thấy một lựa chọn luồng dữ liệu cố định sẽ cố định sẵn sự ưu tiên của bộ tăng tốc đối với các mô hình cụ thể như thế nào. {#tbl-hw-acceleration-systolic-dataflow tbl-colwidths="[20,18,18,44]"}
 
@@ -2392,11 +2392,11 @@ Các bộ tăng tốc AI hiện đại ngày càng hỗ trợ thực thi với �
 
 Xu hướng đa dạng hóa độ chính xác thể hiện rõ trong tiến trình phát triển của phần cứng AI. Các kiến trúc ban đầu như NVIDIA Volta chỉ hỗ trợ hạn chế các định dạng có độ chính xác thấp hơn FP16, trong khi các kiến trúc sau này như Turing và Ampere đã mở rộng đáng kể dải định dạng được hỗ trợ. @Tbl-nvidia-numerics minh họa quá trình này: GPU Ampere giới thiệu TF32, một định dạng lai giữa FP32 và FP16 [@nvidia_tf32], đồng thời mở rộng hỗ trợ cho BF16, INT8 và INT4 [@nvidia2017gpu; @nvidia2018t4; @NVIDIA2020].
 
-| Architecture                                 | Year | **Supported Tensor Core precisions**\index{Supported Tensor Core precisions!definition} | **Supported CUDA Core Precisions** |
+| Kiến trúc | Năm | Độ chính xác Tensor Core được hỗ trợ | **Độ chính xác CUDA Core được hỗ trợ** |
 |:---------------------------------------------|-----:|:----------------------------------------------------------------------------------------|:-----------------------------------|
-| **Volta**\index{Volta!definition}            | 2017 | FP16                                                                                    | FP64, FP32, FP16                   |
-| **Turing**\index{Turing!definition}          | 2018 | FP16, INT8, INT4, INT1                                                                  | FP64, FP32, FP16, INT8             |
-| **Ampere**\index{NVIDIA!Ampere architecture} | 2020 | FP64, TF32\index{TF32!tensor float 32}, BF16, FP16, INT8, INT4                          | FP64, FP32, FP16, BF16, INT8       |
+| Volta | 2017 | FP16 | FP64, FP32, FP16 |
+| Turing | 2018 | FP16, INT8, INT4, INT1 | FP64, FP32, FP16, INT8 |
+| Ampere | 2020 | FP64, TF32, BF16, FP16, INT8, INT4 | FP64, FP32, FP16, BF16, INT8 |
 
 : **Tiến trình hỗ trợ độ chính xác**: Từ Volta đến Ampere, hỗ trợ Tensor Core đã được mở rộng từ FP16 sang TF32, BF16 và các định dạng số nguyên, nhờ đó tăng thêm lựa chọn độ chính xác cho huấn luyện và suy luận; cột CUDA-core cho thấy các định dạng vô hướng/vector riêng mà mỗi thế hệ hỗ trợ. {#tbl-nvidia-numerics tbl-colwidths="[15,10,38,37]"}
 
@@ -2412,12 +2412,12 @@ Khi các mô hình AI tiếp tục mở rộng, hỗ trợ độ chính xác k�
 
 Các bộ xử lý AI hiện đại thể hiện nhiều đánh đổi trong thiết kế, tùy theo ứng dụng mục tiêu. So sánh các cấu hình cho thấy các ràng buộc khi triển khai đã dẫn tới những khác biệt kiến trúc. Một bộ tăng tốc tối ưu cho huấn luyện như NVIDIA A100 tích hợp nhiều Streaming Multiprocessor với các đơn vị SIMD rộng và FP16 Tensor Cores, vì thông lượng huấn luyện tăng theo tổng năng lực nhân-tích lũy [@NVIDIA2020]. TPUv4 của Google chọn hướng hoàn toàn khác: chỉ hai lõi trên mỗi chip, mỗi lõi chứa các mảng systolic BF16 rất lớn; thiết kế này đánh đổi sự linh hoạt của lập trình viên để lấy hiệu quả trên các phép nhân ma trận dày đặc [@jouppi2023]. Ở phía suy luận, Intel Sapphire Rapids dành các engine ô Advanced Matrix Extensions (AMX) cho INT8 và BF16, phản ánh nhận định từ @sec-model-compression rằng các mô hình suy luận chịu được độ chính xác thấp hơn [@intel2021amx]. Các neural engine trên thiết bị di động còn đi xa hơn bằng cách thu nhỏ các engine ma trận thành các khối hệ thống trên chip (SoC) công suất thấp, ưu tiên hiệu quả năng lượng trên mỗi phép toán hơn là thông lượng cực đại. @Tbl-execution-units so sánh các cấu hình kiến trúc này.
 
-| Processor                                       | **Vector execution**\index{Vector execution!definition} | **Matrix engine**\index{Matrix engine!definition} |  Processing Elements  | **Primary workloads**\index{Primary workloads!definition} |
+| Bộ xử lý | Thực thi vector | Engine ma trận |  Các phần tử xử lý | Các khối lượng công việc (workload) chính |
 |:------------------------------------------------|:-------------------------------------------------------:|:-------------------------------------------------:|:---------------------:|:----------------------------------------------------------|
-| **NVIDIA A100**\index{NVIDIA A100!definition}   |                    CUDA FP/INT lanes                    |           Tensor Core instruction tiles           |        108 SMs        | Training, HPC                                             |
-| **Google TPUv4**\index{Google TPUv4!definition} |                       Vector unit                       |       $128{\times}128$ BF16 systolic arrays       |      2 cores/chip     | Training                                                  |
-| **Intel Sapphire**\index{Intel!Sapphire Rapids} |                     512-bit AVX-512                     |     AMX tiles (up to 16 rows by 64 bytes each)    |     Up to 60 cores    | Inference                                                 |
-| Mobile NPU                                      |                   CPU/GPU/DSP vectors                   |                Small matrix engines               | Integrated NPU blocks | Mobile inference                                          |
+| NVIDIA A100 |                    Làn CUDA FP/INT |           Các tile lệnh Tensor Core |        108 SMs | Huấn luyện, HPC |
+| Google TPUv4 |                       Đơn vị vector |       $128{\times}128$ mảng systolic BF16 |      2 core/chip | Huấn luyện |
+| **Intel Sapphire**\index{Intel!Sapphire Rapids} |                     512-bit AVX-512 |     AMX tiles (tối đa 16 hàng, mỗi hàng 64 bytes) |     Lên đến 60 lõi | Suy luận |
+| NPU di động |                   Các vector CPU/GPU/DSP |                Các công cụ ma trận nhỏ | Các khối NPU tích hợp | Suy luận di động |
 
 : **Cấu hình Bộ xử lý AI**: Các bộ xử lý AI hiện đại ưu tiên các đặc tính đơn vị thực thi khác nhau cho từng khối lượng công việc cụ thể: NVIDIA A100 sử dụng SIMD rộng và Tensor Cores cho huấn luyện, Google TPUv4 tập trung vào phép nhân ma trận BF16 với thông lượng cao, Intel Sapphire Rapids tập trung vào suy luận tối ưu hóa INT8, và NPU di động ưu tiên thực thi với công suất thấp. Những khác biệt về độ rộng SIMD, kích thước Tensor Core và số lượng phần tử xử lý phản ánh sự đa dạng ngày càng tăng trong kiến trúc phần cứng AI. {#tbl-execution-units tbl-colwidths="[15,23,20,23,19]"}
 
@@ -2528,13 +2528,13 @@ class AcceleratorEconomics:
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| Accelerator                                       |   **List price**\index{List price!definition}   |       **Representative Peak Throughput (precision shown)**       |                    Memory Bandwidth                   | **Price/performance**\index{Price/performance!definition} |
+| Bộ tăng tốc |   **Giá niêm yết**\index{List price!definition} |       **Thông lượng đỉnh đại diện (độ chính xác được hiển thị)** |                    Băng thông bộ nhớ | **Giá/hiệu năng**\index{Price/performance!definition} |
 |:--------------------------------------------------|:-----------------------------------------------:|:----------------------------------------------------------------:|:-----------------------------------------------------:|:---------------------------------------------------------:|
-| **NVIDIA V100**\index{NVIDIA!V100}                |  `{python} AcceleratorEconomics.v100_price_str` |       `{python} AcceleratorEconomics.v100_tflop_per_s_str`       |  `{python} AcceleratorEconomics.v100_bw_gb_per_s_str` |      `{python} AcceleratorEconomics.v100_pp_usd_str`      |
-| NVIDIA A100\index{NVIDIA!A100}                    |  `{python} AcceleratorEconomics.a100_price_str` |    `{python} AcceleratorEconomics.a100_fp16_tflop_per_s_str`     |  `{python} AcceleratorEconomics.a100_bw_gb_per_s_str` |      `{python} AcceleratorEconomics.a100_pp_usd_str`      |
-| **NVIDIA H100**\index{NVIDIA H100!definition}     |  `{python} AcceleratorEconomics.h100_price_str` | `{python} AcceleratorEconomics.h100_tf32_tflop_per_s_str` (TF32) |  `{python} AcceleratorEconomics.h100_bw_gb_per_s_str` |      `{python} AcceleratorEconomics.h100_pp_usd_str`      |
-| Google TPUv4                                      |  `{python} AcceleratorEconomics.tpu_price_str`  |   `{python} AcceleratorEconomics.tpuv4_tflop_per_s_str` (BF16)   | `{python} AcceleratorEconomics.tpuv4_bw_gb_per_s_str` |       `{python} AcceleratorEconomics.tpu_pp_usd_str`      |
-| **Intel Gaudi 2**\index{Intel Gaudi 2!definition} | `{python} AcceleratorEconomics.gaudi_price_str` |   `{python} AcceleratorEconomics.gaudi_tflop_per_s_str` (FP8)    | `{python} AcceleratorEconomics.gaudi_bw_gb_per_s_str` |      `{python} AcceleratorEconomics.gaudi_pp_usd_str`     |
+| **NVIDIA V100**\index{NVIDIA!V100} |  `{python} AcceleratorEconomics.v100_price_str` |       `{python} AcceleratorEconomics.v100_tflop_per_s_str`       |  `{python} AcceleratorEconomics.v100_bw_gb_per_s_str` |      `{python} AcceleratorEconomics.v100_pp_usd_str`      |
+| NVIDIA A100\index{NVIDIA!A100} |  `{python} AcceleratorEconomics.a100_price_str` |    `{python} AcceleratorEconomics.a100_fp16_tflop_per_s_str`     |  `{python} AcceleratorEconomics.a100_bw_gb_per_s_str` |      `{python} AcceleratorEconomics.a100_pp_usd_str`      |
+| **NVIDIA H100**\index{NVIDIA H100!definition} |  `{python} AcceleratorEconomics.h100_price_str` | `{python} AcceleratorEconomics.h100_tf32_tflop_per_s_str` (TF32) |  `{python} AcceleratorEconomics.h100_bw_gb_per_s_str` |      `{python} AcceleratorEconomics.h100_pp_usd_str`      |
+| Google TPUv4 |  `{python} AcceleratorEconomics.tpu_price_str`  |   `{python} AcceleratorEconomics.tpuv4_tflop_per_s_str` (BF16) | `{python} AcceleratorEconomics.tpuv4_bw_gb_per_s_str` |       `{python} AcceleratorEconomics.tpu_pp_usd_str`      |
+| **Intel Gaudi 2**\index{Intel Gaudi 2!definition} | `{python} AcceleratorEconomics.gaudi_price_str` |   `{python} AcceleratorEconomics.gaudi_tflop_per_s_str` (FP8) | `{python} AcceleratorEconomics.gaudi_bw_gb_per_s_str` |      `{python} AcceleratorEconomics.gaudi_pp_usd_str`     |
 
 : **Bảng tính chi phí bộ tăng tốc minh họa**: Mỗi hàng lấy giả định về giá mua gần đúng và chia cho chế độ đỉnh đại diện được nêu. Vì độ chính xác, các giả định về tính thưa và nguồn giá khác nhau, nên các tỷ lệ này không thể xem là so sánh hiệu năng khối lượng công việc. Tổng chi phí cũng bao gồm mức sử dụng, dung lượng bộ nhớ, công suất, làm mát, kết nối, phần mềm và cơ sở hạ tầng; chi phí mua TPU được ước tính từ giá đám mây. {#tbl-accelerator-economics tbl-colwidths="[15,16,36,13,20]"}
 
@@ -3286,15 +3286,15 @@ Một nguồn gây không đều quan trọng trong các khối lượng công v
 \renewcommand{\arraystretch}{1.4}
 ```
 
-| Feature                                                     | **Regular dense kernels**\index{Regular dense kernels!definition} | **Irregular ML components**\index{Irregular ML components!definition} |
+| Đặc trưng | **Các kernel dày đặc thông thường**\index{Regular dense kernels!definition} | **Các thành phần ML không đều**\index{Irregular ML components!definition} |
 |:------------------------------------------------------------|:------------------------------------------------------------------|:----------------------------------------------------------------------|
-| **Access pattern**\index{Access pattern!definition}         | Contiguous or tiled                                               | Indirect, scattered, or input-dependent                               |
-| **Cache locality**\index{Cache locality!definition}         | Often high after tiling                                           | Often lower and workload-dependent                                    |
-| **Data reuse**\index{Data reuse!definition}                 | Structured across tiles or batches                                | Sparse or dynamic, depending on the operator                          |
-| Dependencies                                                | Static loop nests                                                 | Input-dependent routing or variable shapes                            |
-| Examples                                                    | GEMM, convolution, dense attention                                | Embedding lookup, unstructured sparsity, MoE routing                  |
-| **Primary pressure**\index{Primary pressure!definition}     | Compute or bandwidth, depending on arithmetic intensity           | Latency, bandwidth, metadata, and load imbalance                      |
-| **Energy consequence**\index{Energy consequence!definition} | Depends on reuse and memory tier                                  | Extra movement and metadata can increase energy                       |
+| **Mẫu truy cập**\index{Access pattern!definition} | Liên tục hoặc xếp lát (tiled) | Gián tiếp, phân tán, hoặc phụ thuộc vào đầu vào |
+| **Tính cục bộ của cache**\index{Cache locality!definition} | Thường cao sau khi xếp lát (tiling) | Thường thấp hơn và phụ thuộc vào khối lượng công việc (workload) |
+| **Tái sử dụng dữ liệu**\index{Data reuse!definition} | Có cấu trúc trên các lát (tiles) hoặc các batch | Thưa thớt hoặc động, tùy thuộc vào toán tử |
+| Các phụ thuộc | Các vòng lặp lồng nhau tĩnh | Định tuyến phụ thuộc vào đầu vào hoặc các hình dạng biến đổi |
+| Ví dụ | GEMM, tích chập, attention dày đặc | Tra cứu embedding, độ thưa thớt không cấu trúc, định tuyến MoE |
+| **Áp lực chính** | Tính toán hoặc băng thông, tùy thuộc vào cường độ số học | Độ trễ, băng thông, metadata và mất cân bằng tải |
+| **Hệ quả năng lượng** | Phụ thuộc vào việc tái sử dụng và cấp bộ nhớ | Di chuyển thêm và metadata có thể làm tăng năng lượng |
 
 : **Truy cập bộ nhớ đều đặn và không đều đặn**: Các kernel dày đặc thông thường cho phép tái sử dụng theo khối và có địa chỉ dễ dự đoán. Ngược lại, các thành phần ML không đều đặn phụ thuộc nhiều hơn vào truy cập gián tiếp hoặc phụ thuộc vào đầu vào, làm giảm hiệu quả của cache và prefetching, đồng thời làm tăng chi phí metadata hoặc cân bằng tải. Một mô hình có thể chứa cả hai kiểu truy cập này. {#tbl-traditional-vs-ml-mem tbl-colwidths="[20,32,48]"}
 
@@ -3324,14 +3324,14 @@ Các bộ tăng tốc AI hiện đại tận dụng các mẫu tái sử dụng 
 
 Điểm mấu chốt trong @tbl-memory-hierarchy là bộ lưu trữ càng lớn và càng xa thì thường có dung lượng lớn hơn nhưng đi kèm độ trễ và chi phí năng lượng cao hơn. Các tỷ lệ này không đồng đều giữa các cấp liền kề, và việc truy cập thanh ghi hoặc SRAM ở gần không nhất thiết đắt hơn từng phép toán số học.
 
-| Memory Level                                              | **Relative latency**\index{Relative latency!definition} |      Bandwidth      | **Relative capacity**\index{Relative capacity!definition} | **Example Use in Deep Learning**                                 |
+| Cấp độ bộ nhớ | **Độ trễ tương đối** |      Băng thông | **Dung lượng tương đối** | **Ví dụ sử dụng trong deep learning** |
 |:----------------------------------------------------------|:--------------------------------------------------------|:-------------------:|:----------------------------------------------------------|:-----------------------------------------------------------------|
-| Registers                                                 | Lowest                                                  |       Highest       | Tiny                                                      | Storing operands for immediate computation                       |
-| **L1/L2 Cache (SRAM)**\index{SRAM!on-chip cache}          | Very low                                                |         High        | Small                                                     | Caching frequently accessed activations and small weight blocks  |
-| **Scratchpad memory**\index{Scratchpad memory!definition} | Very low                                                |         High        | Small to medium                                           | Software-managed storage for intermediate computations           |
-| **Device DRAM (HBM, GDDR, or LPDDR)**                     | High                                                    | Moderate--Very High | Large                                                     | Storing model parameters and activations that do not fit on-chip |
-| **Host DRAM (typically DDR)**                             | High locally; transfer adds latency                     |       Moderate      | Large to very large                                       | Staging or offloading data outside accelerator memory            |
-| **Flash Storage (SSD/NVMe)**                              | Very high                                               |         Low         | Very large                                                | Storing pretrained models and checkpoints for later loading      |
+| Thanh ghi | Thấp nhất |       Cao nhất | Rất nhỏ | Lưu trữ toán hạng cho tính toán tức thì |
+| **Cache L1/L2 (SRAM)** | Rất thấp |         Cao | Nhỏ | Lưu vào cache các activation được truy cập thường xuyên và các khối trọng số nhỏ |
+| **Bộ nhớ scratchpad** | Rất thấp |         Cao | Nhỏ đến trung bình | Bộ nhớ được quản lý bằng phần mềm cho các tính toán trung gian |
+| **DRAM thiết bị (HBM, GDDR hoặc LPDDR)** | Cao | Trung bình--Rất cao | Lớn | Lưu trữ các tham số mô hình và activation không vừa trên chip |
+| **DRAM máy chủ (thường là DDR)** | Cao cục bộ; truyền tải làm tăng độ trễ |       Trung bình | Lớn đến rất lớn | Chuẩn bị hoặc dỡ tải dữ liệu bên ngoài bộ nhớ bộ tăng tốc |
+| **Bộ nhớ Flash (SSD/NVMe)** | Rất cao |         Thấp | Rất lớn | Lưu trữ các mô hình đã huấn luyện trước và checkpoint để tải sau |
 
 : **Đánh đổi trong Hệ thống phân cấp bộ nhớ**: Các bộ tăng tốc AI sử dụng hệ thống phân cấp bộ nhớ đa cấp để cân bằng hiệu suất và dung lượng. Mỗi cấp độ có các đặc điểm riêng về độ trễ, băng thông và dung lượng, từ đó quyết định cách phân bổ các thành phần của mạng nơ-ron (trọng số, activations và kết quả trung gian) nhằm giảm thiểu tắc nghẽn và tối đa hóa thông lượng. Các nhãn tương đối mô tả thứ tự thông thường; giá trị chính xác phụ thuộc vào kiến trúc. @Sec-appdx-machine-foundations-latencies-every-programmer-know-e89f cung cấp các độ trễ tham chiếu dựa trên thanh ghi. {#tbl-memory-hierarchy tbl-colwidths="[22,17,14,12,35]"}
 
@@ -3627,11 +3627,11 @@ Các kỹ thuật như phân ô attention, cache KV và bố cục tensor giúp 
 
 Các yêu cầu bộ nhớ đa dạng của MLPs, CNNs và transformer nhấn mạnh nhu cầu thiết kế bộ tăng tốc chuyên biệt cho từng khối lượng công việc\index{Accelerator!design, workload-specific memory}. @Tbl-model-mem-compare cho thấy các mẫu truy cập bộ nhớ khác nhau đáng kể giữa các loại mô hình.
 
-| **Model type**\index{Model type!definition} | **Weight size**\index{Weight size!definition}       | **Activation reuse**\index{Activation reuse!definition} | **Memory access pattern**\index{Memory access pattern!definition} | Primary Bottleneck          |
+| **Loại mô hình** | Kích thước trọng số | Tái sử dụng activation | Mẫu truy cập bộ nhớ | Nút thắt cổ chai chính |
 |:--------------------------------------------|:----------------------------------------------------|:--------------------------------------------------------|:------------------------------------------------------------------|:----------------------------|
-| **MLP (Dense)**                             | Large, dense                                        | Low                                                     | Regular, sequential (streamed)                                    | Bandwidth (off-chip)        |
-| CNN                                         | Small, reused                                       | High                                                    | Spatial locality                                                  | Feature map movement        |
-| Transformer                                 | Large, usually dense; sparse in MoE/pruned variants | Low-to-medium                                           | Mostly regular GEMM plus KV-cache/attention traffic               | Memory capacity + bandwidth |
+| **MLP (Đặc)** | Lớn, đặc | Thấp | Đều đặn, tuần tự (dạng luồng) | Băng thông (ngoài chip) |
+| CNN | Nhỏ, được tái sử dụng | Cao | Tính cục bộ không gian | Di chuyển feature map |
+| Transformer | Lớn, thường đặc; thưa thớt trong các biến thể MoE/được tỉa (pruning) | Thấp đến trung bình | Chủ yếu là GEMM đều đặn cộng với lưu lượng KV-cache/attention | Dung lượng bộ nhớ + băng thông |
 
 : **Truy cập bộ nhớ mô hình machine learning**: Các mô hình machine learning khác nhau có các mẫu truy cập bộ nhớ và nút thắt cổ chai riêng biệt, do khác biệt về kích thước trọng số, mức độ tái sử dụng activation và cách dữ liệu luân chuyển. Các mô hình transformer dày đặc tiêu chuẩn đòi hỏi băng thông và dung lượng bộ nhớ cao, do trọng số lớn, cache KV và lưu lượng attention tạo áp lực lên bộ nhớ; các biến thể MoE thưa thớt hoặc đã được cắt tỉa còn bổ sung các cân nhắc về định tuyến và độ thưa thớt. CNNs hưởng lợi từ tính cục bộ không gian và mức độ tái sử dụng activation cao, giúp giảm áp lực lên bộ nhớ. {#tbl-model-mem-compare tbl-colwidths="[16,25,16,25,18]"}
 
@@ -3781,7 +3781,7 @@ Biểu đồ roofline thể hiện hiệu năng (TFLOP/s) trên trục dọc và
 \renewcommand{\arraystretch}{1.5}
 ```
 
-| **NVIDIA Accelerator**\index{NVIDIA Accelerator!definition} |    **Peak FP16**\index{Peak FP16!definition}     |                  Bandwidth                  |              Ridge Point              |
+| Bộ tăng tốc NVIDIA |    Đỉnh FP16 |                  Băng thông |              Ridge Point |
 |:------------------------------------------------------------|:------------------------------------------------:|:-------------------------------------------:|:-------------------------------------:|
 | **V100 (`{python} RooflineGap.v100_year_str`)**             |   `{python} RooflineGap.v100_tflop_per_s_str`    | `{python} RooflineGap.v100_bw_tb_per_s_str` | `{python} RooflineGap.v100_ridge_str` |
 | **A100 (`{python} RooflineGap.a100_year_str`)**             | `{python} RooflineGap.a100_fp16_tflop_per_s_str` | `{python} RooflineGap.a100_bw_tb_per_s_str` | `{python} RooflineGap.a100_ridge_str` |
@@ -3821,14 +3821,14 @@ Tích chập depthwise\index{Depthwise Convolution!low arithmetic intensity}, tr
 \renewcommand{\arraystretch}{1.5}
 ```
 
-| Operation                                           | Arithmetic Intensity | **Classification**\index{Classification!definition} | **Lighthouse example**\index{Lighthouse example!definition} |
+| Thao tác | Arithmetic Intensity | Phân loại | Ví dụ điển hình |
 |:----------------------------------------------------|:---------------------|:----------------------------------------------------|:------------------------------------------------------------|
-| **Conv2D (Dense)**                                  | 50--200 FLOP/byte    | Straddles ridge; high-reuse cases compute-bound     | ResNet-50                                                   |
-| **Dense MatMul (large batch, well-tiled)**          | 64--256+ FLOP/byte   | Often compute-bound at large batch                  | GPT-2 (batched projections)                                 |
-| **Depthwise conv**\index{Depthwise conv!definition} | 10--20 FLOP/byte     | Memory-bound                                        | MobileNet                                                   |
-| Attention Softmax                                   | Convention-dependent | Memory-bound                                        | GPT-2 (Generation)                                          |
-| LayerNorm                                           | 1--2 FLOP/byte       | Memory-bound                                        | GPT-2/Llama                                                 |
-| Embedding lookup                                    | $<1$ FLOP/byte       | Memory-bound                                        | DLRM                                                        |
+| **Conv2D (Đặc)** | 50--200 FLOP/byte | Nằm vắt ngang ranh giới; các trường hợp tái sử dụng cao bị giới hạn bởi tính toán | ResNet-50 |
+| **MatMul đặc (batch lớn, được lát gạch tốt)** | 64--256+ FLOP/byte | Thường bị giới hạn bởi tính toán ở batch lớn | GPT-2 (các phép chiếu theo batch) |
+| Depthwise conv | 10--20 FLOP/byte | Giới hạn bởi bộ nhớ | MobileNet |
+| Attention Softmax | Phụ thuộc vào quy ước | Giới hạn bởi bộ nhớ | GPT-2 (Tạo sinh) |
+| LayerNorm | 1--2 FLOP/byte | Giới hạn bởi bộ nhớ | GPT-2/Llama |
+| Embedding lookup | $<1$ FLOP/byte | Giới hạn bởi bộ nhớ | DLRM |
 
 : **Các phép toán trên Roofline**: Các lớp mạng nơ-ron có dải cường độ số học rất rộng. Các phép tích chập lớn, được chia ô tốt và các phép GEMM theo batch có thể bị giới hạn bởi tính toán (compute-bound), trong khi các lớp depthwise của MobileNet, softmax trong attention, chuẩn hóa và các embedding của DLRM thường bị giới hạn bởi bộ nhớ (memory-bound). Để xem các giá trị cường độ này chuyển thành dự đoán hiệu suất thực tế như thế nào, một lớp transformer cung cấp phép tính cường độ số học đầy đủ cho các phép toán phụ chính của nó. {#tbl-roofline-operations tbl-colwidths="[25,25,25,25]"}
 
@@ -4225,12 +4225,12 @@ Chuẩn hóa độc lập thực hiện rất ít phép toán so với số byte
 
 Phân tích đường giới hạn trực tiếp định hướng các ưu tiên tối ưu hóa, được tóm tắt trong @tbl-optimization-intensity-regime.
 
-| **Intensity regime**\index{Intensity regime!definition} | **Typical operations**\index{Typical operations!definition} | **Optimization priority**\index{Optimization priority!definition} | **Common techniques**\index{Common techniques!definition}                             | **Expected impact**\index{Expected impact!definition}                          |
+| **Intensity regime** | **Typical operations** | **Optimization priority** | **Common techniques** | **Expected impact** |
 |:--------------------------------------------------------|:------------------------------------------------------------|:------------------------------------------------------------------|:--------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------|
-| **High AI ($>200$ FLOP/byte)**                          | Large convolutions                                          | Maximize compute utilization.                                     | Tensor Cores, thread-block tuning, and high occupancy.                                | Raises sustained compute utilization when the kernel already clears the ridge. |
-| **Medium AI (20--200 FLOP/byte)**                       | Medium-sized dense layers                                   | Balance compute and memory optimization.                          | Larger batches, register tiling, and fusion with adjacent operations.                 | Can move the binding bottleneck between memory and compute.                    |
-| **Low AI ($<20$ FLOP/byte)**                            | Small dense layers and element-wise operations              | Reduce memory traffic.                                            | Aggressive operator fusion, reduced precision (FP16 → INT8), and algorithmic changes. | Reduces external-memory traffic when fusion or layout changes are legal.       |
-| **Very low AI ($<2$ FLOP/byte)**                        | Normalization layers and activation functions               | Eliminate memory round-trips.                                     | Fuse with adjacent operations and use in-place computation where legal.               | Removes intermediate round-trips when adjacent operations can be fused.        |
+| **AI cao ($>200$ FLOP/byte)** | Các tích chập lớn | Tối đa hóa tận dụng khả năng tính toán. | Tensor Cores, thread-block tuning, và high occupancy. | Nâng cao khả năng tận dụng tính toán bền vững khi kernel đã vượt qua ngưỡng. |
+| **AI trung bình (20--200 FLOP/byte)** | Các lớp dày đặc kích thước trung bình | Cân bằng tối ưu hóa tính toán và bộ nhớ. | Các batch lớn hơn, register tiling, và kết hợp với các phép toán liền kề. | Có thể di chuyển nút thắt ràng buộc giữa bộ nhớ và tính toán. |
+| **AI thấp ($<20$ FLOP/byte)** | Các lớp dày đặc nhỏ và các phép toán từng phần tử | Giảm lưu lượng bộ nhớ. | Kết hợp toán tử mạnh mẽ, độ chính xác giảm (FP16 → INT8), và thay đổi thuật toán. | Giảm lưu lượng bộ nhớ ngoài khi việc kết hợp hoặc thay đổi bố cục là hợp lệ. |
+| **AI rất thấp ($<2$ FLOP/byte)** | Các lớp chuẩn hóa và hàm activation | Loại bỏ các chuyến đi khứ hồi của bộ nhớ. | Kết hợp với các phép toán liền kề và sử dụng tính toán tại chỗ khi hợp lệ. | Loại bỏ các chuyến đi khứ hồi trung gian khi các phép toán liền kề có thể được kết hợp. |
 
 : **Tối ưu hóa theo chế độ Cường độ số học**: Vị trí trên đường giới hạn Roofline sẽ quyết định liệu một tối ưu nên tập trung vào tận dụng năng lực tính toán, giảm lưu lượng bộ nhớ, hay loại bỏ hoàn toàn các lượt đi-về bộ nhớ. Cường độ số học càng thấp, việc hợp nhất và tránh di chuyển dữ liệu càng trở nên giá trị. {#tbl-optimization-intensity-regime tbl-colwidths="[13,18,16,25,28]"}
 
@@ -4423,13 +4423,13 @@ Bố trí tính toán là quá trình gán các phép toán cho các phần tử
 
 Độ khó của việc bố trí phụ thuộc vào tính đều đặn của khối lượng công việc (workload). Các phép toán CNN và transformer dày đặc có cấu trúc rõ ràng và dễ chia tile, dù transformers kết hợp các kernel có hình dạng và mẫu tái sử dụng khác nhau. Mạng nơ-ron đồ thị (GNNs)\index{Graph Neural Network!irregular computation} khó phân vùng hơn vì các vùng lân cận thưa thớt, phụ thuộc vào đầu vào có thể gây mất cân bằng tải và giao tiếp phân tán. Bảng @Tbl-placement-challenges liệt kê những thách thức cốt lõi mà việc bố trí cần giải quyết trên các loại khối lượng công việc (workload) này. Lịch trình tĩnh hoạt động tốt cho nhiều kernel dày đặc có hình dạng cố định; còn bố trí nhận biết runtime hữu ích khi hình dạng, độ thưa thớt, định tuyến hoặc mức sẵn có của tài nguyên thay đổi.
 
-| **Challenge**\index{Challenge!definition}                                           | **Impact on execution**\index{Impact on execution!definition}                                                      | **Key Considerations for Placement**                                                        |
+| **Thách thức** | **Tác động đến thực thi** | **Các cân nhắc chính cho việc đặt vị trí** |
 |:------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------|
-| **Workload imbalance**\index{Workload imbalance!definition}                         | Some processing elements finish early while others remain overloaded, leading to idle compute resources.           | Distribute operations evenly to prevent stalls and ensure full utilization of PEs.          |
-| **Irregular computation patterns**\index{Irregular computation patterns!definition} | Sparse graphs, routing, and variable shapes can create nonuniform work that complicates static placement.          | Use adaptive placement when workload characteristics vary at run time.                      |
-| **Excessive data movement**\index{Excessive data movement!definition}               | Frequent memory transfers introduce latency and increase power consumption.                                        | Keep frequently used data close to the compute units and minimize off-chip memory accesses. |
-| **Limited interconnect bandwidth**\index{Limited interconnect bandwidth!definition} | Poorly placed operations can create congestion, slowing data movement between PEs.                                 | Optimize spatial and temporal placement to reduce communication overhead.                   |
-| **Model-specific execution needs**\index{Model-specific execution needs!definition} | CNNs, transformers, and GNNs require different execution patterns, making a single placement strategy ineffective. | Tailor placement strategies to match the computational structure of each model type.        |
+| **Mất cân bằng khối lượng công việc** | Một số phần tử xử lý kết thúc sớm trong khi những phần tử khác vẫn bị quá tải, dẫn đến tài nguyên tính toán nhàn rỗi. | Phân phối các phép toán đều đặn để ngăn chặn tắc nghẽn và đảm bảo tận dụng tối đa các PE. |
+| **Các mẫu tính toán không đều** | Đồ thị thưa thớt, định tuyến và hình dạng biến đổi có thể tạo ra công việc không đồng đều làm phức tạp việc đặt vị trí tĩnh. | Sử dụng việc đặt vị trí thích ứng khi các đặc điểm của khối lượng công việc thay đổi trong thời gian runtime. |
+| **Di chuyển dữ liệu quá mức** | Việc truyền bộ nhớ thường xuyên gây ra độ trễ và tăng mức tiêu thụ công suất. | Giữ dữ liệu thường xuyên sử dụng gần các đơn vị tính toán và giảm thiểu truy cập bộ nhớ ngoài chip. |
+| **Băng thông kết nối hạn chế** | Các phép toán được đặt không tối ưu có thể gây tắc nghẽn, làm chậm quá trình di chuyển dữ liệu giữa các PE. | Tối ưu hóa vị trí không gian và thời gian để giảm chi phí giao tiếp. |
+| **Nhu cầu thực thi cụ thể của mô hình** | CNN, transformer và GNN yêu cầu các mẫu thực thi khác nhau, khiến một chiến lược đặt vị trí duy nhất trở nên không hiệu quả. | Điều chỉnh các chiến lược đặt vị trí để phù hợp với cấu trúc tính toán của từng loại mô hình. |
 
 : **Thách thức trong bố trí tính toán**: Để triển khai mạng nơ-ron hiệu quả, cần phân bổ một cách có chiến lược các tác vụ tính toán lên các phần tử xử lý, đồng thời cân bằng giữa phân phối khối lượng công việc (workload), chi phí di chuyển dữ liệu và các ràng buộc phần cứng nhằm tối đa hóa hiệu quả thực thi. Những thách thức này định hướng thiết kế các chiến lược ánh xạ để tối ưu hóa sử dụng tài nguyên và giảm chi phí giao tiếp. {#tbl-placement-challenges tbl-colwidths="[20,45,35]"}
 
@@ -4443,13 +4443,13 @@ Mức độ nghiêm trọng của các hệ quả này khác nhau theo khối l�
 
 Dung lượng chỉ là bài kiểm tra đầu tiên khi cấp phát bộ nhớ. Một *tensor* có thể vừa trong bộ nhớ của bộ tăng tốc nhưng vẫn chi phối thời gian thực thi nếu mỗi *kernel* phải đọc lại nó từ một tầng bộ nhớ xa; ngược lại, kỹ thuật *tiling* có thể giúp một tập làm việc lớn hơn vẫn hiệu quả bằng cách giữ tái sử dụng cục bộ. Vì vậy, chẩn đoán cấp phát phải nhìn vào lưu lượng, không chỉ chuyện “vừa hay không”: các nhà thiết kế cần đếm xem các giá trị băng qua mỗi ranh giới bộ nhớ bao nhiêu lần và giữ những giá trị được tái sử dụng thường xuyên ở tầng nhanh nhất có thể. @Tbl-memory-allocation tóm tắt những thách thức này. Hệ thống thường kết hợp kế hoạch bộ nhớ tĩnh cho các hình dạng đã biết với quản lý bộ đệm động khi hình dạng thay đổi, trong khi dung lượng thiết bị giới hạn những mô hình nào có thể chạy mà không phải phân vùng hoặc đưa bớt dữ liệu ra ngoài.
 
-| Challenge                                                                               | Impact on Execution                                                                    | **Key Considerations for Allocation**                                                             |
+| Thách thức | Tác động đến việc thực thi | **Các cân nhắc chính cho việc cấp phát** |
 |:----------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------|
-| **High memory latency**\index{High memory latency!definition}                           | Slow data access delays execution and reduces throughput.                              | Prioritize placing frequently accessed data in faster memory locations.                           |
-| **Limited on-chip storage**\index{Limited on-chip storage!definition}                   | Small local memory constrains the amount of data available near compute units.         | Allocate storage efficiently to maximize data availability without exceeding hardware limits.     |
-| **High off-chip bandwidth demand**\index{High off-chip bandwidth demand!definition}     | Frequent access to external memory increases delays and power consumption.             | Reduce unnecessary memory transfers by carefully managing when and how data is moved.             |
-| **Irregular memory access patterns**\index{Irregular memory access patterns!definition} | Some models require accessing data unpredictably, leading to inefficient memory usage. | Organize memory layout to align with access patterns and minimize unnecessary data movement.      |
-| **Model-specific memory needs**\index{Model-specific memory needs!definition}           | Different models require different allocation strategies to optimize performance.      | Tailor allocation decisions based on the structure and execution characteristics of the workload. |
+| **Độ trễ bộ nhớ cao** | Truy cập dữ liệu chậm làm trì hoãn quá trình thực thi và giảm thông lượng. | Ưu tiên đặt dữ liệu được truy cập thường xuyên vào các vị trí bộ nhớ nhanh hơn. |
+| **Bộ nhớ lưu trữ trên chip hạn chế** | Bộ nhớ cục bộ nhỏ hạn chế lượng dữ liệu có sẵn gần các đơn vị tính toán. | Cấp phát bộ nhớ hiệu quả để tối đa hóa khả năng sẵn có của dữ liệu mà không vượt quá giới hạn phần cứng. |
+| **Nhu cầu băng thông ngoài chip cao** | Truy cập thường xuyên vào bộ nhớ ngoài làm tăng độ trễ và tiêu thụ công suất. | Giảm các lần truyền bộ nhớ không cần thiết bằng cách quản lý cẩn thận thời điểm và cách thức di chuyển dữ liệu. |
+| **Các mẫu truy cập bộ nhớ không đều** | Một số mô hình yêu cầu truy cập dữ liệu không thể đoán trước, dẫn đến việc sử dụng bộ nhớ không hiệu quả. | Sắp xếp bố cục bộ nhớ để phù hợp với các mẫu truy cập và giảm thiểu di chuyển dữ liệu không cần thiết. |
+| **Nhu cầu bộ nhớ cụ thể của mô hình** | Các mô hình khác nhau yêu cầu các chiến lược cấp phát khác nhau để tối ưu hóa hiệu suất. | Điều chỉnh các quyết định cấp phát dựa trên cấu trúc và đặc điểm thực thi của khối lượng công việc. |
 
 : **Thách thức trong cấp phát bộ nhớ**: Quản lý bộ nhớ hiệu quả trong các bộ tăng tốc AI đòi hỏi cân bằng giữa tốc độ truy cập dữ liệu và các giới hạn phần cứng, để giảm các nút thắt cổ chai hiệu năng do độ trễ, băng thông hạn chế và các mẫu dữ liệu bất quy tắc gây ra. Các mô hình phức tạp như transformer và mạng đồ thị áp đặt yêu cầu bộ nhớ biến thiên và khắt khe, càng khuếch đại những thách thức này. {#tbl-memory-allocation tbl-colwidths="[17,40,43]"}
 
@@ -4459,13 +4459,13 @@ Ví dụ tích chập nhỏ cũng giải thích vì sao ánh xạ phần cứng 
 
 Các yếu tố tương tác này tạo nên một không gian thiết kế mang tính tổ hợp rất lớn, nơi chỉ một thay đổi nhỏ trong quyết định ánh xạ cũng có thể dẫn đến khác biệt lớn về hiệu suất và hiệu quả năng lượng. Khác với các khối lượng công việc (workload) truyền thống có kiểu thực thi dễ đoán, các mô hình machine learning có cấu trúc tính toán đa dạng, đòi hỏi ánh xạ phải được điều chỉnh để tận dụng tái sử dụng dữ liệu, cơ hội song song hóa và đáp ứng các ràng buộc bộ nhớ. Không gian tìm kiếm tăng theo tổ hợp, khiến việc tìm kiếm toàn diện trở nên bất khả thi. Ba nguồn biến thiên góp phần vào độ phức tạp này:
 
-| Dimension                                                                                 | **Placement considerations**\index{Placement considerations!definition}                                  | **Allocation and Scheduling Considerations**                                                         |
+| Chiều | **Các cân nhắc về vị trí** | **Các cân nhắc về cấp phát và lập lịch** |
 |:------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------|
-| **Computational granularity**\index{Computational granularity!definition}                 | Fine-grained placement enables greater parallelism but increases synchronization overhead.               | Coarse-grained scheduling reduces synchronization overhead but may limit flexibility.                |
-| **Spatial vs. Temporal Mapping**                                                          | Spatial placement enhances parallel execution but can lead to resource contention and memory congestion. | Temporal scheduling balances resource sharing but may reduce overall throughput.                     |
-| **Memory and Data Locality**                                                              | Placing data closer to compute units minimizes latency but may reduce overall memory availability.       | Allocating data across multiple memory levels increases capacity but introduces higher access costs. |
-| **Communication and synchronization**\index{Communication and synchronization!definition} | Co-locating compute units reduces communication latency but may introduce contention.                    | Scheduling synchronization mechanisms mitigates stalls but can introduce additional overhead.        |
-| **Dataflow and Execution Ordering**                                                       | Static placement simplifies execution but limits adaptability to workload variations.                    | Dynamic scheduling improves adaptability but adds scheduling complexity.                             |
+| **Độ hạt tính toán** | Đặt vị trí hạt mịn cho phép song song hóa lớn hơn nhưng làm tăng chi phí đồng bộ hóa. | Lập lịch hạt thô giảm chi phí đồng bộ hóa nhưng có thể hạn chế tính linh hoạt. |
+| **Ánh xạ không gian so với thời gian** | Đặt vị trí không gian tăng cường thực thi song song nhưng có thể dẫn đến tranh chấp tài nguyên và tắc nghẽn bộ nhớ. | Lập lịch thời gian cân bằng chia sẻ tài nguyên nhưng có thể giảm thông lượng tổng thể. |
+| **Tính cục bộ của bộ nhớ và dữ liệu** | Đặt dữ liệu gần các đơn vị tính toán hơn giúp giảm thiểu độ trễ nhưng có thể làm giảm khả năng sẵn có của bộ nhớ tổng thể. | Cấp phát dữ liệu trên nhiều cấp bộ nhớ làm tăng dung lượng nhưng phát sinh chi phí truy cập cao hơn. |
+| **Giao tiếp và đồng bộ hóa** | Đặt các đơn vị tính toán cùng vị trí giúp giảm độ trễ giao tiếp nhưng có thể gây ra tranh chấp. | Lập lịch các cơ chế đồng bộ hóa giúp giảm thiểu các điểm dừng nhưng có thể phát sinh chi phí bổ sung. |
+| **Dataflow và Execution Ordering** | Static placement đơn giản hóa việc thực thi nhưng hạn chế khả năng thích ứng với các biến thể của khối lượng công việc (workload). | Dynamic scheduling cải thiện khả năng thích ứng nhưng làm tăng độ phức tạp của việc lập lịch. |
 
 : **Đánh đổi giữa bố trí, cấp phát và lập lịch**: Hiệu suất bộ tăng tốc AI phụ thuộc vào việc ánh xạ các phép tính lên phần cứng, cấp phát dữ liệu vào các cấp bộ nhớ và lập lịch thực thi theo thời gian. Cần cân nhắc kỹ các yếu tố phụ thuộc lẫn nhau này để tối đa hóa thông lượng và giảm tiêu thụ năng lượng. {#tbl-combinatorial-complexity tbl-colwidths="[25,38,37]"}
 
@@ -4750,14 +4750,14 @@ Các framework và trình biên dịch AI hiện đại thường biến đổi 
 
 Cả bố cục kênh cuối cùng (NHWC) và kênh đầu tiên (NCHW) đều có vai trò riêng trong các khối lượng công việc machine learning, và hiệu quả của chúng phụ thuộc nhiều vào kiến trúc phần cứng, mẫu truy cập bộ nhớ và yêu cầu tính toán. Việc lựa chọn bố cục ảnh hưởng trực tiếp đến việc sử dụng cache, hiệu quả băng thông bộ nhớ và thông lượng xử lý. Bảng @Tbl-major sẽ so sánh những đánh đổi về hiệu suất và khả năng tương thích phần cứng giữa hai cách tiếp cận này.
 
-| Feature                                                               | **Channels-Last (NHWC)**                                       | **Channels-First (NCHW)**                                      |
+| Đặc trưng | **Channels-Last (NHWC)** | **Channels-First (NCHW)** |
 |:----------------------------------------------------------------------|:---------------------------------------------------------------|:---------------------------------------------------------------|
-| **Memory storage order**\index{Memory storage order!definition}       | Pixels are stored row-by-row, channel interleaved              | All values for a given channel are stored together first       |
-| Best for                                                              | CPU loops, element-wise operations, many channels-last kernels | Many legacy GPU convolution paths and channel-first model code |
-| **Cache efficiency**\index{Cache efficiency!definition}               | High cache locality for sequential row/channel-last access     | Can improve coalescing for channel-first kernels               |
-| **Convolution performance**\index{Convolution performance!definition} | Often preferred by modern Tensor Core convolution/fusion paths | Efficient for many cuDNN and framework kernels                 |
-| **Memory fetching**\index{Memory fetching!definition}                 | Good when kernels vectorize over adjacent channel data         | Good when kernels process channel-major tiles                  |
-| **Default in frameworks**\index{Default in frameworks!definition}     | Common TensorFlow convention; PyTorch channels-last option     | Common PyTorch tensor shape convention                         |
+| **Thứ tự lưu trữ bộ nhớ**\index{Memory storage order!definition} | Pixel được lưu trữ từng hàng, xen kẽ kênh | Tất cả các giá trị cho một kênh đã cho được lưu trữ cùng nhau trước tiên |
+| Tốt nhất cho | Các vòng lặp CPU, các phép toán từng phần tử, nhiều kernel channels-last | Nhiều đường dẫn tích chập GPU cũ và mã mô hình channel-first |
+| **Hiệu quả cache**\index{Cache efficiency!definition} | Tính cục bộ cache cao cho truy cập tuần tự hàng/channels-last | Có thể cải thiện việc hợp nhất cho các kernel channel-first |
+| **Hiệu suất tích chập**\index{Convolution performance!definition} | Thường được ưu tiên bởi các đường dẫn tích chập/hợp nhất Tensor Core hiện đại | Hiệu quả cho nhiều kernel cuDNN và framework |
+| **Tìm nạp bộ nhớ**\index{Memory fetching!definition} | Tốt khi các kernel vector hóa trên dữ liệu kênh liền kề | Tốt khi các kernel xử lý các tile channel-major |
+| **Mặc định trong các framework**\index{Default in frameworks!definition} | Quy ước TensorFlow phổ biến; tùy chọn channels-last của PyTorch | Quy ước hình dạng tensor PyTorch phổ biến |
 
 : **Các chiến lược bố cục dữ liệu**: Bố cục kênh cuối cùng (NHWC) và kênh đầu tiên (NCHW) tối ưu hóa mẫu truy cập bộ nhớ cho các kernel của backend khác nhau. NHWC thường phù hợp cho việc vector hóa trên CPU và các đường dẫn tích chập/hợp nhất (fusion) hiện đại của Tensor Core, trong khi NCHW vẫn phổ biến trong mã nguồn mô hình PyTorch và nhiều kernel GPU. Việc chọn bố cục phù hợp ảnh hưởng trực tiếp đến hiệu suất bằng cách tối đa hóa việc sử dụng cache và hiệu quả băng thông bộ nhớ. {#tbl-major}
 
@@ -4840,13 +4840,13 @@ Hai tensor trung gian này chiếm dung lượng bộ nhớ khi chúng còn đan
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| Tensor       |   **Size (MB) for $1024{\times}1024$ Tensor**   |
+| Tensor |   **Kích thước (MB) cho Tensor $1024{\times}1024$** |
 |:-------------|:-----------------------------------------------:|
 | **X**        |   `{python} MemoryFootprintCalc.tensor_mb_str`  |
 | **X'**       |   `{python} MemoryFootprintCalc.tensor_mb_str`  |
 | **X''**      |   `{python} MemoryFootprintCalc.tensor_mb_str`  |
 | **Y**        |   `{python} MemoryFootprintCalc.tensor_mb_str`  |
-| Total Memory | **`{python} MemoryFootprintCalc.total_mb_str`** |
+| Tổng bộ nhớ | **`{python} MemoryFootprintCalc.total_mb_str`** |
 
 : **Lưu trữ tensor trung gian**: Nếu cả bốn tensor được đặt tên vẫn còn hoạt động trong ví dụ đơn giản này, chúng sẽ chiếm `{python} MemoryFootprintCalc.total_mb_str`; một runtime tối ưu hóa có thể tái sử dụng bộ đệm khi các giá trị trước đó không còn cần. Hợp nhất chủ yếu đảm bảo loại bỏ việc ghi và đọc ra ngoài cho mỗi tensor trung gian bị loại bỏ, thay vì luôn làm giảm đỉnh bộ nhớ cấp phát. {#tbl-memory-footprint}
 
@@ -4900,10 +4900,10 @@ class FusionBenefitsCalc:
 
 @Tbl-fusion-benefits cho thấy tác động của việc hợp nhất các phép toán đến hiệu quả sử dụng bộ nhớ. Bằng cách giữ các kết quả trung gian trong thanh ghi hoặc bộ nhớ cục bộ thay vì ghi chúng ra bộ nhớ chính, hợp nhất giúp giảm lưu lượng truy cập bên ngoài. Với ba kernel suy luận độc lập thực hiện các phép toán pointwise, cách tiếp cận đơn giản lý tưởng sẽ đọc và ghi một tensor cho mỗi phép toán, trong khi cách tiếp cận hợp nhất chỉ đọc đầu vào một lần và ghi đầu ra một lần.
 
-| Execution Model                                       | **External tensor payloads**\index{External tensor payloads!definition} |              **Traffic (MB)**              |
+| Mô hình thực thi | **Tải trọng tensor bên ngoài**\index{External tensor payloads!definition} |              **Lưu lượng (MB)** |
 |:------------------------------------------------------|:-----------------------------------------------------------------------:|:------------------------------------------:|
-| **Naïve execution**\index{Naïve execution!definition} |                            3 reads + 3 writes                           | `{python} FusionBenefitsCalc.naive_mb_str` |
-| **Fused execution**\index{Fused execution!definition} |                             1 read + 1 write                            | `{python} FusionBenefitsCalc.fused_mb_str` |
+| **Thực thi đơn giản**\index{Naïve execution!definition} |                            3 lần đọc + 3 lần ghi | `{python} FusionBenefitsCalc.naive_mb_str` |
+| **Thực thi hợp nhất**\index{Fused execution!definition} |                             1 lần đọc + 1 lần ghi | `{python} FusionBenefitsCalc.fused_mb_str` |
 
 : **Lợi ích của hợp nhất phép toán**: Trong chuỗi suy luận lý tưởng này, hợp nhất giúp giảm lưu lượng tensor bên ngoài từ `{python} FusionBenefitsCalc.naive_mb_str` xuống `{python} FusionBenefitsCalc.fused_mb_str`, tức giảm 3 lần. Lưu lượng thực tế phụ thuộc vào hành vi của cache và cách trình biên dịch tái sử dụng các buffer. {#tbl-fusion-benefits}
 
@@ -5113,15 +5113,15 @@ Register blocking, double buffering và hierarchical tiling đều mở rộng c
 
 Khi các mô hình machine learning ngày càng lớn và phức tạp, tiling vẫn là công cụ quan trọng để nâng cao hiệu quả phần cứng, giúp các bộ tăng tốc AI vận hành gần với tiềm năng thực tế. Các chiến lược tiling thủ công có thể mang lại lợi ích đáng kể; đồng thời, trình biên dịch và các kỹ thuật tối ưu hóa nhận biết phần cứng còn nâng hiệu suất hơn nữa bằng cách tự động chọn chiến lược tiling hiệu quả cho một khối lượng công việc (workload) cụ thể.
 
-| Aspect                                                    | **Spatial Tiling (Data Tiling)**                                                           | **Temporal Tiling (Loop Blocking)**                                    | **Hybrid tiling**\index{Hybrid tiling!definition}              |
+| Khía cạnh | **Tiling không gian (Data Tiling)** | **Tiling thời gian (Loop Blocking)** | **Tiling lai**\index{Hybrid tiling!definition} |
 |:----------------------------------------------------------|:-------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------|:---------------------------------------------------------------|
-| Primary Goal                                              | Reduce memory accesses by keeping data in fast memory longer                               | Increase data reuse across loop iterations                             | Adapt dynamically to workload constraints                      |
-| Optimization Focus                                        | Partitioning data structures into smaller, memory-friendly blocks                          | Reordering computations to maximize reuse before eviction              | Balancing spatial and temporal reuse strategies                |
-| **Memory usage**\index{Memory usage!definition}           | Improves cache locality and reduces DRAM access                                            | Keeps frequently used data in fast memory for multiple iterations      | Minimizes data movement while ensuring high reuse              |
-| **Common use cases**\index{Common use cases!definition}   | Matrix multiplications, CNNs, self-attention in transformers                               | Convolutions, recurrent neural networks (RNNs), iterative computations | AI accelerators with hierarchical memory, mixed workloads      |
-| **Performance gains**\index{Performance gains!definition} | Reduced memory bandwidth requirements, better cache utilization                            | Lower memory fetch latency, improved data locality                     | Maximized efficiency across multiple hardware types            |
-| Challenges                                                | Requires careful tile size selection, inefficient for workloads with minimal spatial reuse | Can increase register pressure, requires loop restructuring            | Complexity in tuning tile size and execution order dynamically |
-| **Best when**\index{Best when!definition}                 | Data is large and needs to be partitioned for efficient processing                         | The same data is accessed multiple times across iterations             | Both data partitioning and iteration-based reuse are important |
+| Mục tiêu chính | Giảm số lần truy cập bộ nhớ bằng cách giữ dữ liệu trong bộ nhớ nhanh lâu hơn | Tăng khả năng tái sử dụng dữ liệu qua các lần lặp vòng lặp | Thích ứng linh hoạt với các ràng buộc của khối lượng công việc (workload) |
+| Trọng tâm tối ưu hóa | Phân vùng cấu trúc dữ liệu thành các khối nhỏ hơn, thân thiện với bộ nhớ | Sắp xếp lại các phép tính để tối đa hóa việc tái sử dụng trước khi bị đẩy ra | Cân bằng các chiến lược tái sử dụng không gian và thời gian |
+| **Sử dụng bộ nhớ**\index{Memory usage!definition} | Cải thiện tính cục bộ của cache và giảm truy cập DRAM | Giữ dữ liệu thường xuyên được sử dụng trong bộ nhớ nhanh cho nhiều lần lặp | Giảm thiểu di chuyển dữ liệu đồng thời đảm bảo tái sử dụng cao |
+| **Các trường hợp sử dụng phổ biến**\index{Common use cases!definition} | Phép nhân ma trận, CNNs, cơ chế self-attention trong các transformer | Tích chập, mạng nơ-ron hồi quy (RNNs), các phép tính lặp | Bộ tăng tốc AI với hệ thống phân cấp bộ nhớ, khối lượng công việc (workload) hỗn hợp |
+| **Lợi ích về hiệu suất**\index{Performance gains!definition} | Giảm yêu cầu băng thông bộ nhớ, sử dụng cache tốt hơn | Độ trễ tìm nạp bộ nhớ thấp hơn, cải thiện tính cục bộ của dữ liệu | Hiệu quả tối đa trên nhiều loại phần cứng |
+| Thách thức | Yêu cầu lựa chọn kích thước tile cẩn thận, không hiệu quả đối với các khối lượng công việc (workload) có tái sử dụng không gian tối thiểu | Có thể làm tăng áp lực thanh ghi, yêu cầu tái cấu trúc vòng lặp | Độ phức tạp trong việc điều chỉnh kích thước tile và thứ tự thực thi một cách linh hoạt |
+| **Tốt nhất khi**\index{Best when!definition} | Dữ liệu lớn và cần được phân vùng để xử lý hiệu quả | Cùng một dữ liệu được truy cập nhiều lần qua các lần lặp | Cả phân vùng dữ liệu và tái sử dụng dựa trên lần lặp đều quan trọng |
 
 : **Các chiến lược Tiling**: Tiling không gian, thời gian và lai giúp tối ưu hóa các mẫu truy cập bộ nhớ để cải thiện hiệu suất. Tiling không gian tối đa hóa tái sử dụng dữ liệu trong bộ nhớ nhanh; tiling thời gian tận dụng cấu trúc vòng lặp để giảm số lần truy cập; còn tiling lai kết hợp cả hai cách tiếp cận. Các trình biên dịch AI và các hệ thống runtime dùng những kỹ thuật này để tự động tối ưu hóa việc thực thi mô hình trên nhiều loại phần cứng. {#tbl-tiling-strategies tbl-colwidths="[16,31,27,26]"}
 
@@ -5139,12 +5139,12 @@ Mặc dù khác nhau, các mô hình này đều tuân theo một bộ nguyên t
 
 Đối với ResNet-50\index{ResNet-50!weight reuse mapping} và các CNN tương tự, một cơ hội ánh xạ quan trọng là tái sử dụng trọng số theo không gian\index{Weight Reuse!spatial}. Một bộ lọc nhỏ được áp dụng trên nhiều vị trí không gian, nên các trọng số của nó tham gia vào rất nhiều phép toán nhân-tích lũy. Các ánh xạ *weight-stationary* có thể khai thác điều này bằng cách giữ các *filter tile* cục bộ, trong khi các ánh xạ *row-stationary* hoặc *output-stationary* có thể cân bằng tốt hơn lưu lượng *activation* và tổng riêng phần trên các kiến trúc khác. Những cấu hình tích chập thuận lợi có thể đạt cường độ số học cao, khiến chúng rất phù hợp với các đường thực thi dạng ma trận và *systolic*. Dòng dữ liệu không bị ấn định bởi họ mô hình: hình dạng lớp, kích thước batch, dung lượng bộ nhớ cục bộ và các *kernel* mà phần cứng mục tiêu hỗ trợ sẽ quyết định mẫu tái sử dụng nào đáng giữ lại.
 
-| **Optimization technique**\index{Optimization technique!definition}           | CNNs                                                                                 | Transformers                                      | MLPs                        | Rationale                                                                                                                                                                                            |
+| **Kỹ thuật tối ưu hóa**\index{Optimization technique!definition} | CNNs | Transformers | MLPs | Cơ sở lý luận |
 |:------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------|:--------------------------------------------------|:----------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Dataflow strategy**\index{Dataflow strategy!definition}                     | Weight, row, or output stationary                                                    | Phase- and kernel-dependent                       | Weight or output stationary | CNNs expose filter and spatial reuse; transformer attention and MLP blocks impose different traffic; dense MLPs reuse weights across a batch and accumulate outputs.                                 |
-| **Memory-aware tensor layouts**\index{Memory-aware tensor layouts!definition} | Backend-dependent (often NCHW for cuDNN convolutions, channels-last on Tensor Cores) | Backend-dependent (row-major activations typical) | Row-major typical           | Layout choice depends on backend kernel path and precision mode (see @sec-hardware-acceleration-memoryefficient-tensor-layouts-e250); the entries name common defaults, not universal prescriptions. |
-| Kernel Fusion                                                                 | Convolution + Activation                                                             | Fused Attention                                   | GEMM Fusion                 | CNNs optimize convolution+activation fusion; Transformers fuse attention mechanisms; MLPs benefit from fused matrix multiplications.                                                                 |
-| **Tiling for Memory Efficiency**                                              | Spatial Tiling                                                                       | Temporal Tiling                                   | Blocked Tiling              | CNNs tile along spatial dimensions; Transformers use loop blocking to improve sequence memory efficiency; MLPs use blocked tiling for large matrix multiplications.                                  |
+| **Chiến lược luồng dữ liệu**\index{Dataflow strategy!definition} | Trọng số (weight) cố định, hàng cố định hoặc đầu ra cố định | Phụ thuộc vào pha và kernel | Trọng số (weight) cố định hoặc đầu ra cố định | CNNs thể hiện tái sử dụng bộ lọc và không gian; cơ chế attention của transformer và các khối MLP áp đặt lưu lượng khác nhau; các MLP dày đặc tái sử dụng trọng số (weight) trên một batch và tích lũy đầu ra. |
+| **Bố cục tensor nhận biết bộ nhớ**\index{Memory-aware tensor layouts!definition} | Phụ thuộc vào backend (thường là NCHW cho các tích chập cuDNN, channels-last trên Tensor Cores) | Phụ thuộc vào backend (activation theo hàng là điển hình) | Theo hàng là điển hình | Việc lựa chọn bố cục phụ thuộc vào đường dẫn kernel của backend và chế độ chính xác (xem @sec-hardware-acceleration-memoryefficient-tensor-layouts-e250); các mục này nêu tên các giá trị mặc định phổ biến, không phải các quy tắc phổ quát. |
+| Hợp nhất Kernel | Tích chập + Activation | Attention hợp nhất | Hợp nhất GEMM | CNNs tối ưu hóa việc hợp nhất tích chập+activation; Transformers hợp nhất các cơ chế attention; MLPs hưởng lợi từ các phép nhân ma trận hợp nhất. |
+| **Chia khối để đạt hiệu quả bộ nhớ** | Chia khối không gian | Chia khối thời gian | Chia khối dạng chặn | CNNs chia khối theo các chiều không gian; Transformers sử dụng chặn vòng lặp để cải thiện hiệu quả bộ nhớ chuỗi; MLPs sử dụng chia khối dạng chặn cho các phép nhân ma trận lớn. |
 
 : **Các chiến lược ánh xạ đặc thù cho từng kiến trúc**: Mỗi kiến trúc mạng nơ-ron sẽ có những ưu tiên tối ưu hóa khác nhau, tùy thuộc vào đặc điểm tính toán và bộ nhớ của nó. {#tbl-mapping-strategies tbl-colwidths="[13,21,14,10,42]"}
 
@@ -5226,14 +5226,14 @@ Các trình biên dịch machine learning\index{ML compiler!vs. traditional comp
 
 @Tbl-ml-vs-traditional-compilers đối chiếu trọng tâm của hai tầng. Ranh giới không tuyệt đối: một stack machine learning thường hạ các chương trình tensor xuống backend LLVM, GPU hoặc backend của nhà cung cấp, nên biên dịch cấp đồ thị và cấp lệnh phối hợp với nhau.
 
-| Aspect                                                                | **Traditional compiler**\index{Traditional compiler!definition}  | **Machine learning compiler**\index{Machine learning compiler!definition} |
+| Khía cạnh | Trình biên dịch truyền thống | Trình biên dịch machine learning |
 |:----------------------------------------------------------------------|:-----------------------------------------------------------------|:--------------------------------------------------------------------------|
-| **Input representation**\index{Input representation!definition}       | Source or intermediate-representation program                    | Tensor graph or tensor-level intermediate representation                  |
-| Execution Model                                                       | Control flow, loops, threads, vectors, and tasks                 | Tensor operators, kernels, graphs, and accelerator streams                |
-| **Optimization priorities**\index{Optimization priorities!definition} | Instruction selection, loop transforms, vectorization, registers | Graph rewrites, fusion, layouts, shapes, and kernel selection             |
-| **Memory management**\index{Memory management!definition}             | Objects, stack/heap, caches, locality, and prefetching           | Tensor lifetimes, buffer reuse, layouts, tiling, and device transfers     |
-| Target Hardware                                                       | CPUs, GPUs, and other programmable targets                       | CPUs, GPUs, TPUs, and custom accelerators                                 |
-| **Compilation output**\index{Compilation output!definition}           | Machine code or lower-level intermediate representation          | Kernels plus a hardware-specific graph or execution plan                  |
+| Biểu diễn đầu vào | Chương trình mã nguồn hoặc biểu diễn trung gian | Đồ thị tensor hoặc biểu diễn trung gian cấp tensor |
+| Mô hình thực thi | Luồng điều khiển, vòng lặp, luồng, vector và tác vụ | Các toán tử tensor, kernel, đồ thị và luồng bộ tăng tốc |
+| Các ưu tiên tối ưu hóa | Chọn lệnh, biến đổi vòng lặp, vector hóa, thanh ghi | Viết lại đồ thị, hợp nhất, bố cục, hình dạng và chọn kernel |
+| Quản lý bộ nhớ | Đối tượng, stack/heap, cache, tính cục bộ và nạp trước | Vòng đời tensor, tái sử dụng bộ đệm, bố cục, chia khối và truyền dữ liệu thiết bị |
+| Phần cứng mục tiêu | CPU, GPU và các mục tiêu lập trình khác | CPU, GPU, TPU và các bộ tăng tốc tùy chỉnh |
+| Đầu ra biên dịch | Mã máy hoặc biểu diễn trung gian cấp thấp hơn | Các kernel cùng với đồ thị hoặc kế hoạch thực thi dành riêng cho phần cứng |
 
 : **Các ưu tiên tối ưu hóa của trình biên dịch**: Các stack trình biên dịch machine learning bổ sung các quyết định ở cấp tensor và đồ thị, bên cạnh các quyết định biên dịch truyền thống ở cấp lệnh và vòng lặp. Trong một chuỗi công cụ sản xuất, hai tầng này thường phối hợp với nhau thay vì thay thế nhau. {#tbl-ml-vs-traditional-compilers tbl-colwidths="[21,40,39]"}
 
@@ -5369,14 +5369,14 @@ Các runtime đa năng quản lý luồng, tác vụ, đối tượng, bộ nh�
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| Aspect                                                | **Traditional runtime**\index{Traditional runtime!definition} | **AI runtime**\index{AI runtime!definition}                   |
+| Khía cạnh | Runtime truyền thống | Runtime AI |
 |:------------------------------------------------------|:--------------------------------------------------------------|:--------------------------------------------------------------|
-| Execution Model                                       | Functions, threads, tasks, events, and asynchronous I/O       | Tensor graphs, kernels, streams, and device events            |
-| **Task scheduling**\index{Task scheduling!definition} | Threads and tasks across processor resources                  | Dependency-aware kernel and transfer dispatch                 |
-| Memory Management                                     | Objects, stacks, heaps, pools, and virtual memory             | Tensor buffers, workspaces, device memory, and buffer reuse   |
-| Optimization Priorities                               | Responsiveness, throughput, locality, and resource sharing    | Shape compatibility, transfer overlap, reuse, and utilization |
-| **Adaptability**\index{Adaptability!definition}       | Dynamic scheduling and allocation within program semantics    | Runtime choices within compiled graphs and available kernels  |
-| Target Hardware                                       | CPUs and heterogeneous devices                                | CPUs, GPUs, TPUs, and custom accelerators                     |
+| Mô hình thực thi | Hàm, luồng, tác vụ, sự kiện và I/O bất đồng bộ | Đồ thị tensor, kernel, luồng và sự kiện thiết bị |
+| Lập lịch tác vụ | Các luồng và tác vụ trên các tài nguyên bộ xử lý | Điều phối kernel và truyền dữ liệu nhận biết phụ thuộc |
+| Quản lý bộ nhớ | Đối tượng, stack, heap, pool và bộ nhớ ảo | Bộ đệm tensor, không gian làm việc, bộ nhớ thiết bị và tái sử dụng bộ đệm |
+| Các ưu tiên tối ưu hóa | Khả năng phản hồi, thông lượng, tính cục bộ và chia sẻ tài nguyên | Tương thích hình dạng, chồng chéo truyền tải, tái sử dụng và tận dụng |
+| **Khả năng thích ứng**\index{Adaptability!definition} | Lập lịch và cấp phát động trong ngữ nghĩa chương trình | Các lựa chọn runtime trong các đồ thị đã biên dịch và các kernel khả dụng |
+| Phần cứng mục tiêu | CPUs và các thiết bị dị thể | CPU, GPU, TPU và các bộ tăng tốc tùy chỉnh |
 
 : **Các mô hình thực thi runtime**: Các runtime AI bổ sung khả năng quản lý tài nguyên có nhận biết tensor, đồ thị và bộ tăng tốc vào các dịch vụ runtime truyền thống. Ranh giới chính xác giữa framework, runtime trình biên dịch, thư viện thiết bị và bộ lập lịch phục vụ (serving) thay đổi tùy theo ngăn xếp. {#tbl-runtime-comparison tbl-colwidths="[22,35,43]"}
 

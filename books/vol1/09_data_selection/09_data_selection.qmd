@@ -132,12 +132,12 @@ class ScalingAsymmetry:
 
 @Tbl-scaling-asymmetry sử dụng một kịch bản tăng trưởng minh họa, trong đó năng lực tính toán của GPU tăng `{python} ScalingAsymmetry.gpu_growth_mult_str` mỗi `{python} ScalingAsymmetry.gpu_period_years_str`, trong khi dữ liệu chất lượng cao có thể tiếp cận được lại tăng chậm hơn. Đây là các tham số đầu vào của kịch bản, không phải các tốc độ phổ quát đã được đo lường.
 
-| **Resource**            |                                                                                                   **Growth Rate** | **Implication**                                                                   |
+| **Tài nguyên** |                                                                                                   **Tốc độ tăng trưởng** | **Hàm ý** |
 |:------------------------|------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------|
-| **GPU Compute**         |               ~`{python} ScalingAsymmetry.gpu_growth_mult_str` / `{python} ScalingAsymmetry.gpu_period_years_str` | Hardware throughput can rise quickly in a given era                               |
-| **Training Data (Web)** |     ~`{python} ScalingAsymmetry.web_data_growth_mult_str` / `{python} ScalingAsymmetry.web_data_period_years_str` | High-quality web text is finite; much already scraped                             |
-| **Labeled Data**        | ~`{python} ScalingAsymmetry.label_data_growth_mult_str` / `{python} ScalingAsymmetry.label_data_period_years_str` | Human annotation throughput is inherently bounded                                 |
-| **Synthetic Data**      |                                                                                                 Potentially large | Bounded by generator quality (models trained on model-generated data can degrade) |
+| **Tính toán GPU** |               ~`{python} ScalingAsymmetry.gpu_growth_mult_str` / `{python} ScalingAsymmetry.gpu_period_years_str` | Thông lượng phần cứng có thể tăng nhanh trong một kỷ nguyên nhất định |
+| **Dữ liệu huấn luyện (Web)** |     ~`{python} ScalingAsymmetry.web_data_growth_mult_str` / `{python} ScalingAsymmetry.web_data_period_years_str` | Văn bản web chất lượng cao là hữu hạn; phần lớn đã được thu thập |
+| **Dữ liệu được gán nhãn** | ~`{python} ScalingAsymmetry.label_data_growth_mult_str` / `{python} ScalingAsymmetry.label_data_period_years_str` | Thông lượng chú thích của con người vốn dĩ bị giới hạn |
+| **Dữ liệu tổng hợp** |                                                                                                 Có khả năng lớn | Bị giới hạn bởi chất lượng của bộ tạo (các mô hình được huấn luyện trên dữ liệu do mô hình tạo ra có thể suy giảm chất lượng) |
 
 : **Bất đối xứng về khả năng mở rộng trong tài nguyên ML**: Trong kịch bản mở rộng được minh họa, năng lực tính toán tăng nhanh hơn nguồn cung dữ liệu chất lượng cao, tạo ra sự mất cân bằng giữa tính toán và dữ liệu, khiến việc lựa chọn dữ liệu trở nên có giá trị. {#tbl-scaling-asymmetry .striped .hover tbl-colwidths="[16,13,71]"}
 
@@ -358,12 +358,12 @@ Bức tường dữ liệu cho thấy *tại sao* việc chọn lọc dữ liệ
 
 Ngược lại, một *khung tư duy hệ thống*\index{Data selection!systems vs. ML framing} cho việc chọn lọc dữ liệu đặt câu hỏi làm thế nào để giảm tổng chi phí để đạt hiệu suất mục tiêu trong toàn bộ vòng đời ML. Sự dịch chuyển này đưa trọng tâm từ các đường cong độ chính xác sang tiêu thụ tài nguyên, như @tbl-ml-vs-systems-framing minh họa.
 
-| **ML Framing**                        |                         **Systems Framing** |
+| **Khung nhìn machine learning** |                         **Khung nhìn hệ thống** |
 |:--------------------------------------|--------------------------------------------:|
-| **"Fewer samples for same accuracy"** |             "Fewer FLOPs for same accuracy" |
-| **"Better generalization"**           | "Lower training cost (time, money, energy)" |
-| **"Sample complexity bounds"**        |            "End-to-end resource efficiency" |
-| **"Learning theory"**                 |                          "Cost engineering" |
+| **"Ít mẫu hơn để đạt cùng độ chính xác"** |             "Ít FLOPs hơn để đạt cùng độ chính xác" |
+| **"Khả năng tổng quát hóa tốt hơn"** | "Chi phí huấn luyện thấp hơn (thời gian, tiền bạc, năng lượng)" |
+| **"Giới hạn độ phức tạp của mẫu"** |            "Hiệu quả tài nguyên từ đầu đến cuối" |
+| **"Lý thuyết học máy"** |                          "Kỹ thuật chi phí" |
 
 : **Góc nhìn ML so với Hệ thống về Lựa chọn Dữ liệu**: Khung tư duy ML tối ưu hóa độ phức tạp mẫu; khung tư duy hệ thống tối ưu hóa tổng chi phí tài nguyên trên toàn bộ pipeline. {#tbl-ml-vs-systems-framing .striped .hover}
 
@@ -1148,13 +1148,13 @@ Các phương pháp dựa trên hình học và dựa trên động lực huấn
 
 Mỗi thuật toán trong @tbl-coreset-comparison nằm ở một điểm khác nhau trong bài toán đánh đổi giữa tài nguyên tính toán và thông tin của framework ICR. @Fig-coreset-selection minh họa một chiến lược dựa trên độ bất định, chứ không phải mọi phương pháp tập lõi. Lấy mẫu ngẫu nhiên xuất hiện ở bên trái; còn biểu đồ bên phải dồn ngân sách lựa chọn về gần ranh giới quyết định được minh họa. Các phương pháp dựa trên hình học có thể thay vào đó ưu tiên phủ đều khắp không gian embedding.
 
-| **Method**     | **Compute Cost**                        | **Requires Training** | **Best For**          | **Limitation**            |
+| **Phương pháp** | **Chi phí tính toán** | **Yêu cầu huấn luyện** | **Tốt nhất cho** | **Hạn chế** |
 |:---------------|:----------------------------------------|:----------------------|:----------------------|:--------------------------|
-| **k-Center**   | $\mathcal{O}(D^2)$ or $\mathcal{O}(DK)$ | No                    | Coverage, exploration | Ignores label information |
-| **Herding**    | $\mathcal{O}(DK)$                       | No                    | Distribution matching | Assumes Gaussian-like     |
-| **GraNd**      | $\mathcal{O}(\text{epochs} \times D)$   | Yes (few epochs)      | Decision boundaries   | Requires proxy training   |
-| **Forgetting** | $\mathcal{O}(\text{full training})$     | Yes (full)            | Hard examples         | Expensive to compute      |
-| **EL2N**       | $\mathcal{O}(\text{epochs} \times D)$   | Yes (few epochs)      | Uncertainty sampling  | Best with proxy model     |
+| **k-Center** | $\mathcal{O}(D^2)$ or $\mathcal{O}(DK)$ | Không | Độ bao phủ, khám phá | Bỏ qua thông tin nhãn |
+| **Herding** | $\mathcal{O}(DK)$                       | Không | Khớp phân phối | Giả định giống Gaussian |
+| **GraNd** | $\mathcal{O}(\text{epochs} \times D)$   | Có (vài epoch) | Đường biên quyết định | Yêu cầu huấn luyện proxy |
+| **Quên** | $\mathcal{O}(\text{full training})$     | Có (đầy đủ) | Các ví dụ khó | Tốn kém để tính toán |
+| **EL2N** | $\mathcal{O}(\text{epochs} \times D)$   | Có (vài epoch) | Lấy mẫu dựa trên sự không chắc chắn | Tốt nhất với mô hình proxy |
 
 : **So sánh Thuật toán Lựa chọn Tập Lõi**: $D =$ kích thước tập dữ liệu, $K =$ kích thước tập lõi. Các phương pháp dựa trên hình học và dựa trên động lực huấn luyện tối ưu các đại lượng thay thế khác nhau, nên thứ hạng chất lượng của chúng phụ thuộc vào tập dữ liệu, cách biểu diễn, mô hình mục tiêu và ngân sách tính điểm. {#tbl-coreset-comparison .striped .hover tbl-colwidths="[10,20,20,25,25]"}
 
@@ -1398,12 +1398,12 @@ trong đó $n_{\text{epoch}}$ là số epoch hiện tại, $D$ là kích thướ
 
 Bộ chấm điểm độ khó là một lựa chọn ở tầng hệ thống, vì nó đánh đổi chi phí tính toán để thăm dò với chất lượng sắp thứ tự, như @tbl-difficulty-scoring cho thấy. Chấm điểm theo loss và độ tin cậy cho thứ tự tốt hơn nhưng phải chạy suy luận thêm; các heuristic tránh tính toán nhưng đòi hỏi kiến thức miền; còn self-paced đưa việc thích ứng vào ngay vòng lặp huấn luyện.
 
-| **Strategy**          | **Difficulty Score**                      | **Best For**                                |
+| **Chiến lược** | **Điểm độ khó** | **Tốt nhất cho** |
 |:----------------------|:------------------------------------------|:--------------------------------------------|
-| **Loss-Based**        | Loss from probe model (low = easy)        | General-purpose; requires probe training    |
-| **Confidence-Based**  | Teacher model confidence (high = easy)    | When teacher available; distillation setups |
-| **Domain Heuristics** | Sentence length, image complexity         | No extra compute; domain knowledge required |
-| **Self-Paced**        | Current model's loss (updated each epoch) | Adaptive; no probe needed                   |
+| **Dựa trên hàm mất mát** | Hàm mất mát từ mô hình thăm dò (thấp = dễ) | Đa năng; yêu cầu huấn luyện mô hình thăm dò |
+| **Dựa trên độ tin cậy** | Độ tin cậy của mô hình Teacher (cao = dễ) | Khi mô hình Teacher có sẵn; distillation setups |
+| **Các phương pháp heuristic theo miền** | Độ dài câu, độ phức tạp của hình ảnh | Không cần tính toán bổ sung; yêu cầu kiến thức miền |
+| **Tự điều chỉnh tốc độ** | Hàm mất mát của mô hình hiện tại (cập nhật mỗi epoch) | Thích ứng; không cần mô hình thăm dò |
 
 : **Chiến lược chấm điểm độ khó cho học tập theo chương trình (Curriculum Learning)**: Các hàng trong bảng so sánh nguồn tín hiệu của từng bộ chấm điểm với các yêu cầu hệ thống hoặc sự đánh đổi mà nó mang lại. {#tbl-difficulty-scoring .striped .hover}
 
@@ -1474,12 +1474,12 @@ class CurriculumBenchmarks:
 
 @Tbl-curriculum-benchmarks sử dụng số lượng epoch giả định để minh họa cách tính toán mức tiết kiệm có thể đạt được khi áp dụng học theo chương trình trên các khối lượng công việc (workload) khác nhau. Các giá trị này chỉ mang tính minh họa, không phải là kết quả đo lường thực tế từ các nghiên cứu về học theo chương trình đã được trích dẫn.
 
-| **Dataset**   | **Model** | **Pacing Strategy**    | **Epochs to Target Acc.**                                                                                                                  |                        **Epoch Reduction**                         |
+| **Tập dữ liệu** | **Mô hình** | **Chiến lược điều chỉnh tốc độ** | **Số epoch để đạt độ chính xác mục tiêu** |                        **Giảm số epoch** |
 |:--------------|:---------:|:-----------------------|:-------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------:|
-| **CIFAR-10**  | ResNet-18 | Linear warmup          | `{python} CurriculumBenchmarks.cifar10_curriculum_epochs_str` vs. `{python} CurriculumBenchmarks.cifar10_baseline_epochs_str` baseline     |  `{python} CurriculumBenchmarks.cifar10_speedup_str` fewer epochs  |
-| **CIFAR-100** | ResNet-32 | Self-paced             | `{python} CurriculumBenchmarks.cifar100_curriculum_epochs_str` vs. `{python} CurriculumBenchmarks.cifar100_baseline_epochs_str` baseline   | `{python} CurriculumBenchmarks.cifar100_speedup_str` fewer epochs  |
-| **ImageNet**  | ResNet-50 | Loss-based             | `{python} CurriculumBenchmarks.imagenet_curriculum_epochs_str` vs. `{python} CurriculumBenchmarks.imagenet_baseline_epochs_str` baseline   | `{python} CurriculumBenchmarks.imagenet_speedup_str` fewer epochs  |
-| **ImageNet**  | ResNet-50 | Learned (noisy labels) | `{python} CurriculumBenchmarks.mentornet_curriculum_epochs_str` vs. `{python} CurriculumBenchmarks.mentornet_baseline_epochs_str` baseline | `{python} CurriculumBenchmarks.mentornet_speedup_str` fewer epochs |
+| **CIFAR-10** | ResNet-18 | Khởi động tuyến tính | `{python} CurriculumBenchmarks.cifar10_curriculum_epochs_str` so với `{python} CurriculumBenchmarks.cifar10_baseline_epochs_str` baseline |  `{python} CurriculumBenchmarks.cifar10_speedup_str` ít epoch hơn |
+| **CIFAR-100** | ResNet-32 | Tự điều chỉnh tốc độ | `{python} CurriculumBenchmarks.cifar100_curriculum_epochs_str` so với `{python} CurriculumBenchmarks.cifar100_baseline_epochs_str` baseline | `{python} CurriculumBenchmarks.cifar100_speedup_str` ít epoch hơn |
+| **ImageNet** | ResNet-50 | Dựa trên hàm mất mát | `{python} CurriculumBenchmarks.imagenet_curriculum_epochs_str` so với `{python} CurriculumBenchmarks.imagenet_baseline_epochs_str` baseline | `{python} CurriculumBenchmarks.imagenet_speedup_str` ít epoch hơn |
+| **ImageNet** | ResNet-50 | Đã học (nhãn nhiễu) | `{python} CurriculumBenchmarks.mentornet_curriculum_epochs_str` so với `{python} CurriculumBenchmarks.mentornet_baseline_epochs_str` đường cơ sở | `{python} CurriculumBenchmarks.mentornet_speedup_str` ít epoch hơn |
 
 : **Minh họa giảm số epoch trong học tập theo chương trình**: Bảng này áp dụng một quy tắc độ chính xác mục tiêu cho số lượng epoch giả định của cả phương pháp cơ sở và phương pháp học theo chương trình. Nó chỉ minh họa phép tính, chứ không nhằm xếp hạng các tập dữ liệu hay phương pháp. {#tbl-curriculum-benchmarks .striped .hover tbl-colwidths="[20,20,20,20,20]"}
 
@@ -2173,12 +2173,12 @@ Trong học bán giám sát, sự đánh đổi về hệ thống là thay công
 
 Hiệu quả đạt được là rất lớn, nhưng học bán giám sát không phải lúc nào cũng áp dụng được. Kỹ thuật này giả định dữ liệu chưa có nhãn cùng phân phối với dữ liệu đã có nhãn, và sẽ gặp khó khi: dữ liệu chưa có nhãn chứa mẫu ngoài phân phối (mô hình tự tin gán nhãn sai); mất cân bằng lớp nghiêm trọng (nhãn giả khuếch đại độ chệch (bias) của lớp đa số); hoặc tập dữ liệu đã gán nhãn không bao phủ đủ mọi lớp (không thể lan truyền nhãn tới các lớp chưa xuất hiện). Hãy luôn đánh giá trên một tập giữ lại (held-out set) có nhãn thật để phát hiện sự lệch phân phối.
 
-| **Label Budget**                                                                                                                              | **Method**        |                           **Accuracy**                          |                                                                              **Label Efficiency** |
+| **Ngân sách nhãn** | **Phương pháp** |                           **Độ chính xác** |                                                                              **Hiệu quả nhãn** |
 |:----------------------------------------------------------------------------------------------------------------------------------------------|:------------------|:---------------------------------------------------------------:|--------------------------------------------------------------------------------------------------:|
-| **`{python} FixmatchLabelEfficiency.cifar10_full_labels_str` (`{python} FixmatchLabelEfficiency.cifar10_full_frac_pct_str`)**                 | Full training set |                               ---                               |                                                                             Label-count reference |
-| **`{python} FixmatchLabelEfficiency.cifar10_fixmatch_4k_labels_str` (`{python} FixmatchLabelEfficiency.cifar10_fixmatch_4k_frac_pct_str`)**   | FixMatch          |  `{python} FixmatchLabelEfficiency.cifar10_fixmatch_4k_acc_str` |  `{python} FixmatchLabelEfficiency.cifar10_fixmatch_4k_efficiency_factor_mult_str` more efficient |
-| **`{python} FixmatchLabelEfficiency.cifar10_fixmatch_250_labels_str` (`{python} FixmatchLabelEfficiency.cifar10_fixmatch_250_frac_pct_str`)** | FixMatch          | `{python} FixmatchLabelEfficiency.cifar10_fixmatch_250_acc_str` | `{python} FixmatchLabelEfficiency.cifar10_fixmatch_250_efficiency_factor_mult_str` more efficient |
-| **`{python} FixmatchLabelEfficiency.cifar10_fixmatch_40_labels_str` (`{python} FixmatchLabelEfficiency.cifar10_fixmatch_40_frac_pct_str`)**   | FixMatch          |  `{python} FixmatchLabelEfficiency.cifar10_fixmatch_40_acc_str` |  `{python} FixmatchLabelEfficiency.cifar10_fixmatch_40_efficiency_factor_mult_str` more efficient |
+| **`{python} FixmatchLabelEfficiency.cifar10_full_labels_str` (`{python} FixmatchLabelEfficiency.cifar10_full_frac_pct_str`)**                 | Tập huấn luyện đầy đủ |                               ---                               |                                                                             Tham chiếu số lượng nhãn |
+| **`{python} FixmatchLabelEfficiency.cifar10_fixmatch_4k_labels_str` (`{python} FixmatchLabelEfficiency.cifar10_fixmatch_4k_frac_pct_str`)**   | FixMatch |  `{python} FixmatchLabelEfficiency.cifar10_fixmatch_4k_acc_str` |  `{python} FixmatchLabelEfficiency.cifar10_fixmatch_4k_efficiency_factor_mult_str` hiệu quả hơn |
+| **`{python} FixmatchLabelEfficiency.cifar10_fixmatch_250_labels_str` (`{python} FixmatchLabelEfficiency.cifar10_fixmatch_250_frac_pct_str`)** | FixMatch | `{python} FixmatchLabelEfficiency.cifar10_fixmatch_250_acc_str` | `{python} FixmatchLabelEfficiency.cifar10_fixmatch_250_efficiency_factor_mult_str` hiệu quả hơn |
+| **`{python} FixmatchLabelEfficiency.cifar10_fixmatch_40_labels_str` (`{python} FixmatchLabelEfficiency.cifar10_fixmatch_40_frac_pct_str`)**   | FixMatch |  `{python} FixmatchLabelEfficiency.cifar10_fixmatch_40_acc_str` |  `{python} FixmatchLabelEfficiency.cifar10_fixmatch_40_efficiency_factor_mult_str` hiệu quả hơn |
 
 : **Hiệu quả nhãn của FixMatch trên CIFAR-10**: Với `{python} FixmatchLabelEfficiency.cifar10_fixmatch_250_labels_str` nhãn (chiếm `{python} FixmatchLabelEfficiency.cifar10_fixmatch_250_frac_pct_prose_str` của tập dữ liệu), FixMatch đạt độ chính xác `{python} FixmatchLabelEfficiency.cifar10_fixmatch_250_acc_prose_str` trong khi dùng ít nhãn hơn `{python} FixmatchLabelEfficiency.cifar10_fixmatch_250_efficiency_factor_mult_str` lần so với toàn bộ tập huấn luyện. {#tbl-fixmatch-cifar10 .striped .hover tbl-colwidths="[25,25,25,25]"}
 
@@ -2192,13 +2192,13 @@ GPT được huấn luyện để dự đoán token kế tiếp trong một chu�
 
 Nhãn là một dạng giám sát; một tác vụ tiền đề (pretext task) cũng có thể rút ra tín hiệu để học từ cấu trúc của dữ liệu, như @tbl-self-supervised-tasks tóm tắt.
 
-| **Modality**    | **Self-Supervised Task** |                      **Supervision Signal** |
+| **Phương thức** | **Tác vụ tự giám sát** |                      **Tín hiệu giám sát** |
 |:----------------|:-------------------------|--------------------------------------------:|
-| **Text**        | Masked language modeling |                 Predict [MASK] from context |
-| **Text**        | Next-token prediction    |              Predict next token in sequence |
-| **Images**      | Contrastive learning     | Same image (augmented) vs. different images |
-| **Images**      | Masked autoencoding      |                  Reconstruct masked patches |
-| **Multi-modal** | CLIP-style alignment     |                      Match image-text pairs |
+| **Văn bản** | Mô hình hóa ngôn ngữ được che giấu |                 Dự đoán [MASK] từ ngữ cảnh |
+| **Văn bản** | Dự đoán token tiếp theo |              Dự đoán token tiếp theo trong chuỗi |
+| **Hình ảnh** | Học tương phản | Cùng một hình ảnh (được tăng cường) so với các hình ảnh khác nhau |
+| **Hình ảnh** | Tự mã hóa được che giấu |                  Tái tạo các patch được che giấu |
+| **Đa phương thức** | Căn chỉnh kiểu CLIP |                      Ghép nối các cặp hình ảnh-văn bản |
 
 : **Các tác vụ tiền đề tự giám sát theo loại hình**: Mỗi tác vụ lấy tín hiệu giám sát từ cấu trúc dữ liệu thay vì nhãn của con người, cho phép tiền huấn luyện trên các tập dữ liệu lớn chưa gán nhãn. {#tbl-self-supervised-tasks .striped .hover tbl-colwidths="[30,30,40]"}
 
@@ -2208,10 +2208,10 @@ Các tác vụ tiền đề (pretext task)\index{Pretext Task!self-supervised le
 
 Để hiểu *tại sao* học tự giám sát trở thành trung tâm của nhiều quy trình làm việc với mô hình nền tảng (foundation model), chúng ta cần xem xét cấu trúc kinh tế của nó. Mô hình nền tảng là một mô hình cơ sở được tiền huấn luyện trên phạm vi rộng, có thể tái sử dụng và thích ứng với nhiều tác vụ hạ nguồn thông qua tinh chỉnh (fine-tuning). Sự chuyển dịch này mang lại tiết kiệm chi phí cụ thể nhờ *phân bổ chi phí*\index{Cost amortization!self-supervised pretraining}, trong đó phần tiền huấn luyện tốn kém được thực hiện một lần rồi dùng lại cho nhiều ứng dụng khác nhau (@tbl-cost-amortization).
 
-| **Approach**                   | **Labels per Task** | **Compute per Task**  |     **Data Acquisition** |
+| **Phương pháp** | **Nhãn mỗi tác vụ** | **Tính toán mỗi tác vụ** |     **Thu thập dữ liệu** |
 |:-------------------------------|:--------------------|:----------------------|-------------------------:|
-| **Train from scratch**         | 100K–1M labeled     | 100% full training    | Task-specific collection |
-| **Fine-tune foundation model** | 100–1K labeled      | 1–5% of full training | Reuse pretraining corpus |
+| **Huấn luyện từ đầu** | 100K–1M được gán nhãn | 100% huấn luyện đầy đủ | Thu thập cụ thể cho tác vụ |
+| **Tinh chỉnh mô hình nền tảng** | 100–1K được gán nhãn | 1–5% của huấn luyện đầy đủ | Tái sử dụng corpus tiền huấn luyện |
 
 : **Minh họa phân bổ chi phí của mô hình nền tảng**: Các phạm vi về nhãn và tài nguyên tính toán ở đây là giả định cho kịch bản này. Chúng cho thấy vì sao việc tái sử dụng có thể làm giảm chi phí biên cho mỗi tác vụ khi có thể chuyển giao biểu diễn, chứ không phải một tỷ lệ tinh chỉnh (fine-tuning) áp dụng chung cho mọi trường hợp. {#tbl-cost-amortization .striped .hover}
 
@@ -2497,12 +2497,12 @@ Thích nghi miền\index{Domain adaptation!feature alignment} đi theo hướng 
 
 Trong thực tế, trộn dữ liệu tổng hợp với dữ liệu thực giúp có một điểm neo từ dữ liệu thực, đồng thời vẫn giữ được phần nào độ bao phủ của dữ liệu tổng hợp. Tuy nhiên, tỷ lệ trộn tốt nhất sẽ phụ thuộc vào khối lượng công việc (workload). @Tbl-synthetic-mix tóm tắt các đánh đổi giữa những tỷ lệ trộn khác nhau.
 
-| **Synthetic Fraction**       | **Representative Outcome**                          |
+| **Tỷ lệ tổng hợp** | **Kết quả đại diện** |
 |:-----------------------------|:----------------------------------------------------|
-| **100% synthetic**           | No real-data anchor; validate the domain gap        |
-| **80% synthetic + 20% real** | Lower real-data demand; validate on deployment data |
-| **50% synthetic + 50% real** | More real-data anchoring; higher collection cost    |
-| **100% real**                | No synthetic-to-real gap; highest collection cost   |
+| **100% tổng hợp** | Không có điểm neo dữ liệu thực; xác thực khoảng cách miền |
+| **80% tổng hợp + 20% thực** | Nhu cầu dữ liệu thực thấp hơn; xác thực trên dữ liệu triển khai |
+| **50% tổng hợp + 50% thực** | Nhiều điểm neo dữ liệu thực hơn; chi phí thu thập cao hơn |
+| **100% thực** | Không có khoảng cách từ tổng hợp đến thực; chi phí thu thập cao nhất |
 
 : **Tỷ lệ trộn dữ liệu tổng hợp với dữ liệu thực**: Dữ liệu tổng hợp thuần túy có thể bị lệch phân phối, còn dữ liệu thực thuần túy thì rất đắt. Tỷ lệ tối ưu sẽ thay đổi tùy theo lĩnh vực, độ chân thực của bộ mô phỏng, họ mô hình và quy trình kiểm định. Vì vậy, hãy xem bảng này như một khung kịch bản tham khảo, chứ không phải một công thức áp dụng cho mọi trường hợp. {#tbl-synthetic-mix .striped .hover}
 
@@ -2601,24 +2601,24 @@ Tổng hợp lại, tăng cường dữ liệu, tạo sinh dữ liệu và chưn
 
 Khi ngân sách gán nhãn, dữ liệu dư thừa, các lớp hiếm, quyền riêng tư và tốc độ hội tụ đều quan trọng cùng lúc, người thực hành trước tiên cần xác định ràng buộc nào đang chi phối. Mỗi giai đoạn có thể nâng tỉ lệ thông tin-tính toán nếu lợi ích chất lượng đo được xứng đáng với chi phí: tỉa (pruning) loại bỏ các mẫu ít giá trị trước khi huấn luyện, lựa chọn động tập trung tài nguyên tính toán vào các mẫu có giá trị cao trong quá trình huấn luyện, và tạo sinh tạo ra các mẫu giá trị cao mới khi cần (@tbl-data-selection).
 
-| **Stage**                | **When Applied** | **Techniques**                                        | **Illustrative Outcome**                             |
+| **Giai đoạn** | **Thời điểm áp dụng** | **Kỹ thuật** | **Kết quả minh họa** |
 |:-------------------------|:-----------------|:------------------------------------------------------|:-----------------------------------------------------|
-| **Static pruning**       | Before training  | Coreset Selection, Deduplication, Quality Filtering   | 30–50% dataset reduction                             |
-| **Dynamic selection**    | During training  | Curriculum Learning, Active Learning, Semi-Supervised | 10–30% faster curricula; 2--100$\times$ fewer labels |
-| **Synthetic generation** | On-demand        | Augmentation, Generative Models, Distillation         | 2--10$\times$ effective data expansion               |
+| **Tỉa (pruning) tĩnh** | Trước khi huấn luyện | Lựa chọn Coreset, Loại bỏ trùng lặp, Lọc chất lượng | Giảm tập dữ liệu 30–50% |
+| **Lựa chọn động** | Trong quá trình huấn luyện | Curriculum Learning, Active Learning, Bán giám sát | Curricula nhanh hơn 10–30%; nhãn ít hơn 2--100$\times$ |
+| **Tạo tổng hợp** | Theo yêu cầu | Tăng cường, Mô hình sinh tạo, Chưng cất | Mở rộng dữ liệu hiệu quả 2--10$\times$ |
 
 : **pipeline lựa chọn dữ liệu ba giai đoạn**: Các khoảng giá trị này chỉ minh họa các kết quả có thể đạt được, chứ không phải là những kỳ vọng có thể áp dụng chung. Lợi ích thực tế sẽ phụ thuộc vào tập dữ liệu, mô hình, phương pháp lựa chọn và chỉ số mục tiêu cụ thể. {#tbl-data-selection .striped .hover tbl-colwidths="[23,21,28,28]"}
 
 Khi ràng buộc chi phối đã được xác định, @tbl-technique-selection so sánh kỹ thuật nào thay đổi ràng buộc đó và vì sao.
 
-| **Constraint**                 | **Candidate Technique**   | **Why**                                              |
+| **Ràng buộc** | **Kỹ thuật tiềm năng** | **Lý do** |
 |:-------------------------------|:--------------------------|:-----------------------------------------------------|
-| **Limited labeling budget**    | Active Learning           | Maximizes label ROI by selecting informative samples |
-| **High redundancy in data**    | Deduplication + Coreset   | Removes waste before training begins                 |
-| **Rare classes or edge cases** | Synthetic Generation      | Creates samples that do not exist in raw data        |
-| **Slow convergence**           | Curriculum Learning       | Improves gradient quality in early training          |
-| **Privacy requirements**       | Privacy-audited synthesis | Reduce direct use of real records; verify leakage    |
-| **Large model, small dataset** | Knowledge Distillation    | Use teacher model's knowledge as "data"              |
+| **Ngân sách gán nhãn hạn chế** | Active Learning | Tối đa hóa ROI nhãn bằng cách chọn các mẫu thông tin |
+| **Dư thừa cao trong dữ liệu** | Loại bỏ trùng lặp + Coreset | Loại bỏ lãng phí trước khi huấn luyện bắt đầu |
+| **Các lớp hiếm hoặc các trường hợp biên** | Tạo tổng hợp | Tạo ra các mẫu không tồn tại trong dữ liệu thô |
+| **Hội tụ chậm** | Curriculum Learning | Cải thiện chất lượng gradient trong giai đoạn huấn luyện ban đầu |
+| **Yêu cầu về quyền riêng tư** | Tổng hợp được kiểm toán quyền riêng tư | Giảm sử dụng trực tiếp các bản ghi thực; xác minh rò rỉ |
+| **Mô hình lớn, tập dữ liệu nhỏ** | Knowledge Distillation | Sử dụng kiến thức của mô hình "giáo viên" làm "dữ liệu" |
 
 : **Hướng dẫn lựa chọn kỹ thuật theo ràng buộc chính**: Các kỹ thuật lựa chọn dữ liệu tiềm năng được đối chiếu với ràng buộc tài nguyên chi phối trong pipeline ML. Bảng này là bước khởi đầu để chẩn đoán; các điều kiện tiên quyết và ROI (lợi tức đầu tư) đo được sẽ quyết định lựa chọn cuối cùng. {#tbl-technique-selection .striped .hover}
 
@@ -2711,15 +2711,15 @@ Sau khi xác định nút thắt cổ chai, hãy kiểm tra xem các kỹ thuậ
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Technique**                                        | **Prerequisites**                                           |
+| **Kỹ thuật** | **Điều kiện tiên quyết** |
 |:-----------------------------------------------------|:------------------------------------------------------------|
-| **Active Learning**                                  | Access to oracle, unlabeled pool, retraining infrastructure |
-| **Coreset selection**\index{Coreset!data efficiency} | Proxy model or embedding extractor, full dataset accessible |
-| **Curriculum Learning**                              | Difficulty scoring method, pacing schedule                  |
-| **Semi-Supervised**                                  | Some labeled data, unlabeled data from same distribution    |
-| **Self-Supervised**                                  | Large unlabeled corpus, pretraining compute budget          |
-| **Augmentation**                                     | Domain knowledge of invariances, augmentation library       |
-| **Synthetic Generation**                             | Generative model or simulator, domain gap mitigation        |
+| **Active Learning** | Truy cập vào oracle, tập dữ liệu chưa được gán nhãn, cơ sở hạ tầng huấn luyện lại |
+| **Coreset selection**\index{Coreset!hiệu quả dữ liệu} | Mô hình proxy hoặc bộ trích xuất embedding, tập dữ liệu đầy đủ có thể truy cập |
+| **Curriculum Learning** | Phương pháp chấm điểm độ khó, lịch trình điều chỉnh tốc độ |
+| **Bán giám sát** | Một số dữ liệu đã được gán nhãn, dữ liệu chưa được gán nhãn từ cùng phân phối |
+| **Tự giám sát** | Kho ngữ liệu lớn chưa được gán nhãn, ngân sách tính toán cho pretraining |
+| **Tăng cường** | Kiến thức miền về các bất biến, thư viện tăng cường |
+| **Tạo tổng hợp** | Mô hình tạo sinh hoặc trình mô phỏng, giảm thiểu khoảng cách miền |
 
 : **Các điều kiện tiên quyết của kỹ thuật**: Mỗi kỹ thuật đều có các yêu cầu cụ thể về cơ sở hạ tầng và dữ liệu cần được xác minh trước khi triển khai. Một kỹ thuật dù có lợi ích lý thuyết rất lớn nhưng không đáp ứng các điều kiện tiên quyết sẽ thất bại trong thực tế. Do đó, danh sách kiểm tra này là bước đầu tiên trong việc lựa chọn kỹ thuật. {#tbl-technique-prerequisites .striped .hover}
 
@@ -3055,12 +3055,12 @@ class RandomAccessPenalty:
     nvme_penalty_factor_mult_str = fmt_multiple(nvme_penalty, precision=2, commas=False)
 ```
 
-| **Storage Tier** |               **Sequential Throughput**               |             **Random I/O (IOPS)**             |              **Random Throughput (approx)**              |                      **Random Penalty**                     |
+| **Bậc lưu trữ** |               **Thông lượng tuần tự** |             **I/O ngẫu nhiên (IOPS)** |              **Thông lượng ngẫu nhiên (xấp xỉ)** |                      **Phạt ngẫu nhiên** |
 |:-----------------|:-----------------------------------------------------:|:---------------------------------------------:|:--------------------------------------------------------:|:-----------------------------------------------------------:|
-| **HDD (7.2k)**   |  ~`{python} RandomAccessPenalty.hdd_seq_mb_per_s_str` |  ~`{python} RandomAccessPenalty.hdd_iops_str` | ~`{python} RandomAccessPenalty.hdd_random_mb_per_s_str`  |  `{python} RandomAccessPenalty.hdd_penalty_factor_mult_str` |
-| **SATA SSD**     | ~`{python} RandomAccessPenalty.sata_seq_mb_per_s_str` | ~`{python} RandomAccessPenalty.sata_iops_str` | ~`{python} RandomAccessPenalty.sata_random_mb_per_s_str` | `{python} RandomAccessPenalty.sata_penalty_factor_mult_str` |
-| **NVMe SSD**     | ~`{python} RandomAccessPenalty.nvme_seq_mb_per_s_str` | ~`{python} RandomAccessPenalty.nvme_iops_str` | ~`{python} RandomAccessPenalty.nvme_random_mb_per_s_str` | `{python} RandomAccessPenalty.nvme_penalty_factor_mult_str` |
-| **Cloud (S3)**   |                Configuration-dependent                |              Not IOPS-comparable              |                 Configuration-dependent                  |                     Potentially extreme                     |
+| **HDD (7.2k)** |  ~`{python} RandomAccessPenalty.hdd_seq_mb_per_s_str` |  ~`{python} RandomAccessPenalty.hdd_iops_str` | ~`{python} RandomAccessPenalty.hdd_random_mb_per_s_str`  |  `{python} RandomAccessPenalty.hdd_penalty_factor_mult_str` |
+| **SATA SSD** | ~`{python} RandomAccessPenalty.sata_seq_mb_per_s_str` | ~`{python} RandomAccessPenalty.sata_iops_str` | ~`{python} RandomAccessPenalty.sata_random_mb_per_s_str` | `{python} RandomAccessPenalty.sata_penalty_factor_mult_str` |
+| **NVMe SSD** | ~`{python} RandomAccessPenalty.nvme_seq_mb_per_s_str` | ~`{python} RandomAccessPenalty.nvme_iops_str` | ~`{python} RandomAccessPenalty.nvme_random_mb_per_s_str` | `{python} RandomAccessPenalty.nvme_penalty_factor_mult_str` |
+| **Đám mây (S3)** |                Phụ thuộc vào cấu hình |              Không thể so sánh bằng IOPS |                 Phụ thuộc vào cấu hình |                     Có khả năng cực đoan |
 
 : **Minh họa về độ phạt khi đọc nhỏ**: Các mốc thiết bị Registry so sánh băng thông tuần tự với các lượt đọc ngẫu nhiên 4 KB theo phép quy đổi IOPS đơn giản hóa. Thông lượng thực tế còn phụ thuộc vào kích thước yêu cầu, độ sâu hàng đợi, mức độ đồng thời, cơ chế cache và cấu hình dịch vụ; dòng đám mây trong bảng chỉ là một kịch bản mang tính định tính. {#tbl-io-performance .striped .hover tbl-colwidths="[11,25,20,24,20]"}
 
@@ -3215,12 +3215,12 @@ $$
 \renewcommand{\arraystretch}{1.25}
 ```
 
-| **Component**            |                                 **Formula**                                  |                        **Illustrative Range** |
+| **Thành phần** |                                 **Công thức** |                        **Phạm vi minh họa** |
 |:-------------------------|:----------------------------------------------------------------------------:|----------------------------------------------:|
-| **$C_{\text{acquire}}$** |                         $D \times c_{\text{sample}}$                         | \$0.001–\$10/sample (web scrape vs. licensed) |
-| **$C_{\text{label}}$**   |                 $D_{\text{labeled}} \times c_{\text{label}}$                 |        \$0.01–\$200/sample (crowd vs. expert) |
-| **$C_{\text{store}}$**   |  $D_{\text{vol,store}} \times c_{\text{storage}} \times T_{\text{months}}$   |                        \$0.02–\$0.10/GB/month |
-| **$C_{\text{process}}$** | $D \times N_{\text{epochs}} \times O_{\text{sample}} \times c_{\text{FLOP}}$ |                Proportional to training FLOPs |
+| **$C_{\text{acquire}}$** |                         $D \times c_{\text{sample}}$                         | $0.001–$10/mẫu (cào web so với được cấp phép) |
+| **$C_{\text{label}}$**   |                 $D_{\text{labeled}} \times c_{\text{label}}$                 |        $0.01–$200/mẫu (cộng đồng so với chuyên gia) |
+| **$C_{\text{store}}$**   |  $D_{\text{vol,store}} \times c_{\text{storage}} \times T_{\text{months}}$   |                        $0.02–$0.10/GB/tháng |
+| **$C_{\text{process}}$** | $D \times N_{\text{epochs}} \times O_{\text{sample}} \times c_{\text{FLOP}}$ |                Tỷ lệ thuận với FLOPs huấn luyện |
 
 : **Tổng chi phí dữ liệu huấn luyện**: Bốn thành phần chi phí này bao phủ toàn bộ vòng đời dữ liệu. Cụ thể, $D$ là tổng số mẫu, $D_{\text{labeled}}$ là tập con đã gán nhãn, $D_{\text{vol,store}}$ là dung lượng dữ liệu lưu trữ (tính bằng byte), $T_{\text{months}}$ là thời gian lưu giữ (tháng), $N_{\text{epochs}}$ là số epoch, và $O_{\text{sample}}$ là khối lượng công việc huấn luyện trên mỗi mẫu. Các khoảng giá trị này là mốc tham chiếu theo kịch bản, không phải mức giá thị trường chung. {#tbl-cost-components .striped .hover tbl-colwidths="[25,30,45]"}
 
@@ -3326,14 +3326,14 @@ class CostBreakdown:
 
 @Tbl-data-selection-imagenet-cost-breakdown liệt kê chi tiết một kịch bản minh họa về chi phí thu thập, gán nhãn, lưu trữ và tính toán ở quy mô ImageNet. Tỷ lệ thu được dựa trên các giả định đã nêu về cấp phép, chú thích, lưu trữ, runtime và chi phí tính toán; đây không phải tỷ lệ điển hình cho mọi khối lượng công việc (workload) có giám sát.
 
-| **Cost Component**                                                                                                                                                                                                       | **Calculation**                                                                                                                                        |                                        **Amount**                                        |
+| **Thành phần chi phí** | **Tính toán** |                                        **Số lượng** |
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------:|
-| **Raw data (`{python} CostBreakdown.n_labels_str` images)**                                                                                                                                                              | Licensed dataset, flat fee                                                                                                                             |                          `{python} CostBreakdown.c_raw_usd_str`                          |
-| **Labels (crowd annotation)**                                                                                                                                                                                            | `{python} CostBreakdown.n_labels_str` $\times$ `{python} CostBreakdown.cb_cost_per_label_str`                                                          |                         `{python} CostBreakdown.c_label_usd_str`                         |
-| **Storage (cloud object store)**                                                                                                                                                                                         | `{python} CostBreakdown.storage_size_str` $\times$ `{python} CostBreakdown.cb_storage_rate_str` $\times$ `{python} CostBreakdown.storage_duration_str` |                         `{python} CostBreakdown.c_store_usd_str`                         |
-| **Training campaign (`{python} CostBreakdown.train_run_count_str`, each `{python} CostBreakdown.train_epoch_count_str` in `{python} CostBreakdown.train_duration_str` on `{python} CostBreakdown.train_gpu_count_str`)** | `{python} CostBreakdown.train_gpu_hours_str` $\times$ `{python} CostBreakdown.cb_gpu_rate_str`                                                         |                         `{python} CostBreakdown.c_train_usd_str`                         |
-| **Total**                                                                                                                                                                                                                |                                                                                                                                                        |                       **`{python} CostBreakdown.c_total_usd_str`**                       |
-| **Data vs. Compute ratio**                                                                                                                                                                                               |                                                                                                                                                        | `{python} CostBreakdown.p_data_str` data, `{python} CostBreakdown.p_compute_str` compute |
+| **Dữ liệu thô (`{python} CostBreakdown.n_labels_str` images)** | Tập dữ liệu được cấp phép, phí cố định |                          `{python} CostBreakdown.c_raw_usd_str`                          |
+| **Nhãn (chú thích cộng đồng)** | `{python} CostBreakdown.n_labels_str` $\times$ `{python} CostBreakdown.cb_cost_per_label_str`                                                          |                         `{python} CostBreakdown.c_label_usd_str`                         |
+| **Lưu trữ (kho đối tượng đám mây)** | `{python} CostBreakdown.storage_size_str` $\times$ `{python} CostBreakdown.cb_storage_rate_str` $\times$ `{python} CostBreakdown.storage_duration_str` |                         `{python} CostBreakdown.c_store_usd_str`                         |
+| **Chiến dịch huấn luyện (`{python} CostBreakdown.train_run_count_str`, mỗi `{python} CostBreakdown.train_epoch_count_str` trong `{python} CostBreakdown.train_duration_str` trên `{python} CostBreakdown.train_gpu_count_str`)** | `{python} CostBreakdown.train_gpu_hours_str` $\times$ `{python} CostBreakdown.cb_gpu_rate_str`                                                         |                         `{python} CostBreakdown.c_train_usd_str`                         |
+| **Tổng cộng** |                                                                                                                                                        |                       **`{python} CostBreakdown.c_total_usd_str`**                       |
+| **Tỷ lệ Dữ liệu so với Tính toán** |                                                                                                                                                        | `{python} CostBreakdown.p_data_str` dữ liệu, `{python} CostBreakdown.p_compute_str` tính toán |
 
 : **Phân tích chi phí minh họa quy mô ImageNet**: Chi phí thu thập, gán nhãn, lưu trữ và tính toán được liệt kê theo các giả định kịch bản đã nêu. Mỗi khoản được tính từ mức giá hiển thị bên cạnh, sử dụng các mức giá gán nhãn đám đông, lưu trữ đối tượng và cloud-GPU được công bố trong sách. Trong phép tính này, chi phí dữ liệu chiếm ưu thế vì đã bao gồm cấp phép và chú thích, trong khi lần chạy huấn luyện tương đối ngắn. {#tbl-data-selection-imagenet-cost-breakdown tbl-colwidths="[30,38,32]"}
 
@@ -3355,12 +3355,12 @@ Thách thức là định lượng chính xác cả hai phía. @Tbl-roi-profiles
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Technique**         | **Investment (Cost)**                                   | **Savings (Benefit)**                                        |
+| **Kỹ thuật** | **Đầu tư (Chi phí)** | **Tiết kiệm (Lợi ích)** |
 |:----------------------|:--------------------------------------------------------|:-------------------------------------------------------------|
-| **Deduplication**     | One-time compute for hashing + infrastructure           | Reduced storage and repeated-sample processing               |
-| **Coreset Selection** | Proxy model training + selection compute                | Fewer retained samples if target quality and coverage hold   |
-| **Active Learning**   | Inference on unlabeled pool + human-in-the-loop latency | Lower labeling demand when query selection transfers         |
-| **Data Augmentation** | CPU/GPU cycles for transforms                           | Effective dataset size increase without new data acquisition |
+| **Loại bỏ trùng lặp** | Tính toán một lần để băm + cơ sở hạ tầng | Giảm lưu trữ và xử lý mẫu lặp lại |
+| **Lựa chọn Coreset** | Huấn luyện mô hình proxy + tính toán lựa chọn | Ít mẫu được giữ lại hơn nếu chất lượng và độ bao phủ mục tiêu được duy trì |
+| **Active Learning** | Suy luận trên tập dữ liệu chưa được gán nhãn + độ trễ human-in-the-loop | Nhu cầu gán nhãn thấp hơn khi lựa chọn truy vấn được chuyển giao |
+| **Tăng cường dữ liệu** | Chu kỳ CPU/GPU cho các phép biến đổi | Tăng kích thước tập dữ liệu hiệu quả mà không cần thu thập dữ liệu mới |
 
 : **Hồ sơ ROI cho các kỹ thuật chọn dữ liệu**: Bảng này chỉ ra chi phí và các khoản tiết kiệm có thể có. Không kỹ thuật nào đảm bảo ROI dương; mỗi kỹ thuật phải thỏa mãn bất đẳng thức lựa chọn trong điều kiện khối lượng công việc (workload) được đo lường. {#tbl-roi-profiles .striped .hover tbl-colwidths="[18,39,43]"}
 
@@ -3501,11 +3501,11 @@ class DeduplicationAmortization:
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Component**                             |                                                               **Cost** |
+| **Thành phần** |                                                               **Chi phí** |
 |:------------------------------------------|-----------------------------------------------------------------------:|
-| **Build deduplication pipeline**          | `{python} DeduplicationAmortization.cost_build_str` (engineering time) |
-| **Compute MinHash signatures (one-time)** |             `{python} DeduplicationAmortization.cost_compute_once_str` |
-| **Per-run savings**                       |               `{python} DeduplicationAmortization.savings_per_run_str` |
+| **Xây dựng pipeline loại bỏ trùng lặp** | `{python} DeduplicationAmortization.cost_build_str` (thời gian kỹ thuật) |
+| **Tính toán chữ ký MinHash (một lần)** |             `{python} DeduplicationAmortization.cost_compute_once_str` |
+| **Tiết kiệm trên mỗi lần chạy** |               `{python} DeduplicationAmortization.savings_per_run_str` |
 
 : **Các thành phần chi phí cơ sở hạ tầng cho việc loại bỏ dữ liệu trùng lặp**: Khoản đầu tư một lần bao gồm công sức kỹ thuật và tài nguyên tính toán ban đầu; khoản tiết kiệm trên mỗi lần chạy sẽ tích lũy dần theo mỗi lần huấn luyện tiếp theo trên dữ liệu đã được loại bỏ trùng lặp. {#tbl-dedup-costs .striped .hover}
 
@@ -3519,12 +3519,12 @@ Xu hướng ROI trong @tbl-amortized-roi cho thấy những trường hợp nào
 - **Tập dữ liệu được chia sẻ**: Một tập dữ liệu đã được làm sạch hoặc loại bỏ dữ liệu trùng lặp có thể hỗ trợ nhiều nhóm hoặc nhiều kiến trúc mô hình.
 - **Các kỹ thuật có thể tái sử dụng rộng rãi**: Các phương pháp như loại bỏ dữ liệu trùng lặp có thể áp dụng cho nhiều mô hình, trong khi các coreset chuyên biệt cho từng tác vụ thì có thể không.
 
-| **Number of Runs** |                                                    **Amortized ROI** |
+| **Số lần chạy** |                                                    **ROI được khấu hao** |
 |:-------------------|---------------------------------------------------------------------:|
-| **1 run**          |            `{python} DeduplicationAmortization.roi_1_str` (net loss) |
-| **5 runs**         |     `{python} DeduplicationAmortization.roi_5_str` (near break-even) |
-| **10 runs**        |          +`{python} DeduplicationAmortization.roi_10_str` (positive) |
-| **50 runs**        | +`{python} DeduplicationAmortization.roi_50_str` (highly profitable) |
+| **1 lần chạy** |            `{python} DeduplicationAmortization.roi_1_str` (lỗ ròng) |
+| **5 lần chạy** |     `{python} DeduplicationAmortization.roi_5_str` (gần hòa vốn) |
+| **10 lần chạy** |          +`{python} DeduplicationAmortization.roi_10_str` (dương) |
+| **50 lần chạy** | +`{python} DeduplicationAmortization.roi_50_str` (lợi nhuận cao) |
 
 : **ROI phân bổ qua nhiều lần huấn luyện**: Với mức chi phí và tiết kiệm trong kịch bản này, một pipeline khử trùng lặp có thể bị lỗ ở lần dùng đầu tiên nhưng sẽ có lãi khi được tái sử dụng đủ nhiều lần chạy. Các khoản đầu tư hạ tầng nên được đánh giá theo vòng đời kỳ vọng của chúng, thay vì chỉ nhìn vào một lần sử dụng. {#tbl-amortized-roi .striped .hover}
 
@@ -3554,12 +3554,12 @@ Broadcast: selected_indices → all workers
 Workers: train on subset(local_shard, selected_indices)
 ```
 
-| **Technique**           | **Single-Node Assumption**      | **Distributed Challenge**                    |
+| **Kỹ thuật** | **Giả định một Node** | **Thách thức phân tán** |
 |:------------------------|:--------------------------------|:---------------------------------------------|
-| **Coreset Selection**   | Global view of dataset          | Each worker sees only its shard              |
-| **Active Learning**     | Centralized uncertainty scoring | Scoring requires model synchronization       |
-| **Curriculum Learning** | Global difficulty ordering      | Workers may have different "hardest" samples |
-| **Deduplication**       | Hash table fits in memory       | Distributed hash tables add latency          |
+| **Lựa chọn Coreset** | Chế độ xem toàn cầu của tập dữ liệu | Mỗi worker chỉ thấy shard của nó |
+| **Active Learning** | Chấm điểm sự không chắc chắn tập trung | Chấm điểm yêu cầu đồng bộ hóa mô hình |
+| **Curriculum Learning** | Sắp xếp độ khó toàn cầu | Các worker có thể có các mẫu "khó nhất" khác nhau |
+| **Loại bỏ trùng lặp** | Bảng băm (Hash table) vừa trong bộ nhớ | Các bảng băm phân tán (Distributed hash tables) làm tăng độ trễ |
 
 : **Các Phụ thuộc Lựa chọn trong Huấn luyện Phân tán**: Bảng này bắt đầu từ cách tiếp cận tập trung phổ biến của từng kỹ thuật, sau đó chỉ ra vấn đề phối hợp phát sinh khi dữ liệu bị phân mảnh. Các phiên bản phân tán có thể chấp nhận một mức độ sai khác nhất định, thay vì phải tái tạo chính xác kết quả như khi thực hiện tập trung. {#tbl-selection-dependencies .striped .hover}
 
@@ -3734,11 +3734,11 @@ Cơ chế này liên quan đến cách mô hình mã hóa thông tin. Một mô 
 
 Trong khi hiệu quả cấp mô hình quyết định phần công việc còn lại sau huấn luyện, thì thông lượng cấp máy quyết định mức độ hiệu quả của chính quá trình huấn luyện. Các bộ tăng tốc chuyên dụng, tối ưu hóa kernel và thực thi song song giúp tăng thông lượng hiệu quả. Lựa chọn dữ liệu ảnh hưởng đến việc nút thắt cổ chai nào của máy trở nên chi phối, và mối quan hệ này tinh tế hơn nhiều so với những phép tính tăng tốc đơn giản gợi ý, như @tbl-bottleneck-shifts minh họa.
 
-| **Observed Condition**                  | **Possible Bottleneck**        | **Candidate Response**                    |
+| **Điều kiện quan sát được** | **Nút thắt cổ chai (Bottleneck) có thể xảy ra** | **Phản hồi ứng cử viên** |
 |:----------------------------------------|:-------------------------------|:------------------------------------------|
-| **Input rate below accelerator demand** | Storage, decode, or host link  | Sharding, prefetching, parallel decode    |
-| **Low-intensity training kernels**      | Accelerator memory bandwidth   | Fusion, reduced traffic, lower precision  |
-| **Dynamic scoring dominates iteration** | Selection compute or index I/O | Proxy models, cached scores or embeddings |
+| **Tốc độ đầu vào thấp hơn nhu cầu của bộ tăng tốc** | Lưu trữ, giải mã hoặc liên kết máy chủ | Sharding, tìm nạp trước, giải mã song song |
+| **Các kernel huấn luyện cường độ thấp** | Băng thông bộ nhớ của bộ tăng tốc | Fusion, giảm lưu lượng, độ chính xác thấp hơn |
+| **Chấm điểm động chiếm ưu thế trong lần lặp** | Tính toán lựa chọn hoặc I/O chỉ mục | Các mô hình proxy, điểm được lưu vào cache hoặc embeddings |
 
 : **Chẩn đoán nút thắt sau khi chọn dữ liệu**: Việc thay đổi tập dữ liệu và cách thức truy cập có thể làm lộ một nút thắt khác, nhưng chỉ riêng kích thước tập dữ liệu không quyết định tài nguyên giới hạn. Hãy profile lại pipeline và chọn cách xử lý phù hợp với tình trạng đo được. {#tbl-bottleneck-shifts .striped .hover}
 
@@ -4426,13 +4426,13 @@ Các nguyên tắc lựa chọn dữ liệu áp dụng cho cả năm mô hình l
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Lighthouse**       | **Primary Bottleneck** | **Data Selection Priority**                                                      |
+| **Hải đăng** | **Nút thắt cổ chai (Bottleneck) chính** | **Ưu tiên lựa chọn dữ liệu** |
 |:---------------------|:-----------------------|:---------------------------------------------------------------------------------|
-| **ResNet-50**        | Compute                | Coreset selection directly reduces training FLOPs                                |
-| **GPT-2/Llama**      | Memory bandwidth       | Deduplication reduces corpus size; curriculum learning improves token efficiency |
-| **MobileNetV2**      | Latency/Power          | Validate augmentation against the target model and deployment invariances        |
-| **DLRM**             | Memory capacity        | Interaction deduplication and embedding pruning reduce table size                |
-| **Keyword Spotting** | Extreme constraints    | Augmentation and synthesis create datasets from minimal seeds                    |
+| **ResNet-50** | Tính toán | Lựa chọn coreset trực tiếp giảm FLOPs huấn luyện |
+| **GPT-2/Llama** | Băng thông bộ nhớ | Loại bỏ trùng lặp giảm kích thước kho ngữ liệu; curriculum learning cải thiện hiệu quả token |
+| **MobileNetV2** | Độ trễ/Công suất | Xác thực augmentation so với mô hình mục tiêu và các tính bất biến khi triển khai |
+| **DLRM** | Dung lượng bộ nhớ | Loại bỏ trùng lặp tương tác và tỉa (pruning) embedding giảm kích thước bảng |
+| **Phát hiện từ khóa (Keyword Spotting)** | Các ràng buộc cực đoan | Augmentation và tổng hợp tạo ra các tập dữ liệu từ các hạt giống tối thiểu |
 
 : **Ưu tiên lựa chọn dữ liệu theo Lighthouse**: Nút thắt chính và mức độ ưu tiên lựa chọn dữ liệu được đề xuất cho mỗi khối lượng công việc (workload) lighthouse. Sự kết hợp này gợi ý một giả thuyết cần được kiểm tra; chỉ riêng ràng buộc tài nguyên chính không đảm bảo rằng một kỹ thuật sẽ hiệu quả. {#tbl-data-selection-lighthouse-priorities}
 

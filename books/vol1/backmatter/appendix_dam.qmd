@@ -26,11 +26,11 @@ Khung phân loại này ánh xạ trực tiếp đến định luật sắt củ
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Axis**          |        **Role**        |    **Physical Constraint**    | **High-Leverage Optimization**                     |
+| **Trục** |        **Vai trò** |    **Ràng buộc vật lý** | **Tối ưu hóa đòn bẩy cao** |
 |:------------------|:----------------------:|:-----------------------------:|:---------------------------------------------------|
-| **Data (D)**      | Information (The Fuel) | Volume, quality, arrival rate | Data Selection (@sec-data-selection)               |
-| **Algorithm (A)** | Logic (The Blueprint)  |  Operations and dependencies  | Model Compression (@sec-model-compression)         |
-| **Machine (M)**   |  Physics (The Engine)  |      Compute, memory, I/O     | Hardware Acceleration (@sec-hardware-acceleration) |
+| **Dữ liệu (D)** | Thông tin (Nhiên liệu) | Khối lượng, chất lượng, tốc độ đến | Lựa chọn dữ liệu (@sec-data-selection) |
+| **Thuật toán (A)** | Logic (Bản thiết kế) |  Các hoạt động và sự phụ thuộc | Nén mô hình (@sec-model-compression) |
+| **Máy (M)** |  Vật lý (Động cơ) |      Tính toán, bộ nhớ, I/O | Tăng tốc phần cứng (@sec-hardware-acceleration) |
 
 : **Tham khảo Trục D·A·M**: Mỗi trục tương ứng với một loại ràng buộc và một chiến lược tối ưu hóa. Bạn hãy đưa ra giả thuyết, kiểm chứng bằng các phép đo, rồi xem chương tương ứng. {#tbl-dam-components-ref tbl-colwidths="[13,23,30,34]"}
 
@@ -186,15 +186,15 @@ Sau khi đã xác định được trục chính ban đầu, @tbl-dam-intersecti
 \renewcommand{\arraystretch}{1.4}
 ```
 
-| **Zone**                                 | **Name**                   | **Key Techniques**                                           | **Book Coverage**                                          |
+| **Vùng** | **Tên** | **Các kỹ thuật chính** | **Nội dung sách** |
 |:-----------------------------------------|:---------------------------|:-------------------------------------------------------------|:-----------------------------------------------------------|
-| **Data**                                 | Information                | Storage formats, data quality, distributions                 | @sec-data-engineering                                      |
-| **Algorithm**                            | Logic                      | Loss functions, architectures, gradients                     | @sec-neural-computation, @sec-network-architectures        |
-| **Data $\cap$ Algorithm**                | What to Learn From         | Data selection, curriculum learning, compute-optimal scaling | @sec-data-selection, @sec-model-training                   |
-| **Data $\cap$ Machine**                  | How to Move Information    | I/O bandwidth, prefetching, data formats                     | @sec-data-engineering, @sec-hardware-acceleration          |
-| **Algorithm $\cap$ Machine**             | How to Execute Efficiently | Quantization, pruning, kernel fusion, mixed precision        | @sec-ml-frameworks, @sec-model-compression                 |
-| **Machine**                              | Physics                    | Silicon, memory hierarchy, peak FLOP/s                       | @sec-hardware-acceleration                                 |
-| **Data $\cap$ Algorithm $\cap$ Machine** | ML Systems Engineering     | Iron law, Roofline, training loops, serving                  | @sec-model-training, @sec-model-serving, @sec-benchmarking |
+| **Dữ liệu** | Thông tin | Định dạng lưu trữ, chất lượng dữ liệu, phân phối | @sec-data-engineering |
+| **Thuật toán** | Logic | Các hàm mất mát, kiến trúc, gradient | @sec-neural-computation, @sec-network-architectures |
+| **Dữ liệu $\cap$ Thuật toán** | Học từ đâu | Lựa chọn dữ liệu, học tập theo chương trình, mở rộng tối ưu tính toán | @sec-data-selection, @sec-model-training |
+| **Dữ liệu $\cap$ Máy** | Cách di chuyển thông tin | Băng thông I/O, tìm nạp trước, định dạng dữ liệu | @sec-data-engineering, @sec-hardware-acceleration |
+| **Thuật toán $\cap$ Máy** | Cách thực thi hiệu quả | Lượng tử hoá, tỉa (pruning), hợp nhất kernel, độ chính xác hỗn hợp | @sec-ml-frameworks, @sec-model-compression |
+| **Máy** | Vật lý | Silicon, hệ thống phân cấp bộ nhớ, FLOP/s đỉnh | @sec-hardware-acceleration |
+| **Dữ liệu $\cap$ Thuật toán $\cap$ Máy** | Kỹ thuật Hệ thống ML | Iron law, Roofline, các vòng lặp huấn luyện, phục vụ (serving) | @sec-huấn luyện mô hình, @sec-phục vụ (serving) mô hình, @sec-benchmarking |
 
 : **Tham chiếu Giao điểm D·A·M**: Mỗi vùng ánh xạ các kỹ thuật cụ thể đến các trục mà chúng bao phủ và các chương đề cập đến chúng. Các giao điểm từng cặp đòi hỏi phải suy luận về hai miền đồng thời; phần trung tâm đòi hỏi cả ba. {#tbl-dam-intersections tbl-colwidths="[17,25,37,21]"}
 
@@ -234,12 +234,12 @@ $$ T_{\text{sequential}} = \frac{D_{\text{vol}}}{\text{BW}} + \frac{O}{R_{\text{
 
 Nhiệm vụ của kỹ sư hệ thống là làm cho các thành phần này chạy song song, không phải nối tiếp. @Tbl-dam-overlap tóm tắt các kỹ thuật phối hợp D·A·M chính giúp chồng chéo công việc trên các trục:
 
-| **Technique**           | **D·A·M Axes Overlapped**    | **Implementation**                                             |
+| **Kỹ thuật** | **Các Trục D·A·M Chồng Chéo** | **Triển khai** |
 |:------------------------|:-----------------------------|:---------------------------------------------------------------|
-| **Prefetching**         | D overlaps M                 | DataLoader with `prefetch_factor`, `pin_memory=True`           |
-| **CUDA Streams**        | D overlaps M                 | Separate streams for H2D transfer and compute                  |
-| **Async Gradient Sync** | M (communication) overlaps A | Overlap bucketed AllReduce with remaining backward computation |
-| **Double Buffering**    | D overlaps M                 | Fill buffer N+1 while computing on buffer N                    |
+| **Tìm nạp trước** | D chồng chéo M | DataLoader với `prefetch_factor`, `pin_memory=True` |
+| **CUDA Streams** | D chồng chéo M | Tách biệt các luồng cho truyền H2D và tính toán |
+| **Đồng bộ Gradient Bất đồng bộ** | M (truyền thông) chồng chéo A | Chồng chéo AllReduce theo nhóm với tính toán lan truyền ngược còn lại |
+| **Double Buffering** | D chồng chéo M | Điền bộ đệm N+1 trong khi tính toán trên bộ đệm N |
 
 : **Các Kỹ thuật Chồng chéo D·A·M**: Mỗi kỹ thuật giúp chồng chéo công việc trên các trục, đưa thời gian Dữ liệu/Máy và Thuật toán/Máy (vốn được cộng tuần tự) tiến gần hơn đến giới hạn dưới lý tưởng của chúng: tức là giá trị lớn hơn trong hai hạng mục. Các phụ thuộc và tranh chấp sẽ giới hạn mức độ chồng chéo thực tế đạt được. {#tbl-dam-overlap tbl-colwidths="[19,27,54]"}
 
@@ -277,11 +277,11 @@ Các nhãn phổ biến trong ngành có thể cắt ngang các trục. Thực t
 
 Khi profiling đã xác định được thành phần chi phối trong "định luật sắt", các tối ưu hóa phải nhắm đúng vào trục đó. @Tbl-bottleneck-actions đối chiếu các can thiệp đem lại tăng tốc end-to-end với những tối ưu hóa không ràng buộc, gây lãng phí công sức kỹ thuật:
 
-| **If the workload is...** |              **Dominant Term**               | **Optimization That Works**                                                                           | **Optimization That is Wasted**                             |
+| **Nếu khối lượng công việc (workload) là...** |              **Thành phần Chi phối** | **Tối ưu hóa Hiệu quả** | **Tối ưu hóa Lãng phí** |
 |:--------------------------|:--------------------------------------------:|:------------------------------------------------------------------------------------------------------|:------------------------------------------------------------|
-| **Memory-Bound**          |          $D_{\text{vol}}/\text{BW}$          | Quantization; structured pruning; batching for weight reuse; fusion that removes intermediate traffic | Faster accelerator (more FLOP/s will not help)              |
-| **Compute-Bound**         | $O/(R_{\text{peak}} \cdot \eta_{\text{hw}})$ | Better kernels, Tensor Cores, faster accelerator, lower precision                                     | More memory bandwidth (not the binding term)                |
-| **Latency-Bound**         |               $L_{\text{lat}}$               | Reduce serial depth; fuse or dispatch asynchronously; batch within budget                             | More compute or bandwidth unless the trace shows it binding |
+| **Giới hạn bởi Bộ nhớ** |          $D_{\text{vol}}/\text{BW}$          | Lượng tử hoá; tỉa (pruning) có cấu trúc; gom batch để tái sử dụng trọng số; hợp nhất loại bỏ lưu lượng trung gian | Bộ tăng tốc nhanh hơn (nhiều FLOP/s hơn sẽ không giúp ích) |
+| **Giới hạn bởi Tính toán** | $O/(R_{\text{peak}} \cdot \eta_{\text{hw}})$ | Kernel tốt hơn, Tensor Cores, bộ tăng tốc nhanh hơn, độ chính xác thấp hơn | Băng thông bộ nhớ nhiều hơn (không phải thành phần ràng buộc) |
+| **Giới hạn bởi Độ trễ** |               $L_{\text{lat}}$               | Giảm độ sâu tuần tự; hợp nhất hoặc điều phối bất đồng bộ; gom batch trong giới hạn ngân sách | Tính toán hoặc băng thông nhiều hơn trừ khi dấu vết cho thấy nó là ràng buộc |
 
 : **Điều gì hiệu quả và Điều gì lãng phí**: Tối ưu hóa một yếu tố không phải nút thắt cổ chai sẽ đem lại rất ít hoặc không cải thiện được end-to-end. Ví dụ, một mô hình ngôn ngữ lớn bị giới hạn bởi bộ nhớ sẽ không được lợi nhiều chỉ từ việc tăng thêm FLOP/s đỉnh, dù một bộ tăng tốc có băng thông bộ nhớ lớn hơn có thể giúp. {#tbl-bottleneck-actions tbl-colwidths="[19,17,32,32]"}
 
@@ -329,13 +329,13 @@ Ba trường hợp này cho thấy các nút thắt cổ chai có thể vượt 
 
 Ma trận chẩn đoán gợi ý *nghi ngờ điều gì*. Câu hỏi tiếp theo là *làm sao* xác nhận nghi ngờ đó bằng bằng chứng—điều này đòi hỏi các công cụ phân tích hiệu năng (profiling tools) phù hợp.
 
-| **Symptom**                     | **Hypothesis**             | **Confirm With**                                  | **Act After Confirmation**                    |
+| **Triệu chứng** | **Giả thuyết** | **Xác nhận bằng** | **Hành động sau Xác nhận** |
 |:--------------------------------|:---------------------------|:--------------------------------------------------|:----------------------------------------------|
-| **Low Accelerator Utilization** | Data/host starvation       | Trace gaps; loader, CPU, storage, launch counters | Prefetch, parallelize, or cut launches.       |
-| **High Latency (P99)**          | Algorithm/runtime/queue    | Phase p99 and queue depth                         | Optimize the dominant phase.                  |
-| **High Training Cost**          | Low useful-work efficiency | MFU, communication, idle time                     | Reduce the largest loss or resize.            |
-| **High Inter-GPU Overhead**     | Communication bound        | Device trace; collective gaps                     | Bucket AllReduce; tune data-parallel overlap. |
-| **Out-of-Memory (OOM)**         | Algorithm/Machine fit      | Peak weights, states, activations                 | Checkpoint, shard, quantize, or shrink batch. |
+| **Mức sử dụng Bộ tăng tốc Thấp** | Thiếu hụt dữ liệu/tài nguyên host | Khoảng trống theo dõi; trình tải, CPU, bộ nhớ, bộ đếm khởi chạy | Tải trước, song song hóa hoặc cắt giảm khởi chạy. |
+| **Độ trễ cao (P99)** | Thuật toán/runtime/hàng đợi | Giai đoạn p99 và độ sâu hàng đợi | Tối ưu hóa giai đoạn chiếm ưu thế. |
+| **Chi phí huấn luyện cao** | Hiệu quả công việc hữu ích thấp | MFU, giao tiếp, thời gian nhàn rỗi | Giảm tổn thất lớn nhất hoặc thay đổi kích thước. |
+| **Chi phí chung giữa các GPU cao** | Giới hạn bởi giao tiếp | Dấu vết thiết bị; khoảng trống tập thể | Bucket AllReduce; điều chỉnh sự chồng chéo song song dữ liệu. |
+| **Hết bộ nhớ (OOM)** | Thuật toán/Khớp máy | Trọng số đỉnh, trạng thái, activation | Checkpoint, phân đoạn, lượng tử hoá hoặc thu nhỏ batch. |
 
 : **Ma trận chẩn đoán D·A·M**: Các giả thuyết và phép đo ban đầu cho những lỗi thường gặp. Hãy xác nhận yếu tố gây tắc nghẽn trước khi can thiệp. {#tbl-dam-troubleshooting tbl-colwidths="[25,21,29,25]"}
 
@@ -343,11 +343,11 @@ Ma trận chẩn đoán gợi ý *nghi ngờ điều gì*. Câu hỏi tiếp the
 
 Khi đã có giả thuyết (ví dụ: "khối lượng công việc (workload) có vẻ bị ràng buộc bởi 'Machine'"), chúng ta cần bằng chứng để xác nhận. Các khái niệm trừu tượng phải được đo lường bằng những tiện ích cụ thể. @Tbl-dam-tooling kết nối các thành phần lý thuyết với các công cụ phân tích hiệu năng cụ thể của Linux và Python để kiểm chứng chúng.
 
-| **Axis**      | **Key Metric**                        | **Primary Tool**         | **Secondary Tool**            |
+| **Trục** | **Chỉ số chính** | **Công cụ chính** | **Công cụ phụ** |
 |:--------------|:--------------------------------------|:-------------------------|:------------------------------|
-| **Data**      | Batch Load and Wait Time              | Framework profiler trace | `iostat`, `pidstat` (I/O/CPU) |
-| **Algorithm** | FLOPs, Model Depth                    | PyTorch Profiler         | DeepSpeed Flops Profiler      |
-| **Machine**   | Accelerator Utilization, SM Occupancy | Nsight Compute           | `nvidia-smi`, Nsight Systems  |
+| **Dữ liệu** | Tải batch và Thời gian chờ | Dấu vết profiler của framework | `iostat`, `pidstat` (I/O/CPU) |
+| **Thuật toán** | FLOPs, Độ sâu mô hình | PyTorch Profiler | DeepSpeed Flops Profiler |
+| **Máy** | Mức sử dụng bộ tăng tốc, Mức chiếm dụng SM | Nsight Compute | `nvidia-smi`, Nsight Systems |
 
 : **Bản đồ công cụ D·A·M**: Các tiện ích phân tích hiệu năng dùng để chẩn đoán các nút thắt cổ chai theo từng trục D·A·M. Hãy bắt đầu với công cụ chính để phân loại nhanh; dùng các công cụ phụ để phân tích chuyên sâu khi kết quả từ công cụ chính chưa đủ thuyết phục. {#tbl-dam-tooling tbl-colwidths="[12,37,20,31]"}
 
@@ -364,11 +364,11 @@ Các công cụ phân tích hiệu năng tạo ra những con số thô—tỷ l
 \renewcommand{\arraystretch}{2.7}
 ```
 
-| **Axis**      | **Metric**     |                       **Definition**                       |    **Investigate**     |   **Strong Signal**   |
+| **Trục** | **Chỉ số** |                       **Định nghĩa** |    **Điều tra** |   **Tín hiệu mạnh** |
 |:--------------|:---------------|:----------------------------------------------------------:|:----------------------:|:---------------------:|
-| **Data**      | I/O Overhead   |  $\dfrac{\text{Data Wait Time}}{\text{Total Step Time}}$   |    $>$ 10% (screen)    |    $<$ 1% (strong)    |
-| **Algorithm** | Avoidable Work |      Profiler or ablation finds redundant operations       |  Redundant work found  | End-to-end work falls |
-| **Machine**   | MFU            | $\dfrac{\text{Achieved model FLOP/s}}{\text{Peak FLOP/s}}$ | $<$ 30% (large models) | $>$ 50% (same regime) |
+| **Dữ liệu** | Chi phí chung I/O |  $\dfrac{\text{Data Wait Time}}{\text{Total Step Time}}$   |    $>$ 10% (screen) |    $<$ 1% (strong) |
+| **Thuật toán** | Công việc có thể tránh được |      Profiler hoặc ablation tìm thấy các hoạt động dư thừa |  Tìm thấy công việc dư thừa | Khối lượng công việc đầu cuối giảm |
+| **Máy** | MFU | $\dfrac{\text{Achieved model FLOP/s}}{\text{Peak FLOP/s}}$ | $<$ 30% (mô hình lớn) | $>$ 50% (cùng chế độ) |
 
 : **Các chỉ số sàng lọc D·A·M**: Đây là những tín hiệu phụ thuộc ngữ cảnh để phục vụ điều tra, không phải điểm số mang tính phổ quát. {#tbl-dam-scorecard tbl-colwidths="[25,25,25,25]"}
 

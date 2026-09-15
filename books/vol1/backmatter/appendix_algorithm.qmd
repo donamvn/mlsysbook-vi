@@ -187,12 +187,12 @@ Một lần sập do lệch shape, một phép broadcast sai mà không báo l�
 \renewcommand{\arraystretch}{1.6}
 ```
 
-| **Layer Type**                |        **Output Shape**       |                                       **Parameters ($P$)**                                       |                              **FLOPs (per Forward Pass)**                              |
+| **Loại lớp** |        **Hình dạng đầu ra** |                                       **Tham số ($P$)** |                              **FLOPS (mỗi lượt chuyển tiếp)** |
 |:------------------------------|:-----------------------------:|:------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------:|
-| **Linear**                    |     $(B, N_{\text{out}})$     |            $N_{\text{in}} \times N_{\text{out}} + N_{\text{out}}$ if bias is enabled             |                $2 \times B \times N_{\text{in}} \times N_{\text{out}}$                 |
-| **Conv2D**                    | $(B, C_{\text{out}}, H', W')$ |       $K^2 \times C_{\text{in}} \times C_{\text{out}} + C_{\text{out}}$ if bias is enabled       | $2 \times B \times H' \times W' \times K^2 \times C_{\text{in}} \times C_{\text{out}}$ |
-| **Multi-Head Self-Attention** |   $(B, S, d_{\text{model}})$  | $4 \times d_{\text{model}}^2$, plus $4 \times d_{\text{model}}$ if projection biases are enabled |              $B \times (4 S^2 d_{\text{model}} + 8 S d_{\text{model}}^2)$              |
-| **LayerNorm**                 |   $(B, S, d_{\text{model}})$  |                 $2 \times d_{\text{model}}$ if affine scale and bias are enabled                 |                   $\mathcal{O}(B \times S \times d_{\text{model}})$                    |
+| **Tuyến tính** |     $(B, N_{\text{out}})$     |            $N_{\text{in}} \times N_{\text{out}} + N_{\text{out}}$ nếu độ chệch (bias) được bật |                $2 \times B \times N_{\text{in}} \times N_{\text{out}}$                 |
+| **Tích chập 2D** | $(B, C_{\text{out}}, H', W')$ |       $K^2 \times C_{\text{in}} \times C_{\text{out}} + C_{\text{out}}$ nếu độ chệch (bias) được bật | $2 \times B \times H' \times W' \times K^2 \times C_{\text{in}} \times C_{\text{out}}$ |
+| **Multi-Head Self-Attention** |   $(B, S, d_{\text{model}})$  | $4 \times d_{\text{model}}^2$, cộng thêm $4 \times d_{\text{model}}$ nếu độ chệch (bias) chiếu được bật |              $B \times (4 S^2 d_{\text{model}} + 8 S d_{\text{model}}^2)$              |
+| **LayerNorm** |   $(B, S, d_{\text{model}})$  |                 $2 \times d_{\text{model}}$ nếu tỷ lệ affine và độ chệch (bias) được bật |                   $\mathcal{O}(B \times S \times d_{\text{model}})$                    |
 
 : **Các phép toán tensor cơ bản trong deep learning**: Tóm tắt về hình dạng, tham số và số lượng FLOPS. Lưu ý: $B$ là kích thước batch, $S$ là độ dài chuỗi và $K$ là kích thước kernel. Số FLOPS cho attention bao gồm các phép chiếu QKV và các tương tác tính điểm. Hạng $S^2$ áp dụng cho huấn luyện toàn chuỗi và giai đoạn prefill, trong khi quá trình tạo sinh với KV-cache thì tuyến tính theo từng token trong ngữ cảnh đã được cache; khối lượng phép chiếu $d^2$ sẽ chiếm ưu thế khi chiều ẩn lớn. {#tbl-tensor-op-ref tbl-colwidths="[13,18,36,33]"}
 

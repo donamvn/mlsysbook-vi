@@ -29,11 +29,11 @@ Cường độ hoạt động và băng thông DRAM đều phải được đo t
 
 Nhiều kernel quan trọng trong ML nằm ở phía bị giới hạn bởi bộ nhớ (memory-bound), đặc biệt là các thao tác ít tái sử dụng dữ liệu như tra cứu embedding, chuẩn hóa, softmax, tích chập depthwise và các đường suy luận với batch nhỏ. Ngược lại, phép nhân ma trận dày đặc và tích chập có thể chuyển sang bị giới hạn bởi tính toán (compute-bound) khi batch lớn và phần cứng được tận dụng cao. Sự phân nhánh này bắt nguồn từ “bức tường bộ nhớ” (memory wall): tốc độ của bộ xử lý trong lịch sử tăng nhanh hơn băng thông bộ nhớ, và khoảng cách tích lũy đã nới rộng suốt hơn ba thập kỷ [@wulf1995; @gholami2024]. Mạng nơ-ron, với các tensor trọng số rất lớn và tính cục bộ theo thời gian không đồng đều, đặc biệt dễ bị ảnh hưởng. Định luật cường độ số học giúp chẩn đoán *vị trí* của một khối lượng công việc (workload) so với bức tường này. Chi phí di chuyển dữ liệu giải thích *tại sao* bức tường lại khắc nghiệt đến vậy. @Tbl-bottleneck-diagnostic liên kết mỗi loại nút thắt cổ chai với các tối ưu hóa tiêu biểu để xử lý chúng, và với những thay đổi không chạm tới thành phần chi phối.
 
-| **If the workload is...** |              **Dominant Term**               | **Optimization That Works**                                                | **Optimization That is Wasted**  |
+| **Nếu khối lượng công việc (workload) là...** |              **Thuật ngữ chi phối** | **Tối ưu hóa có hiệu quả** | **Tối ưu hóa bị lãng phí** |
 |:--------------------------|:--------------------------------------------:|:---------------------------------------------------------------------------|:---------------------------------|
-| **Memory-Bound**          |          $D_{\text{vol}}/\text{BW}$          | Quantization, pruning, batching                                            | Faster accelerator (more FLOP/s) |
-| **Compute-Bound**         | $O/(R_{\text{peak}} \cdot \eta_{\text{hw}})$ | Better kernels, Tensor Cores, faster accelerator                           | More memory bandwidth            |
-| **Latency-Bound**         |               $L_{\text{lat}}$               | Kernel fusion, async dispatch, bounded microbatching under the latency SLO | More FLOP/s or bandwidth alone   |
+| **Giới hạn bởi bộ nhớ** |          $D_{\text{vol}}/\text{BW}$          | Lượng tử hoá, tỉa (pruning), batching | Bộ tăng tốc nhanh hơn (nhiều FLOP/s hơn) |
+| **Giới hạn bởi tính toán** | $O/(R_{\text{peak}} \cdot \eta_{\text{hw}})$ | Kernels tốt hơn, Tensor Cores, bộ tăng tốc nhanh hơn | Băng thông bộ nhớ nhiều hơn |
+| **Giới hạn bởi độ trễ** |               $L_{\text{lat}}$               | Hợp nhất kernel, điều phối bất đồng bộ, microbatching giới hạn dưới SLO độ trễ | Nhiều FLOP/s hoặc băng thông một mình |
 
 : **Chẩn đoán nút thắt cổ chai**: Trước khi tối ưu hóa, hãy xác định vế nào của “luật sắt” đang chi phối. Tối ưu sai vế sẽ khiến nút thắt chính không đổi và thường không mang lại, hoặc chỉ mang lại rất ít, cải thiện đầu-cuối. {#tbl-bottleneck-diagnostic tbl-colwidths="[18,18,37,27]"}
 

@@ -106,11 +106,11 @@ Trọng lực dữ liệu[^fn-data-gravity-anchor] là một phép ẩn dụ d�
 
 Thời gian truyền lý tưởng ở tốc độ đường truyền là $T = D_{\text{vol}}/\text{BW}$ sau khi chuyển đổi dung lượng dữ liệu và băng thông về cùng đơn vị (các phép tính dưới đây chuyển đổi rõ ràng giữa byte thập phân và bit trên giây). Với các dung lượng lớn như ở đây, độ trễ có thể bỏ qua; phương trình đầy đủ được trình bày trong @sec-appdx-machine-foundations-bandwidth-vs-latency-5320. @Tbl-data-gravity đưa ra các giới hạn dưới; chi phí giao thức và giới hạn của điểm cuối sẽ làm tăng các giá trị này.
 
-| **Data Volume** |       **1 Gbps (Standard WAN)**       |       **10 Gbps (High-End WAN)**       |      **100 Gbps (Direct Connect)**      |       **Truck (Illustrative)**       |
+| **Khối lượng dữ liệu** |       **1 Gbps (WAN tiêu chuẩn)** |       **10 Gbps (WAN cao cấp)** |      **100 Gbps (Kết nối trực tiếp)** |       **Xe tải (Minh họa)** |
 |:----------------|:-------------------------------------:|:--------------------------------------:|:---------------------------------------:|:------------------------------------:|
-| **1 TB**        |  `{python} DataGravity.t_1tb_1g_str`  |  `{python} DataGravity.t_1tb_10g_str`  |  `{python} DataGravity.t_1tb_100g_str`  |                 N/A                  |
-| **100 TB**      | `{python} DataGravity.t_100tb_1g_str` | `{python} DataGravity.t_100tb_10g_str` | `{python} DataGravity.t_100tb_100g_str` |                 N/A                  |
-| **1 PB**        |  `{python} DataGravity.t_1pb_1g_str`  |  `{python} DataGravity.t_1pb_10g_str`  |  `{python} DataGravity.t_1pb_100g_str`  | `{python} DataGravity.truck_1pb_str` |
+| **1 TB** |  `{python} DataGravity.t_1tb_1g_str`  |  `{python} DataGravity.t_1tb_10g_str`  |  `{python} DataGravity.t_1tb_100g_str`  |                 N/A                  |
+| **100 TB** | `{python} DataGravity.t_100tb_1g_str` | `{python} DataGravity.t_100tb_10g_str` | `{python} DataGravity.t_100tb_100g_str` |                 N/A                  |
+| **1 PB** |  `{python} DataGravity.t_1pb_1g_str`  |  `{python} DataGravity.t_1pb_10g_str`  |  `{python} DataGravity.t_1pb_100g_str`  | `{python} DataGravity.truck_1pb_str` |
 
 : **Chi phí của quán tính**: Những khoảng thời gian truyền này giải thích vì sao chúng ta thường "chuyển tính toán đến dữ liệu" thay vì "chuyển dữ liệu đến tính toán." Các cột mạng thể hiện giới hạn dưới ở tốc độ đường truyền duy trì. Mục xe tải là một mô hình minh họa thời gian trọn vẹn cho 1 PB: 8 giờ để tải, 32 giờ di chuyển và 8 giờ để dỡ, chưa tính chi phí lập lịch và cấp phát. {#tbl-data-gravity tbl-colwidths="[23,20,20,20,17]"}
 
@@ -161,11 +161,11 @@ Ngay cả khi dữ liệu đã đến máy, chi phí tuần tự hóa vẫn là 
 
 [^fn-serialization-binary-format]: **Tuần tự hóa**\index{Serialization!definition}: Từ tiếng Latin *serialis* (có nghĩa là tạo thành một chuỗi). Đây là quá trình chuyển đổi các cấu trúc dữ liệu trong bộ nhớ thành một luồng byte để lưu trữ hoặc truyền tải, và quá trình ngược lại (*giải tuần tự hóa*). Trong các pipeline ML, việc chọn định dạng tuần tự hóa có thể ảnh hưởng rất lớn đến tổng thời gian huấn luyện; @sec-data-engineering-data-ingestion-8efc sẽ trình bày các chiến lược thiết kế pipeline để giảm thiểu chi phí này.
 
-| **Format**   |                **Decoding Speed (MB/s)**                |           **Relative CPU Decode Cost**          | **Suitability**        |
+| **Định dạng** |                **Tốc độ giải mã (MB/s)** |           **Chi phí giải mã CPU tương đối** | **Phù hợp** |
 |:-------------|:-------------------------------------------------------:|:-----------------------------------------------:|:-----------------------|
-| **CSV/JSON** |   `{python} SerializationCost.csv_speed_mb_per_s_str`   |   `{python} SerializationCost.csv_cycles_str`   | Inspection/interchange |
-| **Protobuf** |  `{python} SerializationCost.proto_speed_mb_per_s_str`  |  `{python} SerializationCost.proto_cycles_str`  | RPC/Messages           |
-| **Parquet**  | `{python} SerializationCost.parquet_speed_mb_per_s_str` | `{python} SerializationCost.parquet_cycles_str` | Columnar storage       |
+| **CSV/JSON** |   `{python} SerializationCost.csv_speed_mb_per_s_str`   |   `{python} SerializationCost.csv_cycles_str`   | Kiểm tra/trao đổi |
+| **Protobuf** |  `{python} SerializationCost.proto_speed_mb_per_s_str`  |  `{python} SerializationCost.proto_cycles_str`  | RPC/Tin nhắn |
+| **Parquet** | `{python} SerializationCost.parquet_speed_mb_per_s_str` | `{python} SerializationCost.parquet_cycles_str` | Lưu trữ dạng cột |
 
 : **Chi phí tuần tự hóa**: Những giá trị minh họa này cho thấy vì sao các định dạng cột nhị phân có thể vượt trội hơn văn bản theo hàng, nhưng chúng không phải là benchmark có thể áp dụng rộng rãi. Arrow là một định dạng trong bộ nhớ/IPC; Parquet là một định dạng lưu trữ nén. {#tbl-serialization-cost tbl-colwidths="[21,27,27,25]"}
 

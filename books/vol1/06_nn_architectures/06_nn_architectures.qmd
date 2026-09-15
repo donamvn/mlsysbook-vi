@@ -141,13 +141,13 @@ Các hệ thống machine learning phải đối mặt với một sự đánh �
 
 Việc chọn một kiến trúc nền tảng sẽ quyết định cách bố trí bộ nhớ chính và kiểu tính toán cho phần cứng tiếp theo. @Tbl-architecture-families so sánh năm họ mạng nơ-ron chính dựa trên các inductive bias về không gian/thời gian, các phép toán tensor và đặc điểm truy cập bộ nhớ của chúng.
 
-| **Architecture** | **Data Type**                 | **Core Innovation**            | **System Bottleneck**                           |
+| **Kiến trúc** | **Loại dữ liệu** | **Đổi mới cốt lõi** | **Nút thắt hệ thống** |
 |:-----------------|:------------------------------|:-------------------------------|:------------------------------------------------|
-| **MLPs**         | Tabular/Unstructured          | Dense connectivity             | Memory bandwidth                                |
-| **CNNs**         | Spatial (images)              | Local filters + weight sharing | Compute throughput                              |
-| **RNNs**         | Sequential (time series)      | Recurrent state                | Sequential dependencies                         |
-| **Transformers** | Relational (language)         | Dynamic attention              | Quadratic score compute; optional $S^2$ storage |
-| **DLRM**         | Categorical (recommendations) | Embedding tables               | Memory capacity (TB+)                           |
+| **MLPs** | Dạng bảng/Không cấu trúc | Kết nối dày đặc | Băng thông bộ nhớ |
+| **CNNs** | Không gian (hình ảnh) | Bộ lọc cục bộ + chia sẻ trọng số | Thông lượng tính toán |
+| **RNNs** | Tuần tự (chuỗi thời gian) | Trạng thái lặp lại | Phụ thuộc tuần tự |
+| **Transformers** | Quan hệ (ngôn ngữ) | Cơ chế attention động | Tính toán điểm bậc hai; lưu trữ $S^2$ tùy chọn |
+| **DLRM** | Phân loại (đề xuất) | Bảng embedding | Dung lượng bộ nhớ (TB+) |
 
 : **Các Họ Kiến trúc Mạng Nơ-ron**: Mỗi họ nhắm đến một cấu trúc dữ liệu riêng biệt và bộc lộ một nút thắt cổ chai riêng của hệ thống. Cột 'nút thắt cổ chai' được suy ra trực tiếp từ 'quy luật sắt': MLP gây áp lực lên băng thông bộ nhớ do sử dụng các activation dày đặc; CNN gây áp lực lên thông lượng tính toán vì phép tích chập tái sử dụng các bộ lọc trên nhiều pixel; RNN gặp khó khăn với các phụ thuộc tuần tự, làm giảm khả năng song song hóa; transformer tính toán các tương tác điểm số bậc hai và có thể cần lưu trữ lượng điểm số lớn theo bậc hai; còn DLRM gây áp lực lên dung lượng bộ nhớ ở quy mô terabyte do sử dụng các bảng embedding. {#tbl-architecture-families}
 
@@ -451,11 +451,11 @@ class WorkloadSignatures:
 
 Những điểm tắc nghẽn này phản ánh bản chất toán học cơ bản. Tuy nhiên, phép tính ở đây chỉ là một ước lượng (proxy) dựa trên trọng số, chứ không phải là một phép đo đầy đủ về lưu lượng truy cập bộ nhớ chính. Nó tính bằng cách chia khối lượng tính toán dấu phẩy động cho số byte trọng số mô hình FP32, bỏ qua lưu lượng của activation, các giá trị trung gian và KV-cache. Kỹ thuật batching có thể phân tán lưu lượng trọng số trên nhiều ví dụ hoặc token, trong khi việc di chuyển trạng thái bổ sung có thể làm giảm cường độ thực tế. @Sec-appdx-algorithm-foundations-computational-complexity-cheat-sheet-0c6c nêu các công thức tính FLOP và tham số cho từng phép toán được dùng trong phép ước lượng này. @Tbl-workload-signatures so sánh ba kịch bản ngọn hải đăng và cho thấy sự chênh lệch khoảng `{python} WorkloadSignatures.resnet_to_gpt2_ratio_mult_str` dựa trên các giả định này.
 
-| **Model Family**     | **Lighthouse** |                  **Intensity** $(I)$                   | **Hardware Affinity**      |
+| **Họ mô hình** | **Lighthouse** |                  **Cường độ** $(I)$ | **Khả năng tương thích phần cứng** |
 |:---------------------|:--------------:|:------------------------------------------------------:|:---------------------------|
-| **Dense CNN**        |   ResNet-50    |  ~`{python} WorkloadSignatures.resnet_intensity_str`   | Compute-Rich (GPUs/TPUs)   |
-| **Efficient Vision** |  MobileNetV2   | ~`{python} WorkloadSignatures.mobilenet_intensity_str` | Balanced (Mobile NPUs)     |
-| **Transformer**      |  GPT-2 (Inf)   |   ~`{python} WorkloadSignatures.gpt2_intensity_str`    | Bandwidth-rich accelerator |
+| **CNN dày đặc** |   ResNet-50 |  ~`{python} WorkloadSignatures.resnet_intensity_str`   | Giàu tính toán (GPUs/TPUs) |
+| **Thị giác hiệu quả** |  MobileNetV2 | ~`{python} WorkloadSignatures.mobilenet_intensity_str` | Cân bằng (Mobile NPUs) |
+| **Transformer** |  GPT-2 (Suy luận) |   ~`{python} WorkloadSignatures.gpt2_intensity_str`    | Bộ tăng tốc giàu băng thông |
 
 : **Đặc trưng khối lượng công việc (workload) tiêu biểu**: Các ước lượng cường độ FP32 chỉ dựa trên trọng số cho ba kịch bản mô hình. Các giá trị này cho thấy áp lực khác nhau về tính toán và băng thông, nhưng không quyết định một sự phù hợp phần cứng cố định; các điểm tắc nghẽn thực tế phụ thuộc vào chế độ thực thi và sự cân bằng của phần cứng. {#tbl-workload-signatures tbl-colwidths="[20,20,20,40]"}
 
@@ -562,13 +562,13 @@ class LighthouseSpecs:
     kws_fp32_kb_str = fmt_memory(kws_mem, unit=KB, precision=0, commas=True)
 ```
 
-| **Model**        | **Domain**  |                     **Params**                    |                    **FLOPs/Inf**                    |                     **Memory**                    | **Bottleneck** | **Role in Textbook**                   |
+| **Mô hình** | **Miền** |                     **Tham số** |                    **FLOPs/Suy luận** |                     **Bộ nhớ** | **Bottleneck** | **Vai trò trong Sách giáo khoa** |
 |:-----------------|:------------|:-------------------------------------------------:|:---------------------------------------------------:|:-------------------------------------------------:|:---------------|:---------------------------------------|
-| **ResNet-50**    | Vision      |   `{python} LighthouseSpecs.resnet_params_m_str`  |     `{python} LighthouseSpecs.resnet_gflop_str`     |   `{python} LighthouseSpecs.resnet_fp32_mb_str`   | Compute        | Dense vision throughput                |
-| **GPT-2 XL**     | Language    |    `{python} LighthouseSpecs.gpt2_params_b_str`   | `{python} LighthouseSpecs.gpt2_gflop_per_token_str` |    `{python} LighthouseSpecs.gpt2_fp32_gb_str`    | Mem. Bandwidth | Token-by-token serving                 |
-| **DLRM**         | Recommender |   `{python} LighthouseSpecs.dlrm_entries_b_str`   |                         Low                         | `{python} LighthouseSpecs.dlrm_model_size_gb_str` | Mem. Capacity  | Embedding tables and capacity planning |
-| **MobileNetV2**  | Edge Vision | `{python} LighthouseSpecs.mobilenet_params_m_str` |    `{python} LighthouseSpecs.mobilenet_mflop_str`   |  `{python} LighthouseSpecs.mobilenet_fp32_mb_str` | Latency        | Depthwise convolutions and efficiency  |
-| **KWS (DS-CNN)** | Audio       |    `{python} LighthouseSpecs.kws_params_k_str`    |       `{python} LighthouseSpecs.kws_mflop_str`      |     `{python} LighthouseSpecs.kws_fp32_kb_str`    | Power          | Always-on power budget                 |
+| **ResNet-50** | Vision |   `{python} LighthouseSpecs.resnet_params_m_str`  |     `{python} LighthouseSpecs.resnet_gflop_str`     |   `{python} LighthouseSpecs.resnet_fp32_mb_str`   | Compute | Thông lượng Dense vision |
+| **GPT-2 XL** | Language |    `{python} LighthouseSpecs.gpt2_params_b_str`   | `{python} LighthouseSpecs.gpt2_gflop_per_token_str` |    `{python} LighthouseSpecs.gpt2_fp32_gb_str`    | Băng thông bộ nhớ | Phục vụ (serving) từng token |
+| **DLRM** | Recommender |   `{python} LighthouseSpecs.dlrm_entries_b_str`   |                         Thấp | `{python} LighthouseSpecs.dlrm_model_size_gb_str` | Dung lượng bộ nhớ | Bảng embedding và lập kế hoạch dung lượng |
+| **MobileNetV2** | Vision trên edge | `{python} LighthouseSpecs.mobilenet_params_m_str` |    `{python} LighthouseSpecs.mobilenet_mflop_str`   |  `{python} LighthouseSpecs.mobilenet_fp32_mb_str` | Độ trễ | Tích chập theo chiều sâu và hiệu quả |
+| **KWS (DS-CNN)** | Audio |    `{python} LighthouseSpecs.kws_params_k_str`    |       `{python} LighthouseSpecs.kws_mflop_str`      |     `{python} LighthouseSpecs.kws_fp32_kb_str`    | Công suất | Ngân sách công suất luôn bật |
 
 : **So sánh các mô hình tiêu biểu**: Các đặc tính định lượng và vai trò sư phạm của năm khối lượng công việc (workload) tiêu chuẩn. Bộ nhớ ở đây là dung lượng lưu trữ trọng số FP32, còn FLOPs được tính trên mỗi lần suy luận, ngoại trừ GPT-2 XL thì được tính trên mỗi token sinh ra; dòng DLRM báo cáo số lượng mục trong bảng embedding thay vì số tham số dày đặc. Cột 'Nút thắt cổ chai' (bottleneck) cho biết giới hạn chính của hệ thống mà mỗi mô hình làm bộc lộ: các mô hình bị giới hạn bởi tính toán (compute-bound) như ResNet sẽ gây áp lực lên thông lượng tính toán số học, trong khi các mô hình bị giới hạn bởi băng thông (bandwidth-bound) như GPT-2 sẽ gây áp lực lên tốc độ truyền dữ liệu của bộ nhớ. {#tbl-lighthouse-comparison tbl-colwidths="[17,14,8,15,9,11,26]"}
 
@@ -1909,13 +1909,13 @@ Các kiểu hoạt động về bộ nhớ, tính toán và di chuyển dữ li�
 \renewcommand{\arraystretch}{1.2}
 ```
 
-| **Property**    | **Value**                                                           | **System Implication**                                                                                                                     |
+| **Thuộc tính** | **Giá trị** | **Hàm ý hệ thống** |
 |:----------------|:--------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------|
-| **Parameters**  | `{python} CNNLighthouseProfile.resnet_params_m_str`                 | `{python} CNNLighthouseProfile.resnet_fp32_mb_str` model size at FP32; fits comfortably in GPU memory.                                     |
-| **FLOPs/Image** | `{python} CNNLighthouseProfile.resnet_gflop_str` $(224{\times}224)$ | $3{\times}3$ convolutions are the largest single kernel class at roughly `{python} CNNLighthouseProfile.resnet_3x3_share_pct_str` of MACs. |
-| **Constraint**  | Compute-heavy when batched                                          | Limited by peak FLOP/s when weight and activation reuse are high; small-batch inference can move toward the memory-bound regime.           |
-| **Bottleneck**  | FP Throughput                                                       | Benefits maximally from specialized Matrix Units (Tensor Cores).                                                                           |
-| **Profile**     | High effective arithmetic intensity under reuse                     | Arithmetic intensity depends on batch size, convolution algorithm, and materialized memory traffic.                                        |
+| **Tham số** | `{python} CNNLighthouseProfile.resnet_params_m_str`                 | Kích thước mô hình `{python} CNNLighthouseProfile.resnet_fp32_mb_str` ở FP32; vừa vặn thoải mái trong bộ nhớ GPU. |
+| **FLOPs/Ảnh** | `{python} CNNLighthouseProfile.resnet_gflop_str` $(224{\times}224)$ | Tích chập $3{\times}3$ là lớp kernel đơn lớn nhất, chiếm khoảng `{python} CNNLighthouseProfile.resnet_3x3_share_pct_str` của MACs. |
+| **Ràng buộc** | Nặng về tính toán khi được xử lý theo batch | Bị giới hạn bởi FLOP/s đỉnh khi việc tái sử dụng trọng số và activation cao; suy luận kích thước batch nhỏ có thể chuyển sang chế độ giới hạn bộ nhớ. |
+| **Bottleneck** | Thông lượng FP | Hưởng lợi tối đa từ các Đơn vị Ma trận chuyên dụng (Tensor Cores). |
+| **Hồ sơ** | Cường độ số học hiệu quả cao khi tái sử dụng | Cường độ số học phụ thuộc vào kích thước batch, thuật toán tích chập và lưu lượng bộ nhớ được hiện thực hóa. |
 
 : **Hồ sơ Hệ thống ResNet-50**: Các thuộc tính định lượng của ngọn hải đăng thị giác và hệ quả hệ thống của chúng. Khi tái sử dụng *tích chập* theo batch, ResNet-50 có cường độ số học hiệu quả cao và thường bị giới hạn bởi tính toán. Do đó, *thông lượng* FP cao nhất trên Tensor Cores thường là yếu tố giới hạn chính, chứ không phải *băng thông* bộ nhớ. {#tbl-nn-architectures-resnet50-profile tbl-colwidths="[14,22,64]"}
 
@@ -1936,13 +1936,13 @@ Hồ sơ bị giới hạn bởi tính toán của ResNet-50 giả định tài 
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Property**    | **Value**                                              | **System Implication**                                                                                                                               |
+| **Thuộc tính** | **Giá trị** | **Hàm ý hệ thống** |
 |:----------------|:-------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Parameters**  | `{python} CNNLighthouseProfile.mobilenet_params_m_str` | `{python} CNNLighthouseProfile.mobilenet_fp32_mb_str` at FP32; `{python} CNNLighthouseProfile.mobilenet_size_ratio_mult_str` smaller than ResNet-50. |
-| **FLOPs/Image** | `{python} CNNLighthouseProfile.mobilenet_mflop_str`    | `{python} CNNLighthouseProfile.mobilenet_flops_ratio_mult_str` fewer than ResNet-50 for similar accuracy.                                            |
-| **Constraint**  | Latency Bound                                          | Single-image inference speed is the priority.                                                                                                        |
-| **Bottleneck**  | Overhead/Memory Access                                 | Operator dispatch and memory access can dominate actual compute.                                                                                     |
-| **Profile**     | Low Arithmetic Intensity                               | Memory access and control logic matter more than peak FLOP/s.                                                                                        |
+| **Tham số** | `{python} CNNLighthouseProfile.mobilenet_params_m_str` | `{python} CNNLighthouseProfile.mobilenet_fp32_mb_str` ở FP32; `{python} CNNLighthouseProfile.mobilenet_size_ratio_mult_str` nhỏ hơn ResNet-50. |
+| **FLOPs/Ảnh** | `{python} CNNLighthouseProfile.mobilenet_mflop_str`    | `{python} CNNLighthouseProfile.mobilenet_flops_ratio_mult_str` ít hơn ResNet-50 để đạt độ chính xác tương tự. |
+| **Ràng buộc** | Giới hạn độ trễ | Tốc độ suy luận hình ảnh đơn là ưu tiên hàng đầu. |
+| **Bottleneck** | Chi phí chung/Truy cập bộ nhớ | Điều phối toán tử và truy cập bộ nhớ có thể chiếm ưu thế so với tính toán thực tế. |
+| **Hồ sơ** | Cường độ số học thấp | Truy cập bộ nhớ và logic điều khiển quan trọng hơn FLOP/s đỉnh. |
 
 : **Hồ sơ Hệ thống MobileNetV2**: Các đặc tính định lượng của mô hình tiêu biểu về hiệu quả này và những tác động của chúng đến hệ thống. MobileNetV2 nhỏ hơn ResNet-50 khoảng một bậc độ lớn cả về tham số và FLOPs. Tuy nhiên, hình dạng các phép toán và cường độ tính toán số học của MobileNetV2 khiến độ trễ xử lý một ảnh đơn lẻ dễ bị ảnh hưởng bởi chi phí điều phối toán tử và việc truy cập bộ nhớ trên các CPU di động. {#tbl-nn-architectures-mobilenet-profile tbl-colwidths="[14,25,61]"}
 
@@ -3400,13 +3400,13 @@ Sự kết hợp (lai) này rất quan trọng ở quy mô sản xuất: Meta đ
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Property**   | **Value**                                                | **System Implication**                                               |
+| **Thuộc tính** | **Giá trị** | **Hàm ý hệ thống** |
 |:---------------|:---------------------------------------------------------|:---------------------------------------------------------------------|
-| **Parameters** | `{python} GPT2BandwidthProfile.gpt2_params_b_str`        | Weight loading dominates inference latency.                          |
-| **Model Size** | `{python} GPT2BandwidthProfile.gpt2_fp32_gb_str` (FP32)  | Fits on one GPU but saturates HBM bandwidth.                         |
-| **Compute**    | `{python} GPT2BandwidthProfile.gpt2_gflop_per_token_str` | Low per-token compute; bottleneck is data movement, not math.        |
-| **Constraint** | Memory Bandwidth                                         | Weight-bound batch-one tokens/s depends strongly on HBM bandwidth.   |
-| **Profile**    | Bandwidth-Bound (small-batch decoding)                   | Larger batches can amortize weight traffic and shift the bottleneck. |
+| **Tham số** | `{python} GPT2BandwidthProfile.gpt2_params_b_str`        | Tải trọng số chiếm ưu thế về độ trễ suy luận. |
+| **Kích thước mô hình** | `{python} GPT2BandwidthProfile.gpt2_fp32_gb_str` (FP32) | Vừa trên một GPU nhưng làm bão hòa băng thông HBM. |
+| **Compute** | `{python} GPT2BandwidthProfile.gpt2_gflop_per_token_str` | Tính toán trên mỗi token thấp; nút thắt cổ chai là di chuyển dữ liệu, không phải toán học. |
+| **Ràng buộc** | Băng thông bộ nhớ | Số token/giây giới hạn bởi trọng số của batch-one phụ thuộc mạnh mẽ vào băng thông HBM. |
+| **Hồ sơ** | Giới hạn bởi băng thông (giải mã batch nhỏ) | Các batch lớn hơn có thể phân bổ lưu lượng trọng số và chuyển nút thắt cổ chai. |
 
 : **Hồ sơ hệ thống GPT-2 XL**: Ước tính chỉ dựa trên trọng số cho quá trình giải mã tự hồi quy batch-one. Với các giả định này, mỗi bước sẽ đọc trọng số mô hình ở mức khoảng 0.5--1 FLOP/byte, do đó băng thông HBM hạn chế mạnh mẽ thông lượng tạo sinh. {#tbl-nn-architectures-gpt2-profile tbl-colwidths="[12,30,58]"}
 
@@ -3540,13 +3540,13 @@ class DLRMLighthouseProfile:
 \renewcommand{\arraystretch}{1.4}
 ```
 
-| **Property**             | **Value**                                                      | **System Implication**                                                                                       |
+| **Thuộc tính** | **Giá trị** | **Hàm ý hệ thống** |
 |:-------------------------|:---------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------|
-| **Embedding Parameters** | `{python} DLRMLighthouseProfile.dlrm_entries_b_str`            | Parameters $\times$ `{python} DLRMLighthouseProfile.bytes_fp32_value_str` bytes; dominates total model size. |
-| **Model Size**           | `{python} DLRMLighthouseProfile.dlrm_model_size_gb_str` (FP32) | May exceed one device's fast memory.                                                                         |
-| **Constraint**           | Memory Capacity                                                | Model size $> \text{Single GPU Memory}$.                                                                     |
-| **Bottleneck**           | Irregular Data Movement                                        | Gather operations dominate sparse feature processing.                                                        |
-| **Profile**              | Mixed (Sparse/Dense)                                           | Combines memory-heavy lookups with compute-heavy MLPs.                                                       |
+| **Tham số embedding** | `{python} DLRMLighthouseProfile.dlrm_entries_b_str`            | Tham số $\times$ `{python} DLRMLighthouseProfile.bytes_fp32_value_str` bytes; chiếm ưu thế trong tổng kích thước mô hình. |
+| **Kích thước mô hình** | `{python} DLRMLighthouseProfile.dlrm_model_size_gb_str` (FP32) | Có thể vượt quá bộ nhớ nhanh của một thiết bị. |
+| **Ràng buộc** | Dung lượng bộ nhớ | Kích thước mô hình $> \text{Bộ nhớ GPU đơn}$. |
+| **Bottleneck** | Di chuyển dữ liệu không đều | Các phép toán thu thập chiếm ưu thế trong xử lý đặc trưng thưa. |
+| **Hồ sơ** | Hỗn hợp (Thưa/Đặc) | Kết hợp các tra cứu tốn nhiều bộ nhớ với các MLP tốn nhiều tính toán. |
 
 : **Hồ sơ hệ thống DLRM**: Các thuộc tính định lượng của ngọn hải đăng khuyến nghị và hệ quả hệ thống của chúng. Các bảng embedding hàng tỷ mục đẩy mô hình vượt quá bộ nhớ của một thiết bị đơn lẻ, tạo ra một tình trạng bị giới hạn bởi dung lượng mà định luật sắt không trực tiếp giải quyết. {#tbl-nn-architectures-dlrm-profile tbl-colwidths="[18,24,58]"}
 
@@ -3670,13 +3670,13 @@ Một khối transformer tái sử dụng nhiều ý tưởng có nguồn gốc 
 %\renewcommand{\arraystretch}{1.25}
 ```
 
-| **Building Block**    | **Born In**      | **Problem Solved**               | **Now Used In**                                                                                  |
+| **Khối xây dựng** | **Ra đời tại** | **Vấn đề đã giải quyết** | **Hiện đang được sử dụng trong** |
 |:----------------------|:-----------------|:---------------------------------|:-------------------------------------------------------------------------------------------------|
-| **GEMM**              | MLPs             | Universal function approximation | All architectures (feedforward layers)                                                           |
-| **Parameter Sharing** | CNNs             | Spatial efficiency               | Transformers (shared projections), RNNs (weight reuse across time)                               |
-| **Skip Connections**  | ResNets (CNNs)   | Gradient flow at depth           | Transformers, DenseNets, U-Nets, many modern deep networks                                       |
-| **Normalization**     | CNNs (BatchNorm) | Activation stability             | LayerNorm (Transformers), RMSNorm (root-mean-square normalization), GroupNorm (grouped channels) |
-| **Gating**            | LSTMs (RNNs)     | Selective signal routing         | Transformers (mixture-of-experts routing), GRUs, highway networks                                |
+| **GEMM** | MLPs | Xấp xỉ hàm phổ quát | Tất cả các kiến trúc (các lớp truyền thẳng) |
+| **Chia sẻ tham số** | CNNs | Hiệu quả không gian | Transformers (phép chiếu được chia sẻ), RNNs (tái sử dụng trọng số theo thời gian) |
+| **Kết nối bỏ qua** | ResNets (CNNs) | Luồng gradient ở độ sâu | Transformers, DenseNets, U-Nets, nhiều mạng sâu hiện đại |
+| **Chuẩn hóa** | CNNs (BatchNorm) | Ổn định activation | LayerNorm (Transformers), RMSNorm (root-mean-square normalization), GroupNorm (grouped channels) |
+| **Gating** | LSTMs (RNNs) | Định tuyến tín hiệu chọn lọc | Transformers (mixture-of-experts routing), GRUs, highway networks |
 
 : **Các Khối Xây Dựng Liên Kiến Trúc**: Đây là các thành phần cơ bản trong kỹ thuật, có nguồn gốc từ một họ kiến trúc nhưng hiện đang xuất hiện lặp lại trong nhiều thiết kế hiện đại. Mỗi khối xây dựng giải quyết một vấn đề thường xuyên lặp lại (như luồng gradient, ổn định activation, định tuyến tín hiệu), mặc dù không phải kiến trúc nào cũng sử dụng tất cả các thành phần cơ bản này. {#tbl-dl-evolution tbl-colwidths="[15,18,32,35]"}
 
@@ -3863,13 +3863,13 @@ Các ràng buộc về kích thước batch phát sinh là do chuẩn hóa batch
 
 Chi phí tính toán để tính giá trị trung bình và phương sai sẽ tăng thêm $\mathcal{O}(B \times d_{\text{model}})$ phép toán cho mỗi lớp chuẩn hóa batch, với $B$ là kích thước batch và $d_{\text{model}}$ là số chiều đặc trưng. Đối với chuẩn hóa lớp (LayerNorm), chi phí là $\mathcal{O}(d_{\text{model}})$ cho mỗi mẫu. RMSNorm còn giảm chi phí này hơn nữa bằng cách loại bỏ hoàn toàn phép tính giá trị trung bình.
 
-| **Characteristic**        | **BatchNorm**                          | **LayerNorm**            | **RMSNorm**                   |
+| **Đặc điểm** | **BatchNorm** | **LayerNorm** | **RMSNorm** |
 |:--------------------------|:---------------------------------------|:-------------------------|:------------------------------|
-| **Normalization Axis**    | Batch and, for CNNs, spatial positions | Feature dimension        | Feature dimension             |
-| **Batch Size Dependency** | High (noisy for small batches)         | None                     | None                          |
-| **Typical Use Case**      | CNNs, vision models                    | Transformers, RNNs       | LLaMA, efficient transformers |
-| **Computation Cost**      | Higher (mean + variance)               | Higher (mean + variance) | Lower (RMS only)              |
-| **Training/Inference**    | Different (running stats)              | Identical                | Identical                     |
+| **Trục chuẩn hóa** | Batch và, đối với CNNs, vị trí không gian | Chiều đặc trưng | Chiều đặc trưng |
+| **Sự phụ thuộc vào kích thước batch** | Cao (nhiễu đối với các batch nhỏ) | Không có | Không có |
+| **Trường hợp sử dụng điển hình** | CNNs, vision models | Transformers, RNNs | LLaMA, efficient transformers |
+| **Chi phí tính toán** | Cao hơn (trung bình + phương sai) | Cao hơn (trung bình + phương sai) | Thấp hơn (chỉ RMS) |
+| **Huấn luyện/Suy luận** | Khác nhau (thống kê đang chạy) | Giống hệt | Giống hệt |
 
 : **So sánh các biến thể chuẩn hóa**: Các kỹ thuật chuẩn hóa khác nhau đánh đổi giữa hiệu quả tính toán, độ nhạy cảm với kích thước batch và khả năng tương thích kiến trúc. RMSNorm [@zhang2019root], được sử dụng trong họ LLaMA và các kiến trúc transformer hiệu quả khác [@touvron2023llama; @touvron2023llama2], bỏ qua việc căn giữa theo giá trị trung bình: $\text{RMSNorm}(\mathbf{x}) = \mathbf{x} / \sqrt{\frac{1}{d_{\text{model}}}\sum_i x_i^2 + \epsilon} \cdot \boldsymbol{\gamma}$. {#tbl-normalization-comparison tbl-colwidths="[23,34,24,19]"}
 
@@ -3953,12 +3953,12 @@ Khả năng ứng dụng rộng rãi này tiếp tục được thể hiện tro
 
 @Tbl-primitive-comparison minh họa cụ thể sự tổng hợp này. Transformer vẫn giữ các phép toán GEMM cốt lõi, vốn phổ biến ở mọi kiến trúc, nhưng lại đưa vào các phép giảm (reduction) dạng 'tất cả-đến-tất cả' phụ thuộc vào nội dung thông qua cơ chế attention. Điều này kết hợp các phép toán broadcast của MLP với các phép toán gather và reduce của các kiến trúc linh hoạt hơn.
 
-| **Primitive Type** | **MLP**    | **CNN**        | **RNN**            | **Transformer**   |
+| **Kiểu nguyên thủy** | **MLP** | **CNN** | **RNN** | **Transformer** |
 |:-------------------|:-----------|:---------------|:-------------------|:------------------|
-| **Computation**    | Dense GEMM | Convolution    | Sequential GEMM    | GEMM + Attention  |
-| **Memory Access**  | Sequential | Strided        | Sequential + State | Tiled QKV streams |
-| **Data Movement**  | Broadcast  | Sliding window | Temporal broadcast | Gather + Reduce   |
-| **Parallelism**    | High       | High           | Low (time deps)    | High (positions)  |
+| **Tính toán** | Dense GEMM | Tích chập | Sequential GEMM | GEMM + Attention |
+| **Truy cập bộ nhớ** | Tuần tự | Strided | Tuần tự + Trạng thái | Tiled QKV streams |
+| **Di chuyển Dữ liệu** | Broadcast | Cửa sổ trượt | Broadcast theo thời gian | Gather + Reduce |
+| **Song song hóa** | Cao | Cao | Thấp (phụ thuộc thời gian) | Cao (vị trí) |
 
 : **Tận dụng các Nguyên thủy trong các Kiến trúc**: Mọi kiến trúc đều sử dụng GEMM, nhưng chúng khác nhau về kiểu truy cập bộ nhớ, cách di chuyển dữ liệu (từ broadcast sang gather+reduce) và khả năng song song. Transformer kết hợp việc truy cập QKV được lát (tiled) dày đặc với các phép giảm (reduction) đặc trưng của cơ chế attention. Đây là lý do tại sao chúng tạo áp lực đồng thời lên cả các đơn vị GEMM và đường dẫn giảm. {#tbl-primitive-comparison}
 
@@ -4129,12 +4129,12 @@ Truy cập ngẫu nhiên là thách thức lớn nhất đối với hiệu qu�
 
 @Tbl-arch-complexity định lượng mức độ các mẫu truy cập bộ nhớ khác nhau này ảnh hưởng đến tổng yêu cầu bộ nhớ của mỗi kiến trúc, bằng cách so sánh MLP, CNN, RNN và transformer dựa trên lưu trữ tham số, lưu trữ activation và hành vi mở rộng.
 
-| **Architecture** | **Input Dependency**       | **Parameter Storage**                                                        | **Activation Storage**                                                                      | **Scaling Behavior** |
+| **Kiến trúc** | **Phụ thuộc đầu vào** | **Lưu trữ tham số** | **Lưu trữ activation** | **Hành vi mở rộng** |
 |:-----------------|:---------------------------|:-----------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------|:---------------------|
-| **MLP**          | Linear                     | $\mathcal{O}(N_{\text{in}} \times d_{\text{width}})$                         | $\mathcal{O}(B \times d_{\text{width}})$                                                    | Predictable          |
-| **CNN**          | Constant w.r.t. resolution | $\mathcal{O}(K^2 C_{\text{in}} C_{\text{out}})$                              | $\mathcal{O}(B \times H_{\text{img}} \times W_{\text{img}} \times C)$                       | Efficient            |
-| **RNN**          | Linear                     | $\mathcal{O}(d_{\text{hidden}}^2)$                                           | $\mathcal{O}(B \times S \times d_{\text{hidden}})$                                          | Challenging          |
-| **Transformer**  | Quadratic attention        | $\mathcal{O}(d_{\text{model}}^2 + d_{\text{model}} d_{\text{ff}})$ per block | $\mathcal{O}(B \times S^2)$ attention, plus $\mathcal{O}(B S d_{\text{model}})$ activations | Problematic          |
+| **MLP** | Tuyến tính | $\mathcal{O}(N_{\text{in}} \times d_{\text{width}})$                         | $\mathcal{O}(B \times d_{\text{width}})$                                                    | Có thể dự đoán |
+| **CNN** | Hằng số đối với độ phân giải | $\mathcal{O}(K^2 C_{\text{in}} C_{\text{out}})$                              | $\mathcal{O}(B \times H_{\text{img}} \times W_{\text{img}} \times C)$                       | Hiệu quả |
+| **RNN** | Tuyến tính | $\mathcal{O}(d_{\text{hidden}}^2)$                                           | $\mathcal{O}(B \times S \times d_{\text{hidden}})$                                          | Thử thách |
+| **Transformer** | Attention bậc hai | $\mathcal{O}(d_{\text{model}}^2 + d_{\text{model}} d_{\text{ff}})$ trên mỗi block | $\mathcal{O}(B \times S^2)$ attention, cộng thêm $\mathcal{O}(B S d_{\text{model}})$ activations | Có vấn đề |
 
 : **Độ phức tạp truy cập bộ nhớ**: Các kiến trúc mạng nơ-ron khác nhau có các kiểu truy cập bộ nhớ và yêu cầu lưu trữ khác nhau, ảnh hưởng đến hiệu suất và khả năng mở rộng của hệ thống. Lưu trữ tham số phụ thuộc vào kích thước mô hình, trong khi lưu trữ activation lại là một chi phí runtime đáng kể. Thuật ngữ $\mathcal{O}(B S^2)$ trong transformer mô tả các điểm attention được hiện thực hóa khi triển khai một cách đơn giản (naïve); các kernel attention chính xác được tiling có thể tránh việc phải lưu giữ toàn bộ ma trận đó. {#tbl-arch-complexity tbl-colwidths="[12,24,21,25,18]"}
 
@@ -4158,12 +4158,12 @@ Tầm quan trọng của các mẫu này trở nên rõ ràng khi ta xem xét c�
 
 Kích thước tập làm việc\index{Working set size} – tức là lượng dữ liệu cần thiết cùng lúc cho quá trình tính toán – thay đổi đáng kể tùy theo từng kiến trúc. Một lớp MLP có thể chỉ cần vài trăm KB (gồm các trọng số và activation), trong khi một transformer xử lý các chuỗi dài có thể cần đến vài MB chỉ để lưu trữ các mẫu attention. Những khác biệt này ảnh hưởng trực tiếp đến các quyết định thiết kế phần cứng, chẳng hạn như sự cân bằng giữa các đơn vị tính toán và bộ nhớ trên chip, cũng như các tối ưu hóa phần mềm như activation checkpointing – giúp tiết kiệm bộ nhớ bằng cách tính toán lại các activation được chọn trong quá trình lan truyền ngược thay vì lưu trữ tất cả chúng – hoặc các kỹ thuật xấp xỉ attention.
 
-| **Architecture** | **Parameters**                                                                                                            | **Forward Pass**                                                                                          | **Memory**                                                                                                              | **Parallelization**                     | **Bottleneck**                                                         |
+| **Kiến trúc** | **Tham số** | **Forward Pass** | **Bộ nhớ** | **Song song hóa** | **Bottleneck** |
 |:-----------------|:--------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------|:----------------------------------------|:-----------------------------------------------------------------------|
-| **MLPs**         | $\mathcal{O}(d_{\text{in}} \times d_{\text{out}})$ per layer                                                              | $\mathcal{O}(d_{\text{in}} \times d_{\text{out}})$ per layer                                              | $\mathcal{O}(d_{\text{in}}d_{\text{out}})$ weights $\mathcal{O}(B d_{\text{out}})$ activations                          | Excellent Matrix ops parallel           | Memory bandwidth                                                       |
-| **CNNs**         | $\mathcal{O}(k^2 \times c_{\text{in}} \times c_{\text{out}})$ per layer                                                   | $\mathcal{O}(H_{\text{img}} \times W_{\text{img}} \times k^2 \times c_{\text{in}} \times c_{\text{out}})$ | $\mathcal{O}(H_{\text{img}} \times W_{\text{img}} \times c)$ features $\mathcal{O}(k^2 \times c^2)$ weights             | Good Spatial independence               | Often compute throughput; bandwidth for depthwise or small-batch cases |
-| **RNNs**         | $\mathcal{O}(d_{\text{hidden}}^2+d_{\text{hidden}} \times d_{\text{in}})$ total                                           | $\mathcal{O}(S \times d_{\text{hidden}}^2)$ for $S$ time steps                                            | $\mathcal{O}(d_{\text{hidden}})$ recurrent state (inference); $\mathcal{O}(S d_{\text{hidden}})$ activations (training) | Poor Sequential deps                    | Sequential deps                                                        |
-| **Transformers** | $\mathcal{O}(d_{\text{model}}^2)$ QKV/O projections plus $\mathcal{O}(d_{\text{model}}d_{\text{ff}})$ feed-forward layers | $\mathcal{O}(S^2 \times d_{\text{model}} + S \times d_{\text{model}}^2)$ per layer                        | $\mathcal{O}(S^2)$ attention $\mathcal{O}(S \times d_{\text{model}})$ sequences                                         | Excellent (positions) Limited by memory | Memory $(S^2)$                                                         |
+| **MLPs** | $\mathcal{O}(d_{\text{in}} \times d_{\text{out}})$ trên mỗi lớp | $\mathcal{O}(d_{\text{in}} \times d_{\text{out}})$ trên mỗi lớp | $\mathcal{O}(d_{\text{in}}d_{\text{out}})$ trọng số $\mathcal{O}(B d_{\text{out}})$ activations | Các phép toán ma trận song song xuất sắc | Băng thông bộ nhớ |
+| **CNNs** | $\mathcal{O}(k^2 \times c_{\text{in}} \times c_{\text{out}})$ trên mỗi lớp | $\mathcal{O}(H_{\text{img}} \times W_{\text{img}} \times k^2 \times c_{\text{in}} \times c_{\text{out}})$ | $\mathcal{O}(H_{\text{img}} \times W_{\text{img}} \times c)$ đặc trưng $\mathcal{O}(k^2 \times c^2)$ trọng số | Độc lập không gian tốt | Thường là thông lượng tính toán; băng thông cho các trường hợp depthwise hoặc kích thước batch nhỏ |
+| **RNNs** | Tổng cộng $\mathcal{O}(d_{\text{hidden}}^2+d_{\text{hidden}} \times d_{\text{in}})$ | $\mathcal{O}(S \times d_{\text{hidden}}^2)$ cho $S$ bước thời gian | Trạng thái lặp lại $\mathcal{O}(d_{\text{hidden}})$ (suy luận); activations $\mathcal{O}(S d_{\text{hidden}})$ (huấn luyện) | Phụ thuộc tuần tự kém | Phụ thuộc tuần tự |
+| **Transformers** | Các phép chiếu QKV/O $\mathcal{O}(d_{\text{model}}^2)$ cộng với các lớp feed-forward $\mathcal{O}(d_{\text{model}}d_{\text{ff}})$ | $\mathcal{O}(S^2 \times d_{\text{model}} + S \times d_{\text{model}}^2)$ trên mỗi lớp | Attention $\mathcal{O}(S^2)$ các chuỗi $\mathcal{O}(S \times d_{\text{model}})$ | Xuất sắc (vị trí) Bị giới hạn bởi bộ nhớ | Bộ nhớ $(S^2)$ |
 
 : **So sánh độ phức tạp tính toán**: Cách thức mở rộng và yêu cầu tài nguyên cho các kiến trúc mạng nơ-ron chính. Các biến: $d_{\text{in}}$ = chiều đầu vào, $d_{\text{out}}$ = chiều đầu ra, $d_{\text{model}}$ = chiều mô hình transformer, $d_{\text{hidden}}$ = chiều trạng thái ẩn của RNN, $k$ = kích thước kernel, $c$ = số kênh, $H_{\text{img}}, W_{\text{img}}$ = các chiều không gian, $S$ = độ dài chuỗi (số bước thời gian), $B$ = kích thước batch. Cột nút thắt cổ chai cho biết yếu tố chính hạn chế hiệu suất trong các lần triển khai điển hình. Đối với transformer, số hạng bộ nhớ $\mathcal{O}(S^2)$ giả định rằng các điểm attention được tính toán và lưu trữ; các kernel attention chính xác dùng kỹ thuật xếp lát có thể tránh việc giữ lại toàn bộ ma trận đó. {#tbl-computational-complexity tbl-colwidths="[12,18,16,20,18,16]"}
 
@@ -4377,15 +4377,15 @@ Các nguyên thủy di chuyển dữ liệu đã ảnh hưởng đáng kể đ�
 
 Những nguyên tắc cơ bản này có ý nghĩa quan trọng đối với hệ thống, liên quan đến phần cứng, phần mềm và hiệu suất. Bảng @Tbl-sys-design-implications chuyển đổi việc ánh xạ từ các nguyên tắc cơ bản sang hệ thống thành một danh sách kiểm tra thiết kế: mỗi hàng liên kết một nguyên tắc kiến trúc cơ bản với các hỗ trợ phần cứng, tối ưu hóa phần mềm và những nút thắt cổ chai mà nó thường gây ra. Dù đã có phần cứng chuyên dụng được phát triển để hỗ trợ các nguyên tắc cơ bản này, nhưng vẫn còn một số nút thắt cổ chai. Băng thông bộ nhớ thường vẫn là một hạn chế lớn, đặc biệt với các mô hình có *working set* lớn hoặc cần truy cập ngẫu nhiên thường xuyên. Chi phí năng lượng để di chuyển dữ liệu, nhất là giữa bộ nhớ ngoài (off-chip memory) và các đơn vị xử lý, vẫn là một vấn đề đáng lo ngại. Với các mô hình lớn, chi phí giao tiếp trong huấn luyện phân tán có thể trở thành nút thắt cổ chai, làm giảm hiệu quả mở rộng.
 
-| **Primitive**                                      | **Hardware Impact**       | **Software Optimization** | **Key Challenges**         |
+| **Nguyên thủy** | **Tác động của phần cứng** | **Tối ưu hóa phần mềm** | **Các thách thức chính** |
 |:---------------------------------------------------|:--------------------------|:--------------------------|:---------------------------|
-| **Matrix Multiplication**                          | Tensor Cores              | Batching, GEMM libraries  | Parallelization, precision |
-| **Sliding Window**                                 | Specialized datapaths     | Data layout optimization  | Stride handling            |
-| **Dynamic computation**\index{Dynamic computation} | Flexible routing          | Dynamic graph execution   | Load balancing             |
-| **Sequential Access**                              | Burst mode DRAM           | Contiguous allocation     | Access latency             |
-| **Random Access**                                  | Large caches              | Memory-aware scheduling   | Cache misses               |
-| **Broadcast**                                      | Specialized interconnects | Operation fusion          | Bandwidth                  |
-| **Gather/Scatter**                                 | High-bandwidth memory     | Work distribution         | Load balancing             |
+| **Phép nhân ma trận** | Lõi tensor | Xử lý theo batch, thư viện GEMM | Song song hóa, độ chính xác |
+| **Cửa sổ trượt** | Các đường dẫn dữ liệu chuyên biệt | Tối ưu hóa bố cục dữ liệu | Xử lý stride |
+| Tính toán động | Định tuyến linh hoạt | Thực thi đồ thị động | Cân bằng tải |
+| **Truy cập tuần tự** | DRAM chế độ burst | Cấp phát liên tục | Độ trễ truy cập |
+| **Truy cập ngẫu nhiên** | Các caches lớn | Lập lịch nhận biết bộ nhớ | Lỗi cache (miss) |
+| **Broadcast** | Các kết nối nội bộ chuyên biệt | Hợp nhất thao tác | băng thông |
+| **Gather/Scatter** | Bộ nhớ băng thông cao | Phân phối công việc | Cân bằng tải |
 
 : **Đồng thiết kế Nguyên thủy-Phần cứng**: Để có các hệ thống machine learning hiệu quả, cần tích hợp chặt chẽ giữa các nguyên thủy thuật toán và phần cứng nền tảng. Các nguyên thủy phổ biến được ánh xạ tới các bộ tăng tốc phần cứng và các tối ưu hóa phần mềm cụ thể; mỗi loại đều đặt ra những thách thức triển khai riêng. Phần cứng chuyên dụng như Tensor Cores giúp giải quyết các yêu cầu tính toán của phép nhân ma trận và cửa sổ trượt, trong khi các kỹ thuật phần mềm như *batching* và thực thi đồ thị động (dynamic graph execution) còn giúp nâng cao hiệu suất hơn nữa. {#tbl-sys-design-implications tbl-colwidths="[22,26,26,26]"}
 
@@ -4850,13 +4850,13 @@ Tiếp theo là phân tích các ràng buộc. @Tbl-nn-architectures-wildlife-co
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Constraint**   | **Requirement**                | **Implication**                                          |
+| **Ràng buộc** | **Yêu cầu** | **Hàm ý** |
 |:-----------------|:-------------------------------|:---------------------------------------------------------|
-| **Connectivity** | None (offline)                 | All inference must run on-device                         |
-| **Power**        | ~2 W average (solar + battery) | Rules out GPUs; must use low-power MCU or edge NPU       |
-| **Latency**      | <500 ms per detection          | Allows batch size 1, no real-time streaming              |
-| **Memory**       | 512 MB RAM, 2 GB storage       | Model, activations, and runtime buffers must fit locally |
-| **Accuracy**     | 90%+ on 50 species             | Requires sufficient model capacity                       |
+| **Khả năng kết nối** | Không (offline) | Tất cả suy luận phải chạy trên thiết bị |
+| **Công suất** | ~2 W trung bình (solar + battery) | Loại trừ GPUs; phải sử dụng MCU tiêu thụ điện năng thấp hoặc NPU edge |
+| **Độ trễ** | <500 ms mỗi phát hiện | Cho phép kích thước batch 1, không có truyền phát thời gian thực |
+| **Bộ nhớ** | 512 MB RAM, 2 GB bộ nhớ | Mô hình, activation và các bộ đệm runtime phải nằm gọn trong bộ nhớ cục bộ |
+| **Độ chính xác** | 90%+ trên 50 loài | Yêu cầu dung lượng mô hình đủ lớn |
 
 : **Các Ràng buộc Giám sát Động vật Hoang dã**: Năm ràng buộc triển khai và những ảnh hưởng của chúng đối với kịch bản bẫy ảnh. Việc không có kết nối sẽ loại trừ phương án suy luận hoàn toàn trên đám mây, trong khi các yêu cầu về công suất, độ trễ, bộ nhớ và độ chính xác cần được kiểm tra trên thiết bị đích. {#tbl-nn-architectures-wildlife-constraints tbl-colwidths="[16,33,51]"}
 
@@ -4889,11 +4889,11 @@ Bước thứ năm là đánh giá rủi ro. @Tbl-nn-architectures-wildlife-risk
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Risk**                             | **Mitigation**                                                                    |
+| **Rủi ro** | **Biện pháp giảm thiểu** |
 |:-------------------------------------|:----------------------------------------------------------------------------------|
-| **90% accuracy not achieved**        | Train on augmented dataset; consider EfficientNet-Lite if MobileNet insufficient  |
-| **Thermal throttling in enclosure**  | Add passive heatsink; reduce inference frequency in high-temperature conditions   |
-| **New species added postdeployment** | Expand or retrain the output head and plan an over-the-air (OTA) update mechanism |
+| **Độ chính xác 90% không đạt được** | Huấn luyện trên tập dữ liệu đã được tăng cường; cân nhắc EfficientNet-Lite nếu MobileNet không đủ |
+| **Giảm hiệu năng do nhiệt trong vỏ thiết bị** | Thêm tản nhiệt thụ động; giảm tần suất suy luận trong điều kiện nhiệt độ cao |
+| **Các loài mới được thêm vào sau triển khai** | Mở rộng hoặc huấn luyện lại lớp đầu ra và lên kế hoạch cơ chế cập nhật qua mạng (OTA) |
 
 : **Rủi ro Triển khai Bẫy Ảnh Động vật Hoang dã**: Các rủi ro hàng đầu về độ chính xác, nhiệt độ và phạm vi bao phủ loài đối với triển khai MobileNetV2, kèm theo các biện pháp kỹ thuật giảm thiểu cho từng rủi ro. {#tbl-nn-architectures-wildlife-risks}
 

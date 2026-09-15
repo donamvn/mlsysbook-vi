@@ -196,13 +196,13 @@ Trong khi Phân loại D·A·M giúp chẩn đoán *nơi* lỗi bắt nguồn, c
 %\renewcommand{\arraystretch}{1.25}
 ```
 
-| **Failure Type**            | **Illustrative Detection Time** | **Illustrative Scope** | **Possible Response**          | **Example**                               |
+| **Loại lỗi**            | **Thời gian phát hiện minh họa** | **Phạm vi minh họa** | **Phản hồi có thể**          | **Ví dụ**                               |
 |:----------------------------|:--------------------------------|:-----------------------|:-------------------------------|:------------------------------------------|
-| **Crash**                   | Immediate                       | Complete               | Restart after correcting cause | Out of memory error                       |
-| **Performance Degradation** | Minutes                         | Complete               | Relieve resource contention    | Latency spike from resource contention    |
-| **Data Quality**            | Hours–days                      | Partial                | Data correction may be needed  | Corrupted inputs from upstream system     |
-| **Distribution Shift**      | Days–weeks                      | Partial or all         | May require adaptation         | Population change due to new user segment |
-| **Fairness Violation**      | Weeks–months                    | Subpopulation          | May require redesign           | Bias amplification in historical patterns |
+| **Sự cố**                   | Ngay lập tức                       | Hoàn toàn               | Khởi động lại sau khi khắc phục nguyên nhân | Lỗi hết bộ nhớ                       |
+| **Giảm hiệu suất** | Phút                         | Hoàn toàn               | Giảm bớt tranh chấp tài nguyên    | Độ trễ tăng đột biến do tranh chấp tài nguyên    |
+| **Chất lượng dữ liệu**            | Giờ–ngày                      | Một phần                | Có thể cần hiệu chỉnh dữ liệu  | Đầu vào bị hỏng từ hệ thống thượng nguồn     |
+| **Thay đổi phân phối**      | Ngày–tuần                      | Một phần hoặc toàn bộ         | Có thể yêu cầu thích nghi         | Thay đổi quần thể do phân khúc người dùng mới |
+| **Vi phạm tính công bằng**      | Tuần–tháng                    | Tập hợp con          | Có thể yêu cầu thiết kế lại           | Khuếch đại thiên vị trong các mẫu lịch sử |
 
 : **Phân loại chế độ lỗi hệ thống ML minh họa**: Thời điểm phát hiện, phạm vi và biện pháp khắc phục phụ thuộc vào ứng dụng; các mục trong bảng nêu các trường hợp tiêu biểu. Các lỗi âm thầm như các vấn đề về chất lượng dữ liệu, dịch chuyển phân phối và vi phạm công bằng có thể cần giám sát chủ động vì chúng không nhất thiết kích hoạt các cảnh báo truyền thống. {#tbl-failure-modes tbl-colwidths="[18,15,14,28,25]"}
 
@@ -444,12 +444,12 @@ Ranh giới này cho các kỹ sư biết họ có thể phải chọn đánh đ
 
 [^fn-gender-shades-audit]: **Gender Shades**\index{Gender Shades!disaggregated evaluation}: Một nghiên cứu năm 2018 của Joy Buolamwini (MIT Media Lab) và Timnit Gebru (Microsoft Research) đã kiểm tra các hệ thống phân loại giới tính thương mại từ Microsoft, IBM và Face++ bằng thang đo loại da Fitzpatrick — vốn là một phân loại da liễu do Thomas Fitzpatrick phát triển năm 1975 để đánh giá độ nhạy với tia UV, sau đó được xác nhận dùng trong lâm sàng [@fitzpatrick1988], và ở đây được dùng lại như một benchmark nhân khẩu học cho kiểm tra thuật toán. Nghiên cứu này chứng minh giá trị của đánh giá phân tách; trong các kết quả của Face++ được tái hiện trong @tbl-gender-shades-results, tỷ lệ lỗi của nữ da sẫm cao gấp `{python} GenderShadesDisparity.disparity_factor_mult_str` lần so với nam da sáng. Những giảm lỗi mà Microsoft báo cáo sau đó cho thấy các kết quả kiểm tra công khai có thể thúc đẩy các biện pháp khắc phục có thể đo lường được [@raji2019].
 
-| **Demographic Group**     |                      **Error Rate (%)**                     |                   **Relative to Light-Skinned Males**                   |
+| **Nhóm nhân khẩu học**     |                      **Tỷ lệ lỗi (%)**                     |                   **So với nam giới da sáng**                   |
 |:--------------------------|:-----------------------------------------------------------:|:-----------------------------------------------------------------------:|
-| **Light-skinned males**   |  `{python} GenderShadesDisparity.error_light_male_tbl_str`  |                          Baseline (1.0$\times$)                         |
-| **Light-skinned females** | `{python} GenderShadesDisparity.error_light_female_tbl_str` | `{python} GenderShadesDisparity.disparity_light_female_factor_mult_str` |
-| **Dark-skinned males**    |   `{python} GenderShadesDisparity.error_dark_male_tbl_str`  |   `{python} GenderShadesDisparity.disparity_dark_male_factor_mult_str`  |
-| **Dark-skinned females**  |  `{python} GenderShadesDisparity.error_dark_female_tbl_str` |        `{python} GenderShadesDisparity.disparity_factor_mult_str`       |
+| **Nam giới da sáng**   |  `{python} GenderShadesDisparity.error_light_male_tbl_str`  |                          Mức cơ sở (1.0$\times$)                         |
+| **Nữ giới da sáng** | `{python} GenderShadesDisparity.error_light_female_tbl_str` | `{python} GenderShadesDisparity.disparity_light_female_factor_mult_str` |
+| **Nam giới da sẫm màu**    |   `{python} GenderShadesDisparity.error_dark_male_tbl_str`  |   `{python} GenderShadesDisparity.disparity_dark_male_factor_mult_str`  |
+| **Nữ giới da sẫm màu**  |  `{python} GenderShadesDisparity.error_dark_female_tbl_str` |        `{python} GenderShadesDisparity.disparity_factor_mult_str`       |
 
 : **Tỷ lệ lỗi của Gender Shades Face++**: Tỷ lệ lỗi của nữ giới da sẫm màu cao gấp `{python} GenderShadesDisparity.disparity_factor_mult_str` lần so với tỷ lệ của nam giới da sáng. Nguồn: [@buolamwini2018gender]. {#tbl-gender-shades-results tbl-colwidths="[34,33,33]"}
 
@@ -596,13 +596,13 @@ Một quy trình đánh giá trước triển khai có cấu trúc có thể đ�
 
 Trước khi một mô hình phê duyệt khoản vay được đưa vào sản xuất, nhóm cần xác định nguồn gốc dữ liệu huấn luyện, nhận diện ai được đại diện và ai bị bỏ sót, dự đoán các kiểu lỗi có thể xảy ra, và xác định biện pháp khắc phục cho người dùng bị ảnh hưởng. @Tbl-predeployment-assessment cấu trúc việc đánh giá này thành năm giai đoạn, phân biệt các vấn đề chặn đường găng với các hạng mục ưu tiên cao có thể tiếp tục nếu rủi ro được ghi nhận và chấp nhận.
 
-| **Phase**      | **Priority**  | **Key Questions**                                                                                                | **Documentation Required**                                                                           |
+| **Giai đoạn**      | **Mức độ ưu tiên**  | **Các câu hỏi chính**                                                                                                | **Tài liệu Yêu cầu**                                                                           |
 |:---------------|:--------------|:-----------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------|
-| **Data**       | Critical Path | Where did this data come from? Who is represented? Who is missing? What historical biases might be encoded?      | Data provenance records, demographic composition analysis, collection methodology documentation      |
-| **Training**   | High Priority | What are we optimizing for? What might we be implicitly penalizing? How do architecture choices affect outcomes? | Objective function specification, regularization choices, hyperparameter selection rationale         |
-| **Evaluation** | Critical Path | Does performance hold across different user groups? What edge cases exist? How were test sets constructed?       | Disaggregated metrics by demographic group, edge case testing results, test set composition analysis |
-| **Deployment** | Critical Path | Who will this system affect? What happens when it fails? What recourse do affected users have?                   | Impact assessment, stakeholder identification, rollback procedures, user notification protocols      |
-| **Monitoring** | High Priority | How will we detect problems? Who reviews system behavior? What triggers intervention?                            | Monitoring dashboard specifications, alert thresholds, review schedules, escalation procedures       |
+| **Dữ liệu**       | Đường găng | Dữ liệu này đến từ đâu? Ai được đại diện? Ai bị thiếu? Những sai lệch lịch sử nào có thể được mã hóa?      | Hồ sơ nguồn gốc dữ liệu, phân tích thành phần nhân khẩu học, tài liệu về phương pháp thu thập      |
+| **Huấn luyện**   | Ưu tiên cao | Chúng ta đang tối ưu hóa cho điều gì? Chúng ta có thể đang ngầm phạt điều gì? Các lựa chọn kiến trúc ảnh hưởng đến kết quả như thế nào? | Đặc tả hàm mục tiêu, các lựa chọn điều chuẩn (regularization), lý do lựa chọn siêu tham số         |
+| **Đánh giá** | Đường găng | Hiệu suất có duy trì trên các nhóm người dùng khác nhau không? Những trường hợp biên (edge case) nào tồn tại? Các tập kiểm thử được xây dựng như thế nào?       | Các chỉ số được phân tách theo nhóm nhân khẩu học, kết quả kiểm thử trường hợp biên (edge case), phân tích thành phần tập kiểm thử |
+| **Triển khai** | Đường găng | Hệ thống này sẽ ảnh hưởng đến ai? Điều gì xảy ra khi nó thất bại? Người dùng bị ảnh hưởng có biện pháp khắc phục nào?                   | Đánh giá tác động, xác định các bên liên quan, quy trình khôi phục (rollback), giao thức thông báo người dùng      |
+| **Giám sát** | Ưu tiên cao | Chúng ta sẽ phát hiện vấn đề như thế nào? Ai xem xét hành vi hệ thống? Điều gì kích hoạt sự can thiệp?                            | Đặc tả bảng điều khiển giám sát, ngưỡng cảnh báo, lịch trình xem xét, quy trình leo thang (escalation)       |
 
 : **Predeployment Assessment Framework**: Các hạng mục thuộc Đường găng sẽ chặn triển khai cho đến khi được xử lý. Các hạng mục Ưu tiên cao nên được hoàn thành trước hoặc ngay sau khi ra mắt. Việc bao quát có hệ thống các vấn đề về trách nhiệm trong suốt vòng đời ML sẽ giảm khả năng bỏ sót rủi ro. {#tbl-predeployment-assessment tbl-colwidths="[15,15,35,35]"}
 
@@ -739,13 +739,13 @@ class ModelCardExample:
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Section**                | **Content**                                                                                                                                                                                                                               |
+| **Mục**                | **Nội dung**                                                                                                                                                                                                                               |
 |:---------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Model Details**          | MobileNetV2 architecture with `{python} ModelCardExample.mv2_params_m_str` parameters, trained on ImageNet using depthwise separable convolutions. INT8 quantized for edge deployment.                                                    |
-| **Intended Use**           | Real-time image classification on mobile devices with less than 50 ms latency requirement. Suitable for consumer applications including photo organization and accessibility features.                                                    |
-| **Factors**                | Performance varies with image quality (blur, lighting), object size in frame, and categories outside ImageNet distribution.                                                                                                               |
-| **Metrics**                | 71.8% top-1 accuracy on ImageNet validation (full precision: 72.0%). Accuracy varies by category: 85% on common objects, 45% on fine-grained distinctions.                                                                                |
-| **Ethical Considerations** | Training data reflects ImageNet biases in geographic and demographic representation. Not validated for high-stakes applications (medical diagnosis, security screening). Performance may degrade on images from underrepresented regions. |
+| **Chi tiết mô hình**          | Kiến trúc MobileNetV2 với các tham số `{python} ModelCardExample.mv2_params_m_str`, được huấn luyện trên ImageNet sử dụng tích chập phân tách theo chiều sâu (depthwise separable convolutions). Được lượng tử hoá INT8 để triển khai trên edge.                                                    |
+| **Mục đích sử dụng**           | Phân loại hình ảnh thời gian thực trên thiết bị di động với yêu cầu độ trễ dưới 50 ms. Phù hợp cho các ứng dụng tiêu dùng bao gồm tổ chức ảnh và các tính năng trợ năng.                                                    |
+| **Các yếu tố**                | Hiệu suất thay đổi theo chất lượng hình ảnh (mờ, ánh sáng), kích thước đối tượng trong khung hình và các danh mục nằm ngoài phân phối ImageNet.                                                                                                               |
+| **Các chỉ số**                | Độ chính xác top-1 71.8% trên tập kiểm định ImageNet (độ chính xác đầy đủ: 72.0%). Độ chính xác thay đổi theo danh mục: 85% trên các đối tượng phổ biến, 45% trên các phân biệt chi tiết.                                                                                |
+| **Các cân nhắc về đạo đức** | Dữ liệu huấn luyện phản ánh các sai lệch của ImageNet trong việc đại diện địa lý và nhân khẩu học. Chưa được xác thực cho các ứng dụng có rủi ro cao (chẩn đoán y tế, sàng lọc an ninh). Hiệu suất có thể suy giảm trên hình ảnh từ các khu vực ít được đại diện. |
 
 : **Thẻ mô hình minh họa: MobileNetV2 cho triển khai trên edge**: Các danh mục trừu tượng trong thẻ mô hình được cụ thể hóa thành tài liệu thực hành, giúp định hướng các quyết định triển khai có trách nhiệm. Các mục số liệu trong bảng là giả định kịch bản, không phải kết quả benchmark đã được báo cáo. {#tbl-model-card-example tbl-colwidths="[22,78]"}
 
@@ -785,12 +785,12 @@ Kiến trúc không tự nó quyết định sự công bằng; mỗi dòng tron
 \vspace*{-1.5ex}
 ```
 
-| **Archetype**                 | **Primary Fairness Risk**                                                                       | **Key Evaluation Metric**                                                          | **Real-World Example**                                                                                                     |
+| **Nguyên mẫu**                 | **Rủi ro công bằng chính**                                                                       | **Chỉ số đánh giá chính**                                                          | **Ví dụ thực tế**                                                                                                     |
 |:------------------------------|:------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------|
-| **ResNet-50 (Compute Beast)** | Training data bias (underrepresentation of deployment-relevant groups)                          | Disaggregated accuracy by demographic group                                        | Evaluate the deployed classifier on application-specific demographic slices; Gender Shades values do not measure ResNet-50 |
-| **GPT-2 (Bandwidth Hog)**     | Corpus bias (overrepresentation of majority viewpoints in web text)                             | Toxicity rate by demographic prompt context; stereotype score                      | LLMs produce more toxic completions for prompts mentioning minority groups                                                 |
-| **DLRM (Sparse Scatter)**     | Feedback-loop amplification (popular items get more data)                                       | Share of recommendation impressions by item category and supplier or creator group | Filter bubbles: the system recommends similar content to similar users, reducing discovery of niche creators               |
-| **DS-CNN (Tiny Constraint)**  | Deployment-context mismatch (trained on clean audio, deployed in noisy real-world environments) | False positive rate by acoustic environment and speaker accent                     | Voice assistants perform worse on accented speech; wake-word triggers on TV audio in some languages                        |
+| **ResNet-50 (Cỗ máy tính toán)** | Sai lệch dữ liệu huấn luyện (sự thiếu đại diện của các nhóm liên quan đến triển khai)                          | Độ chính xác được phân tách theo nhóm nhân khẩu học                                        | Đánh giá bộ phân loại đã triển khai trên các phân khúc nhân khẩu học cụ thể của ứng dụng; các giá trị Gender Shades không đo lường ResNet-50 |
+| **GPT-2 (Kẻ ngốn băng thông)**     | Sai lệch tập văn bản (corpus) (sự đại diện quá mức của các quan điểm đa số trong văn bản web)                             | Tỷ lệ độc hại theo ngữ cảnh lời nhắc nhân khẩu học; điểm định kiến                      | LLM tạo ra các phần hoàn thành độc hại hơn cho các lời nhắc đề cập đến các nhóm thiểu số                                                 |
+| **DLRM (Sparse Scatter)** | Khuếch đại vòng lặp phản hồi (các mục phổ biến nhận được nhiều dữ liệu hơn)                                       | Tỷ lệ hiển thị đề xuất theo danh mục mặt hàng và nhóm nhà cung cấp hoặc người tạo | Bong bóng lọc: hệ thống đề xuất nội dung tương tự cho người dùng tương tự, làm giảm khả năng khám phá những người tạo nội dung ngách               |
+| **DS-CNN (Tiny Constraint)** | Không khớp ngữ cảnh triển khai (được huấn luyện trên âm thanh sạch, được triển khai trong môi trường thực tế ồn ào) | Tỷ lệ dương tính giả theo môi trường âm thanh và giọng nói của người nói                     | Trợ lý giọng nói hoạt động kém hơn với giọng nói có ngữ điệu; từ khóa kích hoạt bị kích hoạt bởi âm thanh TV ở một số ngôn ngữ                        |
 
 : **Rủi ro về công bằng theo nguyên mẫu ML**: Các rủi ro về công bằng sẽ khác nhau tùy theo nguồn dữ liệu và ngữ cảnh triển khai của từng nguyên mẫu. {#tbl-fairness-archetype tbl-colwidths="[11,32,23,34]"}
 
@@ -900,10 +900,10 @@ class LoanFairness:
 
 Một mô hình phê duyệt khoản vay\index{Fairness metrics!loan approval case study} báo cáo độ chính xác `{python} LoanFairness.majority_acc_str` trên nhóm đa số và độ chính xác tổng thể `{python} LoanFairness.overall_acc_str` trên tất cả các ứng viên được đánh giá—những con số này có thể đáp ứng một bảng điều khiển tổng hợp ở mức độ thô. @Tbl-confusion-group-a và @tbl-confusion-group-b tiết lộ những gì số liệu tổng hợp che giấu: kết quả phê duyệt khoản vay cho cùng một mô hình khi được đánh giá riêng biệt trên hai nhóm nhân khẩu học.
 
-|                        |          **Approved (pred)**          |          **Rejected (pred)**          |
+|                        |          **Được chấp thuận (dự đoán)**          |          **Bị từ chối (dự đoán)**          |
 |:-----------------------|:-------------------------------------:|:-------------------------------------:|
-| **Repaid (actual)**    | `{python} LoanFairness.a_tp_str` (TP) | `{python} LoanFairness.a_fn_str` (FN) |
-| **Defaulted (actual)** | `{python} LoanFairness.a_fp_str` (FP) | `{python} LoanFairness.a_tn_str` (TN) |
+| **Đã trả nợ (thực tế)**    | `{python} LoanFairness.a_tp_str` (TP) | `{python} LoanFairness.a_fn_str` (FN) |
+| **Vỡ nợ (thực tế)** | `{python} LoanFairness.a_fp_str` (FP) | `{python} LoanFairness.a_tn_str` (TN) |
 
 : **Ma trận nhầm lẫn cho Nhóm A (Đa số)**: Trong kịch bản được xây dựng này, kết quả phê duyệt khoản vay cho `{python} LoanFairness.a_total_str` ứng viên thuộc nhóm nhân khẩu học đa số. Tỷ lệ dương tính thật `{python} LoanFairness.a_tpr_str` (`{python} LoanFairness.a_tp_str` được phê duyệt trong số `{python} LoanFairness.a_qualified_str` đủ điều kiện) và tỷ lệ dương tính giả `{python} LoanFairness.a_fpr_str` thiết lập đường cơ sở để so sánh công bằng. {#tbl-confusion-group-a}
 
@@ -917,10 +917,10 @@ Từ hai ma trận nhầm lẫn này, chúng ta có thể kiểm tra ba định 
 - **Cơ hội bình đẳng**\index{Equal opportunity!definition}\index{Fairness metrics!equal opportunity}: Yêu cầu tỷ lệ dương tính đúng\index{True positive rate!fairness computation} phải bằng nhau giữa các ứng viên đủ điều kiện ($P(\hat{Y}=1 \mid Y=1, A=a) = P(\hat{Y}=1 \mid Y=1, A=b)$). Nhóm A đạt TPR là `{python} LoanFairness.a_tpr_math`, nghĩa là `{python} LoanFairness.a_tpr_str` trong số các ứng viên sẽ trả nợ được phê duyệt. Nhóm B chỉ đạt `{python} LoanFairness.b_tpr_math`. Sự chênh lệch `{python} LoanFairness.tpr_disparity_str` này cho thấy các ứng viên đủ điều kiện của Nhóm B bị từ chối với tỷ lệ cao hơn đáng kể so với các ứng viên đủ điều kiện tương tự ở Nhóm A.
 - **Equalized odds**\index{Equalized odds!definition}\index{Fairness metrics!equalized odds}: Yêu cầu cả tỉ lệ dương tính đúng (TPR) và tỉ lệ dương tính sai (FPR) phải bằng nhau ($P(\hat{Y}=1 \mid Y=y, A=a) = P(\hat{Y}=1 \mid Y=y, A=b)$ với $y \in \{0,1\}$).[^fn-equalized-odds-postprocessing] Nhóm A có FPR là `{python} LoanFairness.a_fpr_math`, và Nhóm B có `{python} LoanFairness.b_fpr_math`. Mặc dù tỉ lệ dương tính sai bằng nhau, nhưng sự chênh lệch về tỉ lệ dương tính đúng cho thấy tiêu chí Equalized odds bị vi phạm. Nhìn chung, do tỉ lệ cơ sở của các nhóm không đồng đều và khả năng dự đoán không hoàn hảo, nhiều tiêu chí công bằng có thể không tương thích với nhau. Do đó, tiêu chí công bằng áp dụng cần được chọn và biện minh rõ ràng, thay vì suy ra từ một chỉ số tổng hợp.
 
-|                        |          **Approved (pred)**          |          **Rejected (pred)**          |
+|                        |          **Được chấp thuận (dự đoán)**          |          **Bị từ chối (dự đoán)**          |
 |:-----------------------|:-------------------------------------:|:-------------------------------------:|
-| **Repaid (actual)**    | `{python} LoanFairness.b_tp_str` (TP) | `{python} LoanFairness.b_fn_str` (FN) |
-| **Defaulted (actual)** | `{python} LoanFairness.b_fp_str` (FP) | `{python} LoanFairness.b_tn_str` (TN) |
+| **Đã trả nợ (thực tế)**    | `{python} LoanFairness.b_tp_str` (TP) | `{python} LoanFairness.b_fn_str` (FN) |
+| **Vỡ nợ (thực tế)** | `{python} LoanFairness.b_fp_str` (FP) | `{python} LoanFairness.b_tn_str` (TN) |
 
 : **Ma trận nhầm lẫn cho Nhóm B (Thiểu số)**: Trong kịch bản giả định này, kết quả phê duyệt khoản vay cho `{python} LoanFairness.b_total_str` ứng viên thuộc nhóm thiểu số được thể hiện. Tỉ lệ dương tính đúng (TPR) của nhóm này là `{python} LoanFairness.b_tpr_str` (tức là `{python} LoanFairness.b_tp_str` người đủ điều kiện được phê duyệt trong tổng số `{python} LoanFairness.b_qualified_str` người đủ điều kiện). Con số này cho thấy sự chênh lệch `{python} LoanFairness.tpr_disparity_str` so với Nhóm A. Tuy nhiên, chỉ riêng các ma trận nhầm lẫn này không thể xác định nguyên nhân của sự chênh lệch đó. {#tbl-confusion-group-b}
 
@@ -965,11 +965,11 @@ for metric in ["approval_rate", "tpr", "fpr"]:
 
 Giám sát tự động đạt được điều mà kiểm toán thủ công không thể ở quy mô lớn: theo dõi liên tục các số liệu công bằng với cảnh báo tức thời khi sự chênh lệch xuất hiện. Sự chênh lệch TPR `{python} LoanFairness.tpr_disparity_str` vượt xa ngưỡng cho phép triển khai 5 điểm phần trăm của kịch bản này, cho thấy mô hình cần được điều chỉnh để đảm bảo tính công bằng trước khi triển khai. @Tbl-fairness-metrics-summary cho thấy xu hướng tổng thể của các số liệu và sự chênh lệch đã tính toán.
 
-| **Metric**              |                **Group A**                 |                **Group B**                 | **Disparity**                                 |
+| **Chỉ số**              |                **Nhóm A**                 |                **Nhóm B**                 | **Chênh lệch**                                 |
 |:------------------------|:------------------------------------------:|:------------------------------------------:|:----------------------------------------------|
-| **Approval Rate**       | `{python} LoanFairness.a_approval_tbl_str` | `{python} LoanFairness.b_approval_tbl_str` | `{python} LoanFairness.dp_disparity_tbl_str`  |
-| **True Positive Rate**  |   `{python} LoanFairness.a_tpr_tbl_str`    |   `{python} LoanFairness.b_tpr_tbl_str`    | `{python} LoanFairness.tpr_disparity_tbl_str` |
-| **False Positive Rate** |   `{python} LoanFairness.a_fpr_tbl_str`    |   `{python} LoanFairness.b_fpr_tbl_str`    | `{python} LoanFairness.fpr_disparity_str`     |
+| **Tỷ lệ chấp thuận**       | `{python} LoanFairness.a_approval_tbl_str` | `{python} LoanFairness.b_approval_tbl_str` | `{python} LoanFairness.dp_disparity_tbl_str`  |
+| **Tỷ lệ dương tính thật**  |   `{python} LoanFairness.a_tpr_tbl_str`    |   `{python} LoanFairness.b_tpr_tbl_str`    | `{python} LoanFairness.tpr_disparity_tbl_str` |
+| **Tỷ lệ dương tính giả** |   `{python} LoanFairness.a_fpr_tbl_str`    |   `{python} LoanFairness.b_fpr_tbl_str`    | `{python} LoanFairness.fpr_disparity_str`     |
 
 : **Tóm tắt các số liệu công bằng**: Trong kịch bản cho vay được xây dựng này, tỷ lệ chấp thuận và tỷ lệ dương tính thật khác nhau giữa các nhóm, trong khi tỷ lệ dương tính giả khớp; bảng này chỉ ra sự chênh lệch nhưng không xác định nguyên nhân. {#tbl-fairness-metrics-summary tbl-colwidths="[40,20,20,20]"}
 
@@ -1170,13 +1170,13 @@ Mức độ khả năng giải thích cần thiết thay đổi theo ngữ cản
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Application Domain** | **Explainability Level**             | **Typical Requirements**                                        |
+| **Lĩnh vực ứng dụng** | **Mức độ giải thích được**             | **Yêu cầu điển hình**                                        |
 |:-----------------------|:-------------------------------------|:----------------------------------------------------------------|
-| **Credit decisions**   | Specific reasons for covered actions | Principal reasons may have to be disclosed to the applicant     |
-| **Medical diagnosis**  | Decision support                     | Support clinical review and applicable documentation            |
-| **Content moderation** | Context-dependent                    | Support notices or appeals where required                       |
-| **Recommendation**     | Context-dependent                    | Provide transparency appropriate to the use and governing rules |
-| **Fraud detection**    | Controlled disclosure                | Balance applicable notice duties with adversarial-gaming risk   |
+| **Quyết định tín dụng**   | Lý do cụ thể cho các hành động được đề cập | Các lý do chính có thể phải được tiết lộ cho người nộp đơn     |
+| **Chẩn đoán y tế**  | Hỗ trợ ra quyết định                     | Hỗ trợ xem xét lâm sàng và tài liệu liên quan            |
+| **Kiểm duyệt nội dung** | Phụ thuộc vào ngữ cảnh                    | Hỗ trợ các thông báo hoặc kháng cáo khi cần thiết                       |
+| **Khuyến nghị**     | Phụ thuộc vào ngữ cảnh                    | Cung cấp sự minh bạch phù hợp với mục đích sử dụng và các quy tắc quản lý |
+| **Phát hiện gian lận**    | Tiết lộ có kiểm soát                | Cân bằng các nghĩa vụ thông báo hiện hành với rủi ro tấn công đối kháng   |
 
 : **Các cân nhắc về khả năng giải thích theo lĩnh vực**: Các yêu cầu khác nhau tùy theo quyết định, chủ thể tham gia, khu vực pháp lý và các quy tắc điều chỉnh. Thách thức kỹ thuật là ghép các cơ chế giải thích với các yêu cầu áp dụng, đồng thời quản lý các rủi ro như việc lách hệ thống. {#tbl-explainability-requirements tbl-colwidths="[18,25,57]"}
 
@@ -1620,13 +1620,13 @@ Zillow đã báo cáo khoản ghi giảm hàng tồn kho ở mảng Bất độn
 
 [^fn-zillow-dam-failure]: **Sự cố D·A·M (dữ liệu · thuật toán · máy) của Zillow**\index{Zillow!sự cố do phân phối bị dịch chuyển}: Khoản ghi giảm giá trị năm 2021 của Zillow là một ca hệ thống đáng chú ý, vì thất bại kinh doanh đã được công bố này kết hợp cả bất định trong dự báo lẫn trục trặc trong khâu vận hành [@zillow2021offers]. Phân tích theo D·A·M diễn giải trục dữ liệu là sự lệch nhau giữa dữ liệu bán nhà lịch sử và biến động giá trong thời kỳ đại dịch; trục thuật toán là khó khăn khi định giá nhà với các ước tính độ không chắc chắn đáng tin cậy; và trục máy là một pipeline iBuying tự động cần các giới hạn năng lực xử lý và cơ chế ngắt mạch mạnh hơn. Đây là một cách diễn giải kỹ thuật dựa trên công bố công khai của Zillow, chứ không phải khẳng định rằng Zillow đã xác định một nguyên nhân kỹ thuật gốc rễ duy nhất.
 
-| **Component**     | **Requirements**                                                                          | **Predeployment Verification**                                                     |
+| **Thành phần**     | **Yêu cầu**                                                                          | **Xác minh trước triển khai**                                                     |
 |:------------------|:------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------|
-| **Detection**     | Monitoring systems that identify anomalies, degraded performance, and fairness violations | Alert thresholds tested, on-call rotation established, escalation paths documented |
-| **Assessment**    | Procedures for evaluating incident scope and severity                                     | Severity classification defined, impact assessment templates prepared              |
-| **Mitigation**    | Technical capabilities to reduce harm while investigation proceeds                        | Rollback procedures tested, fallback systems operational, kill switches functional |
-| **Communication** | Protocols for stakeholder notification                                                    | Contact lists current, message templates prepared, approval chains defined         |
-| **Remediation**   | Processes for permanent fixes and system improvements                                     | Root cause analysis procedures, change management integration                      |
+| **Phát hiện**     | Hệ thống giám sát xác định các bất thường, hiệu suất suy giảm và các vi phạm công bằng | Ngưỡng cảnh báo đã được kiểm tra, lịch trực đã được thiết lập, các lộ trình leo thang đã được ghi lại |
+| **Đánh giá**    | Quy trình để đánh giá phạm vi và mức độ nghiêm trọng của sự cố                                     | Phân loại mức độ nghiêm trọng đã được định nghĩa, các mẫu đánh giá tác động đã được chuẩn bị              |
+| **Giảm thiểu**    | Khả năng kỹ thuật để giảm thiểu thiệt hại trong khi cuộc điều tra diễn ra                        | Quy trình khôi phục đã được kiểm tra, hệ thống dự phòng đang hoạt động, công tắc ngắt khẩn cấp đang hoạt động |
+| **Truyền thông** | Giao thức để thông báo cho các bên liên quan                                                    | Danh sách liên hệ được cập nhật, các mẫu tin nhắn đã được chuẩn bị, chuỗi phê duyệt đã được định nghĩa         |
+| **Khắc phục**   | Quy trình để khắc phục vĩnh viễn và cải tiến hệ thống                                     | Quy trình phân tích nguyên nhân gốc rễ, tích hợp quản lý thay đổi                      |
 
 : **Framework phản ứng sự cố**: Để chuẩn bị có hệ thống cho các sự cố của hệ thống học máy (ML), chúng ta cần năm thành phần riêng biệt. **Phát hiện** nhận diện các bất thường thông qua giám sát chuyên biệt; **đánh giá** xác định phạm vi dựa trên phân loại mức độ nghiêm trọng; **giảm thiểu** hạn chế thiệt hại bằng các quy trình hoàn tác đã được kiểm thử; **truyền thông** thông báo cho các bên liên quan qua các kênh đã được phê duyệt; và **khắc phục** triển khai các sửa chữa lâu dài dựa trên phân tích nguyên nhân gốc rễ. Mỗi thành phần đều cần yêu cầu vận hành và xác minh trước khi triển khai. {#tbl-incident-response tbl-colwidths="[20,40,40]"}
 
@@ -1773,23 +1773,23 @@ class EdgeEfficiencyCalc:
 
 Các kịch bản triển khai ở edge\index{Edge deployment!power constraints} khiến các yêu cầu về hiệu quả trở nên cụ thể. Chẳng hạn, trong kịch bản minh họa này, một thiết bị đeo có ngân sách công suất `{python} EdgeEfficiencyCalc.wear_power_mw_str`\index{Power budget!edge devices} và phải suy luận liên tục trong 24 giờ chỉ với một viên pin nhỏ. Bảng @Tbl-edge-deployment-constraints so sánh các ràng buộc giả định trên bốn ngữ cảnh triển khai khác nhau, từ điện thoại thông minh với ngân sách công suất `{python} EdgeEfficiencyCalc.smart_power_w_str` đến các cảm biến IoT\index{IoT!power budget constraints} hoạt động với ngân sách `{python} EdgeEfficiencyCalc.iot_power_mw_str`.
 
-| **Deployment Context** |                 **Power Budget**                |                                  **Latency Requirement**                                  | **Typical Use Cases**                       |
+| **Bối cảnh triển khai** |                 **Ngân sách công suất**                |                                  **Yêu cầu về độ trễ**                                  | **Các trường hợp sử dụng điển hình**                       |
 |:-----------------------|:-----------------------------------------------:|:-----------------------------------------------------------------------------------------:|:--------------------------------------------|
-| **Smartphone**         | `{python} EdgeEfficiencyCalc.smart_power_w_str` |                      `{python} EdgeEfficiencyCalc.smart_latency_str`                      | Photo enhancement, voice assistants         |
-| **IoT Sensor**         |  `{python} EdgeEfficiencyCalc.iot_power_mw_str` |                      `{python} EdgeEfficiencyCalc.iot_latency_s_str`                      | Anomaly detection, environmental monitoring |
-| **Embedded Camera**    |  `{python} EdgeEfficiencyCalc.cam_power_w_str`  | `{python} EdgeEfficiencyCalc.cam_fps_str` (`{python} EdgeEfficiencyCalc.cam_latency_str`) | Real-time object detection, surveillance    |
-| **Wearable Device**    | `{python} EdgeEfficiencyCalc.wear_power_mw_str` |                       `{python} EdgeEfficiencyCalc.wear_latency_str`                      | Health monitoring, activity recognition     |
+| **Điện thoại thông minh**         | `{python} EdgeEfficiencyCalc.smart_power_w_str` |                      `{python} EdgeEfficiencyCalc.smart_latency_str`                      | Cải thiện ảnh, trợ lý giọng nói         |
+| **Cảm biến IoT**         |  `{python} EdgeEfficiencyCalc.iot_power_mw_str` |                      `{python} EdgeEfficiencyCalc.iot_latency_s_str`                      | Phát hiện bất thường, giám sát môi trường |
+| **Camera nhúng**    |  `{python} EdgeEfficiencyCalc.cam_power_w_str`  | `{python} EdgeEfficiencyCalc.cam_fps_str` (`{python} EdgeEfficiencyCalc.cam_latency_str`) | Phát hiện đối tượng thời gian thực, giám sát    |
+| **Thiết bị đeo**    | `{python} EdgeEfficiencyCalc.wear_power_mw_str` |                       `{python} EdgeEfficiencyCalc.wear_latency_str`                      | Giám sát sức khỏe, nhận dạng hoạt động     |
 
 : **Các Ràng Buộc Triển Khai Edge Minh Họa**: Các giá trị công suất và độ trễ ở đây là giả định kịch bản nhằm so sánh các ngữ cảnh triển khai; ngân sách thực tế phụ thuộc vào phần cứng, khối lượng công việc (workload) và yêu cầu sản phẩm. {#tbl-edge-deployment-constraints tbl-colwidths="[20,14,23,43]"}
 
 Các kịch bản trong @tbl-model-efficiency-comparison cung cấp định hướng cho việc tối ưu hóa hiệu quả. Những kỹ thuật cho phép triển khai trên các nền tảng bị giới hạn công suất có thể giảm tác động môi trường trên mỗi lần suy luận khi chúng hạ năng lượng đo được mà không đẩy chi phí sang nơi khác. Khoản tiết kiệm tài chính còn phụ thuộc vào cấp phát tài nguyên, mức độ sử dụng, chính sách định giá và lưu lượng.
 
-| **Model**           |                  **Parameters**                 |               **Inference Power**               |                  **Latency**                   |                **Fits Smartphone?**               |                  **Fits IoT?**                  |
+| **mô hình**           |                  **Tham số**                 |               **Công suất suy luận**               |                  **độ trễ**                   |                **Phù hợp với điện thoại thông minh?**               |                  **Phù hợp với IoT?**                  |
 |:--------------------|:-----------------------------------------------:|:-----------------------------------------------:|:----------------------------------------------:|:-------------------------------------------------:|:-----------------------------------------------:|
-| **MobileNetV2**     |  `{python} EdgeEfficiencyCalc.mv2_params_m_str` |  `{python} EdgeEfficiencyCalc.mv2_power_w_str`  | `{python} EdgeEfficiencyCalc.mv2_latency_str`  |  `{python} EdgeEfficiencyCalc.mv2_fits_phone_str` |  `{python} EdgeEfficiencyCalc.mv2_fits_iot_str` |
+| **MobileNetV2** |  `{python} EdgeEfficiencyCalc.mv2_params_m_str` |  `{python} EdgeEfficiencyCalc.mv2_power_w_str`  | `{python} EdgeEfficiencyCalc.mv2_latency_str`  |  `{python} EdgeEfficiencyCalc.mv2_fits_phone_str` |  `{python} EdgeEfficiencyCalc.mv2_fits_iot_str` |
 | **EfficientNet-B0** |  `{python} EdgeEfficiencyCalc.eff_params_m_str` |  `{python} EdgeEfficiencyCalc.eff_power_w_str`  | `{python} EdgeEfficiencyCalc.eff_latency_str`  |  `{python} EdgeEfficiencyCalc.eff_fits_phone_str` |  `{python} EdgeEfficiencyCalc.eff_fits_iot_str` |
-| **ResNet-50**       | `{python} EdgeEfficiencyCalc.rn50_params_m_str` |  `{python} EdgeEfficiencyCalc.rn50_power_w_str` | `{python} EdgeEfficiencyCalc.rn50_latency_str` | `{python} EdgeEfficiencyCalc.rn50_fits_phone_str` | `{python} EdgeEfficiencyCalc.rn50_fits_iot_str` |
-| **TinyML Model**    | `{python} EdgeEfficiencyCalc.tiny_params_k_str` | `{python} EdgeEfficiencyCalc.tiny_power_mw_str` | `{python} EdgeEfficiencyCalc.tiny_latency_str` | `{python} EdgeEfficiencyCalc.tiny_fits_phone_str` | `{python} EdgeEfficiencyCalc.tiny_fits_iot_str` |
+| **ResNet-50** | `{python} EdgeEfficiencyCalc.rn50_params_m_str` |  `{python} EdgeEfficiencyCalc.rn50_power_w_str` | `{python} EdgeEfficiencyCalc.rn50_latency_str` | `{python} EdgeEfficiencyCalc.rn50_fits_phone_str` | `{python} EdgeEfficiencyCalc.rn50_fits_iot_str` |
+| **Mô hình TinyML**    | `{python} EdgeEfficiencyCalc.tiny_params_k_str` | `{python} EdgeEfficiencyCalc.tiny_power_mw_str` | `{python} EdgeEfficiencyCalc.tiny_latency_str` | `{python} EdgeEfficiencyCalc.tiny_fits_phone_str` | `{python} EdgeEfficiencyCalc.tiny_fits_iot_str` |
 
 : **So sánh hiệu quả mô hình**: Các đặc điểm mô hình minh họa dựa trên các giả định triển khai đã nêu. Khi chọn mô hình, cần xem xét độ chính xác, độ trễ, công suất, bộ nhớ, hỗ trợ runtime và tác động vòng đời; riêng số lượng tham số không quyết định chi phí hay tác động môi trường. {#tbl-model-efficiency-comparison tbl-colwidths="[20,15,20,10,25,10]"}
 
@@ -2173,14 +2173,14 @@ train_carbon_3yr = TCOCalc.train_carbon_3yr
 
 Chi phí huấn luyện bao gồm cả phát triển ban đầu và huấn luyện lại liên tục. @Tbl-tco-training bóc tách các khoản chi này, cho thấy các chu kỳ huấn luyện lại hàng quý sẽ cộng dồn như thế nào trong suốt ba năm vận hành.
 
-| **Cost Component**              |           **Calculation**            |             **Financial Cost**            |                  **Carbon (kg CO~2~)**                   |
+| **Thành phần chi phí**              |           **Tính toán**            |             **Chi phí tài chính**            |                  **Carbon (kg CO~2~)** |
 |:--------------------------------|:------------------------------------:|:-----------------------------------------:|:--------------------------------------------------------:|
-| **Initial data preparation**    |         hours $\times$ rate          |  `{python} TCOCalc.t_data_prep_calc_str`  |       `{python} TCOCalc.t_data_prep_carbon_kg_str`       |
-| **Hyperparameter search**       | experiments $\times$ cost/experiment |    `{python} TCOCalc.t_hparam_calc_str`   |        `{python} TCOCalc.t_hparam_carbon_kg_str`         |
-| **Final training**              |         hours $\times$ rate          |    `{python} TCOCalc.t_final_calc_str`    |         `{python} TCOCalc.t_final_carbon_kg_str`         |
-| **Subtotal per training cycle** |                                      | **`{python} TCOCalc.t_subtotal_usd_str`** |     **`{python} TCOCalc.t_subtotal_carbon_kg_str`**      |
-| **Retraining frequency**        |      cycles/year $\times$ years      |    `{python} TCOCalc.t_cycles_calc_str`   | same multiplier (`{python} TCOCalc.t_cycles_str` cycles) |
-| **Total training cost**         |       subtotal $\times$ cycles       |   **`{python} TCOCalc.t_total_usd_str`**  |       **`{python} TCOCalc.t_total_carbon_kg_str`**       |
+| **Chuẩn bị dữ liệu ban đầu**    |         giờ $\times$ tỷ lệ          |  `{python} TCOCalc.t_data_prep_calc_str`  |       `{python} TCOCalc.t_data_prep_carbon_kg_str`       |
+| **Tìm kiếm siêu tham số**       | thử nghiệm $\times$ chi phí/thử nghiệm |    `{python} TCOCalc.t_hparam_calc_str`   |        `{python} TCOCalc.t_hparam_carbon_kg_str`         |
+| **Huấn luyện cuối cùng**              |         giờ $\times$ tỷ lệ          |    `{python} TCOCalc.t_final_calc_str`    |         `{python} TCOCalc.t_final_carbon_kg_str`         |
+| **Tổng phụ cho mỗi chu kỳ huấn luyện** |                                      | **`{python} TCOCalc.t_subtotal_usd_str`** |     **`{python} TCOCalc.t_subtotal_carbon_kg_str`**      |
+| **Tần suất huấn luyện lại**        |      chu kỳ/năm $\times$ năm      |    `{python} TCOCalc.t_cycles_calc_str`   | hệ số nhân tương tự (`{python} TCOCalc.t_cycles_str` chu kỳ) |
+| **Tổng chi phí huấn luyện**         |       tổng phụ $\times$ chu kỳ       |   **`{python} TCOCalc.t_total_usd_str`**  |       **`{python} TCOCalc.t_total_carbon_kg_str`**       |
 
 : **Tính toán Chi phí Huấn luyện**: Chi phí huấn luyện tích lũy qua giai đoạn phát triển ban đầu (`{python} TCOCalc.t_subtotal_usd_str` mỗi chu kỳ) và các lần huấn luyện lại hàng quý trong suốt ba năm vận hành. Các công đoạn chuẩn bị dữ liệu, tìm kiếm siêu tham số và huấn luyện cuối cùng tiêu tốn giờ GPU với đơn giá `{python} TCOCalc.train_gpu_rate_str`, tổng cộng `{python} TCOCalc.t_total_usd_str` sau `{python} TCOCalc.t_cycles_str` chu kỳ huấn luyện. Dù trông có vẻ lớn, chi phí huấn luyện chỉ chiếm `{python} TCOCalc.p_train_str` trong tổng chi phí sở hữu. {#tbl-tco-training tbl-colwidths="[24,30,21,25]"}
 
@@ -2188,13 +2188,13 @@ Chi phí huấn luyện bao gồm cả phát triển ban đầu và huấn luy�
 
 @Tbl-tco-inference mô tả chuỗi chuyển đổi biến lưu lượng truy cập thành chi phí: truy vấn hàng ngày được quy đổi thành giây GPU, giây GPU thành giờ GPU, và giờ GPU sau đó được chuyển thành cả đô la và carbon. Carbon chỉ được tính khi khối lượng công việc (workload) được biểu diễn bằng giờ GPU, nên các hàng truy vấn và giây GPU được để trống cột carbon theo thiết kế, không phải do thiếu dữ liệu. Lần theo chuỗi đến hàng cuối cùng sẽ cho ta phần chi phí suy luận để so sánh tổng chi phí trong @tbl-tco-summary; mức độ chi phối chỉ thể hiện khi so sánh phần này với chi phí huấn luyện và vận hành.
 
-| **Cost Component**        |         **Calculation**          |           **Financial Cost**           |           **Carbon (kg CO~2~)**           |
+| **Thành phần chi phí**        |         **Tính toán**          |           **Chi phí tài chính**           |           **Carbon (kg CO~2~)** |
 |:--------------------------|:--------------------------------:|:--------------------------------------:|:-----------------------------------------:|
-| **Daily queries**         |   users $\times$ queries/user    | `{python} TCOCalc.i_daily_q_calc_str`  |                     -                     |
-| **GPU-seconds/day**       | queries $\times$ service demand  | `{python} TCOCalc.i_gpu_sec_calc_str`  |                     -                     |
-| **GPU-hours/day**         |      seconds ÷ SEC_PER_HOUR      |  `{python} TCOCalc.i_gpu_hr_day_str`   |  `{python} TCOCalc.i_daily_carbon_kg_str` |
-| **Annual GPU cost**       | hours $\times$ 365 $\times$ rate |  `{python} TCOCalc.i_annual_calc_str`  | `{python} TCOCalc.i_annual_carbon_kg_str` |
-| **3-year inference cost** |        annual $\times$ 3         | **`{python} TCOCalc.i_total_usd_str`** |   **`{python} TCOCalc.i_carbon_kg_str`**  |
+| **Truy vấn hàng ngày**         |   người dùng $\times$ truy vấn/người dùng    | `{python} TCOCalc.i_daily_q_calc_str`  |                     -                     |
+| **GPU-giây/ngày**       | truy vấn $\times$ nhu cầu dịch vụ  | `{python} TCOCalc.i_gpu_sec_calc_str`  |                     -                     |
+| **GPU-giờ/ngày**         |      giây ÷ SEC_PER_HOUR      |  `{python} TCOCalc.i_gpu_hr_day_str`   |  `{python} TCOCalc.i_daily_carbon_kg_str` |
+| **Chi phí GPU hàng năm**       | giờ $\times$ 365 $\times$ tỷ lệ |  `{python} TCOCalc.i_annual_calc_str`  | `{python} TCOCalc.i_annual_carbon_kg_str` |
+| **Chi phí suy luận 3 năm** |        hàng năm $\times$ 3         | **`{python} TCOCalc.i_total_usd_str`** |   **`{python} TCOCalc.i_carbon_kg_str`**  |
 
 : **Tính toán Chi phí Suy luận Minh họa**: Trong mô hình dịch vụ không batch và không chồng lấp này, `{python} TCOCalc.i_daily_queries_m_str` truy vấn mỗi ngày với độ trễ `{python} TCOCalc.i_latency_ms_str` trên bộ tăng tốc chuyên dụng sẽ yêu cầu `{python} TCOCalc.i_gpu_hr_day_str` giờ GPU mỗi ngày, tổng cộng `{python} TCOCalc.i_annual_cost_k_str` mỗi năm và `{python} TCOCalc.i_total_m_usd_str` trong ba năm. Mức sử dụng thực tế, batching và độ đồng thời sẽ thay đổi phép quy đổi này. {#tbl-tco-inference tbl-colwidths="[25,27,27,21]"}
 
@@ -2202,12 +2202,12 @@ Chi phí huấn luyện bao gồm cả phát triển ban đầu và huấn luy�
 
 Chi phí vận hành gồm cơ sở hạ tầng, nhân sự và ứng phó sự cố. Hệ thống ML tạo ra những gánh nặng vận hành mà phần mềm truyền thống không có: "ứng phó sự cố" thường là gỡ lỗi các lỗi ngầm (trôi dữ liệu, hỏng đặc trưng, hoặc dịch chuyển phân phối) thay vì những lần mất dịch vụ hoàn toàn; còn "hạ tầng giám sát" phải liên tục theo dõi các bất thường thống kê trong dự đoán của mô hình theo các lát cắt nhân khẩu học, chứ không chỉ mỗi tính sẵn sàng của dịch vụ. @Tbl-tco-operations liệt kê các khoản chi thường xuyên này, điều thường khiến các nhóm tập trung chủ yếu vào chi phí tính toán phải bất ngờ.
 
-| **Cost Component**                |             **Annual Estimate**              |            **3-Year Total**            |
+| **Thành phần chi phí**                |             **Ước tính hàng năm**              |            **Tổng cộng 3 năm**            |
 |:----------------------------------|:--------------------------------------------:|:--------------------------------------:|
-| **Monitoring infrastructure**     | `{python} TCOCalc.o_monitor_annual_usd_str`  |  `{python} TCOCalc.o_monitor_usd_str`  |
-| **On-call engineering (0.5 FTE)** |  `{python} TCOCalc.o_oncall_annual_usd_str`  |  `{python} TCOCalc.o_oncall_usd_str`   |
-| **Incident response (estimated)** | `{python} TCOCalc.o_incident_annual_usd_str` | `{python} TCOCalc.o_incident_usd_str`  |
-| **Total operational**             |                                              | **`{python} TCOCalc.o_total_usd_str`** |
+| **Cơ sở hạ tầng giám sát**     | `{python} TCOCalc.o_monitor_annual_usd_str`  |  `{python} TCOCalc.o_monitor_usd_str`  |
+| **Kỹ thuật viên trực (0.5 FTE)** |  `{python} TCOCalc.o_oncall_annual_usd_str`  |  `{python} TCOCalc.o_oncall_usd_str`   |
+| **Phản ứng sự cố (ước tính)** | `{python} TCOCalc.o_incident_annual_usd_str` | `{python} TCOCalc.o_incident_usd_str`  |
+| **Tổng chi phí vận hành**             |                                              | **`{python} TCOCalc.o_total_usd_str`** |
 
 : **Tính toán chi phí vận hành**: Các chi phí vận hành minh họa gồm hạ tầng giám sát (`{python} TCOCalc.o_monitor_annual_k_usd_str`), kỹ sư trực (on-call) 0.5 FTE (`{python} TCOCalc.o_oncall_annual_k_usd_str`), và quỹ dự phòng ứng phó sự cố (`{python} TCOCalc.o_incident_annual_k_usd_str`). Tổng ba năm `{python} TCOCalc.o_total_k_usd_str` chiếm `{python} TCOCalc.p_ops_str` TCO của kịch bản này. Chi phí nhân sự và sự cố thực tế phụ thuộc vào quy mô hệ thống, rủi ro, cấu trúc tổ chức và mô hình hỗ trợ. {#tbl-tco-operations tbl-colwidths="[34,33,33]"}
 
@@ -2266,12 +2266,12 @@ class TCOSummary:
 
 Bảng phân tích chi tiết trong @tbl-tco-summary cho thấy rõ tiền được chi tiêu vào đâu: suy luận ở mức `{python} TCOCalc.p_inf_str`, vận hành ở mức `{python} TCOCalc.p_ops_str`, và huấn luyện chỉ ở mức `{python} TCOCalc.p_train_str`.
 
-| **Category**   |           **3-Year Cost**            |           **Percentage**           |               **Modeled Accelerator Carbon**               |
+| **Danh mục**   |           **Chi phí 3 năm**            |           **Tỷ lệ phần trăm**           |               **Carbon bộ tăng tốc được mô hình hóa**               |
 |:---------------|:------------------------------------:|:----------------------------------:|:----------------------------------------------------------:|
-| **Training**   | `{python} TCOCalc.t_total_k_usd_str` | `{python} TCOCalc.p_train_tbl_str` |          `{python} TCOCalc.t_total_carbon_t_str`           |
-| **Inference**  |  `{python} TCOCalc.i_total_usd_str`  |  `{python} TCOCalc.p_inf_tbl_str`  |             `{python} TCOCalc.i_carbon_t_str`              |
-| **Operations** |  `{python} TCOCalc.o_total_usd_str`  |  `{python} TCOCalc.p_ops_tbl_str`  |                       Not estimated                        |
-| **Total TCO**  | **`{python} TCOCalc.total_tco_str`** | **`{python} TCOCalc.p_total_str`** | **`{python} TCOCalc.total_carbon_t_str` modeled subtotal** |
+| **Huấn luyện**   | `{python} TCOCalc.t_total_k_usd_str` | `{python} TCOCalc.p_train_tbl_str` |          `{python} TCOCalc.t_total_carbon_t_str`           |
+| **Suy luận**  |  `{python} TCOCalc.i_total_usd_str`  |  `{python} TCOCalc.p_inf_tbl_str`  |             `{python} TCOCalc.i_carbon_t_str`              |
+| **Hoạt động** |  `{python} TCOCalc.o_total_usd_str`  |  `{python} TCOCalc.p_ops_tbl_str`  |                       Chưa được ước tính                        |
+| **Tổng TCO**  | **`{python} TCOCalc.total_tco_str`** | **`{python} TCOCalc.p_total_str`** | **`{python} TCOCalc.total_carbon_t_str` tổng phụ được mô hình hóa** |
 
 : **Tóm tắt Tổng chi phí sở hữu**: Trong kịch bản nhu cầu dịch vụ minh họa này, tỷ lệ chi phí suy luận trên huấn luyện là `{python} TCOSummary.inf_train_ratio_str`:1. Việc giảm `{python} TCOSummary.quant_reduction_pct_str` nhu cầu bộ tăng tốc trên mỗi truy vấn tiết kiệm khoảng `{python} TCOSummary.quant_savings_str` và `{python} TCOSummary.quant_carbon_tonnes_str` lượng CO~2~ của bộ tăng tốc theo mô hình, theo cùng các giả định. Phần tổng phụ về carbon không bao gồm vận hành, chi phí chung của cơ sở và các tác động hàm chứa. {#tbl-tco-summary tbl-colwidths="[25,25,25,25]"}
 

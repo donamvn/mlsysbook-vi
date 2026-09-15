@@ -260,11 +260,11 @@ class DeploymentScenarioLatency:
 %\renewcommand{\arraystretch}{1.25}
 ```
 
-| **Context**     |      **Memory**      |                            **Latency**                             | **Power** | **Primary Goal** |
+| **Ngữ cảnh** |      **Bộ nhớ** |                            **Độ trễ** | **Công suất** | **Mục tiêu chính** |
 |:----------------|:--------------------:|:------------------------------------------------------------------:|:----------|:-----------------|
-| **Cloud**       |      tens of GB      |    `{python} DeploymentScenarioLatency.cloud_latency_range_str`    | Flexible  | Throughput, cost |
-| **Mobile/Edge** | hundreds of MB to GB | `{python} DeploymentScenarioLatency.mobile_edge_latency_range_str` | W-scale   | Size, latency    |
-| **TinyML**      |        KB–MB         |    `{python} DeploymentScenarioLatency.tiny_latency_range_str`     | mW        | Size, energy     |
+| **Đám mây** |      hàng chục GB |    `{python} DeploymentScenarioLatency.cloud_latency_range_str`    | Linh hoạt | Thông lượng, chi phí |
+| **Di động/Edge** | hàng trăm MB đến GB | `{python} DeploymentScenarioLatency.mobile_edge_latency_range_str` | Thang W | Kích thước, độ trễ |
+| **TinyML** |        KB–MB |    `{python} DeploymentScenarioLatency.tiny_latency_range_str`     | mW | Kích thước, năng lượng |
 
 : **Các ràng buộc triển khai**: Mỗi ngữ cảnh triển khai sẽ có những ưu tiên tối ưu hóa khác nhau. {#tbl-deployment-scenarios tbl-colwidths="[20,22,16,14,28]"}
 
@@ -391,14 +391,14 @@ Quyết định kỹ thuật nằm ở chỗ chọn điểm dừng. Nên dừng 
 
 :::
 
-| **Model**              |               **Runtime Weight Memory**                |              **Artifact Weight Storage**               | **Cloud (`{python} ModelDeviceComparison.cloud_cap_gb_str`)** |   **Mobile (`{python} ModelDeviceComparison.mobile_cap_gb_str`)**   |      **TinyML (`{python} ModelDeviceComparison.tiny_cap_kb_str`)**       |
+| **Mô hình** |               **Bộ nhớ trọng số khi runtime** |              **Lưu trữ trọng số artifact** | **Đám mây (`{python} ModelDeviceComparison.cloud_cap_gb_str`)** |   **Di động (`{python} ModelDeviceComparison.mobile_cap_gb_str`)** |      **TinyML (`{python} ModelDeviceComparison.tiny_cap_kb_str`)** |
 |:-----------------------|:------------------------------------------------------:|:------------------------------------------------------:|:-------------------------------------------------------------:|:-------------------------------------------------------------------:|:------------------------------------------------------------------------:|
-| **DLRM**               |      `{python} ModelDeviceComparison.dlrm_gb_str`      |      `{python} ModelDeviceComparison.dlrm_gb_str`      |                               ok                              | no (`{python} ModelDeviceComparison.dlrm_mobile_overflow_mult_str`) |    no (`{python} ModelDeviceComparison.dlrm_tiny_overflow_mult_str`)     |
-| **GPT-2 XL**           |      `{python} ModelDeviceComparison.gpt2_gb_str`      |      `{python} ModelDeviceComparison.gpt2_gb_str`      |                               ok                              |                                  ok                                 |    no (`{python} ModelDeviceComparison.gpt2_tiny_overflow_mult_str`)     |
-| **ResNet-50**          |     `{python} ModelDeviceComparison.resnet_mb_str`     |     `{python} ModelDeviceComparison.resnet_mb_str`     |                               ok                              |                                  ok                                 |   no (`{python} ModelDeviceComparison.resnet_tiny_overflow_mult_str`)    |
-| **MobileNetV2**        |   `{python} ModelDeviceComparison.mobilenet_mb_str`    |   `{python} ModelDeviceComparison.mobilenet_mb_str`    |                               ok                              |                                  ok                                 |  no (`{python} ModelDeviceComparison.mobilenet_tiny_overflow_mult_str`)  |
-| **MobileNetV2 (INT8)** | `{python} ModelDeviceComparison.mobilenet_int8_mb_str` | `{python} ModelDeviceComparison.mobilenet_int8_mb_str` |                               ok                              |                                  ok                                 | no (`{python} ModelDeviceComparison.mobilenet_int8_tiny_ratio_mult_str`) |
-| **DS-CNN (KWS, INT8)** |     `{python} ModelDeviceComparison.dscnn_kb_str`      |     `{python} ModelDeviceComparison.dscnn_kb_str`      |                               ok                              |                                  ok                                 |                                    ok                                    |
+| **DLRM** |      `{python} ModelDeviceComparison.dlrm_gb_str`      |      `{python} ModelDeviceComparison.dlrm_gb_str`      |                               ok | không (`{python} ModelDeviceComparison.dlrm_mobile_overflow_mult_str`) |    không (`{python} ModelDeviceComparison.dlrm_tiny_overflow_mult_str`) |
+| **GPT-2 XL** |      `{python} ModelDeviceComparison.gpt2_gb_str`      |      `{python} ModelDeviceComparison.gpt2_gb_str`      |                               ok |                                  ok |    không (`{python} ModelDeviceComparison.gpt2_tiny_overflow_mult_str`) |
+| **ResNet-50** |     `{python} ModelDeviceComparison.resnet_mb_str`     |     `{python} ModelDeviceComparison.resnet_mb_str`     |                               ok |                                  ok |   không (`{python} ModelDeviceComparison.resnet_tiny_overflow_mult_str`) |
+| **MobileNetV2** |   `{python} ModelDeviceComparison.mobilenet_mb_str`    |   `{python} ModelDeviceComparison.mobilenet_mb_str`    |                               ok |                                  ok |  không (`{python} ModelDeviceComparison.mobilenet_tiny_overflow_mult_str`) |
+| **MobileNetV2 (INT8)** | `{python} ModelDeviceComparison.mobilenet_int8_mb_str` | `{python} ModelDeviceComparison.mobilenet_int8_mb_str` |                               ok |                                  ok | không (`{python} ModelDeviceComparison.mobilenet_int8_tiny_ratio_mult_str`) |
+| **DS-CNN (KWS, INT8)** |     `{python} ModelDeviceComparison.dscnn_kb_str`      |     `{python} ModelDeviceComparison.dscnn_kb_str`      |                               ok |                                  ok |                                    ok |
 
 : **Khoảng cách triển khai**: So sánh yêu cầu về trọng số của mô hình với dung lượng thiết bị phổ biến. DLRM đại diện cho áp lực embedding trong các mô hình khuyến nghị [@naumov2019deep]; DS-CNN đại diện cho trường hợp phát hiện từ khoá trong TinyML [@zhang2017hello]. Ngay cả MobileNetV2 sau khi được lượng tử hoá sang INT8 cũng vượt quá giới hạn `{python} ModelDeviceComparison.tiny_cap_kb_str` của thiết bị TinyML tới `{python} ModelDeviceComparison.mobilenet_int8_tiny_ratio_mult_str` lần, trong khi bộ nhận dạng từ khoá DS-CNN được thiết kế chuyên biệt thì vừa vặn sau khi lượng tử hoá INT8. Trong cách tính chỉ dựa trên trọng số này, bộ nhớ trọng số lúc runtime được coi là bằng với dung lượng lưu trữ trọng số của artifact; các chi phí như activation, không gian làm việc, đóng gói và siêu dữ liệu đều không được tính đến. Các số trong ngoặc đơn cho biết mô hình vượt quá bộ nhớ thiết bị bao nhiêu lần. {#tbl-model-vs-device tbl-colwidths="[22,17,16,14,13,18]"}
 
@@ -406,16 +406,16 @@ Sự đánh đổi này biểu hiện khác nhau tuỳ ngữ cảnh triển khai
 
 @Tbl-optimization-tradeoffs tóm tắt các kỹ thuật tối ưu hoá chính, lợi ích cho hệ thống và chi phí phía ML. Đây là những mối quan hệ mang tính thực nghiệm—kết quả thực tế còn phụ thuộc vào kiến trúc mô hình, tác vụ và việc triển khai cẩn thận.
 
-| **Technique**                | **Systems Gain**                          | **ML Cost**          | **Typical Impact**     | **Region** |
+| **Kỹ thuật** | **Lợi ích hệ thống** | **Chi phí ML** | **Tác động điển hình** | **Vùng** |
 |:-----------------------------|:------------------------------------------|:---------------------|:-----------------------|:----------:|
-| **Operator Fusion**          | 10–30% latency reduction                  | None                 | No accuracy loss       |     1      |
-| **FP32 → BF16**              | 2$\times$ memory, ~2$\times$ throughput   | Minimal              | $<0.1\%$ accuracy drop |     1      |
-| **FP16 → INT8**              | 2$\times$ memory, 2--4$\times$ throughput | Quantization error   | 0.5–1% accuracy drop   |     2      |
-| **50% Pruning**              | ~2$\times$ smaller model                  | Capacity loss        | 0.5–1% accuracy drop   |     2      |
-| **Knowledge Distillation**   | 2--10$\times$ smaller student             | Capability ceiling   | 1–3% accuracy drop     |     2      |
-| **4-bit Quantization**       | 4$\times$ memory reduction                | Significant error    | 2–5% accuracy drop     |    2–3     |
-| **90% Pruning**              | ~10$\times$ smaller model                 | Severe capacity loss | 5–15% accuracy drop    |     3      |
-| **↑ Batch Size (8$\times$)** | Higher throughput, better GPU util        | Generalization gap   | Requires LR scaling    |     —      |
+| **Operator Fusion** | Giảm độ trễ 10–30% | Không có | Không mất độ chính xác |     1      |
+| **FP32 → BF16** | Bộ nhớ gấp 2 lần, thông lượng ~gấp 2 lần | Tối thiểu | Giảm độ chính xác $<0.1\%$ |     1      |
+| **FP16 → INT8** | Bộ nhớ gấp 2 lần, thông lượng gấp 2–4 lần | Lỗi lượng tử hoá | Giảm độ chính xác 0.5–1% |     2      |
+| **Tỉa (pruning) 50%** | Mô hình nhỏ hơn ~gấp 2 lần | Mất dung lượng | Giảm độ chính xác 0.5–1% |     2      |
+| **Knowledge Distillation** | Mô hình học sinh nhỏ hơn gấp 2–10 lần | Giới hạn khả năng | Giảm độ chính xác 1–3% |     2      |
+| **Lượng tử hoá 4-bit** | Giảm bộ nhớ gấp 4 lần | Lỗi đáng kể | Giảm độ chính xác 2–5% |    2–3     |
+| **Tỉa (pruning) 90%** | Mô hình nhỏ hơn ~gấp 10 lần | Mất dung lượng nghiêm trọng | Giảm độ chính xác 5–15% |     3      |
+| **Tăng Kích thước batch (gấp 8 lần)** | Thông lượng cao hơn, sử dụng GPU tốt hơn | Generalization gap | Yêu cầu LR scaling |     —      |
 
 : **Các đánh đổi tối ưu hoá**: Vùng 1 = Bữa trưa miễn phí, Vùng 2 = Đánh đổi hiệu quả, Vùng 3 = Vùng nguy hiểm. Kích thước batch ảnh hưởng đến động lực của quá trình huấn luyện hơn là trực tiếp đến chất lượng mô hình. Đây là những phạm vi kỹ thuật tiêu biểu, được tổng hợp từ các công trình đã xuất bản về runtime suy luận, lượng tử hoá, tỉa (pruning), lượng tử hoá LLM bit thấp và chưng cất [@nvidia2024tensorrt; @jacob2018; @han2015deep; @lin2023awq; @hinton2015distilling]; kết quả thực tế có thể khác nhau tuỳ kiến trúc, tác vụ, dữ liệu hiệu chuẩn và chất lượng triển khai. {#tbl-optimization-tradeoffs tbl-colwidths="[22,27,19,23,9]"}
 
@@ -1157,15 +1157,15 @@ Ba phương pháp tỉa nằm ở các vị trí khác nhau trên trục đánh 
 
 Các danh mục này mô tả cách thực thi khi triển khai, chứ không phải các thuật toán huấn luyện loại trừ lẫn nhau. Một mạng con có cấu trúc có thể được huấn luyện với lịch trình động rồi đóng băng để phục vụ (serving); hãy phân loại tạo phẩm dựa trên những gì runtime của nó thực sự thực thi.
 
-| **Aspect**                 | **Unstructured Pruning**                                                                | **Structured Pruning**                                                         | **Dynamic Pruning**                                           |
+| **Khía cạnh** | **Tỉa (pruning) không cấu trúc** | **Tỉa (pruning) có cấu trúc** | **Tỉa (pruning) động** |
 |:---------------------------|:----------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------|:--------------------------------------------------------------|
-| **What is removed?**       | Individual weights in the model                                                         | Entire neurons, channels, filters, or layers                                   | Adjusts pruning based on runtime conditions                   |
-| **Model structure**        | Sparse weight matrices; original architecture remains unchanged                         | Model architecture is modified; pruned layers are fully removed                | Structure adapts dynamically                                  |
-| **Impact on memory**       | Reduces the nonzero count; storage falls only with an appropriate sparse representation | Reduces model storage by removing entire components                            | Varies based on real-time pruning                             |
-| **Impact on computation**  | Dense work remains unless a supported sparse path skips zeros                           | Reduces nominal FLOPs; latency depends on resulting shapes and kernels         | Varies with routing policy and controller overhead            |
-| **Hardware compatibility** | Requires sparse formats and matching execution support                                  | Produces dense subnetworks, but awkward shapes can still underutilize hardware | Requires adaptive inference engines                           |
-| **Fine-tuning required?**  | Often used to recover accuracy after pruning                                            | Often used after structural modification                                       | Depends on how the routing policy and subnetworks are trained |
-| **Use cases**              | Memory-efficient model compression for cloud deployment                                 | Real-time inference optimization, mobile/edge AI, and efficient training       | Adaptive AI applications, real-time systems                   |
+| **Điều gì bị loại bỏ?** | Các trọng số riêng lẻ trong mô hình | Toàn bộ nơ-ron, kênh, bộ lọc hoặc lớp | Điều chỉnh tỉa (pruning) dựa trên các điều kiện runtime |
+| **Cấu trúc mô hình** | Ma trận trọng số thưa; kiến trúc gốc không thay đổi | Kiến trúc mô hình được sửa đổi; các lớp bị tỉa (pruning) được loại bỏ hoàn toàn | Cấu trúc thích ứng linh hoạt |
+| **Tác động đến bộ nhớ** | Giảm số lượng phần tử khác 0; dung lượng lưu trữ chỉ giảm khi có biểu diễn thưa phù hợp | Giảm dung lượng lưu trữ mô hình bằng cách loại bỏ toàn bộ các thành phần | Thay đổi dựa trên tỉa (pruning) thời gian thực |
+| **Tác động đến tính toán** | Tính toán dày đặc vẫn còn trừ khi một đường dẫn thưa được hỗ trợ bỏ qua các số 0 | Giảm FLOPs danh nghĩa; độ trễ phụ thuộc vào các hình dạng và kernel kết quả | Thay đổi theo chính sách định tuyến và chi phí quản lý của bộ điều khiển |
+| **Khả năng tương thích phần cứng** | Yêu cầu định dạng thưa và hỗ trợ thực thi tương ứng | Tạo ra các mạng con dày đặc, nhưng các hình dạng không phù hợp vẫn có thể làm phần cứng hoạt động kém hiệu quả | Yêu cầu các công cụ suy luận thích ứng |
+| **Có cần tinh chỉnh (fine-tuning) không?** | Thường được sử dụng để khôi phục độ chính xác sau khi tỉa (pruning) | Thường được sử dụng sau khi sửa đổi cấu trúc | Phụ thuộc vào cách chính sách định tuyến và các mạng con được huấn luyện |
+| **Trường hợp sử dụng** | Nén mô hình hiệu quả bộ nhớ để triển khai trên đám mây | Tối ưu hóa suy luận thời gian thực, AI di động/edge và huấn luyện hiệu quả | Ứng dụng AI thích ứng, hệ thống thời gian thực |
 
 : **Các chiến lược tỉa**: Tỉa không cấu trúc loại bỏ các trọng số riêng lẻ nhưng cần lưu trữ thưa và các kernel phù hợp để mang lại lợi ích khi triển khai; tỉa có cấu trúc loại bỏ toàn bộ các thành phần ánh xạ trực tiếp hơn tới phần cứng dày đặc, trong khi tỉa động thêm thích ứng runtime và chi phí kèm theo. {#tbl-pruning tbl-colwidths="[20,29,30,21]"}
 
@@ -2055,13 +2055,13 @@ Tuy nhiên, các hạn chế là có thật. Chưng cất cần suy luận từ 
 
 @Tbl-kd-pruning đối chiếu các đánh đổi chính giữa chưng cất tri thức và tỉa (pruning) trên các trục: mức giữ chính xác, chi phí huấn luyện, tốc độ suy luận, khả năng tương thích phần cứng và độ phức tạp triển khai. DistilBERT và MobileBERT cho thấy thiết kế lại kiến trúc kết hợp chưng cất; tỉa (pruning) có thể được kết hợp với chưng cất trong các pipeline tối ưu hoá khác, nhưng các mô hình này chủ yếu nên được hiểu là các ví dụ về mô hình học trò dày đặc.
 
-| **Criterion**              | **Knowledge Distillation**                                        | **Pruning**                                                                   |
+| **Tiêu chí** | **Knowledge Distillation** | **Tỉa (pruning)** |
 |:---------------------------|:------------------------------------------------------------------|:------------------------------------------------------------------------------|
-| **Accuracy retention**     | Model- and student-dependent; often strong with a capable teacher | Model- and sparsity-dependent                                                 |
-| **Training cost**          | Higher – Requires teacher inference and student training          | Often lower – Requires pruning and usually fine-tuning                        |
-| **Inference speed**        | Often favorable for a smaller dense student                       | Depends – Structured pruning is efficient, unstructured needs special support |
-| **Hardware compatibility** | High – Works on standard accelerators                             | Limited – Sparse models may need specialized execution                        |
-| **Implementation effort**  | More involved: teacher inference, student objective, and training | Varies: choose a criterion, prune, fine-tune, and export                      |
+| **Duy trì độ chính xác** | Phụ thuộc vào mô hình và học viên; thường mạnh mẽ với một giáo viên có năng lực | Phụ thuộc vào mô hình và độ thưa |
+| **Chi phí huấn luyện** | Cao hơn – Yêu cầu suy luận của giáo viên và huấn luyện học viên | Thường thấp hơn – Yêu cầu tỉa (pruning) và thường là tinh chỉnh (fine-tuning) |
+| **Tốc độ suy luận** | Thường thuận lợi cho một học viên dày đặc nhỏ hơn | Phụ thuộc – Tỉa (pruning) có cấu trúc hiệu quả, không có cấu trúc cần hỗ trợ đặc biệt |
+| **Khả năng tương thích phần cứng** | Cao – Hoạt động trên các bộ tăng tốc tiêu chuẩn | Hạn chế – Các mô hình thưa có thể cần thực thi chuyên biệt |
+| **Nỗ lực triển khai** | Phức tạp hơn: suy luận của giáo viên, mục tiêu của học viên và huấn luyện | Thay đổi: chọn một tiêu chí, tỉa (pruning), tinh chỉnh (fine-tuning) và xuất |
 
 : **Chưng cất vs. Tỉa (Pruning)**: Chưng cất đầu tư thêm công sức huấn luyện và thiết kế học trò để tạo ra một mô hình dày đặc nhỏ hơn; tỉa (pruning) chỉnh sửa một mô hình sẵn có, nhưng kết quả thưa cần bộ nhớ và kernel tương thích để hiện thực hoá lợi ích khi triển khai. {#tbl-kd-pruning}
 
@@ -2429,16 +2429,16 @@ Phân rã tensor được áp dụng cho các bộ lọc tích chập (xấp x�
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Feature**                   | **Low-Rank Matrix Factorization (LRMF)**                            | **Tensor Decomposition**                                                                                     |
+| **Đặc trưng** | **Low-Rank Matrix Factorization (LRMF)** | **Phân tách Tensor** |
 |:------------------------------|:--------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------|
-| **Applicable Data Structure** | Two-dimensional matrices                                            | Multi-dimensional tensors                                                                                    |
-| **Compression Mechanism**     | Factorizes a matrix into two or more lower-rank matrices            | Decomposes a tensor into multiple lower-rank components                                                      |
-| **Common Methods**            | Singular Value Decomposition (SVD), Alternating Least Squares (ALS) | CP Decomposition, Tucker Decomposition, Tensor-Train (TT)                                                    |
-| **Compute cost**              | Depends on the factorization method, selected rank, and kernels     | Depends on the decomposition, selected ranks, optimization procedure, and tensor-contraction kernels         |
-| **Storage Reduction**         | Reduces storage from $\mathcal{O}(mn)$ to $\mathcal{O}(mk + kn)$    | Depends on the decomposition and selected ranks; stores factor matrices and, for some methods, a core tensor |
-| **Inference execution**       | Replaces one dense operation with two factor operations             | Introduces tensor contractions whose latency depends on available kernels                                    |
-| **Primary Use Cases**         | Fully connected layers, embeddings, recommendation systems          | Convolutional filters, attention mechanisms, multi-modal learning                                            |
-| **Implementation Complexity** | Easier to implement, often involves direct factorization methods    | More complex, requiring iterative optimization and rank selection                                            |
+| **Cấu trúc dữ liệu áp dụng** | Ma trận hai chiều | Tensor đa chiều |
+| **Cơ chế nén** | Phân tích một ma trận thành hai hoặc nhiều ma trận có rank thấp hơn | Phân tách một tensor thành nhiều thành phần có rank thấp hơn |
+| **Các phương pháp phổ biến** | Singular Value Decomposition (SVD), Alternating Least Squares (ALS) | CP Decomposition, Tucker Decomposition, Tensor-Train (TT) |
+| **Chi phí tính toán** | Phụ thuộc vào phương pháp phân tích, rank được chọn và các kernel | Phụ thuộc vào phép phân tách, các rank được chọn, quy trình tối ưu hóa và các kernel co tensor |
+| **Giảm dung lượng lưu trữ** | Giảm dung lượng lưu trữ từ $\mathcal{O}(mn)$ xuống $\mathcal{O}(mk + kn)$ | Phụ thuộc vào phép phân tách và các rank được chọn; lưu trữ các ma trận nhân tử và, đối với một số phương pháp, một core tensor |
+| **Thực thi suy luận** | Thay thế một phép toán dày đặc bằng hai phép toán nhân tử | Giới thiệu các phép co tensor mà độ trễ của chúng phụ thuộc vào các kernel có sẵn |
+| **Các trường hợp sử dụng chính** | Các lớp kết nối đầy đủ, embedding, hệ thống khuyến nghị | Các bộ lọc tích chập, cơ chế attention, học đa phương thức |
+| **Độ phức tạp triển khai** | Dễ triển khai hơn, thường liên quan đến các phương pháp phân tích trực tiếp | Phức tạp hơn, yêu cầu tối ưu hóa lặp và lựa chọn rank |
 
 : **Phân rã ma trận và tensor**: LRMF áp dụng cho ma trận hai chiều, còn phân rã tensor mở rộng các biểu diễn hạng thấp sang các tensor đa chiều; mức lưu trữ và độ trễ thực tế phụ thuộc vào lựa chọn hạng và hỗ trợ kernel. {#tbl-lrmf-tensor tbl-colwidths="[26,37,37]"}
 
@@ -2635,11 +2635,11 @@ Việc thiết kế không gian tìm kiếm cũng có thể trực tiếp tích 
 
 Các chiến lược tìm kiếm xác định cách khám phá không gian kiến trúc một cách hiệu quả mà không cần liệt kê hết tất cả khả năng. @Tbl-nas-strategies so sánh các đánh đổi giữa chi phí tìm kiếm, mức đa dạng kiến trúc và các đảm bảo về tính tối ưu cho mỗi cách tiếp cận.
 
-| **Strategy**                | **Search Efficiency** | **When to Use**                     | **Key Challenge**                       |
+| **Chiến lược** | **Hiệu quả tìm kiếm** | **Khi nào sử dụng** | **Thử thách chính** |
 |:----------------------------|:----------------------|:------------------------------------|:----------------------------------------|
-| **Reinforcement Learning**  | 22,400 GPU-days       | Novel domains, unconstrained search | High computational cost                 |
-| **Evolutionary Algorithms** | 3,150 GPU-days        | Parallel infrastructure available   | Requires large populations              |
-| **Gradient-Based (DARTS)**  | 1--4 GPU-days         | Limited compute budget              | May converge to suboptimal local minima |
+| **Reinforcement Learning** | 22,400 GPU-days | Các miền mới, tìm kiếm không ràng buộc | Chi phí tính toán cao |
+| **Evolutionary Algorithms** | 3,150 GPU-days | Cơ sở hạ tầng song song có sẵn | Yêu cầu quần thể lớn |
+| **Gradient-Based (DARTS)** | 1--4 GPU-days | Ngân sách tính toán hạn chế | Có thể hội tụ về các cực tiểu cục bộ không tối ưu |
 
 : **So sánh Chiến lược Tìm kiếm NAS**: So sánh các đánh đổi tiêu biểu giữa hiệu quả tìm kiếm, các trường hợp sử dụng và những hạn chế của các phương pháp NAS khác nhau. Các chi phí này là các kết quả phụ thuộc phương pháp từ những tìm kiếm học tăng cường và tiến hóa giai đoạn đầu, cũng như từ DARTS, chứ không phải phạm vi chung cho mỗi chiến lược [@zoph2017neural; @real2019; @liu2019darts]. {#tbl-nas-strategies tbl-colwidths="[23,18,34,25]"}
 
@@ -2927,11 +2927,11 @@ class EnergyCosts:
 
 @Tbl-model-compression-energy-hierarchy tóm tắt khoảng cách kinh điển về năng lượng giữa phép toán số học và việc di chuyển dữ liệu; độ mịn của độ chính xác còn kéo giãn thêm khoảng cách này. @Fig-quantized-energy đưa ra chi phí năng lượng tiêu biểu ở cấp độ phép toán, trên nhiều định dạng và dọc theo phân cấp SRAM: một phép cộng số nguyên 32-bit tốn `{python} EnergyCosts.energy_add_int32_pj_per_op_str`, trong khi phép cộng số nguyên 8-bit chỉ tốn `{python} EnergyCosts.energy_add_int8_pj_per_op_str`. Các phép toán dấu phẩy động cũng theo cùng xu hướng: một phép cộng dấu phẩy động 32-bit tiêu thụ khoảng `{python} EnergyCosts.energy_add_fp32_pj_per_op_str`, còn phép cộng dấu phẩy động 16-bit cần `{python} EnergyCosts.energy_add_fp16_pj_per_op_str`. So với phép cộng INT8 chỉ tốn 0.03 pJ, các lần đọc SRAM ở mức 5 đến 50 pJ tiêu tốn năng lượng gấp khoảng 167 đến 1.667 lần. Khoảng chênh lệch gấp mười lần giữa các cấp SRAM cho thấy toán hạng nằm ở đâu quan trọng không kém cách nó được tính. Truy cập DRAM còn tốn kém hơn nữa. Những mức tiết kiệm này sẽ cộng dồn đáng kể khi áp dụng cho các mô hình lớn chạy hàng tỷ phép toán. Vì vậy, giảm dấu chân năng lượng của mô hình góp phần vào triển khai AI bền vững và dễ tiếp cận: nó giúp giảm thiểu tác động môi trường của huấn luyện và suy luận machine learning quy mô lớn khi khối lượng công việc (workload) AI ngày càng tăng [@patterson2021carbon], đồng thời mở rộng phạm vi ứng dụng của machine learning vào các môi trường tài nguyên hạn chế, từ y tế nông thôn đến các hệ thống tự hành hoạt động thực địa.
 
-| **Operation**   |                              **Bit-Width**                               |                         **Relative Energy**                          |
+| **Thao tác** |                              **Độ rộng bit** |                         **Năng lượng tương đối** |
 |:----------------|:------------------------------------------------------------------------:|:--------------------------------------------------------------------:|
-| **Integer Add** |                                  8-bit                                   |                              1$\times$                               |
-| **Float Add**   |                                  32-bit                                  | `{python} QuantizationEnergyPhysics.energy_float_add_ratio_mult_str` |
-| **DRAM Read**   | `{python} QuantizationEnergyPhysics.energy_dram_read_bits_value_str`-bit | `{python} QuantizationEnergyPhysics.energy_dram_read_ratio_mult_str` |
+| **Phép cộng số nguyên** |                                  8-bit |                              1$\times$                               |
+| **Phép cộng số thực** |                                  32-bit | `{python} QuantizationEnergyPhysics.energy_float_add_ratio_mult_str` |
+| **Đọc DRAM** | `{python} QuantizationEnergyPhysics.energy_dram_read_bits_value_str`-bit | `{python} QuantizationEnergyPhysics.energy_dram_read_ratio_mult_str` |
 
 : **Thứ bậc năng lượng**: Chi phí năng lượng tương đối của các phép toán số học và thao tác bộ nhớ điển hình, được chuẩn hoá theo phép cộng số nguyên 8-bit. Một phép cộng số thực 32-bit tốn năng lượng gấp `{python} QuantizationEnergyPhysics.energy_float_add_ratio_mult_str` lần so với phép cộng số nguyên 8-bit tương ứng, nhưng một lần đọc DRAM `{python} QuantizationEnergyPhysics.energy_dram_read_bits_value_str` bit lại tốn gấp `{python} QuantizationEnergyPhysics.energy_dram_read_ratio_mult_str` lần, khiến truy cập DRAM cao hơn hơn bốn bậc độ lớn so với tính toán trên chip. Chính khoảng cách này giải thích vì sao việc giảm độ rộng bit, qua đó giảm dữ liệu phải di chuyển, chi phối ngân sách năng lượng của suy luận nhiều hơn rất nhiều so với những gì chỉ riêng tiết kiệm từ phép toán số học gợi ý [@horowitz2014]. {#tbl-model-compression-energy-hierarchy tbl-colwidths="[34,33,33]"}
 
@@ -3687,16 +3687,16 @@ Việc lựa chọn định dạng số cần dựa trên phạm vi số và đ�
 
 Các định dạng FP16 và BF16 có thể mang lại mức cải thiện hiệu suất vừa phải, còn việc giữ được độ chính xác phụ thuộc vào mô hình, tác vụ và phương pháp huấn luyện. Nhiều bộ tăng tốc AI, như NVIDIA Tensor Cores và TPU, có hỗ trợ chuyên dụng cho phép tính FP16, giúp thực hiện phép toán ma trận nhanh hơn so với FP32. BF16 giữ số mũ 8 bit của FP32 nhưng chỉ có mantissa 7 bit, nên duy trì dải động tương tự trong khi giảm độ chính xác. FP16 có giá trị hữu hạn tối đa là 65,504, giá trị chuẩn dương nhỏ nhất khoảng $6.1\times10^{-5}$, và các giá trị phi chuẩn xuống đến khoảng $6.0\times10^{-8}$. Trong huấn luyện FP16, người ta thường dùng *loss scaling* và tích lũy ở FP32 để xử lý underflow/overflow, trong khi dải số mũ rộng hơn của BF16 giúp giảm rủi ro này.
 
-| **Precision Format**             | **Bit-Width** | **Storage Reduction (vs. FP32)** |             **Compute Speed (vs. FP32)**            |         **Power Effect**         | **Use Cases**                                               |
+| **Định dạng độ chính xác** | **Độ rộng bit** | **Giảm dung lượng lưu trữ (so với FP32)** |             **Tốc độ tính toán (so với FP32)** |         **Ảnh hưởng công suất** | **Trường hợp sử dụng** |
 |:---------------------------------|:-------------:|:--------------------------------:|:---------------------------------------------------:|:--------------------------------:|:------------------------------------------------------------|
-| **FP32**                         |     32-bit    |       Baseline (1$\times$)       |                 Baseline (1$\times$)                |             Baseline             | Training & inference (general-purpose)                      |
-| **FP16**                         |     16-bit    |        2$\times$ smaller         | Up to 2$\times$ peak on selected supported hardware | Hardware- and workload-dependent | Accelerated training, inference (NVIDIA Tensor Cores, TPUs) |
-| **BF16 (Brain Floating Point)**  |     16-bit    |        2$\times$ smaller         |           Hardware- and workload-dependent          | Hardware- and workload-dependent | Training on TPUs, transformer-based models                  |
-| **TF32 (TensorFloat-32)**        |     19-bit    |      None (stored as FP32)       |  Up to 8$\times$ peak on NVIDIA Ampere Tensor Cores | Hardware- and workload-dependent | Training on NVIDIA GPUs                                     |
-| **FP8 (Floating-Point 8-bit)**   |     8-bit     |        4$\times$ smaller         |           Hardware- and workload-dependent          | Hardware- and workload-dependent | Efficient training/inference (H100, AI accelerators)        |
-| **INT8 (8-bit Integer)**         |     8-bit     |        4$\times$ smaller         |           Hardware- and workload-dependent          | Hardware- and workload-dependent | Quantized inference (Edge AI, mobile AI, NPUs)              |
-| **INT4 (4-bit Integer)**         |     4-bit     |        8$\times$ smaller         |           Hardware- and workload-dependent          | Hardware- and workload-dependent | Ultra-low-power AI, experimental quantization               |
-| **Binary/Ternary (1-bit/2-bit)** |    1–2-bit    |      16--32$\times$ smaller      |           Hardware- and workload-dependent          | Hardware- and workload-dependent | Extreme efficiency (binary/ternary neural networks)         |
+| **FP32** |     32-bit |       Mức cơ sở (1$\times$) |                 Mức cơ sở (1$\times$) |             Mức cơ sở | huấn luyện & suy luận (mục đích chung) |
+| **FP16** |     16-bit |        Nhỏ hơn 2$\times$ | Lên đến 2$\times$ đỉnh trên phần cứng được hỗ trợ đã chọn | Phụ thuộc vào phần cứng và khối lượng công việc (workload) | huấn luyện được tăng tốc, suy luận (NVIDIA Tensor Cores, TPUs) |
+| **BF16 (Brain Floating Point)** |     16-bit |        Nhỏ hơn 2$\times$ |           Phụ thuộc vào phần cứng và khối lượng công việc (workload) | Phụ thuộc vào phần cứng và khối lượng công việc (workload) | huấn luyện trên TPUs, các mô hình dựa trên transformer |
+| **TF32 (TensorFloat-32)** |     19-bit |      Không có (được lưu trữ dưới dạng FP32) |  Lên đến 8$\times$ đỉnh trên NVIDIA Ampere Tensor Cores | Phụ thuộc vào phần cứng và khối lượng công việc (workload) | huấn luyện trên NVIDIA GPUs |
+| **FP8 (Floating-Point 8-bit)** |     8-bit |        Nhỏ hơn 4$\times$ |           Phụ thuộc vào phần cứng và khối lượng công việc (workload) | Phụ thuộc vào phần cứng và khối lượng công việc (workload) | huấn luyện/suy luận hiệu quả (H100, bộ tăng tốc AI) |
+| **INT8 (8-bit Integer)** |     8-bit |        Nhỏ hơn 4$\times$ |           Phụ thuộc vào phần cứng và khối lượng công việc (workload) | Phụ thuộc vào phần cứng và khối lượng công việc (workload) | suy luận đã lượng tử hoá (Edge AI, mobile AI, NPUs) |
+| **INT4 (4-bit Integer)** |     4-bit |        8$\times$ nhỏ hơn |           Phụ thuộc vào phần cứng và khối lượng công việc (workload) | Phụ thuộc vào phần cứng và khối lượng công việc (workload) | AI công suất cực thấp, lượng tử hoá thử nghiệm |
+| **Nhị phân/Tam phân (1-bit/2-bit)** |    1–2-bit |      16--32$\times$ nhỏ hơn |           Phụ thuộc vào phần cứng và khối lượng công việc (workload) | Phụ thuộc vào phần cứng và khối lượng công việc (workload) | Hiệu quả cực cao (mạng nơ-ron nhị phân/tam phân) |
 
 : **Các định dạng độ chính xác số**: Tỷ lệ lưu trữ phản ánh độ rộng của giá trị thô; tốc độ tính toán và tác động đến công suất phụ thuộc vào mức hỗ trợ của phần cứng và hành vi của khối lượng công việc (workload). {#tbl-numerics tbl-colwidths="[15,12,13,18,18,24]"}
 
@@ -4662,12 +4662,12 @@ Box/.style={inner xsep=2pt,
 
 Độ hạt của lượng tử hoá là bài toán đánh đổi giữa chi phí hiệu chuẩn, siêu dữ liệu và lỗi biểu diễn. Phạm vi cục bộ hơn có thể giữ thông tin tốt hơn khi các kênh khác nhau, nhưng không tự động cải thiện độ chính xác và có thể thiếu đường dẫn kernel hiệu quả. Mỗi hệ số tỷ lệ bổ sung cũng phải được lưu trữ, tải và áp dụng theo độ hạt mà backend hỗ trợ. @Tbl-quantization-granularity tóm tắt bốn mức phổ biến, từ một phạm vi chung cho cả lớp đến các phạm vi cục bộ trong một bộ lọc.
 
-| **Level**                                               | **Range sharing**                  | **Trade-off**                                                                                     |
+| **Cấp độ** | **Chia sẻ phạm vi** | **Đánh đổi** |
 |:--------------------------------------------------------|:-----------------------------------|:--------------------------------------------------------------------------------------------------|
-| **Layerwise**\index{Quantization!layerwise}             | One range per layer                | Simple but suboptimal when filter ranges vary widely                                              |
-| **Groupwise**\index{Quantization!groupwise}             | Filters grouped with shared ranges | Used in Q-BERT [@shen2020] for transformer attention layers                                       |
-| **Channelwise**\index{Quantization!channelwise}         | One range per filter               | Common default; balances quantization error against scale metadata and implementation overhead    |
-| **Sub-channelwise**\index{Quantization!sub-channelwise} | Ranges within each filter          | More local ranges can reduce quantization error but increase metadata and implementation overhead |
+| **Theo lớp**\index{Quantization!layerwise} | Một phạm vi cho mỗi lớp | Đơn giản nhưng không tối ưu khi các phạm vi bộ lọc thay đổi rộng rãi |
+| **Theo nhóm**\index{Quantization!groupwise} | Các bộ lọc được nhóm với các phạm vi được chia sẻ | Được sử dụng trong Q-BERT [@shen2020] cho các lớp attention của transformer |
+| **Theo kênh**\index{Quantization!channelwise} | Một phạm vi cho mỗi bộ lọc | Mặc định phổ biến; cân bằng lỗi lượng tử hoá với siêu dữ liệu tỷ lệ và chi phí triển khai |
+| **Theo kênh con**\index{Quantization!sub-channelwise} | Các phạm vi trong mỗi bộ lọc | Các phạm vi cục bộ hơn có thể giảm lỗi lượng tử hoá nhưng làm tăng siêu dữ liệu và chi phí triển khai |
 
 : **Các mức độ chi tiết của lượng tử hoá**: Độ chi tiết là sự đánh đổi giữa chi phí hiệu chuẩn và độ chính xác, từ một khoảng duy nhất cho cả lớp đến các khoảng con cho từng bộ lọc. {#tbl-quantization-granularity tbl-colwidths="[15,29,56]"}
 
@@ -4750,11 +4750,11 @@ Trong **lượng tử hoá tĩnh**\index{Static quantization!definition}, dải 
 
 Các quyết định về thời điểm và mức độ chi tiết này gắn liền với việc chọn phương pháp lượng tử hoá tổng thể. Bảng @Tbl-quantization_methods so sánh lượng tử hoá sau huấn luyện, huấn luyện nhận biết lượng tử hoá, và lượng tử hoá động; mỗi phương pháp có điểm mạnh và đánh đổi riêng cho các kịch bản triển khai khác nhau.
 
-| **Method**                            | **Engineering effort**                                 | **Accuracy preservation**                | **Input adaptability**  | **Reach for it when**                                                          |
+| **Phương pháp** | **Nỗ lực kỹ thuật** | **Bảo toàn độ chính xác** | **Khả năng thích ứng đầu vào** | **Sử dụng khi** |
 |:--------------------------------------|:-------------------------------------------------------|:-----------------------------------------|:------------------------|:-------------------------------------------------------------------------------|
-| **Post-training quantization (PTQ)**  | Low: no retraining                                     | Model-dependent; parameters do not adapt | Fixed calibration range | a calibrated model meets the measured accuracy and performance targets         |
-| **Quantization-aware training (QAT)** | High: additional training with quantization simulation | Often stronger when PTQ falls short      | Fixed calibration range | PTQ misses the accuracy target and the training budget allows                  |
-| **Dynamic quantization**              | Moderate: ranges recomputed at runtime                 | Model-dependent; range fits each input   | Per-input range         | activation ranges vary widely across inputs and runtime overhead is acceptable |
+| **Lượng tử hoá sau huấn luyện (PTQ)** | Thấp: không cần huấn luyện lại | Phụ thuộc vào mô hình; các tham số không thích ứng | Phạm vi hiệu chuẩn cố định | một mô hình đã hiệu chuẩn đáp ứng các mục tiêu độ chính xác và hiệu suất đã đo |
+| **Huấn luyện nhận biết lượng tử hoá (QAT)** | Cao: huấn luyện bổ sung với mô phỏng lượng tử hoá | Thường mạnh hơn khi PTQ không đạt yêu cầu | Phạm vi hiệu chuẩn cố định | PTQ không đạt mục tiêu độ chính xác và ngân sách huấn luyện cho phép |
+| **Lượng tử hoá động** | Trung bình: các phạm vi được tính toán lại trong runtime | Phụ thuộc vào mô hình; phạm vi phù hợp với từng đầu vào | Phạm vi theo từng đầu vào | Phạm vi activation thay đổi rộng rãi trên các đầu vào và chi phí runtime là chấp nhận được. |
 
 : **So sánh các Phương pháp Lượng tử hoá**: Việc lựa chọn xoay quanh ba câu hỏi chính: ngân sách kỹ thuật, ngưỡng độ chính xác, và mức độ biến thiên của dữ liệu đầu vào; không nên chỉ dựa vào một danh sách kiểm các đặc trưng. {#tbl-quantization_methods tbl-colwidths="[16,22,22,15,25]"}
 
@@ -5054,12 +5054,12 @@ Thiết kế nhận biết phần cứng phải bắt đầu trước cả nén.
 
 Bước thiết kế đầu tiên là xác định tài nguyên giới hạn mà trace cho thấy. Một mô hình có thể không đạt mục tiêu vì mỗi lớp đều quá tốn kém, vì một họ tích chập chiếm phần lớn phép tính, vì activation hoặc tham số không khớp với hệ thống phân cấp bộ nhớ, hoặc vì kiến trúc ứng cử viên bỏ qua các toán tử ưa thích của nền tảng. @Tbl-hardware-efficient-design sắp xếp các cách ứng phó phổ biến theo nút thắt cổ chai mà chúng giải quyết, thay vì theo họ mô hình.
 
-| **Observed bottleneck**       | **Architectural response**                                                                                                                         | **Example networks** |
+| **Nút thắt cổ chai được quan sát** | **Phản ứng kiến trúc** | **Các mạng ví dụ** |
 |:------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------|
-| **Over-budget model scaling** | Adjust depth, width, and resolution together so the model stays within the latency, memory, and power envelope.                                    | EfficientNet, RegNet |
-| **Redundant computation**     | Replace expensive dense operations with factorized or grouped operations that preserve useful channel mixing at lower arithmetic cost.             | MobileNet, ResNeXt   |
-| **Memory pressure**           | Reduce parameter and activation storage, or reuse features so the working set fits the available cache, SRAM, or device memory.                    | DenseNet, SqueezeNet |
-| **Platform mismatch**         | Include measured device latency, operator support, and power behavior in the architecture search or design loop instead of optimizing FLOPs alone. | MobileNetV3, MnasNet |
+| **Mở rộng mô hình vượt ngân sách** | Điều chỉnh độ sâu, chiều rộng và độ phân giải cùng nhau để mô hình nằm trong giới hạn độ trễ, bộ nhớ và công suất. | EfficientNet, RegNet |
+| **Tính toán dư thừa** | Thay thế các phép toán dày đặc tốn kém bằng các phép toán được phân tích thành thừa số hoặc nhóm giúp bảo toàn việc trộn kênh hữu ích với chi phí số học thấp hơn. | MobileNet, ResNeXt |
+| **Áp lực bộ nhớ** | Giảm lưu trữ tham số và activation, hoặc tái sử dụng các đặc trưng để tập làm việc phù hợp với cache, SRAM hoặc bộ nhớ thiết bị có sẵn. | DenseNet, SqueezeNet |
+| **Không khớp nền tảng** | Bao gồm độ trễ thiết bị đo được, hỗ trợ toán tử và hành vi công suất trong vòng lặp tìm kiếm kiến trúc hoặc thiết kế thay vì chỉ tối ưu hóa FLOPs. | MobileNetV3, MnasNet |
 
 : **Nguyên tắc Thiết kế Nhận biết Phần cứng**: Trace khi phân tích hiệu năng sẽ cho biết phản ứng kiến trúc nào là phù hợp. MobileNet đối phó với tính toán tích chập dư thừa bằng các tích chập tách sâu (depthwise separable convolutions), DenseNet và SqueezeNet đối phó với áp lực bộ nhớ bằng cách tái sử dụng các đặc trưng và giảm số lượng tham số, và NAS nhận biết phần cứng tích hợp trực tiếp hành vi nền tảng đo được vào mục tiêu tìm kiếm. {#tbl-hardware-efficient-design tbl-colwidths="[23,56,21]"}
 
@@ -5325,12 +5325,12 @@ Như @tbl-fusion-speedup cho thấy, lợi ích của việc hợp nhất thay �
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Workload**                | **Relative Fusion Benefit** | **Why**                                                       |
+| **Khối lượng công việc (workload)** | **Lợi ích hợp nhất tương đối** | **Tại sao** |
 |:----------------------------|:---------------------------:|:--------------------------------------------------------------|
-| **Element-wise operations** |             High            | Highly memory bound, low arithmetic intensity                 |
-| **Conv-BN-Act patterns**    |           Moderate          | Mixed memory/compute characteristics                          |
-| **GEMM-based operations**   |             Low             | Compute bound; fusion reduces the memory-bound tail           |
-| **Attention mechanisms**    |             High            | Long sequences amplify avoided attention-intermediate traffic |
+| **Các phép toán theo từng phần tử** |             Cao | Ràng buộc bộ nhớ cao, cường độ số học thấp |
+| **Các mẫu Conv-BN-Act** |           Trung bình | Đặc điểm bộ nhớ/tính toán hỗn hợp |
+| **Các phép toán dựa trên GEMM** |             Thấp | Ràng buộc tính toán; hợp nhất làm giảm phần đuôi ràng buộc bộ nhớ |
+| **Các cơ chế Attention** |             Cao | Các chuỗi dài khuếch đại lưu lượng trung gian attention được tránh |
 
 : **Lợi ích minh họa của hợp nhất toán tử theo khối lượng công việc (workload)**: Các khối lượng công việc bị giới hạn bởi bộ nhớ thường hưởng lợi nhiều hơn so với các khối lượng công việc bị giới hạn bởi tính toán; mức lợi ích thực tế còn phụ thuộc vào đồ thị, runtime, hình dạng chuỗi và phần cứng. {#tbl-fusion-speedup tbl-colwidths="[34,18,48]"}
 
@@ -6931,11 +6931,11 @@ Trước khi quyết định trình tự, hãy tách các đòn bẩy chính the
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Technique**    | **Primary Goal**       |   **Quality Risk**  |      **Training Cost**      | **Hardware Dependency** | **Candidate Use**               |
+| **Kỹ thuật** | **Mục tiêu chính** |   **Rủi ro chất lượng** |      **Chi phí huấn luyện** | **Phụ thuộc phần cứng** | **Sử dụng tiềm năng** |
 |:-----------------|:-----------------------|:-------------------:|:---------------------------:|:-----------------------:|:--------------------------------|
-| **Pruning**      | Reduce FLOPs/size      |  Pattern-dependent  |  Often includes fine-tuning | High for sparse speedup | Removable structures/weights    |
-| **Quantization** | Reduce bytes/precision | Bit-width-dependent | Low for PTQ; higher for QAT |  High for runtime speed | Memory- or bandwidth-bound path |
-| **Distillation** | Train smaller model    |  Student-dependent  |   Teacher and student run   | Low for dense execution | A new training run is feasible  |
+| **Tỉa (pruning)** | Giảm FLOPs/kích thước |  Phụ thuộc vào mẫu |  Thường bao gồm tinh chỉnh (fine-tuning) | Cao đối với tăng tốc thưa thớt | Các cấu trúc/trọng số có thể loại bỏ |
+| **Lượng tử hoá** | Giảm số byte/độ chính xác | Phụ thuộc vào độ rộng bit | Thấp đối với PTQ; cao hơn đối với QAT |  Cao đối với tốc độ runtime | Đường dẫn bị giới hạn bởi bộ nhớ hoặc băng thông |
+| **Distillation** | Huấn luyện mô hình nhỏ hơn |  Phụ thuộc vào Student |   Teacher và student chạy | Thấp đối với thực thi dày đặc | Một lần huấn luyện mới là khả thi |
 
 : **Đánh đổi giữa các kỹ thuật tối ưu hóa**: Các hàng này liệt kê những lựa chọn tiềm năng ban đầu, chứ không phải kết quả chắc chắn. Rủi ro về chất lượng và chi phí huấn luyện phụ thuộc vào mô hình và phương pháp cụ thể, trong khi mức độ phụ thuộc phần cứng quyết định việc tỉa (pruning) hay lượng tử hoá có làm thay đổi độ trễ hay không. Tỉa (pruning) có thể loại bỏ cấu trúc hoặc tạo ra các tensor thưa, lượng tử hoá trực tiếp giảm số byte của giá trị thô, còn chưng cất thì cần thực hiện suy luận trên mô hình giáo viên và một lượt huấn luyện cho mô hình học sinh để tạo ra một mô hình dày đặc thông thường. Cuối cùng, các lựa chọn này vẫn phải được đánh giá trên cùng một tác vụ và so với các ngưỡng của hệ thống đã triển khai. {#tbl-optimization-comparison tbl-colwidths="[13,13,16,20,16,22]"}
 
@@ -6947,13 +6947,13 @@ Trước khi quyết định trình tự, hãy tách các đòn bẩy chính the
 
 Ràng buộc chi phối nên quyết định nhóm kỹ thuật tối ưu hóa trước khi nhóm chọn một kỹ thuật cụ thể. @Tbl-constraint-opt-mapping liên kết mỗi ràng buộc hệ thống với khía cạnh biểu diễn, độ chính xác hoặc kiến trúc có khả năng giảm nhẹ ràng buộc đó nhất, để việc lựa chọn kỹ thuật bắt đầu từ điểm nghẽn khi triển khai thay vì từ phương pháp nén quen thuộc nhất.
 
-| **System Constraint**      | **Model Representation** | **Numerical Precision** | **Architectural Efficiency** |
+| **Ràng buộc Hệ thống** | **Biểu diễn Mô hình** | **Độ chính xác Số học** | **Hiệu quả Kiến trúc** |
 |:---------------------------|:------------------------:|:-----------------------:|:----------------------------:|
-| **Computational Cost**     |            ✓             |       $\triangle$       |              ✓               |
-| **Memory and Storage**     |            ✓             |            ✓            |         $\triangle$          |
-| **Latency and Throughput** |            ✓             |       $\triangle$       |              ✓               |
-| **Energy Efficiency**      |            ✓             |            ✓            |              ✓               |
-| **Scalability**            |            ✓             |       $\triangle$       |              ✓               |
+| **Chi phí Tính toán** |            ✓             |       $\triangle$       |              ✓               |
+| **Bộ nhớ và Lưu trữ** |            ✓             |            ✓            |         $\triangle$          |
+| **Độ trễ và Thông lượng** |            ✓             |       $\triangle$       |              ✓               |
+| **Hiệu quả Năng lượng** |            ✓             |            ✓            |              ✓               |
+| **Khả năng mở rộng** |            ✓             |       $\triangle$       |              ✓               |
 
 : **Các khía cạnh tối ưu hóa**: Các ràng buộc của hệ thống định hướng tối ưu hóa theo ba khía cạnh chính: biểu diễn mô hình, độ chính xác tính toán và hiệu quả kiến trúc, mỗi khía cạnh giải quyết những hạn chế tài nguyên và mục tiêu hiệu suất khác nhau. Ký hiệu ✓ chỉ một đòn bẩy trực tiếp, còn $\triangle$ chỉ lợi ích phụ thuộc vào khối lượng công việc (workload) hoặc phần cứng; ví dụ, số học độ chính xác thấp chỉ hữu ích khi bộ tăng tốc và runtime cung cấp đường hỗ trợ tương ứng. {#tbl-constraint-opt-mapping}
 
@@ -7428,13 +7428,13 @@ Với các mốc cơ sở toàn diện này, framework đo lường phải theo 
 %\renewcommand{\arraystretch}{1.3}
 ```
 
-| **Metric**               | **FP32 baseline**                                         | **INT8 result**                                                                                               | **Deployment reading**                                                |
+| **Chỉ số** | **Đường cơ sở FP32** | **Kết quả INT8** | **Đọc triển khai** |
 |:-------------------------|:----------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------|
-| **Top-1 accuracy**       | `{python} ResNet50Int8Metrics.fp32_top1_str`              | `{python} ResNet50Int8Metrics.int8_top1_str` (`{python} ResNet50Int8Metrics.top1_drop_pp_str` drop)           | Aggregate accuracy mostly holds, but subgroup checks still matter.    |
-| **Modeled V100 latency** | `{python} ResNet50Int8Metrics.fp32_latency_ms_str`        | `{python} ResNet50Int8Metrics.int8_latency_ms_str`                                                            | GPU latency improves when the runtime maps INT8 to fast kernels.      |
-| **Model size**           | `{python} ResNet50Int8Metrics.fp32_size_mb_str`           | `{python} ResNet50Int8Metrics.int8_size_mb_str` (`{python} ResNet50Int8Metrics.size_reduction_mult_str`)      | The artifact becomes easier to cache, transmit, and deploy on edge.   |
-| **Energy/inference**     | `{python} ResNet50Int8Metrics.fp32_energy_j_str`          | `{python} ResNet50Int8Metrics.int8_energy_j_str` (`{python} ResNet50Int8Metrics.energy_improvement_mult_str`) | Lower precision reduces both arithmetic and memory-movement energy.   |
-| **Calibration error**    | `{python} ResNet50Int8Metrics.calibration_error_fp32_str` | `{python} ResNet50Int8Metrics.calibration_error_int8_str`                                                     | Confidence calibration can drift even when accuracy looks acceptable. |
+| **Độ chính xác Top-1** | `{python} ResNet50Int8Metrics.fp32_top1_str`              | `{python} ResNet50Int8Metrics.int8_top1_str` (giảm `{python} ResNet50Int8Metrics.top1_drop_pp_str`) | Độ chính xác tổng hợp phần lớn được giữ nguyên, nhưng kiểm tra nhóm con vẫn quan trọng. |
+| **Độ trễ V100 được mô hình hóa** | `{python} ResNet50Int8Metrics.fp32_latency_ms_str`        | `{python} ResNet50Int8Metrics.int8_latency_ms_str`                                                            | Độ trễ GPU cải thiện khi runtime ánh xạ INT8 tới các kernel nhanh. |
+| **Kích thước mô hình** | `{python} ResNet50Int8Metrics.fp32_size_mb_str`           | `{python} ResNet50Int8Metrics.int8_size_mb_str` (`{python} ResNet50Int8Metrics.size_reduction_mult_str`)      | Tạo phẩm trở nên dễ dàng hơn để cache, truyền tải và triển khai trên edge. |
+| **Năng lượng/suy luận** | `{python} ResNet50Int8Metrics.fp32_energy_j_str`          | `{python} ResNet50Int8Metrics.int8_energy_j_str` (`{python} ResNet50Int8Metrics.energy_improvement_mult_str`) | Độ chính xác thấp hơn làm giảm cả năng lượng tính toán số học và năng lượng di chuyển bộ nhớ. |
+| **Lỗi hiệu chuẩn** | `{python} ResNet50Int8Metrics.calibration_error_fp32_str` | `{python} ResNet50Int8Metrics.calibration_error_int8_str`                                                     | Hiệu chuẩn độ tin cậy có thể bị trôi ngay cả khi độ chính xác trông có vẻ chấp nhận được. |
 
 : **Hồ sơ triển khai INT8 ResNet-50 minh họa**: Các giá trị này tạo thành một kịch bản được mô hình hóa, chứ không phải là các phép đo từ một lần chạy phần cứng thực tế. Một hồ sơ thực tế phải đo độ chính xác, độ trễ, kích thước artifact, năng lượng và hiệu chuẩn trên hệ thống mục tiêu. {#tbl-resnet50-int8-profile tbl-colwidths="[21,19,24,36]"}
 

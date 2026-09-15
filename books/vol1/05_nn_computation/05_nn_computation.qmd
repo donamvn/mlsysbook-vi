@@ -831,23 +831,23 @@ Không phải mọi vấn đề đều phù hợp với deep learning. Mạng n�
 \renewcommand{\arraystretch}{1.4}
 ```
 
-| **Condition**             | **Evidence to seek**                                  | **Rationale**                            |
+| **Điều kiện** | **Bằng chứng cần tìm** | **Cơ sở lý luận** |
 |:--------------------------|:------------------------------------------------------|:-----------------------------------------|
-| **Representative data**   | Training and validation cover deployment conditions   | Capacity cannot replace missing coverage |
-| **Exploitable structure** | Spatial, sequential, or hierarchical patterns         | Architecture can encode a useful prior   |
-| **Baseline gap**          | Simpler methods miss the required task-quality target | Complexity buys a measured gain          |
-| **Operational fit**       | Gain survives latency, memory, and cost limits        | Offline accuracy alone is insufficient   |
-| **Maintenance advantage** | Learned features reduce recurring manual updates      | Full-system maintenance becomes simpler  |
+| **Dữ liệu đại diện** | Huấn luyện và kiểm định bao phủ các điều kiện triển khai | Năng lực không thể thay thế phạm vi thiếu sót |
+| **Cấu trúc có thể khai thác** | Các mẫu không gian, tuần tự hoặc phân cấp | Kiến trúc có thể mã hóa thông tin tiên nghiệm hữu ích |
+| **Khoảng cách đường cơ sở** | Các phương pháp đơn giản hơn không đạt được mục tiêu chất lượng nhiệm vụ yêu cầu | Độ phức tạp mang lại lợi ích có thể đo lường |
+| **Phù hợp vận hành** | Lợi ích vượt qua các giới hạn về độ trễ, bộ nhớ và chi phí | Chỉ riêng độ chính xác ngoại tuyến là không đủ |
+| **Lợi thế bảo trì** | Các đặc trưng đã học giảm các cập nhật thủ công lặp lại | Bảo trì toàn hệ thống trở nên đơn giản hơn |
 
 : **Ứng viên mạng nơ-ron**: Các điều kiện mà deep learning có khả năng vượt trội hơn các phương pháp cổ điển. {#tbl-nn-when-to-use tbl-colwidths="[22,39,39]"}
 
-| **Condition**                   | **Baseline to test**              | **Reason to prefer it**                            |
+| **Điều kiện** | **Đường cơ sở để kiểm tra** | **Lý do để ưu tiên nó** |
 |:--------------------------------|:----------------------------------|:---------------------------------------------------|
-| **Limited labeled data**        | Linear model or tree ensemble     | Lower variance and easier validation               |
-| **Structured tabular inputs**   | Gradient boosting or linear model | Strong accuracy without learned features           |
-| **Approximately linear signal** | Linear or additive model          | Transparent and inexpensive execution              |
-| **Hard resource bound**         | Rules or compact classical model  | Predictable latency, memory use, and energy demand |
-| **Direct auditability needed**  | Constrained tree or linear model  | Decisions are easier to inspect                    |
+| **Dữ liệu được gán nhãn hạn chế** | Mô hình tuyến tính hoặc tập hợp cây | Phương sai thấp hơn và kiểm định dễ dàng hơn |
+| **Đầu vào dạng bảng có cấu trúc** | Gradient boosting hoặc mô hình tuyến tính | Độ chính xác cao mà không cần các đặc trưng đã học |
+| **Tín hiệu gần như tuyến tính** | Mô hình tuyến tính hoặc cộng tính | Thực thi minh bạch và không tốn kém |
+| **Giới hạn tài nguyên cứng** | Các quy tắc hoặc mô hình cổ điển nhỏ gọn | Độ trễ, sử dụng bộ nhớ và nhu cầu năng lượng có thể dự đoán |
+| **Cần khả năng kiểm toán trực tiếp** | Cây bị ràng buộc hoặc mô hình tuyến tính | Các quyết định dễ kiểm tra hơn |
 
 : **Ứng viên phương pháp cổ điển**: Các điều kiện mà các mô hình đơn giản hơn có khả năng sánh được hoặc vượt mạng nơ-ron. {#tbl-nn-when-not-to-use tbl-colwidths="[27,32,41]"}
 
@@ -916,13 +916,13 @@ Sự chuyển dịch sang xử lý song song tạo ra những nút thắt cổ c
 
 [^fn-memory-bound-nn]: **Các phép toán bị giới hạn bởi bộ nhớ (Memory-bound operations)**\index{Memory-bound!arithmetic intensity}: Cường độ số học của phép nhân ma trận (FLOP/byte được tải) quyết định một lớp bị giới hạn bởi tính toán hay bộ nhớ. Các lớp dưới điểm giao cắt roofline của phần cứng sẽ hoàn thành phép toán trước khi lát trọng số tiếp theo được nạp từ bộ nhớ. Hệ quả: hiệu suất sử dụng phần cứng có thể giảm mạnh, và thêm các đơn vị tính toán cũng ít mang lại tăng tốc cho đến khi băng thông bộ nhớ hoặc mức tái sử dụng dữ liệu được cải thiện.
 
-| **System Aspect**    | **Traditional Programming** | **ML with Features**        | **Deep Learning**                        |
+| **Khía cạnh hệ thống** | **Lập trình truyền thống** | **machine learning với các đặc trưng** | **deep learning** |
 |:---------------------|:----------------------------|:----------------------------|:-----------------------------------------|
-| **Computation**      | Often control-flow oriented | Structured parallel ops     | Often matrix-parallel                    |
-| **Memory Access**    | Workload dependent          | Commonly batch-oriented     | Large tensor working sets                |
-| **Data Movement**    | Program and input dependent | Feature-pipeline movement   | Parameter and activation movement        |
-| **Hardware Needs**   | Commonly CPU-centric        | Often CPU with vector units | Frequently accelerator-friendly          |
-| **Resource Scaling** | Input and program dependent | Descriptor and data driven  | Driven by width, batch, state, and reuse |
+| **Tính toán** | Thường hướng luồng điều khiển | Các phép toán song song có cấu trúc | Thường song song ma trận |
+| **Truy cập bộ nhớ** | Phụ thuộc vào workload | Thường hướng batch | Tập làm việc tensor lớn |
+| **Di chuyển dữ liệu** | Phụ thuộc vào chương trình và đầu vào | Di chuyển pipeline đặc trưng | Di chuyển tham số và activation |
+| **Nhu cầu phần cứng** | Thường tập trung vào CPU | Thường là CPU với các đơn vị vector | Thường thân thiện với bộ tăng tốc |
+| **Mở rộng tài nguyên** | Phụ thuộc vào đầu vào và chương trình | Theo hướng mô tả và dữ liệu | Được thúc đẩy bởi chiều rộng, batch, trạng thái và khả năng tái sử dụng |
 
 : **Xu hướng tài nguyên hệ thống**: Các triển khai minh họa cho thấy sự chuyển dịch từ các quy tắc điều khiển sang các pipeline đặc trưng có cấu trúc, rồi đến tính toán mạng nơ-ron nặng về ma trận. Đây là các xu hướng của khối lượng công việc (workload), không phải yêu cầu bắt buộc cho mọi chương trình trong mỗi mô hình. {#tbl-evolution tbl-colwidths="[15,25,24,36]"}
 
@@ -1413,12 +1413,12 @@ Phần bên phải của @fig-bio-nn2ai-nn lần theo tín hiệu qua bốn giai
 3. **Tổng hợp Tín hiệu** (Thân tế bào → Hàm tuyến tính $z$)\index{Bias!signal aggregation}: Nơ-ron tích hợp các tín hiệu đã được nhân với trọng số, tạo ra một giá trị vô hướng duy nhất $z = \sum (x_i \cdot w_i) + b$. Điều này giống cách thân tế bào sinh học cộng các tín hiệu điện hóa đi vào để quyết định xem nơ-ron đã có đủ "bằng chứng" cho một mẫu cụ thể hay chưa.
 4. **Activation phi tuyến** (Sợi trục → Hàm Activation $f$)\index{Activation function!nonlinear transformation}: Tín hiệu tổng hợp được đưa qua một hàm activation $f(z)$ để tạo ra đầu ra $y$. Điều này phản ánh quyết định bắn tín hiệu kiểu "được ăn cả ngã về không" (all-or-nothing) trên sợi trục: tính phi tuyến quyết định xem nơ-ron có "phát" tín hiệu sang lớp tiếp theo hay không. Khác với sinh học, $f$ có thể tạo ra đầu ra nhiều mức (ví dụ, ReLU truyền các giá trị dương và đặt các giá trị âm về 0), nhưng nguyên tắc vẫn vậy — đặt ngưỡng rồi truyền tín hiệu. Bảng @Tbl-neuron_structure sẽ trình bày chi tiết hơn về các điểm tương ứng này.
 
-| **Biological Structure**           | **Artificial Component**    |    **Mathematical Operation**    | **Engineering Role**                          |
+| **Cấu trúc sinh học** | **Thành phần nhân tạo** |    **Phép toán toán học** | **Vai trò kỹ thuật** |
 |:-----------------------------------|:----------------------------|:--------------------------------:|:----------------------------------------------|
-| **Dendrites** (receive signals)    | **Input Vector**            | $\mathbf{x} = [x_1, \dots, x_n]$ | Data ingestion from sensors or prior layers   |
-| **Synapses** (modulate strength)   | **Weight Vector**           | $\mathbf{w} = [w_1, \dots, w_n]$ | Learnable parameters encoding importance      |
-| **Cell Body** (integrates signals) | **Linear Function** $z$     |  $z = \sum (x_i \cdot w_i) + b$  | Linear integration of feature signals         |
-| **Axon** (fires output)            | **Activation Function** $f$ |            $a = f(z)$            | Nonlinear thresholding and signal propagation |
+| **Dendrites** (nhận tín hiệu) | **Vector đầu vào** | $\mathbf{x} = [x_1, \dots, x_n]$ | Thu nạp dữ liệu từ cảm biến hoặc các lớp trước |
+| **Synapses** (điều chỉnh cường độ) | **Vector trọng số** | $\mathbf{w} = [w_1, \dots, w_n]$ | Các tham số có thể học mã hóa tầm quan trọng |
+| **Cell Body** (tích hợp tín hiệu) | **Hàm tuyến tính** $z$ |  $z = \sum (x_i \cdot w_i) + b$  | Tích hợp tuyến tính các tín hiệu đặc trưng |
+| **Axon** (phát ra đầu ra) | **Hàm Activation** $f$ |            $a = f(z)$            | Ngưỡng phi tuyến và lan truyền tín hiệu |
 
 : **Ánh xạ Nơ-ron Sinh học so với Nơ-ron Nhân tạo**: Các thành phần cấu trúc được ánh xạ tới các công thức toán học và trạng thái bộ nhớ vật lý. {#tbl-neuron_structure tbl-colwidths="[28,21,19,32]"}
 
@@ -1743,14 +1743,14 @@ plt.close()
 
 @Tbl-historical-performance đặt các xu hướng này vào các hệ thống tiêu biểu, cho thấy tham số, compute và phần cứng đã đồng tiến hóa trong suốt bốn thập kỷ phát triển mạng nơ-ron. Có ba điểm cần bàn riêng. Thứ nhất, đường biên compute huấn luyện sau năm 2012 tăng theo thang thời gian tính bằng tháng, dù tốc độ khớp phụ thuộc các hệ thống được chọn và các ước tính còn nhiều bất định. Thứ hai, tiến bộ về thuật toán và hệ thống đã giảm lượng compute cần để đạt các mục tiêu benchmark cố định trong một số lĩnh vực, nên xu hướng frontier-compute không phản ánh hiệu quả khi giữ cố định năng lực. Thứ ba, mức tận dụng phần cứng, độ chính xác thấp hơn, độ trưởng thành của phần mềm và điều kiện mua sắm đều chi phối mối quan hệ giữa compute thô và chi phí tiền tệ; chúng không đảm bảo chi phí sẽ tăng chậm hơn. Với kỹ sư hệ thống, các khác biệt này ảnh hưởng đến mốc thời gian hạ tầng, ngân sách thí nghiệm và quyết định tự xây hay mua. Vì vậy, lập kế hoạch cần có số đo hiệu quả, mục tiêu so sánh nêu rõ, và mức độ không chắc chắn được chỉ ra, đặc biệt với các mô hình đóng, nơi kiến trúc và cấu hình huấn luyện không được công bố.
 
-| **Year** | **System** |                      **Params**                      |           **Train FLOPs**           |              **Hardware** | **Train Time** | **Error/Task**                      |
+| **Năm** | **Hệ thống** |                      **Tham số** |           **FLOPs huấn luyện** |              **Phần cứng** | **Thời gian huấn luyện** | **Lỗi/Tác vụ** |
 |:---------|:-----------|:----------------------------------------------------:|:-----------------------------------:|--------------------------:|:--------------:|:------------------------------------|
-| 1989     | LeNet-1    |   ~`{python} HistoricalScale.lenet1_params_k_str`    |         $10^{11}$–$10^{12}$         |     Sun-4/260 workstation |     3 days     | 1% at 12.1% rejection (USPS digits) |
-| 1998     | LeNet-5    |              $60\text{K} \pm 1\text{K}$              |      $10^{14} \pm 1\text{ OoM}$     | SGI Origin 2000 (200 MHz) |    2–3 days    | 0.95% (MNIST)                       |
-| 2012     | AlexNet    |   ~`{python} HistoricalScale.alexnet_params_m_str`   |          $5 \times 10^{17}$         |    2$\times$ GTX 580 GPUs |    5–6 days    | 15.3% (ImageNet)                    |
-| 2015     | ResNet-152 |                         ~60M                         |     $10^{19} \pm 0.5\text{ OoM}$    |  8$\times$ Tesla K80 GPUs |    ~3 weeks    | 3.6% (ImageNet)                     |
-| 2020     | GPT-3      | `{python} HistoricalScale.gpt3_params_b_str` (exact) |          $3 \times 10^{23}$         |               Undisclosed |  Undisclosed   | N/A (language)                      |
-| 2023     | GPT-4      |                     Undisclosed                      | $10^{24}$–$10^{25}$ (external est.) |               Undisclosed |  Undisclosed   | N/A (language)                      |
+| 1989     | LeNet-1 |   ~`{python} HistoricalScale.lenet1_params_k_str`    |         $10^{11}$–$10^{12}$         |     máy trạm Sun-4/260 |     3 ngày | 1% với 12.1% từ chối (chữ số USPS) |
+| 1998     | LeNet-5 |              $60\text{K} \pm 1\text{K}$              |      $10^{14} \pm 1\text{ OoM}$     | SGI Origin 2000 (200 MHz) |    2–3 ngày | 0.95% (MNIST) |
+| 2012     | AlexNet |   ~`{python} HistoricalScale.alexnet_params_m_str`   |          $5 \times 10^{17}$         |    2$\times$ GPU GTX 580 |    5–6 ngày | 15.3% (ImageNet) |
+| 2015     | ResNet-152 |                         ~60M                         |     $10^{19} \pm 0.5\text{ OoM}$    |  8$\times$ GPU Tesla K80 |    ~3 tuần | 3.6% (ImageNet) |
+| 2020     | GPT-3 | `{python} HistoricalScale.gpt3_params_b_str` (chính xác) |          $3 \times 10^{23}$         |               Không tiết lộ |  Không tiết lộ | Không áp dụng (ngôn ngữ) |
+| 2023     | GPT-4 |                     Không tiết lộ | $10^{24}$–$10^{25}$ (ước tính bên ngoài) |               Không tiết lộ |  Không tiết lộ | Không áp dụng (ngôn ngữ) |
 
 : **Hiệu suất lịch sử**: Bốn thập kỷ các hệ thống mạng nơ-ron tiêu biểu, cho thấy tăng trưởng về trạng thái mô hình, compute huấn luyện và hạ tầng phần cứng. Các hàng trước dùng thông số kỹ thuật đã công bố (nếu có). Cấu hình phần cứng và thời lượng của GPT-3 không được công bố; kiến trúc, số tham số, cấu hình phần cứng và thời lượng của GPT-4 không được công bố, và mục compute của nó là một ước tính bên ngoài theo bậc độ lớn, phù hợp với @fig-trends. Tổng số tham số cũng không quyết định lượng tính toán trên mỗi đầu vào đối với các kiến trúc kích hoạt thưa. "OoM" chỉ mức độ không chắc chắn theo bậc độ lớn. {#tbl-historical-performance tbl-colwidths="[6,11,17,18,19,12,17]"}
 
@@ -3290,36 +3290,36 @@ Yếu tố đóng góp đầu tiên là các tham số mô hình: bảng @tbl-nn
 \renewcommand{\arraystretch}{1.2}
 ```
 
-| **Layer**             |                                     **Weights**                                     |               **Biases**              |                 **Total Parameters**                |
+| **Lớp** |                                     **Trọng số** |               **Độ chệch (bias)** |                 **Tổng số tham số** |
 |:----------------------|:-----------------------------------------------------------------------------------:|:-------------------------------------:|:---------------------------------------------------:|
-| **Input → Hidden1**   | `{python} MnistModelSizeLocal.w1_dims_math` = `{python} MnistModelSizeLocal.w1_str` | `{python} MnistModelSizeLocal.b1_str` |        `{python} MnistModelSizeLocal.p1_str`        |
-| **Hidden1 → Hidden2** | `{python} MnistModelSizeLocal.w2_dims_math` = `{python} MnistModelSizeLocal.w2_str` | `{python} MnistModelSizeLocal.b2_str` |        `{python} MnistModelSizeLocal.p2_str`        |
-| **Hidden2 → Output**  | `{python} MnistModelSizeLocal.w3_dims_math` = `{python} MnistModelSizeLocal.w3_str` | `{python} MnistModelSizeLocal.b3_str` |        `{python} MnistModelSizeLocal.p3_str`        |
-| **Total**             |                                                                                     |                                       | **`{python} MnistModelSizeLocal.total_params_str`** |
+| **Đầu vào → Lớp ẩn 1** | `{python} MnistModelSizeLocal.w1_dims_math` = `{python} MnistModelSizeLocal.w1_str` | `{python} MnistModelSizeLocal.b1_str` |        `{python} MnistModelSizeLocal.p1_str`        |
+| **Lớp ẩn 1 → Lớp ẩn 2** | `{python} MnistModelSizeLocal.w2_dims_math` = `{python} MnistModelSizeLocal.w2_str` | `{python} MnistModelSizeLocal.b2_str` |        `{python} MnistModelSizeLocal.p2_str`        |
+| **Lớp ẩn 2 → Đầu ra** | `{python} MnistModelSizeLocal.w3_dims_math` = `{python} MnistModelSizeLocal.w3_str` | `{python} MnistModelSizeLocal.b3_str` |        `{python} MnistModelSizeLocal.p3_str`        |
+| **Tổng cộng** |                                                                                     |                                       | **`{python} MnistModelSizeLocal.total_params_str`** |
 
 : **Tham số MNIST theo Lớp**: Số lượng trọng số và độ chệch (bias) cho mạng 784-128-64-10. Lớp 1 (Đầu vào -> Ẩn 1) chiếm phần lớn tham số vì nó nhân đầu vào 784 chiều với 128 đơn vị ẩn; các lớp sâu hơn giảm nhanh số lượng tham số khi biểu diễn được nén dần về phía đầu ra 10 lớp. {#tbl-nn-computation-mnist-params tbl-colwidths="[25,25,25,25]"}
 
 Các activation là đóng góp tiếp theo. @Tbl-nn-computation-mnist-activations ghi lại tensor activation của mỗi lớp và chi phí bộ nhớ của nó ở kích thước batch 32.
 
-| **Layer**   | **Activation Shape** |                       **Values**                       |                        **Memory**                       |
+| **Lớp** | **Hình dạng activation** |                       **Giá trị** |                        **Bộ nhớ** |
 |:------------|:--------------------:|:------------------------------------------------------:|:-------------------------------------------------------:|
-| **Input**   |   $32{\times}784$    |  `{python} MnistTrainingMemoryCalc.act_in_count_str`   |     `{python} MnistTrainingMemoryCalc.act_in_kb_str`    |
-| **Hidden1** |   $32{\times}128$    |  `{python} MnistTrainingMemoryCalc.act_h1_count_str`   |     `{python} MnistTrainingMemoryCalc.act_h1_kb_str`    |
-| **Hidden2** |    $32{\times}64$    |  `{python} MnistTrainingMemoryCalc.act_h2_count_str`   |     `{python} MnistTrainingMemoryCalc.act_h2_kb_str`    |
-| **Output**  |    $32{\times}10$    |  `{python} MnistTrainingMemoryCalc.act_out_count_str`  |    `{python} MnistTrainingMemoryCalc.act_out_kb_str`    |
-| **Total**   |                      | `{python} MnistTrainingMemoryCalc.total_act_count_str` | **`{python} MnistTrainingMemoryCalc.total_act_kb_str`** |
+| **Đầu vào** |   $32{\times}784$    |  `{python} MnistTrainingMemoryCalc.act_in_count_str`   |     `{python} MnistTrainingMemoryCalc.act_in_kb_str`    |
+| **Lớp ẩn 1** |   $32{\times}128$    |  `{python} MnistTrainingMemoryCalc.act_h1_count_str`   |     `{python} MnistTrainingMemoryCalc.act_h1_kb_str`    |
+| **Lớp ẩn 2** |    $32{\times}64$    |  `{python} MnistTrainingMemoryCalc.act_h2_count_str`   |     `{python} MnistTrainingMemoryCalc.act_h2_kb_str`    |
+| **Đầu ra** |    $32{\times}10$    |  `{python} MnistTrainingMemoryCalc.act_out_count_str`  |    `{python} MnistTrainingMemoryCalc.act_out_kb_str`    |
+| **Tổng cộng** |                      | `{python} MnistTrainingMemoryCalc.total_act_count_str` | **`{python} MnistTrainingMemoryCalc.total_act_kb_str`** |
 
 : **Bộ nhớ Activation MNIST ở Kích thước Batch 32**: Bảng này thể hiện hình dạng tensor activation của từng lớp, số lượng giá trị và chi phí bộ nhớ (dấu phẩy động 32-bit) trong một lượt truyền xuôi duy nhất. Các activation đầu vào chiếm phần lớn trong bảng này, ở mức `{python} MnistTrainingMemoryCalc.act_in_kb_str`. Với mạng perceptron đa lớp (MLP) MNIST nhỏ này, tổng dung lượng bộ nhớ của activation vẫn thấp hơn của tham số; tuy nhiên, với batch lớn hơn và mạng sâu hơn, activation trở thành mối quan tâm chính về bộ nhớ khi huấn luyện. {#tbl-nn-computation-mnist-activations tbl-colwidths="[25,25,25,25]"}
 
 Quá trình huấn luyện cần thêm hai phần bộ nhớ mà suy luận không cần đến. Cụ thể, gradient chiếm dung lượng tương đương với các tham số mà chúng cập nhật, ở đây là `{python} MnistTrainingMemoryCalc.grad_kb_str`. Ngoài ra, optimizer Adam (Adaptive Moment Estimation) còn lưu trữ động lượng và vận tốc, chiếm dung lượng gấp đôi kích thước tham số, tức thêm `{python} MnistTrainingMemoryCalc.opt_kb_str`. Bảng @Tbl-nn-computation-mnist-memory-budget tóm tắt dung lượng bộ nhớ cần thiết cho từng thành phần khi huấn luyện so với suy luận.
 
-| **Component**       |                        **Training**                        |                       **Inference**                        |
+| **Thành phần** |                        **Huấn luyện** |                       **Suy luận** |
 |:--------------------|:----------------------------------------------------------:|:----------------------------------------------------------:|
-| **Parameters**      |      `{python} MnistTrainingMemoryCalc.param_kb_str`       |      `{python} MnistTrainingMemoryCalc.param_kb_str`       |
-| **Activations**     |    `{python} MnistTrainingMemoryCalc.total_act_kb_str`     | `{python} MnistTrainingMemoryCalc.total_infer_act_kb_str`  |
-| **Gradients**       |       `{python} MnistTrainingMemoryCalc.grad_kb_str`       |                             —                              |
-| **Optimizer state** |       `{python} MnistTrainingMemoryCalc.opt_kb_str`        |                             —                              |
-| **Total**           | **~`{python} MnistTrainingMemoryCalc.total_train_mb_str`** | **~`{python} MnistTrainingMemoryCalc.total_infer_kb_str`** |
+| **Tham số** |      `{python} MnistTrainingMemoryCalc.param_kb_str`       |      `{python} MnistTrainingMemoryCalc.param_kb_str`       |
+| **Activations** |    `{python} MnistTrainingMemoryCalc.total_act_kb_str`     | `{python} MnistTrainingMemoryCalc.total_infer_act_kb_str`  |
+| **Gradients** |       `{python} MnistTrainingMemoryCalc.grad_kb_str`       |                             —                              |
+| **Trạng thái optimizer** |       `{python} MnistTrainingMemoryCalc.opt_kb_str`        |                             —                              |
+| **Tổng cộng** | **~`{python} MnistTrainingMemoryCalc.total_train_mb_str`** | **~`{python} MnistTrainingMemoryCalc.total_infer_kb_str`** |
 
 : **So sánh bộ nhớ khi huấn luyện và suy luận mô hình MNIST với kích thước batch 32**: Đây là bảng tổng hợp bộ nhớ FP32 đơn giản hóa cho mô hình MLP MNIST minh họa. Khi huấn luyện, hệ thống giữ lại các activation đã lưu và thêm gradient cùng hai bộ đệm của Adam optimizer; ngược lại, suy luận chỉ dùng bộ đệm lớn nhất giữa các lớp liền kề. Không gian làm việc của framework và các kỹ thuật tiết kiệm bộ nhớ có thể làm thay đổi tổng dung lượng. {#tbl-nn-computation-mnist-memory-budget tbl-colwidths="[33,34,33]"}
 
@@ -3519,11 +3519,11 @@ Ngoài ví dụ về việc mô hình có vừa hay không, @tbl-nn-computation-
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Question**                                 | **Quick Estimate**                                                                            |
+| **Câu hỏi** | **Ước tính nhanh** |
 |:---------------------------------------------|:----------------------------------------------------------------------------------------------|
-| **"Will this model fit in GPU memory?"**     | $\text{persistent training state} + \text{peak activations} + \text{workspace} < \text{VRAM}$ |
-| **"How long per epoch on MNIST?"**           | $60\text{K} \times \text{forward-backward FLOPs/image} / \text{achieved FLOP/s}$              |
-| **"Is this compute bound or memory bound?"** | Compare arithmetic intensity with $R_{\text{peak}}/\text{BW}$                                 |
+| **"Mô hình này có vừa với bộ nhớ GPU không?"** | $\text{persistent training state} + \text{peak activations} + \text{workspace} < \text{VRAM}$ |
+| **"Mất bao lâu cho mỗi epoch trên MNIST?"** | $60\text{K} \times \text{forward-backward FLOPs/image} / \text{achieved FLOP/s}$              |
+| **"Đây là giới hạn tính toán hay giới hạn bộ nhớ?"** | So sánh cường độ số học với $R_{\text{peak}}/\text{BW}$ |
 
 : **Các kiểm tra tính khả thi nhanh (napkin-math)**: Ba quy tắc ước tính nhanh trong đầu về việc mô hình có vừa GPU không, thời gian epoch và chế độ ràng buộc, được chắt lọc thành các công thức một dòng mà một kỹ sư có thể áp dụng trước khi chạy profiler. {#tbl-nn-computation-napkin-math-checks tbl-colwidths="[40,60]"}
 
@@ -3796,10 +3796,10 @@ Trong ví dụ MNIST, kích thước của các phép toán cho một batch $B$ 
 
 Cường độ số học quyết định liệu một kernel bị giới hạn bởi tính toán hay bộ nhớ. Phép nhân ma trận dày đặc dùng lát gạch (tiled) có thể tái sử dụng các giá trị, trong khi một phép toán trên từng phần tử không được hợp nhất (unfused) lại thực hiện rất ít công việc trên mỗi byte. @Tbl-nn-computation-arith-intensity-gap so sánh cường độ lý tưởng của hai loại phép toán này.
 
-| **Operation**                 | **Operation Count ($O$)** | **Minimum Data Movement** | **Idealized Intensity** | **Typical Optimization** |
+| **Thao tác** | **Số lượng thao tác ($O$)** | **Di chuyển dữ liệu tối thiểu** | **Cường độ lý tưởng hóa** | **Tối ưu hóa điển hình** |
 |:------------------------------|:-------------------------:|:-------------------------:|:-----------------------:|:------------------------:|
-| **Matrix Mul $(N{\times}N)$** |           $2N^3$          |       $3N^2s$ bytes       |    $\approx 2N/(3s)$    |  Tiling on CPU/GPU/TPU   |
-| **Element-wise (ReLU)**       |           $N^2$           |       $2N^2s$ bytes       |         $1/(2s)$        | Vectorization and fusion |
+| **Nhân ma trận $(N{\times}N)$** |           $2N^3$          |       $3N^2s$ bytes |    $\approx 2N/(3s)$    |  Tiling trên CPU/GPU/TPU |
+| **Từng phần tử (ReLU)** |           $N^2$           |       $2N^2s$ bytes |         $1/(2s)$        | Vectorization và fusion |
 
 : **Cường độ số học lý tưởng của phép nhân ma trận so với ReLU trên từng phần tử**: Một phép nhân ma trận dày đặc $N{\times}N$ được lát gạch thực hiện $2N^3$ phép toán, đồng thời di chuyển tối thiểu khoảng $3N^2s$ byte (với $s$ byte cho mỗi giá trị). Do đó, khả năng tái sử dụng tiềm năng tăng theo $N$. Một activation trên từng phần tử độc lập sẽ duy trì ở mức $1/(2s)$ FLOP/byte (0.125 FLOP/byte cho FP32); các triển khai thường hợp nhất nó với một kernel lân cận để tránh một lượt truy cập bộ nhớ riêng biệt. {#tbl-nn-computation-arith-intensity-gap tbl-colwidths="[20,19,21,19,21]"}
 
@@ -3984,15 +3984,15 @@ class MnistFlopsCalc:
 %\renewcommand{\arraystretch}{1.3}
 ```
 
-| **Layer**   | **Operation**  |                 **Dimensions**                |                                 **Operations**                                 |
+| **Lớp** | **Thao tác** |                 **Kích thước** |                                 **Các thao tác** |
 |:------------|:---------------|:---------------------------------------------:|:------------------------------------------------------------------------------:|
-| **Layer 1** | MatMul         | ($32{\times}784$) $\times$ ($784{\times}128$) |   `{python} MnistFlopsCalc.l1_mm_math` = `{python} MnistFlopsCalc.l1_mm_str`   |
-| **Layer 1** | Bias + ReLU    |                $32{\times}128$                | `{python} MnistFlopsCalc.l1_bias_math` = `{python} MnistFlopsCalc.l1_bias_str` |
-| **Layer 2** | MatMul         |  ($32{\times}128$) $\times$ ($128{\times}64$) |   `{python} MnistFlopsCalc.l2_mm_math` = `{python} MnistFlopsCalc.l2_mm_str`   |
-| **Layer 2** | Bias + ReLU    |                 $32{\times}64$                | `{python} MnistFlopsCalc.l2_bias_math` = `{python} MnistFlopsCalc.l2_bias_str` |
-| **Layer 3** | MatMul         |   ($32{\times}64$) $\times$ ($64{\times}10$)  |   `{python} MnistFlopsCalc.l3_mm_math` = `{python} MnistFlopsCalc.l3_mm_str`   |
-| **Layer 3** | Bias + Softmax |                 $32{\times}10$                |              ~`{python} MnistFlopsCalc.l3_bias_str` (simplified)               |
-| **Total**   |                |                                               |               **~`{python} MnistFlopsCalc.total_mops_str` MOp**                |
+| **Lớp 1** | MatMul | ($32{\times}784$) $\times$ ($784{\times}128$) |   `{python} MnistFlopsCalc.l1_mm_math` = `{python} MnistFlopsCalc.l1_mm_str`   |
+| **Lớp 1** | Độ chệch (bias) + ReLU |                $32{\times}128$                | `{python} MnistFlopsCalc.l1_bias_math` = `{python} MnistFlopsCalc.l1_bias_str` |
+| **Lớp 2** | MatMul |  ($32{\times}128$) $\times$ ($128{\times}64$) |   `{python} MnistFlopsCalc.l2_mm_math` = `{python} MnistFlopsCalc.l2_mm_str`   |
+| **Lớp 2** | Độ chệch (bias) + ReLU |                 $32{\times}64$                | `{python} MnistFlopsCalc.l2_bias_math` = `{python} MnistFlopsCalc.l2_bias_str` |
+| **Lớp 3** | MatMul |   ($32{\times}64$) $\times$ ($64{\times}10$)  |   `{python} MnistFlopsCalc.l3_mm_math` = `{python} MnistFlopsCalc.l3_mm_str`   |
+| **Lớp 3** | Độ chệch (bias) + Softmax |                 $32{\times}10$                |              ~`{python} MnistFlopsCalc.l3_bias_str` (đơn giản hóa) |
+| **Tổng cộng** |                |                                               |               **~`{python} MnistFlopsCalc.total_mops_str` MOp** |
 
 : **Số lượng phép toán trong lượt truyền tiến MNIST theo lớp**: Phân tích số lượng phép toán tương đương cho một lần truyền tiến duy nhất qua mạng 784-128-64-10 với kích thước batch 32. Các dòng thể hiện phép nhân ma trận được tính bằng FLOPs; các dòng cho độ chệch (bias), ReLU và softmax là các phép toán theo phần tử, được đưa vào để cho thấy đóng góp không đáng kể của chúng. Phép nhân ma trận ở Lớp 1 chiếm ưu thế vì nó nhân đầu vào 784 chiều với ma trận trọng số lớn nhất; các phép toán độ chệch (bias) và activation chỉ đóng góp dưới 1 phần trăm tổng số. {#tbl-nn-computation-mnist-flops tbl-colwidths="[14,20,27,39]"}
 
@@ -4936,12 +4936,12 @@ class MnistInferenceResourceLocal:
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Characteristic**     | **Training Forward Pass**                          | **Inference Forward Pass**                         |
+| **Đặc điểm** | **Lượt chuyển tiếp huấn luyện** | **Lượt chuyển tiếp suy luận** |
 |:-----------------------|:---------------------------------------------------|:---------------------------------------------------|
-| **Activation Storage** | Retains values required by the backward pass       | Retains the current input and output buffers       |
-| **Memory Pattern**     | Saves or recomputes selected intermediate states   | Reuses buffers as successive layers complete       |
-| **Computational Flow** | Structured for gradient computation preparation    | Optimized for direct output generation             |
-| **Resource Profile**   | Higher memory requirements for training operations | Minimized memory footprint for efficient execution |
+| **Lưu trữ activation** | Giữ lại các giá trị cần thiết cho lượt lan truyền ngược | Giữ lại các bộ đệm đầu vào và đầu ra hiện tại |
+| **Kiểu bộ nhớ** | Lưu hoặc tính toán lại các trạng thái trung gian được chọn | Tái sử dụng bộ đệm khi các lớp kế tiếp hoàn thành |
+| **Luồng tính toán** | Được cấu trúc để chuẩn bị tính toán gradient | Được tối ưu hóa để tạo ra đầu ra trực tiếp |
+| **Hồ sơ tài nguyên** | Yêu cầu bộ nhớ cao hơn cho các hoạt động huấn luyện | Giảm thiểu dung lượng bộ nhớ để thực thi hiệu quả |
 
 : **Truyền xuôi trong huấn luyện và suy luận**: Cả hai giai đoạn đều thực hiện cùng các phương trình truyền xuôi, nhưng cách quản lý trạng thái khác nhau. Huấn luyện phải giữ lại hoặc tính lại các giá trị phục vụ truyền ngược, đồng thời mang theo các gradient và trạng thái của optimizer. Còn suy luận có thể tái sử dụng một cặp bộ đệm giữa các lớp theo kiểu luân phiên. Với kích thước batch 32, sổ cái MNIST đơn giản hoá trong @tbl-nn-computation-mnist-memory-budget cho tỷ lệ khoảng `{python} MnistInferenceResourceLocal.training_ratio_mult_str`; tỷ lệ này phụ thuộc vào khối lượng công việc (workload) và cách triển khai. {#tbl-forward-pass-comparison tbl-colwidths="[18,47,35]"}
 
@@ -4957,12 +4957,12 @@ Với mạng MNIST tiêu chuẩn (`{python} MnistInferenceResourceLocal.mnist_ar
 \renewcommand{\arraystretch}{1.0}
 ```
 
-| **Layer**   | **Weights**                                                                                         | **Biases**                                    | **Multiply-Adds**                                         |
+| **Lớp** | **Trọng số** | **Độ chệch (bias)** | **Phép nhân-cộng** |
 |:------------|:----------------------------------------------------------------------------------------------------|:----------------------------------------------|:----------------------------------------------------------|
-| **Layer 1** | `{python} MnistInferenceResourceLocal.w1_dims_math` = `{python} MnistInferenceResourceLocal.w1_str` | `{python} MnistInferenceResourceLocal.b1_str` | `{python} MnistInferenceResourceLocal.inf_madd_l1_str`    |
-| **Layer 2** | `{python} MnistInferenceResourceLocal.w2_dims_math` = `{python} MnistInferenceResourceLocal.w2_str` | `{python} MnistInferenceResourceLocal.b2_str` | `{python} MnistInferenceResourceLocal.inf_madd_l2_str`    |
-| **Output**  | `{python} MnistInferenceResourceLocal.w3_dims_math` = `{python} MnistInferenceResourceLocal.w3_str` | `{python} MnistInferenceResourceLocal.b3_str` | `{python} MnistInferenceResourceLocal.inf_madd_l3_str`    |
-| **Total**   | `{python} MnistInferenceResourceLocal.total_params_str`                                             | Included in total                             | `{python} MnistInferenceResourceLocal.inf_madd_total_str` |
+| **Lớp 1** | `{python} MnistInferenceResourceLocal.w1_dims_math` = `{python} MnistInferenceResourceLocal.w1_str` | `{python} MnistInferenceResourceLocal.b1_str` | `{python} MnistInferenceResourceLocal.inf_madd_l1_str`    |
+| **Lớp 2** | `{python} MnistInferenceResourceLocal.w2_dims_math` = `{python} MnistInferenceResourceLocal.w2_str` | `{python} MnistInferenceResourceLocal.b2_str` | `{python} MnistInferenceResourceLocal.inf_madd_l2_str`    |
+| **Đầu ra** | `{python} MnistInferenceResourceLocal.w3_dims_math` = `{python} MnistInferenceResourceLocal.w3_str` | `{python} MnistInferenceResourceLocal.b3_str` | `{python} MnistInferenceResourceLocal.inf_madd_l3_str`    |
+| **Tổng cộng** | `{python} MnistInferenceResourceLocal.total_params_str`                                             | Được bao gồm trong tổng số | `{python} MnistInferenceResourceLocal.inf_madd_total_str` |
 
 : **Tài nguyên suy luận MNIST theo lớp**: Khối tham số cố định và số lượng phép tính nhân-cộng cho mạng MNIST tiêu chuẩn. Trong các lớp kết nối đầy đủ, các trọng số chiếm bộ nhớ cũng chính là yếu tố quyết định lượng công việc tính toán cho mỗi lần suy luận. {#tbl-mnist-inference-resource-by-layer tbl-colwidths="[25,25,25,25]"}
 
@@ -5418,12 +5418,12 @@ Nghiên cứu mã ZIP năm 1989 báo cáo các số đo về mô hình, nhận d
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Metric**              |                               **Reported Result**                                |
+| **Số liệu** |                               **Kết quả được báo cáo** |
 |:------------------------|:--------------------------------------------------------------------------------:|
-| **Error and rejection** |           1% classification error after rejecting 12.1% of test digits           |
-| **Throughput**          | 10–12 classifications/sec including acquisition; over 30/sec after normalization |
-| **Model parameters**    |               ~`{python} UspsLenetSpecs.lenet_1_params_count_str`                |
-| **Training**            |                23 passes; about 3 days on a Sun-4/260 workstation                |
+| **Lỗi và từ chối** |           Lỗi phân loại 1% sau khi từ chối 12.1% các chữ số thử nghiệm |
+| **Thông lượng** | 10–12 phân loại/giây bao gồm cả việc thu thập; hơn 30/giây sau khi chuẩn hóa |
+| **Các tham số mô hình** |               ~`{python} UspsLenetSpecs.lenet_1_params_count_str`                |
+| **Huấn luyện** |                23 lượt; khoảng 3 ngày trên một máy trạm Sun-4/260 |
 
 : **Kết quả nhận dạng mã ZIP ban đầu**: Các số đo từ hệ thống lan truyền ngược năm 1989, áp dụng trên các ảnh chữ số do USPS cung cấp. Kết quả về tỷ lệ từ chối cho thấy vì sao khi đọc tỷ lệ lỗi vận hành phải đi kèm với tỷ lệ đầu vào bị giữ lại, không phân loại tự động [@lecun1989]. {#tbl-usps-numbers}
 

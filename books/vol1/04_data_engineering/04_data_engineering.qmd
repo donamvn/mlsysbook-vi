@@ -297,12 +297,12 @@ class EnergyAccessCosts:
 
 Định luật sắt trong @sec-introduction-iron-law-ml-systems-c32a và phân tích 'memory-wall' trong @sec-ml-systems-system-balance-hardware-96ab gợi ý một nguyên lý kỹ thuật dữ liệu: *di chuyển một giá trị 32-bit tốn năng lượng gấp khoảng `{python} EnergyAccessCosts.dram_mult_str` đến `{python} EnergyAccessCosts.network_mult_str` lần so với phép nhân FP32 trong bảng*, và hệ số này tăng lên khi dữ liệu rời khỏi chip. Các chương tối ưu hóa sau này sẽ khai thác cùng một độ dốc chi phí này trong thiết kế mô hình và phần cứng; còn ở đây, câu hỏi là luồng thông tin từ thế giới bên ngoài đã tiêu thụ bao nhiêu năng lượng *trước khi* mô hình bắt đầu tính toán. @Tbl-energy-movement-cost cho thấy rõ độ dốc chi phí này trên toàn bộ hệ thống phân cấp bộ nhớ.
 
-| **Operation**                   |                  **Energy (pJ)**                  |                **Relative Cost**                |
+| **Thao tác** |                  **Năng lượng (pJ)** |                **Chi phí tương đối** |
 |:--------------------------------|:-------------------------------------------------:|:-----------------------------------------------:|
-| **32-bit FP Multiply**          | `{python} EnergyAccessCosts.energy_flop_fp32_str` |                    1$\times$                    |
-| **DRAM Memory Access (32-bit)** |    `{python} EnergyAccessCosts.energy_dram_str`   |    `{python} EnergyAccessCosts.dram_mult_str`   |
-| **Local SSD Access (32-bit)**   | `{python} EnergyAccessCosts.local_ssd_energy_str` | `{python} EnergyAccessCosts.local_ssd_mult_str` |
-| **Network Transfer (32-bit)**   |  `{python} EnergyAccessCosts.network_energy_str`  |  `{python} EnergyAccessCosts.network_mult_str`  |
+| **Phép nhân FP 32-bit** | `{python} EnergyAccessCosts.energy_flop_fp32_str` |                    1$\times$                    |
+| **Truy cập bộ nhớ DRAM (32-bit)** |    `{python} EnergyAccessCosts.energy_dram_str`   |    `{python} EnergyAccessCosts.dram_mult_str`   |
+| **Truy cập SSD cục bộ (32-bit)** | `{python} EnergyAccessCosts.local_ssd_energy_str` | `{python} EnergyAccessCosts.local_ssd_mult_str` |
+| **Truyền qua mạng (32-bit)** |  `{python} EnergyAccessCosts.network_energy_str`  |  `{python} EnergyAccessCosts.network_mult_str`  |
 
 : **Chi phí năng lượng khi di chuyển so với tính toán trên giá trị 32-bit**: Năng lượng ước tính cho mỗi sự kiện ở từng cấp trong hệ thống di chuyển dữ liệu, với các hệ số được chuẩn hóa theo một phép nhân FP32 32-bit. Tất cả các hàng đều dùng cùng độ rộng 32-bit, nên các tỷ lệ này so sánh những sự kiện có kích thước tương đương. Bản thân các tỷ lệ này không đủ để kết luận yếu tố nào chi phối một khối lượng công việc hoàn chỉnh; tổng năng lượng còn phụ thuộc vào số lượng phép toán số học và số lần truyền dữ liệu. {#tbl-energy-movement-cost tbl-colwidths="[34,33,33]"}
 
@@ -746,11 +746,11 @@ Khi các hệ thống ML gặp lỗi, bốn trụ cột này cung cấp một l�
 
 Các hệ thống đề xuất\index{Recommendation system!scalability challenge} được xây dựng theo kiểu DLRM\index{DLRM!scalability challenge} là ví dụ điển hình cho thách thức về khả năng mở rộng trong kỹ thuật dữ liệu hiện đại. Các khối lượng công việc (workload) đề xuất ngày nay chia nhu cầu tài nguyên của pipeline thành hai nhánh: các tín hiệu liên tục đi qua các pipeline ma trận dày đặc, còn các ID phân loại đòi hỏi hạ tầng tra cứu phân tán ở quy mô terabyte. @Tbl-data-engineering-dlrm-scalability mô tả các điểm gây áp lực vận hành này qua các giai đoạn: nhập dữ liệu, tổng hợp bảng embedding và tương tác đặc trưng.
 
-| **Property**   | **Value**                      | **System Implication**                                           |
+| **Thuộc tính** | **Giá trị** | **Ảnh hưởng đến hệ thống** |
 |:---------------|:-------------------------------|:-----------------------------------------------------------------|
-| **Data scale** | High-cardinality user/item IDs | Embedding and lookup tables can outgrow one machine's memory.    |
-| **Constraint** | Memory Capacity                | The tables no longer fit on one machine and must be partitioned. |
-| **Bottleneck** | Sparse Access                  | Random lookups stress memory bandwidth more than compute.        |
+| **Quy mô dữ liệu** | ID người dùng/mặt hàng có số lượng lớn | Embedding và bảng tra cứu có thể vượt quá bộ nhớ của một máy. |
+| **Ràng buộc** | Dung lượng bộ nhớ | Các bảng không còn vừa trên một máy và phải được phân vùng. |
+| **Nút thắt cổ chai** | Truy cập thưa thớt | Các tra cứu ngẫu nhiên gây áp lực lên băng thông bộ nhớ nhiều hơn là tính toán. |
 
 : **Hồ sơ khả năng mở rộng của DLRM**: Các mô hình đề xuất gây áp lực lên kỹ thuật dữ liệu ở khía cạnh dung lượng bộ nhớ và băng thông truy cập thưa thớt, hơn là ở khía cạnh tính toán. {#tbl-data-engineering-dlrm-scalability tbl-colwidths="[10,29,61]"}
 
@@ -987,14 +987,14 @@ class KWSDesignSpaceTradeoffs:
     synthetic_cost_savings_mult_str = fmt_multiple(synthetic_cost_savings_mult, precision=0, commas=False)
 ```
 
-| **Design Choice**                   | **Quality Impact**                                                                 |                                                  **Latency Impact**                                                 |                                                                     **Cost Impact**                                                                     |                               **Memory Impact**                                |
+| **Lựa chọn thiết kế** | **Tác động đến chất lượng** |                                                  **Tác động đến độ trễ** |                                                                     **Tác động đến chi phí** |                               **Tác động đến bộ nhớ** |
 |:------------------------------------|:-----------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------:|
-| **16 kHz vs. 8 kHz sampling**       | +`{python} KWSDesignSpaceTradeoffs.sampling_accuracy_gain_pct_str` accuracy        |              `{python} KWSDesignSpaceTradeoffs.sampling_processing_mult_str` input-processing workload              |                                      `{python} KWSDesignSpaceTradeoffs.sampling_storage_mult_str` raw-audio storage                                     | `{python} KWSDesignSpaceTradeoffs.sampling_feature_size_mult_str` feature size |
-| **13 vs. 40 MFCC coefficients**     | +`{python} KWSDesignSpaceTradeoffs.mfcc_accuracy_gain_pct_str` accuracy            |                   `{python} KWSDesignSpaceTradeoffs.mfcc_feature_compute_mult_str` feature compute                  |                                                                         Minimal                                                                         | `{python} KWSDesignSpaceTradeoffs.mfcc_feature_memory_mult_str` feature memory |
-| **1M vs. 10M training examples**    | +`{python} KWSDesignSpaceTradeoffs.data_volume_accuracy_gain_pct_str` accuracy     |                 `{python} KWSDesignSpaceTradeoffs.data_volume_training_time_mult_str` training time                 |                                   `{python} KWSDesignSpaceTradeoffs.data_volume_labeling_cost_mult_str` labeling cost                                   |    `{python} KWSDesignSpaceTradeoffs.data_volume_storage_mult_str` storage     |
-| **Clean vs. noisy training data**   | +`{python} KWSDesignSpaceTradeoffs.noisy_accuracy_gain_pct_str` real-world         |                                                       Minimal                                                       |                                    `{python} KWSDesignSpaceTradeoffs.noisy_collection_cost_mult_str` collection cost                                    |                                    Minimal                                     |
-| **Local vs. cloud inference**       | up to `{python} KWSDesignSpaceTradeoffs.local_accuracy_risk_pct_str` accuracy risk | `{python} KWSDesignSpaceTradeoffs.local_latency_ms_str` vs. `{python} KWSDesignSpaceTradeoffs.cloud_latency_ms_str` | `{python} KWSDesignSpaceTradeoffs.local_inference_cost_usd_per_query_str` vs. `{python} KWSDesignSpaceTradeoffs.cloud_inference_cost_usd_per_query_str` |  `{python} KWSDesignSpaceTradeoffs.local_model_memory_kb_str` vs. cloud-scale  |
-| **Synthetic vs. real augmentation** | +`{python} KWSDesignSpaceTradeoffs.synthetic_robustness_gain_pct_str` robustness   |                                                       Minimal                                                       |                                        `{python} KWSDesignSpaceTradeoffs.synthetic_cost_savings_mult_str` cheaper                                       |                                    Minimal                                     |
+| **Lấy mẫu 16 kHz so với 8 kHz** | +`{python} KWSDesignSpaceTradeoffs.sampling_accuracy_gain_pct_str` độ chính xác |              `{python} KWSDesignSpaceTradeoffs.sampling_processing_mult_str` khối lượng công việc xử lý đầu vào |                                      `{python} KWSDesignSpaceTradeoffs.sampling_storage_mult_str` lưu trữ âm thanh thô | `{python} KWSDesignSpaceTradeoffs.sampling_feature_size_mult_str` kích thước đặc trưng |
+| **13 so với 40 hệ số MFCC** | +`{python} KWSDesignSpaceTradeoffs.mfcc_accuracy_gain_pct_str` độ chính xác |                   `{python} KWSDesignSpaceTradeoffs.mfcc_feature_compute_mult_str` tính toán đặc trưng |                                                                         Tối thiểu | `{python} KWSDesignSpaceTradeoffs.mfcc_feature_memory_mult_str` bộ nhớ đặc trưng |
+| **1M so với 10M ví dụ huấn luyện** | +`{python} KWSDesignSpaceTradeoffs.data_volume_accuracy_gain_pct_str` độ chính xác |                 `{python} KWSDesignSpaceTradeoffs.data_volume_training_time_mult_str` thời gian huấn luyện |                                   `{python} KWSDesignSpaceTradeoffs.data_volume_labeling_cost_mult_str` chi phí gán nhãn |    `{python} KWSDesignSpaceTradeoffs.data_volume_storage_mult_str` lưu trữ |
+| **Dữ liệu huấn luyện sạch so với nhiễu** | +`{python} KWSDesignSpaceTradeoffs.noisy_accuracy_gain_pct_str` thực tế |                                                       Tối thiểu |                                    `{python} KWSDesignSpaceTradeoffs.noisy_collection_cost_mult_str` chi phí thu thập |                                    Tối thiểu |
+| **Suy luận cục bộ so với đám mây** | lên đến `{python} KWSDesignSpaceTradeoffs.local_accuracy_risk_pct_str` rủi ro về độ chính xác | `{python} KWSDesignSpaceTradeoffs.local_latency_ms_str` so với `{python} KWSDesignSpaceTradeoffs.cloud_latency_ms_str` | `{python} KWSDesignSpaceTradeoffs.local_inference_cost_usd_per_query_str` so với `{python} KWSDesignSpaceTradeoffs.cloud_inference_cost_usd_per_query_str` |  `{python} KWSDesignSpaceTradeoffs.local_model_memory_kb_str` so với quy mô đám mây |
+| **Tăng cường tổng hợp so với thực tế** | +`{python} KWSDesignSpaceTradeoffs.synthetic_robustness_gain_pct_str` tính mạnh mẽ |                                                       Tối thiểu |                                        `{python} KWSDesignSpaceTradeoffs.synthetic_cost_savings_mult_str` rẻ hơn |                                    Tối thiểu |
 
 : **Không gian thiết kế kỹ thuật dữ liệu KWS**: Các đầu vào kịch bản minh họa giúp định giá từng lựa chọn thiết kế theo bốn trục: chất lượng, độ trễ, chi phí và bộ nhớ; các mục này không phải số đo từ một hệ thống duy nhất và không nên cộng dồn hiệu ứng. Tốc độ lấy mẫu cao hơn sẽ khiến lưu trữ và xử lý âm thanh thô tăng gấp đôi, trong khi thêm nhiều ví dụ huấn luyện sẽ làm nhu cầu ghi nhãn và lưu trữ nhân lên. Chất lượng và độ trễ thực tế phải được đo trên pipeline mục tiêu. {#tbl-kws-design-space tbl-colwidths="[30,22,16,16,16]"}
 
@@ -1159,14 +1159,14 @@ Kịch bản này kết hợp các lựa chọn trên với 13 MFCC và ngân s�
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Choice**            | **Selection**                                   | **Rationale**                                                                                                          |
+| **Lựa chọn** | **Tuyển chọn** | **Lý do** |
 |:----------------------|:------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------|
-| **Sampling rate**     | 16 kHz                                          | +3% accuracy worth 2$\times$ storage within budget                                                                     |
-| **MFCC coefficients** | 13                                              | Reduces feature-state memory and compute; final fit requires measurement                                               |
-| **Training examples** | 750K real + illustrative synthetic augmentation | Human-label count follows from the budget; synthetic volume is a scenario choice                                       |
-| **Data diversity**    | Noisy + clean mix                               | Critical for real-world deployment                                                                                     |
-| **Inference**         | Local, reduced precision                        | Reduced precision can lower footprint; the final 64 KB fit requires the compression analysis in @sec-model-compression |
-| **Augmentation**      | Heavy synthetic                                 | 10$\times$ cost efficiency                                                                                             |
+| **Tốc độ lấy mẫu** | 16 kHz | +3% độ chính xác đáng giá 2$\times$ lưu trữ trong phạm vi ngân sách |
+| **Hệ số MFCC** | 13                                              | Giảm bộ nhớ trạng thái đặc trưng và tính toán; kết quả phù hợp cuối cùng yêu cầu đo lường |
+| **Ví dụ huấn luyện** | 750K thực tế + tăng cường tổng hợp minh họa | Số lượng nhãn thủ công phụ thuộc vào ngân sách; khối lượng tổng hợp là một lựa chọn kịch bản |
+| **Đa dạng dữ liệu** | Hỗn hợp nhiễu + sạch | Quan trọng cho việc triển khai trong thực tế |
+| **Suy luận** | Cục bộ, độ chính xác giảm | Độ chính xác giảm có thể giảm dung lượng; sự phù hợp 64 KB cuối cùng yêu cầu phân tích nén trong @sec-model-compression |
+| **Tăng cường** | Tổng hợp mạnh | Hiệu quả chi phí gấp 10$\times$ |
 
 : **Cấu hình ứng viên KWS**: Đây là một kịch bản sử dụng ngân sách nhãn thực đã tính toán, đồng thời ghi lại các lựa chọn còn lại về lấy mẫu, tăng cường và triển khai để đo lường đối chiếu với các mục tiêu chất lượng và bộ nhớ. {#tbl-data-engineering-kws-configuration tbl-colwidths="[16,20,64]"}
 
@@ -1538,15 +1538,15 @@ Các kỹ sư ML nên dùng các giả định tham chiếu đã lỗi thời tr
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Operation**                |                                 **Cost**                                | **Notes**              |
+| **Thao tác** |                                 **Chi phí** | **Ghi chú** |
 |:-----------------------------|:-----------------------------------------------------------------------:|:-----------------------|
-| **Crowdsourced image label** |  `{python} DataEngineeringCostConstants.labeling_cost_crowd_range_str`  | Simple classification  |
-| **Bounding box annotation**  |   `{python} DataEngineeringCostConstants.labeling_cost_box_range_str`   | Per box, simple scenes |
-| **Expert medical label**     | `{python} DataEngineeringCostConstants.labeling_cost_medical_range_str` | Per study, radiologist |
-| **S3 storage (Standard)**    |       `{python} DataEngineeringCostConstants.storage_cost_s3_str`       | Hot storage            |
-| **S3 retrieval (Glacier)**   |    `{python} DataEngineeringCostConstants.retrieval_cost_glacier_str`   | Standard: 3-5 hours    |
-| **Cloud GPU training hour**  |                                  \$2–4                                  | Cloud spot pricing     |
-| **Human review hour**        |                                 \$15–50                                 | Depending on expertise |
+| **Nhãn hình ảnh thu thập từ cộng đồng** |  `{python} DataEngineeringCostConstants.labeling_cost_crowd_range_str`  | Phân loại đơn giản |
+| **Chú thích hộp giới hạn** |   `{python} DataEngineeringCostConstants.labeling_cost_box_range_str`   | Mỗi hộp, cảnh đơn giản |
+| **Nhãn y tế chuyên gia** | `{python} DataEngineeringCostConstants.labeling_cost_medical_range_str` | Mỗi nghiên cứu, bác sĩ X-quang |
+| **Lưu trữ S3 (Tiêu chuẩn)** |       `{python} DataEngineeringCostConstants.storage_cost_s3_str`       | Lưu trữ nóng |
+| **Truy xuất S3 (Glacier)** |    `{python} DataEngineeringCostConstants.retrieval_cost_glacier_str`   | Tiêu chuẩn: 3-5 giờ |
+| **Giờ huấn luyện GPU đám mây** |                                  \$2–4                                  | Giá spot đám mây |
+| **Giờ đánh giá của con người** |                                 \$15–50                                 | Tùy thuộc vào chuyên môn |
 
 : **Chi phí Kỹ thuật Dữ liệu Minh họa (2024)**: Các giả định tham chiếu đã lỗi thời dành cho các mô hình chi phí theo khối lượng công việc (workload) cụ thể, không phải là báo giá hiện tại từ nhà cung cấp. Vì các hàng dùng các đơn vị khác nhau, chỉ nên so sánh sau khi đã quy đổi mỗi mức theo đúng số lượng mà nó định giá. {#tbl-data-engineering-cost-constants tbl-colwidths="[39,27,34]"}
 
@@ -1588,11 +1588,11 @@ class DataEngineeringTimeConstants:
     span_orders_str = fmt_int(span_orders, commas=False)
 ```
 
-| **Operation**                      | **Duration** | **Bottleneck**                      |
+| **Thao tác** | **Thời lượng** | **Nút thắt cổ chai** |
 |:-----------------------------------|:------------:|:------------------------------------|
-| **Label 1M images (crowdsourced)** |  2–4 weeks   | Annotation throughput               |
-| **Train ResNet-50 on ImageNet**    |  4–6 hours   | Compute (8$\times$ A100, optimized) |
-| **Feature store lookup**           |   1–10 ms    | Network + cache                     |
+| **Gán nhãn 1 triệu hình ảnh (từ cộng đồng)** |  2–4 tuần | Thông lượng ghi chú |
+| **Huấn luyện ResNet-50 trên ImageNet** |  4–6 giờ | Tính toán (8$\times$ A100, tối ưu hóa) |
+| **Tra cứu Feature store** |   1–10 ms | Mạng + cache |
 
 : **Thang thời gian Kỹ thuật Dữ liệu Minh họa**: Kịch bản này trải dài khoảng `{python} DataEngineeringTimeConstants.span_orders_str` bậc độ lớn, với gán nhãn thủ công là giai đoạn chậm nhất được liệt kê. Thời lượng thực tế phụ thuộc vào tập dữ liệu, tác vụ, phần cứng và cấu hình dịch vụ. {#tbl-data-engineering-time-constants tbl-colwidths="[36,31,33]"}
 
@@ -3681,13 +3681,13 @@ Tính linh hoạt đó chỉ hữu ích khi công tác quản trị ngăn hồ d
 
 Mỗi kiến trúc lưu trữ ưu tiên một mẫu truy cập và một giai đoạn khác nhau của quy trình ML, như @tbl-storage nêu rõ. Một sự kết hợp không phù hợp có thể khiến hiệu năng giảm đáng kể.
 
-| **Attribute**                | **Conventional Database**                  | **Data Warehouse**                                        | **Data Lake**                                          |
+| **Thuộc tính** | **Cơ sở dữ liệu truyền thống** | **Kho dữ liệu** | **Hồ dữ liệu** |
 |:-----------------------------|:-------------------------------------------|:----------------------------------------------------------|:-------------------------------------------------------|
-| **Purpose**                  | Operational and transactional              | Analytical and reporting                                  | Storage for raw and diverse data for future processing |
-| **Data type**                | Structured                                 | Structured                                                | Structured, semi-structured, and unstructured          |
-| **Scale**                    | Small to medium volumes                    | Medium to large volumes                                   | Large volumes of diverse data                          |
-| **Performance Optimization** | Optimized for transactional queries (OLTP) | Optimized for analytical queries (OLAP)                   | Optimized for scalable storage and retrieval           |
-| **Examples**                 | MySQL, PostgreSQL, Oracle DB               | Google BigQuery, Amazon Redshift, Microsoft Azure Synapse | Google Cloud Storage, AWS S3, Azure Data Lake Storage  |
+| **Mục đích** | Vận hành và giao dịch | Phân tích và báo cáo | Lưu trữ dữ liệu thô và đa dạng để xử lý trong tương lai |
+| **Loại dữ liệu** | Có cấu trúc | Có cấu trúc | Có cấu trúc, bán cấu trúc và phi cấu trúc |
+| **Quy mô** | Khối lượng nhỏ đến trung bình | Khối lượng trung bình đến lớn | Khối lượng lớn dữ liệu đa dạng |
+| **Tối ưu hóa hiệu suất** | Tối ưu hóa cho truy vấn giao dịch (OLTP) | Tối ưu hóa cho truy vấn phân tích (OLAP) | Tối ưu hóa cho lưu trữ và truy xuất có khả năng mở rộng |
+| **Ví dụ** | MySQL, PostgreSQL, Oracle DB | Google BigQuery, Amazon Redshift, Microsoft Azure Synapse | Google Cloud Storage, AWS S3, Azure Data Lake Storage |
 
 : **Đặc điểm Hệ thống Lưu trữ**: Mỗi kiến trúc lưu trữ ưu tiên một kiểu truy cập và một giai đoạn khác nhau trong quy trình ML. Cơ sở dữ liệu hỗ trợ truy cập ngẫu nhiên với IOPS cao, cần thiết cho việc phục vụ (serving) đặc trưng theo thời gian thực; kho dữ liệu cung cấp thông lượng tuần tự cho huấn luyện batch và kỹ thuật đặc trưng; còn hồ dữ liệu mang lại sự linh hoạt về lược đồ và hiệu quả chi phí khi lưu trữ dữ liệu thô ở quy mô lớn. Nếu hệ thống không khớp với khối lượng công việc (workload), hiệu năng có thể suy giảm đáng kể. {#tbl-storage tbl-colwidths="[16,28,30,26]"}
 
@@ -3770,13 +3770,13 @@ class KWSStorageEconomics:
 \renewcommand{\arraystretch}{1.45}
 ```
 
-| **Storage Tier**                         | **Cost (\$/TB/month)** |             **Sequential Read** **Throughput**            | **Random Read** **Latency** | **Typical ML Use Case**                       |
+| **Tầng lưu trữ** | **Chi phí ($/TB/tháng)** |             **Thông lượng đọc tuần tự** | **Độ trễ đọc ngẫu nhiên** | **Trường hợp sử dụng machine learning điển hình** |
 |:-----------------------------------------|:----------------------:|:---------------------------------------------------------:|:---------------------------:|:----------------------------------------------|
-| **NVMe SSD (local)**                     |       \$100–300        | `{python} KWSStorageEconomics.nvme_bw_range_gb_per_s_str` |          10–100 μs          | Training data loading, active feature serving |
-| **Object Storage (S3, GCS)**             |        \$20–25         |               100–500 MB/s (per connection)               |           10–50 ms          | Data lake raw storage, model artifacts        |
-| **Data Warehouse (BigQuery, Redshift)**  |        \$20–40         |                  1–5 GB/s (columnar scan)                 |  100–500 ms (query startup) | Training data queries, feature engineering    |
-| **In-Memory Cache (Redis, Memcached)**   |       \$500–1000       |                         20–50 GB/s                        |           1–10 μs           | Online feature serving, real-time inference   |
-| **Archival Storage (Glacier, Nearline)** |         \$1–4          |               10–50 MB/s  (after retrieval)               |      Hours (retrieval)      | Historical retention, compliance archives     |
+| **NVMe SSD (cục bộ)** |       \$100–300        | `{python} KWSStorageEconomics.nvme_bw_range_gb_per_s_str` |          10–100 μs          | Tải dữ liệu huấn luyện, phục vụ (serving) đặc trưng hoạt động |
+| **Lưu trữ đối tượng (S3, GCS)** |        \$20–25         |               100–500 MB/s (mỗi kết nối) |           10–50 ms | Lưu trữ thô data lake, tạo phẩm mô hình |
+| **Kho dữ liệu (BigQuery, Redshift)** |        \$20–40         |                  1–5 GB/s (quét cột) |  100–500 ms (khởi động truy vấn) | Truy vấn dữ liệu huấn luyện, kỹ thuật đặc trưng |
+| **Cache trong bộ nhớ (Redis, Memcached)** |       \$500–1000       |                         20–50 GB/s |           1–10 μs           | Phục vụ (serving) đặc trưng trực tuyến, suy luận thời gian thực |
+| **Lưu trữ hồ sơ (Glacier, Nearline)** |         \$1–4          |               10–50 MB/s (sau khi truy xuất) |      Giờ (truy xuất) | Lưu giữ lịch sử, kho lưu trữ tuân thủ |
 
 : **Đánh đổi chi phí-hiệu suất lưu trữ minh họa (2024)**: Các phạm vi lập kế hoạch này thay đổi tùy nhà cung cấp, khu vực, cấu hình và khối lượng công việc (workload). Việc tải dữ liệu huấn luyện yêu cầu truy cập tuần tự với thông lượng cao; @sec-appdx-machine-foundations-memory-hierarchy-2278 thiết lập hệ thống phân cấp bộ nhớ mà kiểu truy cập này phải phù hợp. Phục vụ (serving) trực tuyến cần đọc ngẫu nhiên với độ trễ thấp, còn lưu trữ dài hạn (archival storage) ưu tiên chi phí hơn tốc độ truy cập để đáp ứng yêu cầu tuân thủ và lưu trữ dữ liệu lịch sử. {#tbl-storage-performance tbl-colwidths="[26,15,19,19,21]"}
 
@@ -3854,16 +3854,16 @@ Những con số về độ trễ này được phổ biến nhờ bài phát bi
 \begingroup
 \renewcommand{\arraystretch}{1.45}
 ```
-| **Operation**            | **Latency (ns)** | **Human Scale** | **ML System Impact**         |
+| **Thao tác** | **Độ trễ (ns)** | **Thang đo con người** | **Tác động hệ thống machine learning** |
 |:-------------------------|:----------------:|:---------------:|:-----------------------------|
-| **L1 Cache Reference**   |       0.5        |     1 second    | Immediate                    |
-| **L2 Cache Reference**   |        7         |    14 seconds   | Fast computation             |
-| **Main Memory (DRAM)**   |       100        |    3 minutes    | The "memory wall" threshold  |
-| **SSD (local NVMe)**     |     100,000      |      2 days     | Data loading bottleneck      |
-| **Network (same DC)**    |     500,000      |    11.57 days   | Distributed coordination lag |
-| **SSD (remote network)** |    2,000,000     |    46.30 days   | Training-serving skew source |
-| **Object Store (S3)**    |    20,000,000    |      1 year     | Archival access              |
-| **Internet (CA to VA)**  |   100,000,000    |     6 years     | Global user experience       |
+| **Tham chiếu Cache L1** |       0.5        |     1 giây | Tức thì |
+| **Tham chiếu Cache L2** |        7         |    14 giây | Tính toán nhanh |
+| **Bộ nhớ chính (DRAM)** |       100        |    3 phút | Ngưỡng "memory wall" |
+| **SSD (NVMe cục bộ)** |     100,000      |      2 ngày | Nút thắt cổ chai tải dữ liệu |
+| **Mạng (cùng trung tâm dữ liệu)** |     500,000      |    11.57 ngày | Độ trễ phối hợp phân tán |
+| **SSD (mạng từ xa)** |    2,000,000     |    46.30 ngày | Nguồn lệch giữa huấn luyện và phục vụ (serving) |
+| **Kho lưu trữ đối tượng (S3)** |    20,000,000    |      1 năm | Truy cập lưu trữ |
+| **Internet (CA đến VA)** |   100,000,000    |     6 năm | Trải nghiệm người dùng toàn cầu |
 
 : **Hệ thống phân cấp độ trễ bộ nhớ và lưu trữ**: Thời gian truy cập phần cứng tiêu chuẩn được quy đổi về một thang đo tương ứng với cảm nhận của con người, trong đó một truy cập cache L1 0.5 ns sẽ tương đương với một giây. {#tbl-ml-latencies tbl-colwidths="[30,20,20,30]"}
 
@@ -4332,16 +4332,16 @@ Khác với nợ kỹ thuật, có thể đánh giá bằng các chỉ số về
 \renewcommand{\arraystretch}{1.45}
 ```
 
-| **Debt Category** | **Metric**                       | **Warning Threshold** |   **Critical Threshold**   |
+| **Danh mục nợ** | **Chỉ số** | **Ngưỡng cảnh báo** |   **Ngưỡng nghiêm trọng** |
 |:------------------|:---------------------------------|:---------------------:|:--------------------------:|
-| **Documentation** | % datasets with data cards       |         < 80%         |           < 50%            |
-| **Documentation** | % columns with descriptions      |         < 90%         |           < 70%            |
-| **Schema**        | Schema version branches          |          > 3          |            > 10            |
-| **Schema**        | % transformations with try/catch |         > 20%         |           > 50%            |
-| **Quality**       | Known label error rate           |          > 1%         |            > 5%            |
-| **Quality**       | Documented bias metrics          |      Not measured     | Measured but not mitigated |
-| **Freshness**     | Days since last retraining       |       > 90 days       |         > 365 days         |
-| **Freshness**     | PSI vs. training baseline        |         > 0.1         |           > 0.25           |
+| **Tài liệu** | % tập dữ liệu có thẻ dữ liệu |         < 80%         |           < 50%            |
+| **Tài liệu** | % cột có mô tả |         < 90%         |           < 70%            |
+| **Lược đồ** | Các nhánh phiên bản lược đồ |          > 3          |            > 10            |
+| **Lược đồ** | % biến đổi có try/catch |         > 20%         |           > 50%            |
+| **Chất lượng** | Tỷ lệ lỗi nhãn đã biết |          > 1%         |            > 5%            |
+| **Chất lượng** | Các chỉ số độ chệch (bias) được ghi nhận |      Chưa đo lường | Đã đo lường nhưng chưa giảm thiểu |
+| **Độ tươi mới** | Số ngày kể từ lần huấn luyện lại cuối cùng |       > 90 ngày |         > 365 ngày |
+| **Độ tươi mới** | PSI so với đường cơ sở huấn luyện |         > 0.1         |           > 0.25           |
 
 : **Các chỉ số nợ dữ liệu**: Các ngưỡng minh họa để phát hiện nợ dữ liệu đang tích tụ trong bốn nhóm. Ngưỡng cảnh báo cho biết nợ cần được xử lý trong các chu kỳ lập kế hoạch sắp tới; ngưỡng nghiêm trọng cho biết cần khắc phục ngay để tránh hệ thống xuống cấp. Hàng PSI sử dụng các dải giám sát drift phổ biến trong vận hành, còn các hàng khác cần được hiệu chỉnh theo mức chấp nhận rủi ro và chi phí khi hệ thống ML cụ thể gặp lỗi. {#tbl-data-debt-metrics}
 

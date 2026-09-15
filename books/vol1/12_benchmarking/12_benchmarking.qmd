@@ -274,12 +274,12 @@ machine learning là ví dụ điển hình cho bước chuyển sang đánh gi�
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **MLPerf Variant**   | **Target Domain** | **Key Constraints**                              | **Primary Metrics**                             |
+| **MLPerf Variant** | **Target Domain** | **Key Constraints** | **Primary Metrics** |
 |:---------------------|:------------------|:-------------------------------------------------|:------------------------------------------------|
-| **MLPerf Training**  | Data center       | Multi-node scaling, high bandwidth interconnects | Time-to-quality, throughput (samples/sec)       |
-| **MLPerf Inference** | Server/Edge       | Latency SLAs, throughput requirements            | QPS, latency percentiles, accuracy preservation |
-| **MLPerf Tiny**      | MCU/IoT           | Ultra-low-power inference, limited memory        | Latency, accuracy, energy per inference         |
-| **MLPerf Power**     | Cross-cutting     | Energy budgets, thermal constraints              | Performance/W, energy per query                 |
+| **MLPerf Huấn luyện** | Trung tâm dữ liệu | Multi-node scaling, interconnects băng thông cao | Time-to-quality, thông lượng (samples/sec) |
+| **MLPerf Suy luận** | Server/Edge | SLAs độ trễ, requirements thông lượng | QPS, percentiles độ trễ, accuracy preservation |
+| **MLPerf Tiny** | MCU/IoT | suy luận Ultra-low-power, memory hạn chế | Độ trễ, accuracy, năng lượng trên mỗi suy luận |
+| **MLPerf Công suất** | Cross-cutting | Energy budgets, thermal constraints | Performance/W, năng lượng trên mỗi query |
 
 : **Các biến thể bộ benchmark MLPerf**: Mỗi biến thể được thiết kế cho một ngữ cảnh triển khai khác nhau, từ huấn luyện quy mô trung tâm dữ liệu đến suy luận trên vi điều khiển cực kỳ hạn chế, nhằm vào các ràng buộc vận hành cụ thể và đo lường các chỉ số phù hợp với kịch bản triển khai đó. {#tbl-mlperf-suites tbl-colwidths="[15,14,36,35]"}
 
@@ -295,14 +295,14 @@ Những bài học đó kết tinh trong các bộ benchmark ML. Tuy nhiên, h�
 
 Nhiều tổ chức đã tự mình học những bài học này, thường là qua không ít khó khăn. Nhưng các phép đo đơn lẻ, rời rạc thì không thể dẫn dắt cả ngành. Khi một nhóm đo độ trễ suy luận bao gồm cả tiền xử lý còn nhóm khác lại loại trừ; khi benchmark độ chính xác dùng các cách chia dữ liệu khác nhau; hoặc khi phép đo công suất đặt ranh giới hệ thống không giống nhau, các con số thu được sẽ không thể so sánh. Việc chuyển từ đo đạc tùy tiện sang các bộ benchmark tiêu chuẩn hóa đã biến hoạt động benchmark từ một bài tập xác thực nội bộ thành một ngôn ngữ chung, giúp các tổ chức mua sắm phần cứng, so sánh kiến trúc và ra quyết định triển khai trên quy mô liên tổ chức.
 
-| **Benchmark**  | **Year** | **Primary Focus**                   | **Key Metric(s)**                       | **Lesson for ML Benchmarking**                                               |
+| **Benchmark** | **Năm** | **Primary Focus** | **Key Metric(s)** | **Lesson cho ML Benchmarking** |
 |:---------------|:--------:|:------------------------------------|:----------------------------------------|:-----------------------------------------------------------------------------|
-| **Whetstone**  |   1976   | Synthetic floating-point operations | MWIPS                                   | Gaming synthetic tests undermines evaluation validity                        |
-| **LINPACK**    |   1979   | Linear algebra (matrix operations)  | FLOP/s                                  | Isolated operations miss system-level complexity and bottlenecks             |
-| **SPEC CPU**   |   1989   | Real application workloads          | SPECrate, SPECspeed                     | Representative workloads reveal true deployment performance                  |
-| **SPEC Power** |   2007   | Server energy efficiency            | ssj_ops/W across load levels            | Energy efficiency requires multi-load evaluation, not just peak performance  |
-| **Green500**   |   2007   | HPC energy efficiency               | GFLOP/s per watt                        | Efficiency rankings complement raw performance rankings                      |
-| **MLPerf**     |   2018   | ML systems (training + inference)   | Time-to-quality, QPS, latency, accuracy | Synthesizes all lessons: representative workloads + multi-objective + system |
+| **Whetstone** |   1976   | Synthetic floating-point operations | MWIPS | Gaming synthetic tests làm suy yếu evaluation validity |
+| **LINPACK** |   1979   | Linear algebra (matrix operations) | FLOP/s | Isolated operations bỏ lỡ system-level complexity và bottlenecks |
+| **SPEC CPU** |   1989   | Khối lượng công việc (workload) ứng dụng thực tế | SPECrate, SPECspeed | Khối lượng công việc (workload) đại diện cho thấy hiệu suất triển khai thực tế |
+| **SPEC Công suất** |   2007   | Server energy efficiency | ssj_ops/W trên các load levels | Hiệu quả năng lượng đòi hỏi đánh giá đa tải, không chỉ hiệu suất đỉnh |
+| **Green500** |   2007   | Hiệu quả năng lượng HPC | GFLOP/s per watt | Xếp hạng hiệu quả bổ sung cho xếp hạng hiệu suất thô |
+| **MLPerf** |   2018   | Hệ thống ML (huấn luyện + suy luận) | Thời gian đạt chất lượng, QPS, độ trễ, độ chính xác | Tổng hợp tất cả các bài học: khối lượng công việc (workload) đại diện + đa mục tiêu + hệ thống |
 
 : **Tiến hóa của Benchmark**: Sự tiến hóa của các benchmark tính toán, từ các phép đo tổng hợp đến các phương pháp đánh giá chuyên biệt cho ML. Mỗi thế hệ đều khắc phục hạn chế của thế hệ trước, và đỉnh cao là MLPerf khi tổng hợp được các khối lượng công việc (workload) đại diện, các chỉ số đa mục tiêu và đo lường hệ thống tích hợp. {#tbl-benchmark-evolution tbl-colwidths="[12,9,23,20,36]"}
 
@@ -515,12 +515,12 @@ Phần cứng nền tảng—CPU, GPU, Tensor Processing Units (TPU),[^fn-tpu-be
 \renewcommand{\arraystretch}{1.4}
 ```
 
-| **Vendor Claim**               | **What It Often Means**                                            |
+| **Tuyên bố của nhà cung cấp** | **Điều nó thường có nghĩa** |
 |:-------------------------------|:-------------------------------------------------------------------|
-| **"Up to 10,000 images/sec"**  | Peak throughput at maximum batch size, INT8, without preprocessing |
-| **"Sub-millisecond latency"**  | Accelerator compute only, excluding data transfer                  |
-| **"5$\times$ more efficient"** | Per-operation efficiency, not total system efficiency              |
-| **"Optimized for AI"**         | May only accelerate specific operations or precisions              |
+| **"Up to 10,000 images/sec"** | Thông lượng đỉnh ở kích thước batch tối đa, INT8, không cần tiền xử lý |
+| **"Độ trễ dưới mili giây"** | Chỉ tính toán của bộ tăng tốc, không bao gồm truyền dữ liệu |
+| **"5$\times$ more efficient"** | Hiệu quả trên mỗi hoạt động, không phải hiệu quả hệ thống tổng thể |
+| **"Tối ưu hóa cho AI"** | Có thể chỉ tăng tốc các hoạt động hoặc độ chính xác cụ thể |
 
 : **Giải mã các tuyên bố benchmark của nhà cung cấp**: Bốn cụm từ tiếp thị phổ biến và những lưu ý kỹ thuật quyết định liệu một tuyên bố đang mô tả hiệu suất đầu-cuối, một phép đo hẹp của bộ tăng tốc (accelerator), hay một so sánh hiệu suất không được hỗ trợ. {#tbl-benchmarking-vendor-claims}
 
@@ -1149,14 +1149,14 @@ Vì tính đặc thù của benchmark đầu-cuối, các tổ chức thường 
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Component**   | **Micro Benchmarks**                                      | **Macro Benchmarks**                                   | **End-to-End Benchmarks**                              |
+| **Thành phần** | **Micro Benchmark** | **Macro Benchmark** | **End-to-End Benchmark** |
 |:----------------|:----------------------------------------------------------|:-------------------------------------------------------|:-------------------------------------------------------|
-| **Focus**       | Individual operations                                     | Complete models                                        | Full system pipeline                                   |
-| **Scope**       | Tensor ops, layers, activations                           | Model architecture, training, inference                | Extract, transform, load; model; infrastructure        |
-| **Example**     | Conv layer performance on cuDNN                           | ResNet-50 on ImageNet                                  | Production recommendation system                       |
-| **Advantages**  | Precise bottleneck identification, Component optimization | Model architecture comparison, Standardized evaluation | Realistic performance assessment, System-wide insights |
-| **Challenges**  | May miss interaction effects                              | Limited infrastructure insights                        | Complex to standardize, Often proprietary              |
-| **Typical Use** | Hardware selection, Operation optimization                | Model selection, Research comparison                   | Production system evaluation                           |
+| **Trọng tâm** | Các hoạt động riêng lẻ | Các mô hình hoàn chỉnh | pipeline hệ thống hoàn chỉnh |
+| **Phạm vi** | Các hoạt động tensor, lớp, activation | Kiến trúc mô hình, huấn luyện, suy luận | Trích xuất, biến đổi, tải; mô hình; cơ sở hạ tầng |
+| **Ví dụ** | Hiệu suất lớp tích chập trên cuDNN | ResNet-50 on ImageNet | Hệ thống đề xuất trong sản xuất |
+| **Ưu điểm** | Xác định nút thắt chính xác, Tối ưu hóa thành phần | So sánh kiến trúc mô hình, Đánh giá tiêu chuẩn hóa | Đánh giá hiệu suất thực tế, Thông tin chi tiết toàn hệ thống |
+| **Thách thức** | Có thể bỏ sót các hiệu ứng tương tác | Thông tin chi tiết về hạ tầng bị hạn chế | Phức tạp để chuẩn hóa, Thường là độc quyền |
+| **Sử dụng điển hình** | Lựa chọn phần cứng, Tối ưu hóa hoạt động | Lựa chọn mô hình, So sánh nghiên cứu | Đánh giá hệ thống sản xuất |
 
 : **Các cấp độ chi tiết của benchmark**: Các phạm vi benchmark khác nhau sẽ nhắm tới những giai đoạn riêng trong quá trình phát triển hệ thống học máy. Micro-benchmark tách từng thao tác riêng lẻ để tối ưu ở cấp thấp; macro-benchmark đánh giá các mô hình hoàn chỉnh nhằm định hướng lựa chọn kiến trúc; còn các benchmark đầu-cuối đánh giá hiệu năng toàn bộ hệ thống trong môi trường sản xuất. {#tbl-benchmark-comparison tbl-colwidths="[11,28,32,29]"}
 
@@ -1455,21 +1455,21 @@ Các chỉ số đánh giá[^fn-metric-etymology-measurement] giúp biến hành
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Category**   | **Metric**                   | **Unit**               | **Primary Use Case**   |
+| **Danh mục** | **Chỉ số** | **Đơn vị** | **Trường hợp sử dụng chính** |
 |:---------------|:-----------------------------|:-----------------------|:-----------------------|
-| **Accuracy**   | Top-1/Top-5 Accuracy         | Percentage             | Classification         |
-|                | mAP (mean Average Precision) | 0–1 score              | Object detection       |
-|                | BLEU/ROUGE                   | 0–100 score            | NLP generation         |
-|                | Perplexity                   | Score (lower = better) | Language modeling      |
-| **Throughput** | Samples/second               | Samples/s              | Batch inference        |
-|                | Token throughput             | tokens/s               | LLM inference          |
-|                | Time-to-train                | Hours/days             | Training benchmarks    |
-| **Latency**    | p50 latency                  | Milliseconds           | Median response time   |
-|                | p99 latency                  | Milliseconds           | Tail latency (SLA)     |
-|                | First-token latency          | Milliseconds           | LLM responsiveness     |
-| **Efficiency** | Samples/second/watt          | Samples/s/W            | Energy efficiency      |
-|                | Accuracy/FLOP                | percent/PFLOP          | Algorithmic efficiency |
-|                | TCO per inference            | \$/inference           | Economic efficiency    |
+| **Độ chính xác** | Độ chính xác Top-1/Top-5 | Phần trăm | Phân loại |
+|                | mAP (mean Average Precision) | Điểm số 0–1 | Phát hiện đối tượng |
+|                | BLEU/ROUGE | Điểm số 0–100 | Tạo sinh NLP |
+|                | Perplexity | Điểm số (càng thấp càng tốt) | Mô hình hóa ngôn ngữ |
+| **Thông lượng** | Mẫu/giây | Mẫu/s | Suy luận theo batch |
+|                | Thông lượng token | tokens/s | Suy luận LLM |
+|                | Thời gian huấn luyện | Giờ/ngày | benchmarks huấn luyện |
+| **Độ trễ** | Độ trễ p50 | Mili giây | Thời gian phản hồi trung vị |
+|                | Độ trễ p99 | Mili giây | Độ trễ đuôi (SLA) |
+|                | Độ trễ token đầu tiên | Mili giây | Khả năng phản hồi của LLM |
+| **Hiệu quả** | Mẫu/giây/watt | Mẫu/s/W | Hiệu quả năng lượng |
+|                | Độ chính xác/FLOP | phần trăm/PFLOP | Hiệu quả thuật toán |
+|                | TCO mỗi suy luận | $/suy luận | Hiệu quả kinh tế |
 
 : **Phân loại các chỉ số benchmark ML**: Các chỉ số được sắp xếp theo danh mục đánh giá, đơn vị đo và trường hợp sử dụng chính. Các chỉ số độ chính xác dùng để định lượng chất lượng mô hình; các chỉ số thông lượng và độ trễ đo lường tốc độ của hệ thống; còn các chỉ số hiệu quả thì kết hợp nhiều chiều khác nhau. Việc chọn đúng chỉ số cho ngữ cảnh triển khai thường quan trọng hơn việc tối ưu hóa bất kỳ chỉ số đơn lẻ nào đến mức tối đa. {#tbl-metric-taxonomy}
 
@@ -1740,11 +1740,11 @@ Các triển khai di động và edge\index{Edge deployment!constraint triangle}
 %\renewcommand{\arraystretch}{1.3}
 ```
 
-| **Constraint** | **Cloud Impact**     | **Edge Impact**             |
+| **Ràng buộc** | **Tác động đám mây** | **Tác động edge** |
 |:---------------|:---------------------|:----------------------------|
-| **Power**      | Operational cost     | Device energy budget        |
-| **Latency**    | Service-level target | Local response deadline     |
-| **Accuracy**   | Task-quality target  | Balanced with power/latency |
+| **Công suất** | Chi phí vận hành | Ngân sách năng lượng thiết bị |
+| **Độ trễ** | Mục tiêu cấp độ dịch vụ | Thời hạn phản hồi cục bộ |
+| **Độ chính xác** | Mục tiêu chất lượng tác vụ | Cân bằng với công suất/độ trễ |
 
 : **Các Ràng Buộc Triển Khai Edge so với Đám Mây**: Với các triển khai trên đám mây điển hình, công suất được xem là chi phí vận hành và độ trễ là chỉ tiêu dịch vụ; còn các triển khai edge thường chịu giới hạn chặt hơn về năng lượng và thời gian phản hồi, từ đó hạn chế độ chính xác có thể đạt được. {#tbl-edge-vs-cloud-constraints}
 
@@ -2243,12 +2243,12 @@ Với khả năng mở rộng hoàn hảo, `{python} ScalingEfficiencyCalc.n_gpu
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Source**                                | **Example Contribution** | **Measurement**                     |
+| **Nguồn** | **Đóng góp ví dụ** | **Đo lường** |
 |:------------------------------------------|:------------------------:|:------------------------------------|
-| **Gradient synchronization**              |          10–15%          | AllReduce time per step             |
-| **Memory copy (CPU$\leftrightarrow$GPU)** |           3–5%           | Data transfer profiling             |
-| **Load imbalance**                        |           2–5%           | Per-GPU step time variance          |
-| **Batch size effects**                    |           2–5%           | Larger batches converge differently |
+| **Đồng bộ hóa gradient** |          10–15%          | Thời gian AllReduce mỗi bước |
+| **Sao chép bộ nhớ (CPU$\leftrightarrow$GPU)** |           3–5%           | Lập hồ sơ truyền tải dữ liệu |
+| **Mất cân bằng tải** |           2–5%           | Phương sai thời gian bước trên mỗi GPU |
+| **Ảnh hưởng của kích thước batch** |           2–5%           | Các batch lớn hơn hội tụ khác nhau |
 
 : **Nguồn Gây Mất Hiệu Suất Mở Rộng**: Phân tích minh họa phần hiệu suất bị thiếu thành các hạng mục chi phí phụ có thể đo lường và tín hiệu đo lường tương ứng dùng để gán cho từng phần mất mát. Tỷ lệ phần trăm thực tế phụ thuộc vào mô hình, kết nối, lưu trữ, lịch trình batch và triển khai framework. {#tbl-benchmarking-scaling-efficiency-loss}
 
@@ -2339,14 +2339,14 @@ MLPerf Training giải quyết vấn đề này bằng tiền xử lý dữ li�
 
 Một benchmark huấn luyện toàn diện xem xét nhiều khía cạnh trong hành vi của hệ thống, vì mỗi khía cạnh chỉ ra một cách khác nhau mà khoản đầu tư vào phần cứng có thể không dẫn tới hội tụ. @Tbl-training-metrics tóm tắt các danh mục chính và các chỉ số liên quan thường dùng để benchmark hiệu suất huấn luyện ở cấp độ hệ thống, qua đó cung cấp một framework để hiểu cách các hệ thống huấn luyện vận hành dưới các khối lượng công việc (workload) và cấu hình khác nhau.
 
-| **Category**                            | **Key Metrics**                                                                                                              | **Example Benchmark Use**                                   |
+| **Danh mục** | **Các chỉ số chính** | **Ví dụ sử dụng benchmark** |
 |:----------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------|
-| **Training Time and Throughput**        | Time-to-accuracy (seconds, minutes, hours); Throughput (samples/sec)                                                         | Comparing training speed across different GPU architectures |
-| **Scalability and Parallelism**         | Scaling efficiency (percent of ideal speedup); Communication overhead (latency, bandwidth)                                   | Analyzing distributed training performance for large models |
-| **Resource Utilization**                | Compute utilization (percent GPU/TPU usage); Memory bandwidth (GB/s); I/O efficiency (data loading speed)                    | Optimizing data pipelines to improve GPU utilization        |
-| **Energy Efficiency and Cost**          | Energy consumption per run (MWh, kWh); Training throughput per watt (FLOP/s/W)                                               | Evaluating energy-efficient training strategies             |
-| **Fault Tolerance and Robustness**      | Checkpoint overhead (time per save); Recovery success rate (percent)                                                         | Assessing failure recovery in cloud-based training systems  |
-| **Reproducibility and Standardization** | Variance across runs (percent difference in accuracy, training time); Framework consistency (TensorFlow vs. PyTorch vs. JAX) | Ensuring consistency in benchmark results across hardware   |
+| **Thời gian huấn luyện và thông lượng** | Thời gian đạt độ chính xác (seconds, minutes, hours); Thông lượng (samples/sec) | So sánh tốc độ huấn luyện trên các kiến trúc GPU khác nhau |
+| **Khả năng mở rộng và song song hóa** | Hiệu quả mở rộng (phần trăm tăng tốc lý tưởng); Chi phí giao tiếp (độ trễ, băng thông) | Phân tích hiệu suất huấn luyện phân tán cho các mô hình lớn |
+| **Sử dụng Tài nguyên** | Mức sử dụng tính toán (phần trăm sử dụng GPU/TPU); Băng thông bộ nhớ (GB/s); Hiệu quả I/O (tốc độ tải dữ liệu) | Tối ưu hóa các pipeline dữ liệu để cải thiện mức sử dụng GPU |
+| **Hiệu quả Năng lượng và Chi phí** | Mức tiêu thụ năng lượng mỗi lần chạy (MWh, kWh); Thông lượng huấn luyện trên mỗi watt (FLOP/s/W) | Đánh giá các chiến lược huấn luyện tiết kiệm năng lượng |
+| **Khả năng Chịu lỗi và Độ bền vững** | Chi phí checkpoint (thời gian mỗi lần lưu); Tỷ lệ thành công khôi phục (phần trăm) | Đánh giá khôi phục lỗi trong các hệ thống huấn luyện dựa trên đám mây |
+| **Khả năng Tái tạo và Tiêu chuẩn hóa** | Phương sai giữa các lần chạy (phần trăm khác biệt về độ chính xác, thời gian huấn luyện); Tính nhất quán của framework (TensorFlow vs. PyTorch vs. JAX) | Đảm bảo tính nhất quán trong các kết quả benchmark trên các phần cứng khác nhau |
 
 : **Các chiều đo benchmark huấn luyện**: Các danh mục và chỉ số chính để đánh giá hệ thống huấn luyện machine learning vượt ra ngoài việc đo tốc độ, bao gồm hiệu quả sử dụng tài nguyên, khả năng tái lập và các đánh đổi hiệu suất tổng thể giữa những cách tiếp cận huấn luyện và cấu hình hạ tầng khác nhau. {#tbl-training-metrics tbl-colwidths="[18,55,27]"}
 
@@ -2555,15 +2555,15 @@ Trong benchmark suy luận, cần phân biệt rõ giữa độ trễ thành ph�
 \renewcommand{\arraystretch}{1.4}
 ```
 
-| **Component**              | **Example Range** | **Notes**                  |
+| **Thành phần** | **Phạm vi Ví dụ** | **Ghi chú** |
 |:---------------------------|:-----------------:|:---------------------------|
-| **Network round-trip**     |     10–100 ms     | Varies by region           |
-| **Request parsing**        |      0.1–1 ms     | JSON/protobuf              |
-| **Input preprocessing**    |      1–50 ms      | Tokenization, image resize |
-| **Queue wait time**        |     0–1000+ ms    | Load-dependent             |
-| **Model inference**        |      5–100 ms     | The "benchmark"            |
-| **Output postprocessing**  |     0.5–10 ms     | Decoding, format           |
-| **Response serialization** |      0.1–1 ms     | JSON/protobuf              |
+| **Chuyến đi khứ hồi mạng** |     10–100 ms | Thay đổi theo khu vực |
+| **Phân tích cú pháp yêu cầu** |      0.1–1 ms | JSON/protobuf |
+| **Tiền xử lý đầu vào** |      1–50 ms | Tokenization, thay đổi kích thước hình ảnh |
+| **Thời gian chờ hàng đợi** |     0–1000+ ms | Phụ thuộc vào tải |
+| **Suy luận mô hình** |      5–100 ms | "benchmark" |
+| **Hậu xử lý đầu ra** |     0.5–10 ms | Giải mã, định dạng |
+| **Tuần tự hóa phản hồi** |      0.1–1 ms | JSON/protobuf |
 
 : **Phân tích độ trễ suy luận**: Nhiều thành phần trong pipeline cùng góp phần tạo nên độ trễ đầu đến cuối, và suy luận mô hình (con số các nhà cung cấp thường công bố) chỉ là một phần của tổng thời gian xử lý yêu cầu. Khi hệ thống chịu tải, thời gian chờ trong hàng đợi có thể chiếm ưu thế, nên đo lường đầu đến cuối là thiết yếu để đánh giá hiệu năng sát thực tế. Các khoảng giá trị ở đây chỉ mang tính minh họa, không phải con số chung cho mọi trường hợp. {#tbl-latency-breakdown}
 
@@ -2681,15 +2681,15 @@ Không giống huấn luyện, các hệ thống suy luận phải xử lý đ�
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Category**                    | **Key Metrics**                                                      | **Example Benchmark Use**                                |
+| **Danh mục** | **Các chỉ số chính** | **Ví dụ sử dụng benchmark** |
 |:--------------------------------|:---------------------------------------------------------------------|:---------------------------------------------------------|
-| **Latency and Tail Latency**    | Mean latency (ms/request); Tail latency (p95, p99, p99.9)            | Evaluating interactive and soft real-time performance    |
-| **Throughput and Efficiency**   | Queries per second (QPS); Frames per second (FPS); Batch throughput  | Comparing large-scale cloud inference systems            |
-| **Numerical Precision Impact**  | Accuracy degradation (FP32 vs. INT8); Speedup from reduced precision | Balancing accuracy vs. efficiency in optimized inference |
-| **Memory Footprint**            | Model size (MB/GB); RAM usage (MB); Memory bandwidth utilization     | Assessing feasibility for edge and mobile deployments    |
-| **Cold-Start and Load Time**    | Model load time (s); First inference latency (s)                     | Evaluating responsiveness in serverless AI               |
-| **Scalability**                 | Efficiency under load; Multi-model serving performance               | Measuring robustness for dynamic, high-demand systems    |
-| **Power and Energy Efficiency** | Power consumption (W); Performance per W (QPS/W)                     | Optimizing energy use for mobile and sustainable AI      |
+| **Độ trễ và Độ trễ đuôi** | Độ trễ trung bình (ms/request); Độ trễ đuôi (p95, p99, p99.9) | Đánh giá hiệu suất tương tác và thời gian thực mềm |
+| **Thông lượng và Hiệu quả** | Số truy vấn mỗi giây (QPS); Số khung hình mỗi giây (FPS); Thông lượng batch | So sánh các hệ thống suy luận đám mây quy mô lớn |
+| **Tác động của độ chính xác số học** | Giảm độ chính xác (FP32 so với INT8); Tăng tốc từ độ chính xác giảm | Cân bằng độ chính xác so với hiệu quả trong suy luận được tối ưu hóa |
+| **Dấu chân bộ nhớ** | Kích thước mô hình (MB/GB); Sử dụng RAM (MB); Mức sử dụng băng thông bộ nhớ | Đánh giá tính khả thi cho triển khai trên edge và thiết bị di động |
+| **Khởi động nguội và Thời gian tải** | Thời gian tải mô hình (s); Độ trễ suy luận đầu tiên (s) | Đánh giá khả năng phản hồi trong AI phi máy chủ |
+| **Khả năng mở rộng** | Hiệu quả dưới khối lượng công việc; Hiệu suất phục vụ (serving) đa mô hình | Đo lường tính mạnh mẽ cho các hệ thống động, có nhu cầu cao |
+| **Công suất và Hiệu quả năng lượng** | Mức tiêu thụ công suất (W); Hiệu suất trên mỗi W (QPS/W) | Tối ưu hóa việc sử dụng năng lượng cho AI di động và bền vững |
 
 : **Các số liệu hiệu suất suy luận**: Độ trễ, thông lượng và các số liệu về sử dụng tài nguyên cung cấp cơ sở định lượng để tối ưu hóa các hệ thống machine learning đã triển khai, đồng thời lựa chọn cấu hình phần cứng phù hợp, nhằm cân bằng tốc độ, chi phí và độ chính xác trong các ứng dụng trong môi trường sản xuất. {#tbl-inference-metrics tbl-colwidths="[22,50,28]"}
 
@@ -2701,13 +2701,13 @@ Các số liệu này luôn có những đánh đổi không thể tránh. Chẳ
 
 Kịch bản triển khai quyết định thứ tự ưu tiên giữa các số liệu. Các ràng buộc vận hành và tiêu chí thành công khác nhau rất nhiều giữa các bối cảnh, nên thứ tự ưu tiên giúp kỹ sư tập trung nỗ lực benchmark và diễn giải kết quả trong đúng khung ra quyết định. @Tbl-metric-priorities minh họa cách các ưu tiên hiệu suất thay đổi trong năm ngữ cảnh triển khai chính, qua đó cho thấy mối quan hệ có hệ thống giữa các ràng buộc vận hành và mục tiêu tối ưu hóa.
 
-| **Deployment Context**     | **Primary Priority** | **Secondary Priority** | **Tertiary Priority** | **Key Design Constraint**                         |
+| **Bối cảnh triển khai** | **Ưu tiên chính** | **Ưu tiên thứ cấp** | **Ưu tiên thứ ba** | **Ràng buộc thiết kế chính** |
 |:---------------------------|:---------------------|:-----------------------|:----------------------|:--------------------------------------------------|
-| **Real-Time Applications** | Latency              | Reliability            | Memory Footprint      | User experience demands immediate response        |
-| **Cloud-Scale Services**   | Throughput (QPS)     | Cost Efficiency        | Average Latency       | Business viability requires massive scale         |
-| **Edge/Mobile Devices**    | Power Consumption    | Memory Footprint       | Latency               | Battery life and resource limits dominate         |
-| **Training Workloads**     | Training Time        | GPU Utilization        | Memory Efficiency     | Research velocity enables faster experimentation  |
-| **Scientific/Medical**     | Accuracy             | Reliability            | Explainability        | Correctness cannot be compromised for performance |
+| **Ứng dụng thời gian thực** | Độ trễ | Độ tin cậy | Dấu chân bộ nhớ | Trải nghiệm người dùng đòi hỏi phản hồi ngay lập tức |
+| **Dịch vụ quy mô đám mây** | Thông lượng (QPS) | Hiệu quả chi phí | Độ trễ trung bình | Khả năng tồn tại của doanh nghiệp đòi hỏi quy mô lớn |
+| **Thiết bị edge/di động** | Mức tiêu thụ công suất | Dấu chân bộ nhớ | Độ trễ | Tuổi thọ pin và giới hạn tài nguyên chi phối |
+| **Khối lượng công việc (workload) huấn luyện** | Thời gian huấn luyện | Mức sử dụng GPU | Hiệu quả bộ nhớ | Tốc độ nghiên cứu cho phép thử nghiệm nhanh hơn |
+| **Khoa học/Y tế** | Độ chính xác | Độ tin cậy | Khả năng giải thích | Tính đúng đắn không thể bị đánh đổi để đổi lấy hiệu suất |
 
 : **Ưu tiên các số liệu hiệu suất theo ngữ cảnh triển khai (minh họa)**: Một ví dụ về thứ tự ưu tiên cho thấy các ràng buộc vận hành có thể làm thay đổi cách chọn benchmark và cách diễn giải kết quả; các ngưỡng thực tế cần được xác định từ đặc tả triển khai. {#tbl-metric-priorities tbl-colwidths="[18,19,18,17,28]"}
 
@@ -2862,13 +2862,13 @@ Kịch bản Offline\index{Offline scenario!maximum throughput mode} cung cấp 
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Scenario**     | **Context**                         | **Strategy**                         | **Focus**                                  |
+| **Kịch bản** | **Ngữ cảnh** | **Chiến lược** | **Trọng tâm** |
 |:-----------------|:------------------------------------|:-------------------------------------|:-------------------------------------------|
-| **SingleStream** | Mobile apps, embedded devices       | No batching (batch = 1)              | Preprocessing, power efficiency            |
-| **MultiStream**  | Autonomous driving, video analytics | Synchronized sensor fusion           | Jitter handling, deadline guarantees       |
-| **Server**       | Cloud APIs, web services            | Dynamic batching with timeout        | Throughput-latency trade-off tuning        |
-| **Offline**      | Batch processing, data pipelines    | Maximum batch size                   | Throughput, hardware utilization           |
-| **Interactive**  | Chat, agents, local generative AI   | Token streaming, KV-cache management | Time-to-first-token, time-per-output-token |
+| **Luồng đơn** | Ứng dụng di động, thiết bị nhúng | Không batching (batch = 1) | Tiền xử lý, hiệu quả công suất |
+| **Đa luồng** | Lái xe tự hành, phân tích video | Hợp nhất cảm biến đồng bộ | Xử lý jitter, đảm bảo thời hạn |
+| **Máy chủ** | API đám mây, dịch vụ web | Batching động với thời gian chờ | Điều chỉnh sự đánh đổi giữa thông lượng và độ trễ |
+| **Ngoại tuyến** | Xử lý batch, các pipeline dữ liệu | Kích thước batch tối đa | Thông lượng, tận dụng phần cứng |
+| **Tương tác** | Trò chuyện, tác nhân, AI tạo sinh cục bộ | Truyền phát token, quản lý KV-cache | Thời gian đến token đầu tiên, thời gian trên mỗi token đầu ra |
 
 : **Các Kịch bản Thực thi MLPerf**: Các kịch bản suy luận MLPerf cổ điển được ánh xạ tới các ngữ cảnh triển khai riêng biệt, mỗi kịch bản yêu cầu các chiến lược tối ưu hóa khác nhau, và các kịch bản Interactive mới hơn mở rộng framework cho các khối lượng công việc (workload) LLM nhạy cảm với độ trễ. SingleStream và MultiStream ưu tiên độ trễ; Server cân bằng thông lượng và độ trễ; Offline tối đa hóa thông lượng; còn Interactive nhấn mạnh khả năng phản hồi ở cấp độ token. Việc đối chiếu kịch bản với ngữ cảnh triển khai sẽ giúp xác định kết quả benchmark nào là phù hợp. {#tbl-mlperf-scenarios tbl-colwidths="[12,28,28,32]"}
 
@@ -2938,12 +2938,12 @@ Mở rộng lighthouse \ref{lhs-benchmarking-mobilenet-deployment-validation}, t
 
 @Tbl-benchmarking-edgetpu-validation trình bày các giả định cho kịch bản kiểu SingleStream minh họa.
 
-| **Metric**               |                **CPU (Cortex-M7)**                |                      **EdgeTPU**                      |                        **Headline Ratio**                       |                        **System-Level Ratio**                       |
+| **Chỉ số** |                **CPU (Cortex-M7)** |                      **EdgeTPU** |                        **Tỷ lệ tiêu đề** |                        **Tỷ lệ cấp hệ thống** |
 |:-------------------------|:-------------------------------------------------:|:-----------------------------------------------------:|:---------------------------------------------------------------:|:-------------------------------------------------------------------:|
-| **Inference latency**    | ~`{python} EdgeTPUSpeedupCalc.cpu_latency_ms_str` | ~`{python} EdgeTPUSpeedupCalc.edgetpu_latency_ms_str` | `{python} EdgeTPUSpeedupCalc.inference_speedup_mult_str` faster |                                  —                                  |
-| **End-to-end latency**   |   ~`{python} EdgeTPUSpeedupCalc.cpu_e2e_ms_str`   |   ~`{python} EdgeTPUSpeedupCalc.edgetpu_e2e_ms_str`   |                                —                                |      ~`{python} EdgeTPUSpeedupCalc.e2e_speedup_mult_str` faster     |
-| **Power consumption**    |  ~`{python} EdgeTPUSpeedupCalc.cpu_power_mw_str`  |  ~`{python} EdgeTPUSpeedupCalc.edgetpu_power_mw_str`  |                                —                                |  ~`{python} EdgeTPUSpeedupCalc.edgetpu_power_ratio_mult_str` higher |
-| **Energy per inference** |  ~`{python} EdgeTPUSpeedupCalc.cpu_energy_mj_str` |  ~`{python} EdgeTPUSpeedupCalc.edgetpu_energy_mj_str` |                                —                                | ~`{python} EdgeTPUSpeedupCalc.energy_ratio_mult_str` more efficient |
+| **Độ trễ suy luận** | ~`{python} EdgeTPUSpeedupCalc.cpu_latency_ms_str` | ~`{python} EdgeTPUSpeedupCalc.edgetpu_latency_ms_str` | `{python} EdgeTPUSpeedupCalc.inference_speedup_mult_str` nhanh hơn |                                  —                                  |
+| **Độ trễ đầu cuối** |   ~`{python} EdgeTPUSpeedupCalc.cpu_e2e_ms_str`   |   ~`{python} EdgeTPUSpeedupCalc.edgetpu_e2e_ms_str`   |                                —                                |      ~`{python} EdgeTPUSpeedupCalc.e2e_speedup_mult_str` nhanh hơn |
+| **Mức tiêu thụ công suất** |  ~`{python} EdgeTPUSpeedupCalc.cpu_power_mw_str`  |  ~`{python} EdgeTPUSpeedupCalc.edgetpu_power_mw_str`  |                                —                                |  ~`{python} EdgeTPUSpeedupCalc.edgetpu_power_ratio_mult_str` cao hơn |
+| **Năng lượng trên mỗi lần suy luận** |  ~`{python} EdgeTPUSpeedupCalc.cpu_energy_mj_str` |  ~`{python} EdgeTPUSpeedupCalc.edgetpu_energy_mj_str` |                                —                                | ~`{python} EdgeTPUSpeedupCalc.energy_ratio_mult_str` hiệu quả hơn |
 
 : **Kịch bản EdgeTPU so với Cortex-M7 MobileNetV2**: Các số liệu minh họa về độ trễ suy luận kiểu SingleStream, độ trễ đầu cuối, công suất và năng lượng cho thấy chi phí tiền xử lý làm thu hẹp mức tăng tốc đáng chú ý của bộ tăng tốc; đây không phải là các phép đo được kiểm soát. {#tbl-benchmarking-edgetpu-validation tbl-colwidths="[24,20,18,18,20]"}
 
@@ -3026,16 +3026,16 @@ Tuy nhiên, đo mức tiêu thụ công suất trong các hệ thống machine l
 \renewcommand{\arraystretch}{1.22}
 ```
 
-| **Category** | **Device Type**                 | **Power Consumption** |
+| **Danh mục** | **Loại thiết bị** | **Mức tiêu thụ công suất** |
 |:-------------|:--------------------------------|:---------------------:|
-| **Tiny**     | Neural Decision Processor (NDP) |         150 µW        |
-| **Tiny**     | M7 Microcontroller              |         25 mW         |
-| **Mobile**   | Raspberry Pi 4                  |         3.5 W         |
-| **Mobile**   | Smartphone                      |          4 W          |
-| **Edge**     | Smart Camera                    |        10–15 W        |
-| **Edge**     | Edge Server                     |        65–95 W        |
-| **Cloud**    | ML Server Node                  |       300–500 W       |
-| **Cloud**    | ML Server Rack                  |        4–10 kW        |
+| **Nhỏ** | Bộ xử lý quyết định thần kinh (NDP) |         150 µW        |
+| **Nhỏ** | Vi điều khiển M7 |         25 mW |
+| **Di động** | Raspberry Pi 4 |         3.5 W         |
+| **Di động** | Smartphone |          4 W          |
+| **Edge** | Camera thông minh |        10–15 W        |
+| **Edge** | Edge Server |        65–95 W        |
+| **Đám mây** | Nút máy chủ ML |       300–500 W       |
+| **Đám mây** | Giá máy chủ ML |        4–10 kW |
 
 : **Phổ tiêu thụ công suất**: Các điểm triển khai được liệt kê ở đây trải rộng gần tám bậc độ lớn về nhu cầu công suất, từ thiết bị TinyML ở mức microwatt (150 µW) đến các rack máy chủ ML ở mức kilowatt (10 kW); @fig-power-differentials còn mở rộng bức tranh này xuống 5.6 µW ở đáy TinyML và lên tới khoảng 498 kW ở trần cụm huấn luyện, bao phủ gần mười một bậc độ lớn. Phạm vi khổng lồ này giải thích vì sao không có một kỹ thuật đo hay chỉ số hiệu quả nào áp dụng cho mọi trường hợp: benchmark một bộ xử lý mạng nơ-ron 150 µW đòi hỏi dụng cụ đo lường hoàn toàn khác so với đo một rack máy chủ 10 kW. {#tbl-power tbl-colwidths="[22,42,36]"}
 
@@ -3313,11 +3313,11 @@ Hãy nhớ từ @sec-hardware-acceleration rằng di chuyển dữ liệu tốn 
 
 Các kiểu dữ liệu hẹp hơn thường cần ít năng lượng chuyển mạch và lưu trữ trên mỗi phép toán, vì vậy @tbl-benchmarking-energy-per-precision cho thấy một khoảng chênh `{python} EnergyPerOp.fp32_vs_int8_mult_str` về chi phí phép nhân giữa FP32 và INT8:
 
-| **Precision** |           **Multiplier Energy**            |            **Relative Cost**             |
+| **Độ chính xác** |           **Năng lượng bộ nhân** |            **Chi phí tương đối** |
 |:--------------|:------------------------------------------:|:----------------------------------------:|
-| **FP32**      | ~`{python} EnergyPerOp.energy_fp32_pj_str` | `{python} EnergyPerOp.fp32_rel_mult_str` |
-| **FP16**      | ~`{python} EnergyPerOp.energy_fp16_pj_str` | `{python} EnergyPerOp.fp16_rel_mult_str` |
-| **INT8**      | ~`{python} EnergyPerOp.energy_int8_pj_str` | `{python} EnergyPerOp.int8_rel_mult_str` |
+| **FP32** | ~`{python} EnergyPerOp.energy_fp32_pj_str` | `{python} EnergyPerOp.fp32_rel_mult_str` |
+| **FP16** | ~`{python} EnergyPerOp.energy_fp16_pj_str` | `{python} EnergyPerOp.fp16_rel_mult_str` |
+| **INT8** | ~`{python} EnergyPerOp.energy_int8_pj_str` | `{python} EnergyPerOp.int8_rel_mult_str` |
 
 : **Năng lượng tiêu thụ trên mỗi phép toán theo độ chính xác**: Chi phí năng lượng cho một phép nhân ở các định dạng FP32, FP16 và INT8. Chi phí tương đối được chuẩn hóa theo FP32, cho thấy vì sao các kiểu dữ liệu hẹp hơn giúp giảm năng lượng cho phép toán số học. Các giá trị này dựa trên ước tính 45 nm trong @horowitz2014 và @sec-appdx-machine-foundations-numbers-know-b531. {#tbl-benchmarking-energy-per-precision}
 
@@ -3325,12 +3325,12 @@ Trong mô hình linh kiện 45 nm này, một bộ nhân 8-bit tiêu thụ năng
 
 @Tbl-benchmarking-energy-memory-tier mở rộng phân tích sang việc truy cập bộ nhớ, với chi phí năng lượng trên mỗi byte ở từng cấp trong hệ thống phân cấp bộ nhớ:
 
-| **Memory Level** |                     **Energy per Byte**                     |                 **Relative Cost**                 |
+| **Mức bộ nhớ** |                     **Năng lượng trên mỗi Byte** |                 **Chi phí tương đối** |
 |:-----------------|:-----------------------------------------------------------:|:-------------------------------------------------:|
-| **Register**     |          ~`{python} EnergyPerOp.energy_reg_pj_str`          |      `{python} EnergyPerOp.reg_rel_mult_str`      |
-| **L1 Cache**     |           ~`{python} EnergyPerOp.energy_l1_pj_str`          |       `{python} EnergyPerOp.l1_rel_mult_str`      |
-| **L2 Cache**     |           ~`{python} EnergyPerOp.energy_l2_pj_str`          |       `{python} EnergyPerOp.l2_rel_mult_str`      |
-| **DRAM**         | ~`{python} EnergyBreakdownCalc.dram_energy_pj_per_byte_str` | `{python} EnergyPerOp.dram_vs_reg_ratio_mult_str` |
+| **Register** |          ~`{python} EnergyPerOp.energy_reg_pj_str`          |      `{python} EnergyPerOp.reg_rel_mult_str`      |
+| **L1 Cache** |           ~`{python} EnergyPerOp.energy_l1_pj_str`          |       `{python} EnergyPerOp.l1_rel_mult_str`      |
+| **L2 Cache** |           ~`{python} EnergyPerOp.energy_l2_pj_str`          |       `{python} EnergyPerOp.l2_rel_mult_str`      |
+| **DRAM** | ~`{python} EnergyBreakdownCalc.dram_energy_pj_per_byte_str` | `{python} EnergyPerOp.dram_vs_reg_ratio_mult_str` |
 
 : **Năng lượng truy cập bộ nhớ theo cấp**: Chi phí năng lượng trên mỗi byte trong hệ thống phân cấp từ thanh ghi đến DRAM. Chi phí tương đối được chuẩn hóa theo một lần đọc thanh ghi, làm rõ vì sao lưu lượng truy cập bộ nhớ ngoài chip chiếm phần lớn ngân sách năng lượng cho suy luận. Các giá trị này dựa trên cùng mô hình ước tính năng lượng chuẩn được sử dụng trong @horowitz2014 và @sec-appdx-machine-foundations-numbers-know-b531. {#tbl-benchmarking-energy-memory-tier}
 
@@ -3340,11 +3340,11 @@ Truy cập bộ nhớ là yếu tố chi phối: đọc một byte từ DRAM t�
 
 @Tbl-benchmarking-mobilenet-int8-energy kết hợp hai hiệu ứng trong một mô hình MobileNetV2 được đơn giản hóa có chủ đích. Mô hình này tính một lần đọc DRAM cho mỗi trọng số và áp mức năng lượng theo hệ số nhân cho mọi FLOP đã liệt kê, đồng thời không tính lưu lượng activation, hành vi cache, chi phí riêng cho phép cộng, chi phí điều khiển (control overhead) và công suất tĩnh (static power):
 
-| **Component**                                                | **FP32 (`{python} EnergyBreakdownCalc.m_fp32_mb_str`)** | **INT8 (`{python} EnergyBreakdownCalc.m_int8_mb_str`)** |                           **Savings**                            |
+| **Thành phần** | **FP32 (`{python} EnergyBreakdownCalc.m_fp32_mb_str`)** | **INT8 (`{python} EnergyBreakdownCalc.m_int8_mb_str`)** |                           **Tiết kiệm** |
 |:-------------------------------------------------------------|:-------------------------------------------------------:|:-------------------------------------------------------:|:----------------------------------------------------------------:|
-| **One weight read from DRAM**                                |      `{python} EnergyBreakdownCalc.e_fp32_load_str`     |      `{python} EnergyBreakdownCalc.e_int8_load_str`     |   `{python} EnergyBreakdownCalc.load_savings_factor_mult_str`    |
-| **Compute (`{python} EnergyBreakdownCalc.m_ops_mflop_str`)** |    `{python} EnergyBreakdownCalc.e_fp32_compute_str`    |    `{python} EnergyBreakdownCalc.e_int8_compute_str`    |  `{python} EnergyBreakdownCalc.compute_savings_factor_mult_str`  |
-| **Total**                                                    |   **`{python} EnergyBreakdownCalc.e_fp32_total_str`**   |   **`{python} EnergyBreakdownCalc.e_int8_total_str`**   | **`{python} EnergyBreakdownCalc.total_savings_factor_mult_str`** |
+| **Một trọng số được đọc từ DRAM** |      `{python} EnergyBreakdownCalc.e_fp32_load_str`     |      `{python} EnergyBreakdownCalc.e_int8_load_str`     |   `{python} EnergyBreakdownCalc.load_savings_factor_mult_str`    |
+| **Tính toán (`{python} EnergyBreakdownCalc.m_ops_mflop_str`)** |    `{python} EnergyBreakdownCalc.e_fp32_compute_str`    |    `{python} EnergyBreakdownCalc.e_int8_compute_str`    |  `{python} EnergyBreakdownCalc.compute_savings_factor_mult_str`  |
+| **Tổng cộng** |   **`{python} EnergyBreakdownCalc.e_fp32_total_str`**   |   **`{python} EnergyBreakdownCalc.e_int8_total_str`**   | **`{python} EnergyBreakdownCalc.total_savings_factor_mult_str`** |
 
 : **Ước tính năng lượng đơn giản của MobileNetV2 INT8**: Một lần đọc trọng số cộng với phần năng lượng theo hệ số nhân cho mỗi FLOP được liệt kê, theo mô hình năng lượng thành phần 45 nm. Đây không phải là phép đo suy luận ở cấp toàn thiết bị. {#tbl-benchmarking-mobilenet-int8-energy tbl-colwidths="[40,20,20,20]"}
 
@@ -4016,12 +4016,12 @@ Quay lại ngọn hải đăng \ref{lhs-benchmarking-mobilenet-deployment-valida
 
 Trong @tbl-benchmarking-mobilenet-int8-validation, có thể thấy độ chính xác tổng thể hầu như không đổi sau khi lượng tử hoá INT8 xuống `{python} MobileNetINT8Calc.mv2_size_int8_mb_str`, nhưng lỗi hiệu chuẩn và độ chính xác ở các trường hợp biên lại kể câu chuyện khác. ECE của mô hình INT8 tăng từ `{python} MobileNetINT8Calc.mv2_ece_fp32_str` lên `{python} MobileNetINT8Calc.mv2_ece_int8_str`; việc mức tăng này có chấp nhận được hay không phụ thuộc vào ngưỡng dung sai theo giao thức ECE cố định của tác vụ.
 
-| **Metric**             |                    **FP32**                    |                    **INT8**                    | **Acceptable?**                                                                                |
+| **Chỉ số** |                    **FP32** |                    **INT8** | **Chấp nhận được không?** |
 |:-----------------------|:----------------------------------------------:|:----------------------------------------------:|:-----------------------------------------------------------------------------------------------|
-| **Top-1 accuracy**     | `{python} MobileNetINT8Calc.mv2_acc_fp32_str`  | `{python} MobileNetINT8Calc.mv2_acc_int8_str`  | ✓ (`{python} MobileNetINT8Calc.mv2_acc_drop_tbl_str` drop; below 1 percentage-point threshold) |
-| **Top-5 accuracy**     | `{python} MobileNetINT8Calc.mv2_top5_fp32_str` | `{python} MobileNetINT8Calc.mv2_top5_int8_str` | ✓                                                                                              |
-| **Calibration ECE**    | `{python} MobileNetINT8Calc.mv2_ece_fp32_str`  | `{python} MobileNetINT8Calc.mv2_ece_int8_str`  | No (degraded)                                                                                  |
-| **Edge-case accuracy** | `{python} MobileNetINT8Calc.mv2_edge_fp32_str` | `{python} MobileNetINT8Calc.mv2_edge_int8_str` | No (drop of `{python} MobileNetINT8Calc.mv2_edge_drop_tbl_str`)                                |
+| **Độ chính xác Top-1** | `{python} MobileNetINT8Calc.mv2_acc_fp32_str`  | `{python} MobileNetINT8Calc.mv2_acc_int8_str`  | ✓ (`{python} MobileNetINT8Calc.mv2_acc_drop_tbl_str` giảm; dưới ngưỡng 1 điểm phần trăm) |
+| **Độ chính xác Top-5** | `{python} MobileNetINT8Calc.mv2_top5_fp32_str` | `{python} MobileNetINT8Calc.mv2_top5_int8_str` | ✓                                                                                              |
+| **ECE hiệu chuẩn** | `{python} MobileNetINT8Calc.mv2_ece_fp32_str`  | `{python} MobileNetINT8Calc.mv2_ece_int8_str`  | Không (suy giảm) |
+| **Độ chính xác trường hợp biên** | `{python} MobileNetINT8Calc.mv2_edge_fp32_str` | `{python} MobileNetINT8Calc.mv2_edge_int8_str` | Không (giảm `{python} MobileNetINT8Calc.mv2_edge_drop_tbl_str`) |
 
 : **Các chỉ số sau nén của MobileNetV2 INT8**: Bảng này minh hoạ các giá trị FP32 và INT8 cho độ chính xác top-1, top-5, lỗi hiệu chuẩn và độ chính xác ở các trường hợp biên, cho thấy độ chính xác tổng thể có thể che giấu sự suy giảm về hiệu chuẩn và hiệu suất ở các trường hợp đuôi (tail-case). {#tbl-benchmarking-mobilenet-int8-validation tbl-colwidths="[20,13,19,48]"}
 
@@ -4047,12 +4047,12 @@ Framework đánh giá nén hoạt động tốt khi tác vụ có nhãn ổn đ�
 
 Bảng phân loại các chỉ số LLM hữu ích trong @tbl-llm-benchmark-failure-taxonomy là công cụ hỗ trợ ra quyết định, không phải bảng xếp hạng. Các hàng trong bảng dùng Massive Multitask Language Understanding (MMLU)\index{MMLU!multitask language understanding},[^fn-mmlu-knowledge-benchmark] HELM (Holistic Evaluation of Language Models),[^fn-helm-holistic-evaluation] và perplexity\index{Perplexity!language model prediction measure}[^fn-perplexity-language-metric] làm ví dụ về các điểm số trả lời những câu hỏi triển khai khác nhau:
 
-| **Deployment failure to rule out**     | **Metric or benchmark family**                                 | **What the score reveals**                                                                                                                       | **What the score cannot prove**                                                                                                                        |
+| **Lỗi triển khai cần loại trừ** | **Nhóm chỉ số hoặc benchmark** | **Điểm số tiết lộ điều gì** | **Điểm số không thể chứng minh điều gì** |
 |:---------------------------------------|:---------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **The model recognizes facts poorly**  | MMLU (Massive Multitask Language Understanding)                | Broad factual and disciplinary knowledge across fifty-seven subjects, with scores interpretable against chance-level multiple-choice performance | Whether the model can generate grounded open-ended answers rather than choose among multiple-choice options                                            |
-| **The model is capable but unsafe**    | HELM (Holistic Evaluation of Language Models)                  | Accuracy alongside calibration, robustness, fairness, bias, toxicity, and efficiency                                                             | Whether one aggregate score captures the deployment risk; a model can be strong on accuracy and weak on calibration, safety, cost, or prompt stability |
-| **The model predicts its corpus well** | Perplexity                                                     | Held-out next-token prediction on the same corpus; a perplexity of 10 means the model is "10-way confused" on average                            | Whether generated answers are helpful, safe, or grounded outside that corpus                                                                           |
-| **The model feels slow in use**        | First-token latency, inter-token latency, and token throughput | Prompt-processing delay before generation starts and decode speed after generation begins                                                        | Whether a single throughput number hides poor interactive responsiveness, especially when batching improves throughput but worsens first-token latency |
+| **Mô hình nhận diện sự kiện kém** | MMLU (Massive Multitask Language Understanding) | Kiến thức thực tế và chuyên ngành rộng khắp năm mươi bảy môn học, với điểm số có thể diễn giải dựa trên hiệu suất trắc nghiệm ngẫu nhiên | Liệu mô hình có thể tạo ra các câu trả lời mở, có căn cứ thay vì chọn trong số các lựa chọn trắc nghiệm |
+| **Mô hình có khả năng nhưng không an toàn** | HELM (Holistic Evaluation of Language Models) | Độ chính xác cùng với hiệu chuẩn, mạnh mẽ, công bằng, độ chệch (bias), độc hại và hiệu quả | Liệu một điểm số tổng hợp có thể nắm bắt rủi ro triển khai; một mô hình có thể mạnh về độ chính xác nhưng yếu về hiệu chuẩn, an toàn, chi phí hoặc độ ổn định của prompt |
+| **Mô hình dự đoán corpus của nó tốt** | Perplexity | Dự đoán token tiếp theo trên cùng một corpus; độ phức tạp (perplexity) là 10 có nghĩa là mô hình "bị nhầm lẫn 10 cách" trung bình | Liệu các câu trả lời được tạo ra có hữu ích, an toàn hoặc có căn cứ bên ngoài corpus đó hay không |
+| **Mô hình có cảm giác chậm khi sử dụng** | Độ trễ token đầu tiên, độ trễ giữa các token và thông lượng token | Độ trễ xử lý prompt trước khi quá trình tạo bắt đầu và tốc độ giải mã sau khi quá trình tạo bắt đầu | Liệu một con số thông lượng duy nhất có che giấu khả năng phản hồi tương tác kém, đặc biệt khi batching cải thiện thông lượng nhưng làm trầm trọng thêm độ trễ token đầu tiên |
 
 : **Phân loại benchmark LLM theo lỗi triển khai**: Các chỉ số LLM hữu ích khi mỗi điểm số gắn với lỗi triển khai cụ thể mà nó nhằm loại trừ. Khả năng nhận diện, hành vi tổng thể, dự đoán trên corpus và khả năng phản hồi bộc lộ các rủi ro khác nhau, nên không có điểm số đơn lẻ nào đủ xác lập mức độ sẵn sàng đưa vào sản xuất. {#tbl-llm-benchmark-failure-taxonomy tbl-colwidths="[17,22,30,31]"}
 
@@ -4429,11 +4429,11 @@ Sự phụ thuộc lẫn nhau này gợi lại bức tranh D·A·M đã nêu ở
 
 Phân loại D·A·M\index{DAM taxonomy@D·A·M taxonomy!diagnostic framework} cung cấp một framework chẩn đoán để xác định có hệ thống trục nào đang giới hạn hiệu suất. @Sec-appdx-dam-taxonomy-diagnostic-summary-9f73 ánh xạ mỗi trục tới ràng buộc vật lý tương ứng và lộ trình tối ưu hóa để tháo gỡ, qua đó đưa ra bước chẩn đoán đầu tiên khi một benchmark cho thấy mức tận dụng thấp. @Tbl-dam-bottleneck cụ thể hóa cách tiếp cận này bằng cách bắt cặp từng trục D·A·M với ba loại nút thắt cổ chai cơ bản; @sec-appdx-dam-taxonomy cung cấp hướng dẫn chẩn đoán đầy đủ, bao gồm các công cụ profiling và các chỉ báo sàng lọc hiệu quả.
 
-| **Component** | **Compute-Bound**                                    | **Memory-Bound**                                     | **I/O-Bound**                                            |
+| **Thành phần** | **Giới hạn bởi tính toán (Compute-Bound)** | **Giới hạn bởi bộ nhớ (Memory-Bound)** | **Giới hạn bởi I/O (I/O-Bound)** |
 |:--------------|:-----------------------------------------------------|:-----------------------------------------------------|:---------------------------------------------------------|
-| **Data**      | Preprocessing too slow (augmentation, tokenization)  | Dataset exceeds RAM (spills to disk)                 | Storage cannot feed GPU (disk throughput limit)          |
-| **Algorithm** | Model too large for hardware (FLOPs exceed capacity) | Activations exceed memory (batch size limited)       | Gradient sync slower than compute (distributed training) |
-| **Machine**   | GPU utilization saturated (need faster accelerator)  | Memory bandwidth saturated (need more HBM bandwidth) | Network/PCIe bandwidth saturated (need faster links)     |
+| **Dữ liệu** | Tiền xử lý quá chậm (tăng cường, tokenization) | Tập dữ liệu vượt quá RAM (tràn ra đĩa) | Bộ nhớ không thể cung cấp cho GPU (giới hạn thông lượng đĩa) |
+| **Thuật toán** | Mô hình quá lớn so với phần cứng (FLOPs vượt quá dung lượng) | Activations vượt quá bộ nhớ (kích thước batch bị giới hạn) | Đồng bộ gradient chậm hơn tính toán (huấn luyện phân tán) |
+| **Máy** | Mức sử dụng GPU bão hòa (cần bộ tăng tốc nhanh hơn) | Băng thông bộ nhớ bão hòa (cần nhiều băng thông HBM hơn) | Băng thông mạng/PCIe bão hòa (cần các liên kết nhanh hơn) |
 
 : **Ma trận Chẩn đoán Nút thắt cổ chai D·A·M**: Mỗi ô mô tả một triệu chứng giới hạn hiệu suất, và mỗi hàng cho biết trục D·A·M nào cần được xem xét. Khi hiệu suất chững lại, ma trận này biến bước chẩn đoán đầu tiên thành một phép kiểm tra theo từng trục: Dữ liệu, Thuật toán hoặc Máy. {#tbl-dam-bottleneck tbl-colwidths="[12,29,30,29]"}
 
@@ -4460,13 +4460,13 @@ Trước khi triển khai, hãy kiểm chứng lại các kết luận từ benc
 %\renewcommand{\arraystretch}{1.4}
 ```
 
-| **Benchmark Assumption**       | **Production Reality**       | **Validation Approach**                |
+| **Giả định Benchmark** | **Thực tế sản xuất** | **Phương pháp xác thực** |
 |:-------------------------------|:-----------------------------|:---------------------------------------|
-| **Uniform request arrival**    | Bursty traffic patterns      | Load test with production trace replay |
-| **Clean, preprocessed inputs** | Variable quality inputs      | Evaluate on production data sample     |
-| **Warm system state**          | Cold starts, cache misses    | Measure cold-start performance         |
-| **Isolated execution**         | Resource contention          | Benchmark under realistic system load  |
-| **Fixed model version**        | A/B testing, gradual rollout | Establish baseline for comparison      |
+| **Lượt yêu cầu đến đồng đều** | Các mẫu lưu lượng truy cập đột biến | Kiểm tra tải với phát lại dấu vết sản xuất |
+| **Đầu vào sạch, đã được tiền xử lý** | Đầu vào chất lượng thay đổi | Đánh giá trên mẫu dữ liệu sản xuất |
+| **Trạng thái hệ thống ấm** | Khởi động lạnh, cache misses | Đo lường hiệu suất khởi động lạnh |
+| **Thực thi cô lập** | Tranh chấp tài nguyên | Benchmark dưới tải hệ thống thực tế |
+| **Phiên bản mô hình cố định** | A/B testing, triển khai dần dần | Thiết lập đường cơ sở để so sánh |
 
 : **Danh sách kiểm tra benchmark trước triển khai**: Mỗi hàng ghép một giả định ăn sẵn trong benchmark phòng thí nghiệm với thực tế sản xuất vi phạm nó và bước xác thực để thu hẹp khoảng cách. Một hệ thống dù vượt qua mọi benchmark trong phòng thí nghiệm vẫn có thể thất bại khi đưa vào sản xuất, trừ khi mỗi mục trong bảng này được kiểm tra độc lập dưới các điều kiện vận hành đại diện. {#tbl-predeployment-checklist}
 

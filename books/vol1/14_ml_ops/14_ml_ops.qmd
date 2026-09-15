@@ -151,12 +151,12 @@ trong đó $v$ xác định phiên bản và $\xi$ biểu diễn tính ngẫu nh
 
 **Tách biệt các mối quan tâm**\index{Separation of concerns!MLOps layers} phân tách các hệ thống MLOps thành các lớp chức năng riêng biệt có thể phát triển độc lập, như @tbl-mlops-layers minh họa:
 
-| **Layer**            | **Responsibility**                             | **Stability**                      |
+| **Lớp** | **Trách nhiệm** | **Độ ổn định** |
 |:---------------------|:-----------------------------------------------|:-----------------------------------|
-| **Data Layer**       | Feature computation, storage, serving          | Changes with data schema evolution |
-| **Training Layer**   | Model development, hyperparameter optimization | Changes with algorithm research    |
-| **Serving Layer**    | Inference, scaling, latency management         | Changes with traffic patterns      |
-| **Monitoring Layer** | Drift detection, performance tracking          | Changes with business requirements |
+| **Lớp Dữ liệu** | Tính toán đặc trưng, lưu trữ, phục vụ (serving) | Thay đổi theo sự phát triển của lược đồ dữ liệu |
+| **Lớp Huấn luyện** | Phát triển mô hình, tối ưu hóa siêu tham số | Thay đổi theo nghiên cứu thuật toán |
+| **Lớp Phục vụ (serving)** | Suy luận, khả năng mở rộng, quản lý độ trễ | Thay đổi theo các mẫu lưu lượng truy cập |
+| **Lớp Giám sát** | Phát hiện trôi dạt, theo dõi hiệu suất | Thay đổi theo yêu cầu kinh doanh |
 
 : **Tách biệt các mối quan tâm trong MLOps**: Mỗi lớp giải quyết một trách nhiệm riêng biệt và phát triển với tốc độ khác nhau trên các lớp dữ liệu, huấn luyện, phục vụ (serving) và giám sát. Sự tách biệt này cho phép mở rộng quy mô và cập nhật độc lập, giảm thiểu phạm vi ảnh hưởng khi cần thay đổi. {#tbl-mlops-layers}
 
@@ -227,24 +227,24 @@ Bất đẳng thức này là một ngưỡng quyết định, không phải cơ
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Degradation Type**     | **Detection Mechanism** | **Response Strategy**                  |
+| **Loại suy giảm** | **Cơ chế phát hiện** | **Chiến lược phản hồi** |
 |:-------------------------|:------------------------|:---------------------------------------|
-| **Sudden accuracy drop** | Threshold alerts        | Diagnose; roll back if release-related |
-| **Gradual drift**        | Trend analysis          | Diagnose, then retrain if warranted    |
-| **Subgroup degradation** | Cohort monitoring       | Targeted data collection               |
-| **Latency increase**     | Percentile tracking     | Infrastructure scaling                 |
+| **Giảm độ chính xác đột ngột** | Cảnh báo ngưỡng | Chẩn đoán; quay lại nếu liên quan đến bản phát hành |
+| **Trôi dạt dần dần** | Phân tích xu hướng | Chẩn đoán, sau đó huấn luyện lại nếu cần thiết |
+| **Suy giảm nhóm con** | Giám sát nhóm đối tượng | Thu thập dữ liệu có mục tiêu |
+| **Tăng độ trễ** | Theo dõi phân vị | Mở rộng cơ sở hạ tầng |
 
 : **Các chiến lược phát hiện suy giảm**: Bốn dấu hiệu lỗi được liên kết với các bộ phát hiện và phản ứng vận hành cụ thể. Sự suy giảm đột ngột đòi hỏi chẩn đoán ngay lập tức và có thể cần hoàn tác (rollback), trong khi suy giảm dần dần hoặc suy giảm theo nhóm con thì cần chẩn đoán trước khi huấn luyện lại hoặc thu thập dữ liệu có mục tiêu. {#tbl-degradation-types}
 
 Nguyên tắc này định hướng cách thiết kế các tín hiệu kích hoạt huấn luyện lại, ngưỡng xác thực và chiến lược triển khai sẽ được xem xét trong chương này. Các giá trị cụ thể khác nhau theo từng lĩnh vực, nhưng framework để ra quyết định đánh đổi có cơ sở thì vẫn giữ nguyên. Phân tích huấn luyện lại trong @sec-ml-operations-training-pipelines-2dcf xây dựng mô hình kinh tế đầy đủ, kèm các ví dụ minh họa cách tính khoảng thời gian huấn luyện lại tối ưu. Khi chuỗi nhân quả đã rõ, năm nguyên tắc này có thể đóng vai trò framework đánh giá gọn nhẹ cho công cụ và thực tiễn. Luận điểm cốt lõi của @tbl-mlops-principles-summary là mỗi nguyên tắc chỉ thực sự vận hành khi được gắn với một chỉ số đo lường cụ thể: ghép mỗi nguyên tắc với chỉ số then chốt của nó, từ hash của artifact đến giá trị ròng của huấn luyện lại, là điều giúp framework này có thể kiểm toán, thay vì chỉ mang tính kỳ vọng.
 
-| **Principle**              | **Core Insight**            | **Key Metric**         |
+| **Nguyên tắc** | **Thông tin chuyên sâu cốt lõi** | **Chỉ số chính** |
 |:---------------------------|:----------------------------|:-----------------------|
-| **Reproducibility**        | Version all artifacts       | Complete artifact hash |
-| **Separation of concerns** | Independent layer evolution | Layer coupling score   |
-| **Consistency**            | Training equals Serving     | Feature skew rate      |
-| **Observable degradation** | Make failures visible       | Time to detection      |
-| **Cost-aware automation**  | Optimize total cost         | Net retraining value   |
+| **Khả năng tái tạo** | Lập phiên bản tất cả các artifact | Hash artifact hoàn chỉnh |
+| **Tách biệt các mối quan tâm** | Sự phát triển lớp độc lập | Điểm ghép nối lớp |
+| **Tính nhất quán** | Huấn luyện tương đương với phục vụ (serving) | Tỷ lệ lệch đặc trưng |
+| **Suy giảm có thể quan sát được** | Làm cho các lỗi hiển thị | Thời gian phát hiện |
+| **Tự động hóa có tính đến chi phí** | Tối ưu hóa tổng chi phí | Giá trị huấn luyện lại ròng |
 
 : **Tóm tắt các nguyên tắc MLOps**: Tóm tắt nhanh năm nguyên tắc nền tảng, định hướng mọi quyết định về công cụ và thực hành MLOps. {#tbl-mlops-principles-summary}
 
@@ -261,12 +261,12 @@ Cách các nguyên tắc này thể hiện trong thực tế phụ thuộc vào 
 ```
 Các dạng lỗi chính và ưu tiên giám sát khác nhau giữa các nguyên mẫu khối lượng công việc (workload). Bảng @Tbl-monitoring-archetype-strategy so sánh bốn nguyên mẫu tiêu biểu theo kiểu trôi, chỉ số giám sát và ví dụ về tín hiệu kích hoạt huấn luyện lại:
 
-| **Archetype**                 | **Dominant Drift Pattern**                                       | **Primary Monitoring Metric**                       | **Example Retraining Trigger**                                                      |
+| **Nguyên mẫu** | **Mẫu trôi dạt chủ đạo** | **Chỉ số giám sát chính** | **Ví dụ về yếu tố kích hoạt huấn luyện lại** |
 |:------------------------------|:-----------------------------------------------------------------|:----------------------------------------------------|:------------------------------------------------------------------------------------|
-| **ResNet-50 (Compute Beast)** | Visual distribution shift (lighting, camera, new object classes) | Accuracy on holdout set (ground truth available)    | Accuracy drops > 2% from baseline  ($\sim$monthly for stable domains)               |
-| **GPT-2 (Bandwidth Hog)**     | Vocabulary drift, topic shift,  emerging entities                | Perplexity on live traffic (no ground truth needed) | Perplexity increases > 10%; new vocabulary detected ($\sim$weekly for news domains) |
-| **DLRM (Sparse Scatter)**     | User behavior shift, item catalog churn, cold-start items        | CTR/CVR delta vs. historical cohorts                | Engagement drops > 5%; catalog refresh ($\sim$daily for e-commerce)                 |
-| **DS-CNN (Tiny Constraint)**  | Acoustic environment change  (noise floor shift)                 | Duty cycle (wakeups/hour) + false positive rate     | False wake rate > 1%; battery drain  exceeds spec ($\sim$quarterly OTA update)      |
+| **ResNet-50 (Quái vật tính toán)** | Thay đổi phân phối hình ảnh (ánh sáng, máy ảnh, các lớp đối tượng mới) | Độ chính xác trên tập giữ lại (có sẵn sự thật cơ sở) | Độ chính xác giảm > 2% so với đường cơ sở ($\sim$hàng tháng đối với các lĩnh vực ổn định) |
+| **GPT-2 (Kẻ ngốn băng thông)** | Trôi dạt từ vựng, thay đổi chủ đề, các thực thể mới nổi | Perplexity trên lưu lượng truy cập trực tiếp (không cần sự thật cơ sở) | Perplexity tăng > 10%; phát hiện từ vựng mới ($\sim$hàng tuần đối với các lĩnh vực tin tức) |
+| **DLRM (Phân tán thưa thớt)** | Thay đổi hành vi người dùng, biến động danh mục mặt hàng, mặt hàng khởi động nguội | Chênh lệch CTR/CVR so với các nhóm đối tượng lịch sử | Mức độ tương tác giảm > 5%; làm mới danh mục ($\sim$hàng ngày đối với thương mại điện tử) |
+| **DS-CNN (Ràng buộc nhỏ)** | Thay đổi môi trường âm thanh (thay đổi ngưỡng nhiễu) | Chu kỳ hoạt động (số lần thức dậy/giờ) + tỷ lệ dương tính giả | Tỷ lệ thức dậy sai > 1%; hao pin vượt quá thông số kỹ thuật ($\sim$cập nhật OTA hàng quý) |
 
 : **Chiến lược giám sát theo nguyên mẫu khối lượng công việc (workload)**: Đây là những gợi ý ban đầu mang tính minh họa cho chiến lược giám sát. Các ngưỡng thực tế cần được hiệu chỉnh dựa trên độ trễ của nhãn, lưu lượng, rủi ro kinh doanh và ngân sách cho việc chịu đựng cảnh báo (alert-fatigue budget) của hệ thống đã triển khai. {#tbl-monitoring-archetype-strategy tbl-colwidths="[16,28,23,33]"}
 
@@ -286,13 +286,13 @@ Những nguyên tắc này nhằm ứng phó với các thách thức lặp đi 
 
 [^fn-dvc-data-versioning]: **DVC (Data Version Control)**\index{DVC!data versioning}: DVC mang cơ chế lập phiên bản kiểu Git đến các tập dữ liệu và tạo phẩm mô hình [@dvc], giải quyết khoảng trống về tạo phẩm mà @eq-model-reproducibility đã nêu rõ: nếu không có lập phiên bản dữ liệu, thành phần $\text{Data}_v$ không thể khôi phục, và không có tổ hợp commit mã nào có thể tái tạo lại mô hình đã được triển khai.
 
-| **Aspect**           | **DevOps**                                                                                                  | **MLOps**                                                                                                                    |
+| **Khía cạnh** | **DevOps** | **MLOps** |
 |:---------------------|:------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------|
-| **Objective**        | Streamlining software development and operations processes                                                  | Optimizing the lifecycle of machine learning models                                                                          |
-| **Methodology**      | Continuous Integration and Continuous Delivery (CI/CD) for software development                             | Similar to CI/CD but focuses on machine learning workflows                                                                   |
-| **Primary Tools**    | Version control (Git), CI/CD tools (Jenkins, Travis CI), Configuration management (Ansible, Puppet)         | Data versioning tools, Model training and deployment tools, CI/CD pipelines tailored for ML                                  |
-| **Primary Concerns** | Code integration, Testing, Release management, Automation, Infrastructure as code                           | Data management, Model versioning, Experiment tracking, Model deployment, Scalability of ML workflows                        |
-| **Typical Outcomes** | Faster and more reliable software releases, Improved collaboration between development and operations teams | Efficient management and deployment of machine learning models, Enhanced collaboration between data scientists and engineers |
+| **Mục tiêu** | Hợp lý hóa quy trình phát triển phần mềm và vận hành | Tối ưu hóa vòng đời của các mô hình machine learning |
+| **Phương pháp luận** | Tích hợp liên tục và Phân phối liên tục (CI/CD) cho phát triển phần mềm | Tương tự như CI/CD nhưng tập trung vào các quy trình làm việc machine learning |
+| **Công cụ chính** | Kiểm soát phiên bản (Git), công cụ CI/CD (Jenkins, Travis CI), Quản lý cấu hình (Ansible, Puppet) | Công cụ quản lý phiên bản dữ liệu, Công cụ huấn luyện và triển khai mô hình, pipeline CI/CD tùy chỉnh cho ML |
+| **Các mối quan tâm chính** | Tích hợp mã, Kiểm thử, Quản lý phát hành, Tự động hóa, Cơ sở hạ tầng dưới dạng mã | Quản lý dữ liệu, Quản lý phiên bản mô hình, Theo dõi thử nghiệm, Triển khai mô hình, Khả năng mở rộng của các quy trình làm việc machine learning |
+| **Kết quả điển hình** | Phát hành phần mềm nhanh hơn và đáng tin cậy hơn, Cải thiện sự hợp tác giữa các nhóm phát triển và vận hành | Quản lý và triển khai hiệu quả các mô hình machine learning, Tăng cường sự hợp tác giữa các nhà khoa học dữ liệu và kỹ sư |
 
 : **MLOps so với DevOps**: MLOps mở rộng các nguyên tắc của DevOps để đáp ứng các yêu cầu đặc thù của hệ thống machine learning, bao gồm lập phiên bản dữ liệu và mô hình, cùng giám sát liên tục hiệu suất mô hình và trôi dữ liệu. MLOps phối hợp nhiều bên liên quan hơn và nhấn mạnh tính tái tạo và khả năng mở rộng vượt ra ngoài các quy trình phát triển phần mềm truyền thống. {#tbl-mlops tbl-colwidths="[12,42,46]"}
 
@@ -707,12 +707,12 @@ Cơ sở hạ tầng phát triển biến các kiểu nợ đã chẩn đoán th
 \renewcommand{\arraystretch}{1.2}
 ```
 
-| **Infrastructure Component** | **Principle Implemented**          | **Debt Pattern Addressed**                  |
+| **Thành phần cơ sở hạ tầng** | **Nguyên tắc được triển khai** | **Mẫu nợ được giải quyết** |
 |:-----------------------------|:-----------------------------------|:--------------------------------------------|
-| **Feature stores**           | Consistency Imperative             | Data dependency debt, training-serving skew |
-| **Versioning systems**       | Reproducibility Through Versioning | Configuration debt, correction cascades     |
-| **CI/CD pipelines**          | Cost-Aware Automation              | Pipeline debt, boundary erosion             |
-| **Monitoring systems**       | Observable Degradation             | Feedback loops, silent failures             |
+| **Kho đặc trưng** | Yêu cầu nhất quán | Nợ phụ thuộc dữ liệu, độ lệch huấn luyện-suy luận |
+| **Hệ thống quản lý phiên bản** | Khả năng tái tạo thông qua quản lý phiên bản | Nợ cấu hình, thác sửa lỗi |
+| **Các pipeline CI/CD** | Tự động hóa có ý thức về chi phí | Nợ pipeline, xói mòn ranh giới |
+| **Hệ thống giám sát** | Suy giảm có thể quan sát được | Vòng lặp phản hồi, lỗi âm thầm |
 
 : **Cơ sở hạ tầng MLOps như một giải pháp khắc phục nợ**: Mỗi thành phần hạ tầng ứng với một lớp nợ kỹ thuật quan sát được trong các hệ thống ML sản xuất. Kho đặc trưng có thể giảm độ lệch giữa huấn luyện và phục vụ (serving) bằng cách tái sử dụng định nghĩa và giá trị đặc trưng; hệ thống quản lý phiên bản hỗ trợ khả năng tái tạo; các pipeline CI/CD tự động hóa kiểm soát triển khai; hệ thống giám sát có thể đưa sự suy giảm âm thầm lên bề mặt trước khi người dùng phát hiện. {#tbl-mlops-infrastructure-debt}
 
@@ -829,12 +829,12 @@ Lệch huấn luyện-phục vụ\index{Training-serving skew!silent accuracy de
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Skew Type**               | **Example**                                   | **Detection Method**                            |
+| **Loại độ lệch** | **Ví dụ** | **Phương pháp phát hiện** |
 |:----------------------------|:----------------------------------------------|:------------------------------------------------|
-| **Feature preprocessing**   | Normalization uses different statistics       | Statistical comparison of feature distributions |
-| **Missing data handling**   | Training fills NaN with mean; serving uses 0  | Schema validation with explicit null handling   |
-| **Time-dependent features** | Features computed with different time cutoffs | Timestamp validation in feature pipelines       |
-| **Library version drift**   | NumPy or Pandas version differences           | Environment hash comparison                     |
+| **Tiền xử lý đặc trưng** | Chuẩn hóa sử dụng các thống kê khác nhau | So sánh thống kê các phân bố đặc trưng |
+| **Xử lý dữ liệu thiếu** | Huấn luyện điền NaN bằng giá trị trung bình; suy luận sử dụng 0 | Xác thực lược đồ với xử lý null rõ ràng |
+| **Các đặc trưng phụ thuộc thời gian** | Các đặc trưng được tính toán với các ngưỡng thời gian khác nhau | Xác thực dấu thời gian trong các pipeline đặc trưng |
+| **Lệch phiên bản thư viện** | Sự khác biệt phiên bản NumPy hoặc Pandas | So sánh hash môi trường |
 
 : **Các loại lệch giữa huấn luyện và phục vụ**: Mỗi loại cần các chiến lược phát hiện và phòng ngừa khác nhau. Lệch về lược đồ và tiền xử lý xuất phát từ khác biệt trong mã và cần được xác minh tính tương đồng; dùng chung logic đặc trưng, bao gồm cả kho đặc trưng (nếu phù hợp), có thể giảm các lệch này. Trong khi đó, lệch về phân phối dữ liệu cần được giám sát thống kê so với đường cơ sở huấn luyện. Lệch về thời gian đòi hỏi phân tích kỹ lưỡng về độ cập nhật của đặc trưng giữa ngữ cảnh huấn luyện và phục vụ. {#tbl-training-serving-skew tbl-colwidths="[23,39,38]"}
 
@@ -1267,12 +1267,12 @@ Các thực hành này hội tụ về một ranh giới vận hành chung. Khi 
 
 Các pipeline huấn luyện tự động đặt ra một quyết định quan trọng về tần suất chạy. Quyết định thời điểm huấn luyện lại một mô hình\index{Retraining!decision framework}\index{Retraining!scheduled vs. triggered} đòi hỏi cân bằng giữa duy trì độ chính xác và chi phí tính toán. Có ba chiến lược phổ biến, mỗi chiến lược có những đánh đổi riêng. @Tbl-retraining-schedules đưa ra các lịch trình minh họa theo lĩnh vực, từ huấn luyện lại hằng ngày cho dự đoán nhấp quảng cáo biến động nhanh đến cập nhật hằng quý cho các ứng dụng ảnh y tế ổn định:
 
-| **Domain**              | **Illustrative Schedule** | **Rationale**                       |
+| **Lĩnh vực** | **Lịch trình minh họa** | **Cơ sở lý luận** |
 |:------------------------|:--------------------------|:------------------------------------|
-| **Ad click prediction** | Daily                     | User interests shift rapidly        |
-| **Fraud detection**     | Weekly                    | Attack patterns evolve continuously |
-| **Demand forecasting**  | Monthly                   | Seasonal patterns change slowly     |
-| **Medical imaging**     | Quarterly                 | Disease presentations are stable    |
+| **Dự đoán nhấp quảng cáo** | Hàng ngày | Sở thích người dùng thay đổi nhanh chóng |
+| **Phát hiện gian lận** | Hàng tuần | Các mẫu tấn công liên tục phát triển |
+| **Dự báo nhu cầu** | Hàng tháng | Các mẫu theo mùa thay đổi chậm |
+| **Chẩn đoán hình ảnh y tế** | Hàng quý | Biểu hiện bệnh ổn định |
 
 : **Lịch trình huấn luyện lại minh họa theo lĩnh vực**: Đây là các điểm khởi đầu; tần suất thực tế phụ thuộc vào tốc độ trôi dạt quan sát được và tác động kinh doanh, và các tổ chức thường hiệu chỉnh chúng dựa trên kinh nghiệm vận hành. {#tbl-retraining-schedules}
 
@@ -1439,13 +1439,13 @@ Khi chúng ta giả định $\gamma T \ll 1$, khai triển Taylor của hàm mũ
 \renewcommand{\arraystretch}{1.2}
 ```
 
-| **Parameter**           |                   **Value**                    | **Description**                                                        |
+| **Tham số** |                   **Giá trị** | **Mô tả** |
 |:------------------------|:----------------------------------------------:|:-----------------------------------------------------------------------|
-| **$Q$**                 |      `{python} RetrainingInterval.Q_str`       | Transactions per day                                                   |
-| **$V$**                 |    `{python} RetrainingInterval.V_usd_str`     | Value per query for a unit accuracy change                             |
-| **$\text{Accuracy}_0$** |      `{python} RetrainingInterval.A0_str`      | Initial accuracy                                                       |
-| **$\gamma$**            |    `{python} RetrainingInterval.gamma_str`     | Daily decay rate (`{python} RetrainingInterval.gamma_pct_str` per day) |
-| **Retraining Cost**     | `{python} RetrainingInterval.retrain_cost_str` | Total retraining expense                                               |
+| **$Q$**                 |      `{python} RetrainingInterval.Q_str`       | Giao dịch mỗi ngày |
+| **$V$**                 |    `{python} RetrainingInterval.V_usd_str`     | Giá trị mỗi truy vấn cho một thay đổi đơn vị độ chính xác |
+| **$\text{Accuracy}_0$** |      `{python} RetrainingInterval.A0_str`      | Độ chính xác ban đầu |
+| **$\gamma$**            |    `{python} RetrainingInterval.gamma_str`     | Tốc độ suy giảm hàng ngày (`{python} RetrainingInterval.gamma_pct_str` mỗi ngày) |
+| **Chi phí huấn luyện lại** | `{python} RetrainingInterval.retrain_cost_str` | Tổng chi phí huấn luyện lại |
 
 : **Các Tham số Quyết định Huấn luyện lại**: Các giá trị ví dụ cho hệ thống phát hiện gian lận, xử lý 1.000.000 giao dịch mỗi ngày. {#tbl-retraining-parameters}
 
@@ -1453,11 +1453,11 @@ Khi chúng ta giả định $\gamma T \ll 1$, khai triển Taylor của hàm mũ
 
 Theo công thức xấp xỉ căn bậc hai, $T^*$ tỷ lệ thuận với căn bậc hai của các tham số này. @Tbl-retraining-sensitivity cho thấy rằng sự thay đổi gấp bốn lần trong chi phí huấn luyện lại, khối lượng truy vấn hoặc tốc độ suy giảm sẽ khiến khoảng thời gian xấp xỉ thay đổi gấp đôi.
 
-| **Change**                    |        **Effect on $T^*$** |
+| **Thay đổi** |        **Ảnh hưởng đến $T^*$** |
 |:------------------------------|---------------------------:|
-| **4$\times$ retraining cost** |  2$\times$ longer interval |
-| **4$\times$ query volume**    | 2$\times$ shorter interval |
-| **4$\times$ decay rate**      | 2$\times$ shorter interval |
+| **Chi phí huấn luyện lại gấp 4 lần** |  Khoảng thời gian dài hơn 2 lần |
+| **Khối lượng truy vấn gấp 4 lần** | Khoảng thời gian ngắn hơn 2 lần |
+| **Tốc độ suy giảm gấp 4 lần** | Khoảng thời gian ngắn hơn 2 lần |
 
 : **Độ nhạy của Khoảng thời gian Huấn luyện lại**: Theo công thức xấp xỉ căn bậc hai, sự thay đổi gấp bốn lần ở một tham số đầu vào chỉ làm thay đổi khoảng thời gian gấp đôi, và chiều thay đổi cũng khác nhau. Chi phí huấn luyện lại cao hơn sẽ làm kéo dài khoảng thời gian, trong khi khối lượng truy vấn lớn hơn hoặc tốc độ suy giảm nhanh hơn sẽ làm rút ngắn khoảng thời gian đó. {#tbl-retraining-sensitivity}
 
@@ -1619,11 +1619,11 @@ Tầng nhanh nhất, **rollback tức thì**\index{Rollback!immediate}, dùng đ
 
 @Tbl-rollback-patterns tóm tắt các mẫu triển khai cho từng loại rollback:
 
-| **Rollback Type** | **Trigger**               | **Implementation**               | **State Handling**              |
+| **Loại hoàn tác** | **Kích hoạt** | **Triển khai** | **Xử lý trạng thái** |
 |:------------------|:--------------------------|:---------------------------------|:--------------------------------|
-| **Immediate**     | Serving errors, crashes   | Hot standby with instant switch  | Stateless—no special handling   |
-| **Rapid**         | Canary metric degradation | Registry-based redeployment      | Clear caches, restart sessions  |
-| **Delayed**       | Business metric decline   | Full redeployment with migration | Migrate state, replay if needed |
+| **Ngay lập tức** | Lỗi phục vụ (serving), sự cố | Dự phòng nóng với chuyển đổi tức thì | Không trạng thái—không xử lý đặc biệt |
+| **Nhanh chóng** | Suy giảm chỉ số Canary | Triển khai lại dựa trên Registry | Xóa cache, khởi động lại phiên |
+| **Trì hoãn** | Các chỉ số kinh doanh suy giảm | Triển khai lại hoàn toàn kèm di chuyển | Di chuyển trạng thái, phát lại nếu cần |
 
 : **Các mẫu Rollback theo kịch bản**: Mỗi loại rollback đòi hỏi sự hỗ trợ hạ tầng và chiến lược xử lý trạng thái khác nhau. Rollback tức thì yêu cầu các hệ thống dự phòng luôn ở trạng thái sẵn sàng hoạt động (always-warm standbys); còn rollback chậm có thể cần đến các quy trình di chuyển dữ liệu. {#tbl-rollback-patterns}
 
@@ -1723,12 +1723,12 @@ Các hệ thống khuyến nghị và xếp hạng xuất hiện hiệu ứng ca
 %\renewcommand{\arraystretch}{1.3}
 ```
 
-| **Primary Metric**          | **Guardrails** | **Decision**                                                                                                             |
+| **Chỉ số chính** | **Rào chắn bảo vệ** | **Quyết định** |
 |:----------------------------|:---------------|:-------------------------------------------------------------------------------------------------------------------------|
-| **Significant improvement** | All pass       | Ship new model                                                                                                           |
-| **Significant improvement** | Some fail      | Investigate trade-offs, may need model iteration                                                                         |
-| **No significant change**   | All pass       | Evidence inconclusive; retain current model unless a prespecified equivalence or noninferiority test supports the change |
-| **Significant degradation** | N/A            | Do not ship; investigate root cause                                                                                      |
+| **Cải thiện đáng kể** | Tất cả đều đạt | Triển khai mô hình mới |
+| **Cải thiện đáng kể** | Một số thất bại | Điều tra các đánh đổi, có thể cần lặp lại mô hình |
+| **Không có thay đổi đáng kể** | Tất cả đều đạt | Bằng chứng không thuyết phục; giữ lại mô hình hiện tại trừ khi một thử nghiệm tương đương hoặc không kém hơn được chỉ định trước hỗ trợ thay đổi |
+| **Suy giảm đáng kể** | N/A            | Không triển khai; điều tra nguyên nhân gốc rễ |
 
 : **Ma trận Quyết định Kiểm thử A/B**: Các quyết định triển khai cần xem xét cả các chỉ số chính và các chỉ số bảo vệ. Những cải tiến đạt được nhưng vi phạm các chỉ số bảo vệ đòi hỏi phân tích đánh đổi cẩn thận, thay vì tự động triển khai. {#tbl-ab-test-decisions tbl-colwidths="[25,15,60]"}
 
@@ -1763,14 +1763,14 @@ Giới hạn vận hành đầu tiên là cách biểu diễn. Open Neural Netwo
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Framework**    | **Source Formats**                             | **Target Hardware**           | **Key Optimizations**                                   |
+| **Framework** | **Định dạng nguồn** | **Phần cứng mục tiêu** | **Các tối ưu hóa chính** |
 |:-----------------|:-----------------------------------------------|:------------------------------|:--------------------------------------------------------|
-| **ONNX Runtime** | PyTorch, TF, Keras, scikit                     | CPU, GPU, NPU                 | Graph optimization, operator fusion, quantization       |
-| **TensorRT**     | ONNX, TF, PyTorch                              | NVIDIA GPU only               | Kernel auto-tuning, precision calibration, layer fusion |
-| **OpenVINO**     | ONNX, TensorFlow/TFLite, PyTorch, PaddlePaddle | Intel CPU, GPU, NPU           | Model compression, async execution, caching             |
-| **TF-TRT**       | TensorFlow                                     | NVIDIA GPU                    | TensorRT integration within TensorFlow graph            |
-| **Core ML**      | TensorFlow, PyTorch                            | Apple Neural Engine, GPU, CPU | Unified format for Apple devices, on-device inference   |
-| **TFLite**       | TensorFlow, Keras                              | Mobile CPU, GPU, Edge TPU     | Quantization, delegate support, model compression       |
+| **ONNX Runtime** | PyTorch, TF, Keras, scikit | CPU, GPU, NPU | Tối ưu hóa đồ thị, hợp nhất toán tử, lượng tử hoá |
+| **TensorRT** | ONNX, TF, PyTorch | Chỉ GPU NVIDIA | Tự động điều chỉnh kernel, hiệu chuẩn độ chính xác, hợp nhất lớp |
+| **OpenVINO** | ONNX, TensorFlow/TFLite, PyTorch, PaddlePaddle | Intel CPU, GPU, NPU | Nén mô hình, thực thi bất đồng bộ, caching |
+| **TF-TRT** | TensorFlow | NVIDIA GPU | Tích hợp TensorRT trong đồ thị TensorFlow |
+| **Core ML** | TensorFlow, PyTorch | Apple Neural Engine, GPU, CPU | Định dạng thống nhất cho thiết bị Apple, suy luận trên thiết bị |
+| **TFLite** | TensorFlow, Keras | Mobile CPU, GPU, Edge TPU | Lượng tử hoá, delegate support, nén mô hình |
 
 : **Các Framework Tối ưu hoá Mô hình**: Sáu framework đại diện này khác nhau về các định dạng nguồn được hỗ trợ, phần cứng mục tiêu và cơ chế tối ưu hoá. Cụ thể, TensorRT và TF-TRT chuyên biệt cho các sản phẩm của NVIDIA, trong khi ONNX Runtime và OpenVINO hỗ trợ nhiều loại bộ xử lý khác nhau. {#tbl-model-optimization-frameworks tbl-colwidths="[15,31,22,32]"}
 
@@ -1869,14 +1869,14 @@ class LatencyBudget:
 
 Một dịch vụ có SLO p99 là `{python} LatencyBudget.slo_p99_ms_str`, và ngân sách dành cho suy luận của mô hình là `{python} LatencyBudget.inference_ms_str`; phần còn lại `{python} LatencyBudget.non_inference_ms_str` phải bao phủ mọi công đoạn khác trên đường đi của yêu cầu. @Tbl-latency-budget-components phân bổ ngân sách này cho toàn bộ vòng đời của một yêu cầu.
 
-| **Component**                                     |                   **Budget Share**                   |                 **p99 Budget**                | **Optimization Lever**                       |
+| **Thành phần** |                   **Phần ngân sách** |                 **Ngân sách p99** | **Đòn bẩy tối ưu hóa** |
 |:--------------------------------------------------|:----------------------------------------------------:|:---------------------------------------------:|:---------------------------------------------|
-| **Network RTT**\index{Network RTT!latency budget} |    `{python} LatencyBudget.network_share_pct_str`    |    `{python} LatencyBudget.network_ms_str`    | Edge deployment, connection pooling          |
-| **Feature retrieval**                             | `{python} LatencyBudget.feature_fetch_share_pct_str` | `{python} LatencyBudget.feature_fetch_ms_str` | Feature caching, precomputation              |
-| **Request parsing**                               | `{python} LatencyBudget.request_parse_share_pct_str` | `{python} LatencyBudget.request_parse_ms_str` | Binary protocols (gRPC), schema optimization |
-| **Model inference**                               |   `{python} LatencyBudget.inference_share_pct_str`   |   `{python} LatencyBudget.inference_ms_str`   | Quantization, batching, model distillation   |
-| **Postprocessing**                                |   `{python} LatencyBudget.post_proc_share_pct_str`   |   `{python} LatencyBudget.post_proc_ms_str`   | Async processing, result caching             |
-| **Response serialization**                        | `{python} LatencyBudget.serialization_share_pct_str` | `{python} LatencyBudget.serialization_ms_str` | Efficient formats (Protobuf, MessagePack)    |
+| **Network RTT** |    `{python} LatencyBudget.network_share_pct_str`    |    `{python} LatencyBudget.network_ms_str`    | Triển khai edge, connection pooling |
+| **Truy xuất đặc trưng** | `{python} LatencyBudget.feature_fetch_share_pct_str` | `{python} LatencyBudget.feature_fetch_ms_str` | Lưu trữ đặc trưng vào cache, tính toán trước |
+| **Phân tích cú pháp yêu cầu** | `{python} LatencyBudget.request_parse_share_pct_str` | `{python} LatencyBudget.request_parse_ms_str` | Giao thức nhị phân (gRPC), tối ưu hóa lược đồ |
+| **Suy luận mô hình** |   `{python} LatencyBudget.inference_share_pct_str`   |   `{python} LatencyBudget.inference_ms_str`   | Lượng tử hoá, batching, chưng cất mô hình |
+| **Hậu xử lý** |   `{python} LatencyBudget.post_proc_share_pct_str`   |   `{python} LatencyBudget.post_proc_ms_str`   | Xử lý bất đồng bộ, lưu trữ kết quả vào cache |
+| **Tuần tự hóa phản hồi** | `{python} LatencyBudget.serialization_share_pct_str` | `{python} LatencyBudget.serialization_ms_str` | Định dạng hiệu quả (Protobuf, MessagePack) |
 
 : **Các thành phần của Ngân sách Độ trễ**: Ví dụ minh họa cách phân bổ SLO p99 `{python} LatencyBudget.slo_p99_ms_str` cho toàn bộ vòng đời của một yêu cầu. Suy luận của mô hình chiếm `{python} LatencyBudget.inference_pct_str` tổng độ trễ; phần lớn còn lại thuộc về mạng, truy xuất đặc trưng, phân tích cú pháp, xử lý hậu kỳ và tuần tự hóa. Cột đòn bẩy tối ưu hóa chỉ ra nơi có thể giảm từng thành phần. {#tbl-latency-budget-components tbl-colwidths="[23,15,19,43]"}
 
@@ -1897,14 +1897,14 @@ Ngoài ngân sách độ trễ, đưa hệ thống phục vụ (serving) vào v�
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Technique**                                                                      | **Description**                                                     | **Example System**              |
+| **Kỹ thuật** | **Mô tả** | **Hệ thống ví dụ** |
 |:-----------------------------------------------------------------------------------|:--------------------------------------------------------------------|:--------------------------------|
-| **Request scheduling & batching**\index{Batching!request, throughput optimization} | Groups inference requests to improve throughput and reduce overhead | Clipper [@crankshaw2017clipper] |
-| **Instance Selection & Routing**                                                   | Dynamically assigns requests to model variants based on constraints | INFaaS [@romero2021infaas]      |
-| **Predictive Autoscaling**                                                         | Adds capacity ahead of demand spikes to meet latency SLOs           | MArk [@zhang2019mark]           |
-| **Autoscaling**                                                                    | Adjusts model instances to match workload demands                   | INFaaS                          |
-| **Model Orchestration**                                                            | Coordinates execution across model components or pipelines          | AlpaServe [@li2023alpaserve]    |
-| **Execution Time Prediction**                                                      | Forecasts latency to optimize request scheduling                    | Clockwork [@gujarati2020]       |
+| **Lập lịch yêu cầu & batching** | Nhóm các yêu cầu suy luận để cải thiện thông lượng và giảm chi phí chung | Clipper [@crankshaw2017clipper] |
+| **Chọn và định tuyến Instance** | Gán động các yêu cầu cho các biến thể mô hình dựa trên các ràng buộc | INFaaS [@romero2021infaas] |
+| **Tự động điều chỉnh quy mô dự đoán** | Thêm dung lượng trước các đợt tăng đột biến nhu cầu để đáp ứng các SLO về độ trễ | MArk [@zhang2019mark] |
+| **Tự động điều chỉnh quy mô** | Điều chỉnh các instance mô hình để phù hợp với nhu cầu khối lượng công việc (workload) | INFaaS |
+| **Điều phối mô hình** | Điều phối việc thực thi trên các thành phần mô hình hoặc các pipeline | AlpaServe [@li2023alpaserve] |
+| **Dự đoán thời gian thực thi** | Dự báo độ trễ để tối ưu hóa việc lập lịch yêu cầu | Clockwork [@gujarati2020] |
 
 : **Các kỹ thuật hệ thống phục vụ (serving)**: Hạ tầng ML-as-a-service có khả năng mở rộng dựa vào các kỹ thuật như lập lịch yêu cầu và lựa chọn instance để tối ưu hóa sử dụng tài nguyên và giảm độ trễ dưới tải cao. Về lý thuyết xếp hàng và các chiến lược batch nền tảng, xem @sec-model-serving. {#tbl-serving-techniques tbl-colwidths="[29,41,30]"}
 
@@ -1974,12 +1974,12 @@ Các chỉ số sử dụng GPU có thể gây hiểu lầm cho người vận h
 
 @Tbl-gpu-utilization-patterns phân biệt các mô hình này và các chiến lược tối ưu hóa tương ứng:
 
-| **Pattern**       |   **GPU Util**   | **Memory bandwidth util.** | **Optimization Strategy**                           |
+| **Mẫu** |   **Mức sử dụng GPU** | **Mức sử dụng băng thông bộ nhớ** | **Chiến lược tối ưu hóa** |
 |:------------------|:----------------:|:--------------------------:|:----------------------------------------------------|
-| **Compute-bound** |       >85%       |            <70%            | Larger batch sizes, tensor parallelism within node  |
-| **Memory-bound**  |      50–85%      |            >85%            | Reduce model size, quantize, optimize memory access |
-| **I/O-bound**     |       <50%       |            <50%            | Improve data pipeline, prefetch inputs, use SSDs    |
-| **Batch-starved** | Variable (spiky) |          Variable          | Dynamic batching, request queuing on single server  |
+| **Giới hạn bởi tính toán** |       >85%       |            <70%            | Kích thước batch lớn hơn, tensor parallelism trong một node |
+| **Giới hạn bởi bộ nhớ** |      50–85%      |            >85%            | Giảm kích thước mô hình, lượng tử hoá, tối ưu hóa truy cập bộ nhớ |
+| **Giới hạn bởi I/O** |       <50%       |            <50%            | Cải thiện pipeline dữ liệu, tìm nạp trước đầu vào, sử dụng SSD |
+| **Thiếu batch** | Thay đổi (có gai) |          Thay đổi | Batching động, xếp hàng đợi yêu cầu trên một máy chủ |
 
 : **Các kiểu sử dụng GPU**: Mỗi kiểu sử dụng GPU cần những cách tối ưu khác nhau. Chẳng hạn, nếu GPU sử dụng cao nhưng băng thông bộ nhớ thấp, đó thường là khối lượng công việc bị giới hạn bởi tính toán và có thể hưởng lợi từ việc tăng song song hóa. Ngược lại, nếu băng thông bộ nhớ cao nhưng GPU chỉ sử dụng ở mức vừa phải, đó thường là khối lượng công việc bị giới hạn bởi bộ nhớ và cần tối ưu hóa mô hình. {#tbl-gpu-utilization-patterns tbl-colwidths="[15,15,23,47]"}
 
@@ -2002,13 +2002,13 @@ Hiệu năng phục vụ mô hình phụ thuộc rất lớn vào cách tận d�
 %\renewcommand{\arraystretch}{1.35}
 ```
 
-| **Memory Level**             | **Bandwidth** | **Typical Contents** |
+| **Cấp độ bộ nhớ** | **Băng thông** | **Nội dung điển hình** |
 |:-----------------------------|:-------------:|:---------------------|
-| **L2 Cache (40 MB on A100)** |    ~3 TB/s    | Cached working set   |
-| **HBM2e GPU Memory (80 GB)** |    ~2 TB/s    | Model                |
-| **PCIe Gen4 x16 to CPU**     |    ~32 GB/s   | Activations          |
-| **System RAM (512 GB)**      |   ~200 GB/s   | Batched inputs       |
-| **NVMe SSD**                 |    ~7 GB/s    | Model swap           |
+| **L2 Cache (40 MB trên A100)** |    ~3 TB/s | Tập làm việc được lưu vào cache |
+| **Bộ nhớ GPU HBM2e (80 GB)** |    ~2 TB/s | Mô hình |
+| **PCIe Gen4 x16 đến CPU** |    ~32 GB/s | Activations |
+| **RAM hệ thống (512 GB)** |   ~200 GB/s | Đầu vào theo batch |
+| **NVMe SSD** |    ~7 GB/s | Hoán đổi mô hình |
 
 : **Hệ thống phân cấp bộ nhớ GPU và băng thông**: Mỗi cấp độ đánh đổi giữa dung lượng và tốc độ. L2 lưu cache một tập làm việc nhỏ, đang hoạt động, còn toàn bộ tham số của mô hình thường nằm trong HBM. Có thể chuyển bớt dữ liệu sang bộ nhớ máy chủ hoặc lưu trữ để hỗ trợ các mô hình vượt quá bộ nhớ GPU, nhưng độ trễ truyền dữ liệu có thể chiếm phần lớn thời gian suy luận. {#tbl-gpu-memory-hierarchy}
 
@@ -2391,10 +2391,10 @@ Kết quả là một tỷ lệ chi phí vận hành, không phải chi phí thi
 
 Cả hai khối lượng dữ liệu này đều được tính theo cùng một quy trình hai bước. Khi thu thập đầy đủ, dữ liệu đo từ xa của mỗi yêu cầu sẽ đi vào luồng: `{python} ObservabilitySampling.request_rate_m_req_per_s_str` $\times$ `{python} ObservabilitySampling.telemetry_kb_str` cho mỗi yêu cầu = `{python} ObservabilitySampling.high_gb_per_s_str`. Nếu chỉ giữ lại một trong `{python} ObservabilitySampling.sampling_ratio_str` dấu vết yêu cầu, lượng dữ liệu nhập trung bình sẽ giảm xuống còn `{python} ObservabilitySampling.low_mb_per_s_str`. Việc gom batch các dấu vết đã lấy mẫu sau mỗi `{python} ObservabilitySampling.low_seconds_str` chỉ thay đổi thời gian phân phối, không làm thay đổi tốc độ byte trung bình. @Tbl-observability-sampling-cost đặt hai chế độ này cạnh nhau cùng với tác động chi phí của chúng.
 
-| **Sampling**                                                        | **Granularity** | **Data Volume (`{python} ObservabilitySampling.request_rate_m_req_per_s_str`)** | **Cost Impact**                   |
+| **Sampling** | **Mức độ chi tiết** | **Khối lượng dữ liệu (`{python} ObservabilitySampling.request_rate_m_req_per_s_str`)** | **Tác động chi phí** |
 |:--------------------------------------------------------------------|:----------------|:-------------------------------------------------------------------------------:|:----------------------------------|
-| **All traces**                                                      | Micro-bursts    |               ~`{python} ObservabilitySampling.high_gb_per_s_str`               | High (Requires dedicated cluster) |
-| **1-in-`{python} ObservabilitySampling.sampling_ratio_str` traces** | Trends          |                ~`{python} ObservabilitySampling.low_mb_per_s_str`               | Lower (Policy-dependent)          |
+| **Tất cả traces** | Micro-bursts |               ~`{python} ObservabilitySampling.high_gb_per_s_str`               | Cao (Yêu cầu cụm chuyên dụng) |
+| **1 trên `{python} ObservabilitySampling.sampling_ratio_str` traces** | Xu hướng |                ~`{python} ObservabilitySampling.low_mb_per_s_str`               | Thấp hơn (Phụ thuộc vào chính sách) |
 
 : **Lấy mẫu dấu vết so với Chi phí khả năng quan sát**: Việc chỉ giữ lại một trong `{python} ObservabilitySampling.sampling_ratio_str` dấu vết yêu cầu sẽ tạo ra khác biệt về khối lượng dữ liệu là `{python} ObservabilitySampling.sampling_ratio_mult_str` khi tốc độ yêu cầu là `{python} ObservabilitySampling.request_rate_m_req_per_s_str`, giả sử mỗi yêu cầu có `{python} ObservabilitySampling.telemetry_kb_str`. Khoảng thời gian batch không phải là nguyên nhân gây ra mức giảm đó. {#tbl-observability-sampling-cost tbl-colwidths="[14,24,28,34]"}
 
@@ -2454,11 +2454,11 @@ Xác thực lược đồ phát hiện các lỗi cấu trúc (thiếu cột, sa
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Metric**                                                | **Alert Threshold** | **Use Case**                     |
+| **Chỉ số** | **Ngưỡng cảnh báo** | **Trường hợp sử dụng** |
 |:----------------------------------------------------------|:-------------------:|:---------------------------------|
-| **PSI**\index{Population stability index!drift detection} |      PSI > 0.25     | Categorical and binned features  |
-| **Kolmogorov-Smirnov statistic**                          |       KS > 0.1      | Continuous feature distributions |
-| **Jensen-Shannon divergence**                             |       JS > 0.1      | Probability distributions        |
+| PSI |      PSI > 0.25 | Các đặc trưng phân loại và được phân nhóm |
+| **Thống kê Kolmogorov-Smirnov** |       KS > 0.1 | Các phân phối đặc trưng liên tục |
+| **Độ phân kỳ Jensen-Shannon** |       JS > 0.1 | Các phân phối xác suất |
 
 : **Ngưỡng phân phối đặc trưng**: Đây là những điểm khởi đầu để phát hiện sự trôi dạt, và cần được hiệu chỉnh trong thực tế dựa trên độ nhạy và tác động kinh doanh của từng đặc trưng. Các ngưỡng PSI như 0.1 và 0.25 là những quy ước phổ biến trong giám sát scorecard, trong khi các ngưỡng KS và JS cần được hiệu chỉnh theo đặc trưng, kích thước mẫu và chi phí khi bỏ lỡ trôi dạt. Ngưỡng cao hơn giúp giảm tình trạng quá tải cảnh báo nhưng có nguy cơ bỏ lỡ trôi dạt diễn ra từ từ. {#tbl-feature-distribution-thresholds tbl-colwidths="[38,24,38]"}
 
@@ -2535,7 +2535,7 @@ class PSIAgeExample:
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Age Bin** |                 **Training**                 |                 **Serving**                 |               **Difference**               |          **ln(Serving/Training)**         |               **Contribution**               |
+| **Nhóm tuổi** |                 **Huấn luyện** |                 **Phục vụ (serving)** |               **Chênh lệch** |          **ln(Serving/Training)** |               **Đóng góp** |
 |:-----------:|:--------------------------------------------:|:-------------------------------------------:|:------------------------------------------:|:-----------------------------------------:|:--------------------------------------------:|
 |  **18–25**  | `{python} PSIAgeExample.training_pct_str[0]` | `{python} PSIAgeExample.serving_pct_str[0]` | `{python} PSIAgeExample.difference_str[0]` | `{python} PSIAgeExample.log_ratio_str[0]` | `{python} PSIAgeExample.contribution_str[0]` |
 |  **26–35**  | `{python} PSIAgeExample.training_pct_str[1]` | `{python} PSIAgeExample.serving_pct_str[1]` | `{python} PSIAgeExample.difference_str[1]` | `{python} PSIAgeExample.log_ratio_str[1]` | `{python} PSIAgeExample.contribution_str[1]` |
@@ -2600,12 +2600,12 @@ Bốn thuật ngữ $C_*$ là các thành phần chi phí trong cùng một kho�
 
 @Tbl-monitoring-cost-components cung cấp các giả định về chi phí đơn vị đại diện cho từng thành phần. Việc chuyển các chi phí đơn vị này thành một ước tính ngân sách cụ thể giúp làm rõ chi phí thực tế của việc giám sát ngay cả một mô hình sản xuất duy nhất:
 
-| **Component**        | **Illustrative Unit Cost**          | **Scaling Factor**                                           |
+| **Thành phần** | **Chi phí đơn vị minh họa** | **Hệ số tỷ lệ** |
 |:---------------------|:------------------------------------|:-------------------------------------------------------------|
-| **Metric Ingestion** | \$0.10–0.50 per million data points | $\text{Number of metrics} \times \text{sample rate}$         |
-| **Log Storage**      | \$0.50–2.00 per GB/month            | $\text{Log verbosity} \times \text{retention period}$        |
-| **Query Compute**    | \$0.01–0.05 per query               | $\text{Dashboard refresh rate} \times \text{users}$          |
-| **Alert Evaluation** | \$0.001–0.01 per evaluation         | $\text{Number of alert rules} \times \text{check frequency}$ |
+| **Thu nạp chỉ số** | $0.10–0.50 mỗi triệu điểm dữ liệu | $\text{Number of metrics} \times \text{sample rate}$         |
+| **Lưu trữ nhật ký** | $0.50–2.00 mỗi GB/tháng | $\text{Log verbosity} \times \text{retention period}$        |
+| **Tính toán truy vấn** | $0.01–0.05 mỗi truy vấn | $\text{Dashboard refresh rate} \times \text{users}$          |
+| **Đánh giá cảnh báo** | $0.001–0.01 mỗi lần đánh giá | $\text{Number of alert rules} \times \text{check frequency}$ |
 
 : **Các thành phần chi phí giám sát**: Chi phí đơn vị minh họa được dùng trong ví dụ có lời giải. Mỗi thành phần tăng theo cách khác nhau: chi phí thu nạp chỉ số tăng theo cardinality (số lượng chuỗi chỉ số duy nhất), chi phí lưu trữ tăng theo thời gian lưu giữ, còn chi phí truy vấn phụ thuộc vào cách sử dụng bảng điều khiển. {#tbl-monitoring-cost-components tbl-colwidths="[24,38,38]"}
 
@@ -2798,12 +2798,12 @@ Sau khi mức độ nghiêm trọng được xác định, quy trình phản ứ
 4. Các lựa chọn giảm thiểu được đánh giá, bao gồm quay lại phiên bản trước (rollback), kích hoạt cơ chế dự phòng (fallback), hoặc giảm lưu lượng truy cập.
 5. Phân tích nguyên nhân gốc xác định xem vấn đề bắt nguồn từ mô hình, dữ liệu hay cơ sở hạ tầng.
 
-| **Level** | **Criteria**                            | **Response Time** | **Example**                    |
+| **Mức độ** | **Tiêu chí** | **Thời gian phản hồi** | **Ví dụ** |
 |:---------:|:----------------------------------------|:-----------------:|:-------------------------------|
-|   **P0**  | Complete model failure, serving errors  |     15 minutes    | Model returns null predictions |
-|   **P1**  | Significant accuracy degradation (>10%) |       1 hour      | Recommendation CTR drops 15%   |
-|   **P2**  | Moderate drift, localized impact        |      4 hours      | One feature shows PSI > 0.3    |
-|   **P3**  | Minor anomalies, no user impact         |      24 hours     | Training pipeline delay        |
+|   **P0**  | Lỗi mô hình hoàn toàn, lỗi phục vụ (serving) |     15 phút | Mô hình trả về dự đoán rỗng |
+|   **P1**  | Suy giảm độ chính xác đáng kể (>10%) |       1 giờ | CTR đề xuất giảm 15% |
+|   **P2**  | Độ lệch vừa phải, tác động cục bộ |      4 giờ | Một đặc trưng cho thấy PSI > 0.3 |
+|   **P3**  | Bất thường nhỏ, không ảnh hưởng đến người dùng |      24 giờ | Độ trễ pipeline huấn luyện |
 
 : **Phân loại mức độ nghiêm trọng sự cố cho hệ thống ML**: Thời gian phản hồi phản ánh mức độ khẩn cấp và tác động tiềm tàng đến hoạt động kinh doanh của từng mức độ nghiêm trọng. {#tbl-incident-severity tbl-colwidths="[7,41,16,36]"}
 
@@ -2883,13 +2883,13 @@ class SliceAnalysisCalc:
 \renewcommand{\arraystretch}{1.4}
 ```
 
-| **User Segment**     |                     **Traffic %**                      |                          **Accuracy**                         | **Impact**               |
+| **Phân khúc người dùng** |                     **Lưu lượng truy cập %** |                          **Độ chính xác** | **Tác động** |
 |:---------------------|:------------------------------------------------------:|:-------------------------------------------------------------:|:-------------------------|
-| **Desktop users**    |                          45%                           |                              94%                              | Nominal                  |
-| **Mobile (iOS)**     |                          30%                           |                              92%                              | Nominal                  |
-| **Mobile (Android)** |                          20%                           |                              88%                              | Minor degradation        |
-| **Tablet users**     |                           5%                           |                              62%                              | Severe—investigate       |
-| **Overall**          | **`{python} SliceAnalysisCalc.total_traffic_pct_str`** | **`{python} SliceAnalysisCalc.overall_accuracy_pct_tbl_str`** | **Masks tablet problem** |
+| **Người dùng máy tính để bàn** |                          45%                           |                              94%                              | Bình thường |
+| **Di động (iOS)** |                          30%                           |                              92%                              | Bình thường |
+| **Di động (Android)** |                          20%                           |                              88%                              | Suy giảm nhỏ |
+| **Người dùng máy tính bảng** |                           5%                           |                              62%                              | Nghiêm trọng—cần điều tra |
+| **Tổng thể** | **`{python} SliceAnalysisCalc.total_traffic_pct_str`** | **`{python} SliceAnalysisCalc.overall_accuracy_pct_tbl_str`** | **Che giấu vấn đề máy tính bảng** |
 
 : **Ví dụ phân tích lát cắt**: Độ chính xác tổng thể của `{python} SliceAnalysisCalc.overall_accuracy_pct_str` có vẻ chấp nhận được, nhưng người dùng máy tính bảng (chiếm 5% lưu lượng) chỉ đạt 62% độ chính xác, một suy giảm nghiêm trọng bị che khuất bởi việc gộp số liệu. Muốn gỡ lỗi hiệu quả, cần phân tích lát cắt một cách có hệ thống theo các chiều quan trọng. {#tbl-slice-analysis-example tbl-colwidths="[28,22,22,28]"}
 
@@ -2959,12 +2959,12 @@ Sự mơ hồ này càng nặng vì tác động xuất hiện trễ. Không nh�
 
 Những thách thức này dẫn tới nhu cầu về cấu trúc leo thang phân cấp\index{Tiered escalation!incident response} để ghép đúng mức chuyên môn với độ phức tạp của sự cố. @Tbl-oncall-structure minh họa một cấu trúc khả thi: người trực ban cấp đầu xử lý các vấn đề thường nhật bằng sổ tay vận hành tiêu chuẩn, còn các luồng leo thang nối tới chuyên gia có thể điều tra sâu hơn. Một vai trò trực ban dữ liệu song song giúp rút ngắn thời gian khắc phục khi nguyên nhân gốc nằm ở hệ thống dữ liệu phía trước (upstream).
 
-| **Tier**                    | **Responder**                     | **Responsibility**                                                    |
+| **Cấp độ** | **Người phản hồi** | **Trách nhiệm** |
 |:----------------------------|:----------------------------------|:----------------------------------------------------------------------|
-| **Tier 1 (Primary)**        | ML Engineer                       | Initial triage, standard runbooks, escalation decisions               |
-| **Tier 2 (Escalation)**     | Senior ML Engineer/Data Scientist | Complex debugging, cross-system  investigation, model-specific issues |
-| **Tier 3 (Critical)**       | ML Platform Lead                  | Architecture decisions, major incidents, vendor escalation            |
-| **Data On-Call (Parallel)** | Data Engineer                     | Data pipeline issues, feature store problems, upstream dependencies   |
+| **Cấp độ 1 (Chính)** | Kỹ sư ML | Phân loại ban đầu, runbook tiêu chuẩn, quyết định leo thang |
+| **Cấp độ 2 (Leo thang)** | Kỹ sư ML cấp cao/Nhà khoa học dữ liệu | Gỡ lỗi phức tạp, điều tra liên hệ thống, các vấn đề cụ thể của mô hình |
+| **Cấp độ 3 (Nghiêm trọng)** | Trưởng nhóm nền tảng ML | Quyết định kiến trúc, sự cố lớn, leo thang nhà cung cấp |
+| **Trực dữ liệu (Song song)** | Kỹ sư dữ liệu | Các vấn đề về data pipeline, các vấn đề về feature store, các phụ thuộc upstream |
 
 : **Cấu trúc Trực ban ML**: Leo thang phân cấp với trực ban dữ liệu song song giúp ứng phó sự cố hiệu quả. Cấp 1 xử lý các vấn đề thường nhật bằng sổ tay vận hành; Cấp 2 giải quyết việc gỡ lỗi phức tạp; Cấp 3 quản lý các sự cố nghiêm trọng đòi hỏi các quyết định kiến trúc. {#tbl-oncall-structure tbl-colwidths="[25,33,42]"}
 
@@ -2992,13 +2992,13 @@ Quản trị đặt ra các chính sách, nhưng chính sự hợp tác liên ch
 
 Chức danh và ranh giới công việc có thể khác nhau giữa các tổ chức, nhưng một cách phân chia phổ biến sử dụng năm vai trò trong @tbl-ml-roles-matrix. Bảng này ánh xạ mỗi vai trò với một trách nhiệm chính, nhưng không ngụ ý rằng mọi tổ chức đều cần đủ năm vị trí riêng biệt:
 
-| **Role**              | **Primary Focus**                                                 | **Key Deliverables**                                        | **Collaboration Points**                                                     |
+| **Vai trò** | **Trọng tâm chính** | **Kết quả chính** | **Điểm hợp tác** |
 |:----------------------|:------------------------------------------------------------------|:------------------------------------------------------------|:-----------------------------------------------------------------------------|
-| **Data Scientist**    | Model development, experimentation, algorithm selection           | Trained models, experiment results, performance benchmarks  | Hands off to ML Engineer for productionization                               |
-| **ML Engineer**       | Production ML systems, training pipelines, serving infrastructure | Deployed models, training pipelines, serving systems        | Receives from Data Scientist; works with Platform Engineer on infrastructure |
-| **Data Engineer**     | Data pipelines, feature engineering, data quality                 | Feature pipelines, data quality systems, feature stores     | Provides data to Data Scientist; maintains feature store for ML Engineer     |
-| **Platform Engineer** | MLOps infrastructure, tooling, automation                         | CI/CD pipelines, monitoring systems, compute infrastructure | Enables ML Engineer; maintains shared infrastructure                         |
-| **DevOps/SRE**        | Reliability, incident response, system health                     | SLOs/SLAs, on-call procedures, runbooks                     | Supports all roles; owns production health                                   |
+| **Nhà khoa học dữ liệu** | Phát triển mô hình, thử nghiệm, lựa chọn thuật toán | Các mô hình đã huấn luyện, kết quả thử nghiệm, benchmark hiệu suất | Bàn giao cho Kỹ sư ML để đưa vào sản xuất |
+| **Kỹ sư ML** | Hệ thống ML sản xuất, các pipeline huấn luyện, cơ sở hạ tầng phục vụ (serving) | Các mô hình đã triển khai, các pipeline huấn luyện, hệ thống phục vụ (serving) | Nhận từ Data Scientist; làm việc với Platform Engineer về cơ sở hạ tầng |
+| **Kỹ sư dữ liệu** | Các pipeline dữ liệu, kỹ thuật đặc trưng, chất lượng dữ liệu | Các pipeline đặc trưng, hệ thống chất lượng dữ liệu, kho đặc trưng | Cung cấp dữ liệu cho Data Scientist; duy trì kho đặc trưng cho ML Engineer |
+| **Platform Engineer** | Cơ sở hạ tầng MLOps, công cụ, tự động hóa | Các pipeline CI/CD, hệ thống giám sát, cơ sở hạ tầng tính toán | Hỗ trợ ML Engineer; duy trì cơ sở hạ tầng dùng chung |
+| **DevOps/SRE** | Độ tin cậy, ứng phó sự cố, tình trạng hệ thống | SLOs/SLAs, quy trình trực ban, runbook | Hỗ trợ tất cả các vai trò; chịu trách nhiệm về tình trạng sản phẩm |
 
 : **Ma trận Vai trò Nhóm ML**: Ranh giới vai trò rõ ràng giúp tránh khoảng trống và chồng chéo. Data Scientists tập trung vào chất lượng mô hình, trong khi các kỹ sư ML đảm nhiệm việc đưa mô hình vào sản xuất. Các kỹ sư dữ liệu chịu trách nhiệm về các pipeline dữ liệu, còn các kỹ sư nền tảng phụ trách các công cụ MLOps. Các kỹ sư SRE (Site Reliability Engineers) đảm bảo độ tin cậy tổng thể của hệ thống. {#tbl-ml-roles-matrix}
 
@@ -3154,16 +3154,16 @@ Thông qua giao tiếp với các bên liên quan một cách kỷ luật, các 
 
 Để đánh giá mức độ sẵn sàng phát hành, cần có một danh mục dùng chung về các dạng nợ kỹ thuật có thể khiến mô hình không an toàn để triển khai, ngay cả khi các chỉ số ngoại tuyến của nó trông có vẻ chấp nhận được. Bảng @Tbl-technical-debt-summary tổng hợp các dạng nợ đã được thảo luận xuyên suốt chương này, làm tài liệu tham chiếu cho bộ tiêu chí đánh giá trong @tbl-ml-test-score.
 
-| **Debt Pattern**         | **Primary Cause**                                      | **Key Symptoms**                                              | **Mitigation Strategies**                                            |
+| **Mô hình nợ** | **Nguyên nhân chính** | **Triệu chứng chính** | **Các chiến lược giảm thiểu** |
 |:-------------------------|:-------------------------------------------------------|:--------------------------------------------------------------|:---------------------------------------------------------------------|
-| **Boundary Erosion**     | Tightly coupled components, unclear interfaces         | Changes cascade unpredictably, CACE principle violations      | Enforce modular interfaces, design for encapsulation                 |
-| **Correction Cascades**  | Sequential model dependencies, inherited assumptions   | Upstream fixes break downstream systems, escalating revisions | Careful reuse vs. redesign trade-offs, clear versioning              |
-| **Undeclared Consumers** | Informal output sharing, untracked dependencies        | Silent breakage from model updates, hidden feedback loops     | Strict access controls, formal interface contracts, usage monitoring |
-| **Data Dependency Debt** | Unstable or underutilized data inputs                  | Model failures from data changes, brittle feature pipelines   | Data versioning, lineage tracking, leave-one-out analysis            |
-| **Feedback Loops**       | Model outputs influence future training data           | Self-reinforcing behavior, hidden performance degradation     | Cohort-based monitoring, canary deployments, architectural isolation |
-| **Pipeline Debt**        | Ad hoc workflows, lack of standard interfaces          | Fragile execution, duplication, maintenance burden            | Modular design, workflow orchestration tools, shared libraries       |
-| **Configuration Debt**   | Fragmented settings, poor versioning                   | Irreproducible results, silent failures, tuning opacity       | Version control, validation, structured formats, automation          |
-| **Prototype Debt**       | Rapid prototyping shortcuts, tight code-logic coupling | Inflexibility as systems scale, difficult team collaboration  | Flexible foundations, intentional debt tracking, planned refactoring |
+| **Xói mòn ranh giới** | Các thành phần liên kết chặt chẽ, giao diện không rõ ràng | Các thay đổi lan truyền không thể đoán trước, vi phạm nguyên tắc CACE | Thực thi các giao diện mô-đun, thiết kế để đóng gói |
+| **Thác điều chỉnh** | Các phụ thuộc mô hình tuần tự, các giả định kế thừa | Các bản sửa lỗi ở thượng nguồn làm hỏng hệ thống ở hạ nguồn, các bản sửa đổi leo thang | Cân nhắc cẩn thận giữa tái sử dụng và thiết kế lại, quản lý phiên bản rõ ràng |
+| **Người tiêu dùng không được khai báo** | Chia sẻ đầu ra không chính thức, các phụ thuộc không được theo dõi | Lỗi ngầm từ các bản cập nhật mô hình, các vòng lặp phản hồi ẩn | Kiểm soát truy cập chặt chẽ, hợp đồng giao diện chính thức, giám sát việc sử dụng |
+| **Nợ phụ thuộc dữ liệu** | Đầu vào dữ liệu không ổn định hoặc ít được sử dụng | Lỗi mô hình do thay đổi dữ liệu, các pipeline đặc trưng dễ hỏng | Quản lý phiên bản dữ liệu, theo dõi nguồn gốc, phân tích bỏ một phần tử |
+| **Các vòng lặp phản hồi** | Đầu ra của mô hình ảnh hưởng đến dữ liệu huấn luyện trong tương lai | Hành vi tự củng cố, suy giảm hiệu suất ẩn | Giám sát dựa trên nhóm, triển khai canary, cô lập kiến trúc |
+| **Nợ pipeline** | Quy trình làm việc tùy biến, thiếu giao diện tiêu chuẩn | Thực thi dễ hỏng, trùng lặp, gánh nặng bảo trì | Thiết kế module, công cụ điều phối workflow, thư viện dùng chung |
+| **Nợ cấu hình** | Cài đặt phân mảnh, quản lý phiên bản kém | Kết quả không thể tái tạo, lỗi ngầm, sự thiếu minh bạch trong tinh chỉnh | Kiểm soát phiên bản, xác thực, định dạng có cấu trúc, tự động hóa |
+| **Nợ nguyên mẫu** | Các lối tắt tạo nguyên mẫu nhanh, liên kết chặt chẽ giữa mã và logic | Thiếu linh hoạt khi hệ thống mở rộng, cộng tác nhóm khó khăn | Nền tảng linh hoạt, theo dõi nợ có chủ đích, tái cấu trúc có kế hoạch |
 
 : **Các dạng nợ kỹ thuật**: Các hệ thống machine learning tích lũy nhiều dạng nợ kỹ thuật khác nhau, phát sinh từ các phụ thuộc dữ liệu, tương tác giữa các mô hình và bối cảnh vận hành thay đổi. Việc nắm rõ các dạng nợ kỹ thuật chính, nguyên nhân, triệu chứng và các chiến lược giảm thiểu được khuyến nghị sẽ giúp các chuyên gia nhận diện và giải quyết những thách thức này một cách có hệ thống. {#tbl-technical-debt-summary tbl-colwidths="[21,22,28,29]"}
 
@@ -3179,24 +3179,24 @@ Khi đã có đầy đủ các dạng nợ kỹ thuật ở một chỗ, chỉ n
 \renewcommand{\arraystretch}{1.25}
 ```
 
-| **Category**             | **Test**                                                   | **Implementation Example**                       |
+| **Danh mục** | **Kiểm thử** | **Ví dụ triển khai** |
 |:-------------------------|:-----------------------------------------------------------|:-------------------------------------------------|
-| **Data Tests**           | Feature expectations are captured in schema                | Great Expectations, TFX Data Validation          |
-|                          | All features are beneficial (no unused features)           | Feature importance analysis, ablation studies    |
-|                          | No feature's cost exceeds its benefit                      | Latency/accuracy trade-off analysis              |
-|                          | Data pipeline has appropriate privacy controls             | PII detection, access logging                    |
-| **Model Tests**          | Model spec is reviewed and checked into version control    | Git-tracked model configs                        |
-|                          | Offline and online metrics are correlated                  | A/B test validation of offline improvements      |
-|                          | All hyperparameters are tuned                              | Automated HPO with tracked results               |
-|                          | Model staleness is measured and bounded                    | Performance decay monitoring                     |
-| **Infrastructure Tests** | Training is reproducible                                   | Fixed seeds, versioned data, locked dependencies |
-|                          | Model can be rolled back to previous version               | Model registry with versioning                   |
-|                          | Training and serving code paths are tested for consistency | Feature store integration tests                  |
-|                          | Model quality is validated before serving                  | Automated validation gates in CI/CD              |
-| **Monitoring Tests**     | Dependency changes result in alerts                        | Data schema monitoring                           |
-|                          | Data invariants hold in training and serving               | Distribution comparison tests                    |
-|                          | Training and serving features are not skewed               | Training-serving skew detection                  |
-|                          | Model staleness triggers retraining                        | Automated retraining pipelines                   |
+| **Kiểm thử dữ liệu** | Các kỳ vọng về đặc trưng được ghi lại trong schema | Great Expectations, TFX Data Validation |
+|                          | Tất cả các đặc trưng đều có lợi (không có đặc trưng không sử dụng) | Phân tích tầm quan trọng của đặc trưng, nghiên cứu loại bỏ (ablation studies) |
+|                          | Chi phí của không đặc trưng nào vượt quá lợi ích của nó | Phân tích đánh đổi độ trễ/độ chính xác |
+|                          | pipeline dữ liệu có các kiểm soát quyền riêng tư phù hợp | Phát hiện PII, ghi nhật ký truy cập |
+| **Kiểm thử mô hình** | Đặc tả mô hình được xem xét và đưa vào kiểm soát phiên bản | Cấu hình mô hình được theo dõi bằng Git |
+|                          | Các chỉ số ngoại tuyến và trực tuyến có tương quan | Xác thực bằng kiểm thử A/B các cải tiến ngoại tuyến |
+|                          | Tất cả các siêu tham số đều được tinh chỉnh | HPO tự động với kết quả được theo dõi |
+|                          | Sự lỗi thời của mô hình được đo lường và giới hạn | Giám sát sự suy giảm hiệu suất |
+| **Kiểm thử hạ tầng** | Huấn luyện có thể tái tạo | Seed cố định, dữ liệu có phiên bản, các phụ thuộc bị khóa |
+|                          | Mô hình có thể được khôi phục về phiên bản trước | Kho lưu trữ mô hình với quản lý phiên bản |
+|                          | Các đường dẫn mã huấn luyện và phục vụ (serving) được kiểm thử về tính nhất quán | Kiểm thử tích hợp Feature store |
+|                          | Chất lượng mô hình được xác thực trước khi phục vụ (serving) | Các cổng xác thực tự động trong CI/CD |
+| **Kiểm thử giám sát** | Thay đổi phụ thuộc dẫn đến cảnh báo | Giám sát lược đồ dữ liệu |
+|                          | Bất biến dữ liệu được duy trì trong huấn luyện và phục vụ (serving) | Kiểm thử so sánh phân phối |
+|                          | Các đặc trưng huấn luyện và phục vụ (serving) không bị lệch | Phát hiện độ lệch giữa huấn luyện và phục vụ (serving) |
+|                          | Mô hình lỗi thời kích hoạt huấn luyện lại | Các retraining pipelines tự động |
 
 : **Danh sách kiểm tra ML Test Score**: Các kiểm thử mức độ sẵn sàng sản xuất tiêu biểu từ bộ tiêu chí ML Test Score. Bộ tiêu chí gốc gồm 28 kiểm thử, được chia thành bốn phần, mỗi phần có bảy kiểm thử; điểm số từng phần cho thấy rủi ro sản xuất đến từ xác thực dữ liệu, xác thực mô hình, hạ tầng hay giám sát, thay vì che giấu điểm yếu trong một tổng điểm duy nhất. Dựa trên @breck2017. {#tbl-ml-test-score tbl-colwidths="[17,42,41]"}
 
@@ -3218,11 +3218,11 @@ ML Test Score đánh giá các thực hành riêng lẻ. **Mức độ trưởng
 
 Điểm khác biệt ở mỗi giai đoạn không phải là đội ngũ sử dụng công cụ gì, mà là mức độ tích hợp chặt chẽ giữa hạ tầng, tự động hóa và giám sát trong suốt vòng đời. @Tbl-maturity-levels cho thấy bước nhảy từ các quy trình tự phát sang có khả năng mở rộng chủ yếu là một chuyển dịch kiến trúc: từ các script rời rạc sang một hệ thống thống nhất.
 
-| **Maturity Level** | **System Characteristics**                                                              | **Typical Outcomes**                                   |
+| **Mức độ trưởng thành** | **Đặc điểm hệ thống** | **Kết quả điển hình** |
 |:-------------------|:----------------------------------------------------------------------------------------|:-------------------------------------------------------|
-| **Ad Hoc**         | Manual data processing, local training, no version control, unclear ownership           | Fragile workflows, difficult to reproduce or debug     |
-| **Repeatable**     | Automated training pipelines, basic CI/CD, centralized model storage, some monitoring   | Improved reproducibility, limited scalability          |
-| **Scalable**       | Fully automated workflows, integrated observability, infrastructure-as-code, governance | High reliability, rapid iteration, production-grade ML |
+| **Tùy ý** | Xử lý dữ liệu thủ công, huấn luyện cục bộ, không có kiểm soát phiên bản, quyền sở hữu không rõ ràng | Các workflow dễ hỏng, khó tái tạo hoặc gỡ lỗi |
+| **Có thể lặp lại** | Các training pipelines tự động, CI/CD cơ bản, lưu trữ mô hình tập trung, một số giám sát | Khả năng tái tạo được cải thiện, khả năng mở rộng hạn chế |
+| **Có khả năng mở rộng** | Các workflow tự động hoàn toàn, khả năng quan sát tích hợp, infrastructure-as-code, quản trị | Độ tin cậy cao, lặp lại nhanh chóng, ML cấp độ sản xuất |
 
 : **Tiến trình trưởng thành**: Các thực hành vận hành machine learning phát triển từ các quy trình làm việc thủ công, dễ vỡ sang các hệ thống tự động và tích hợp hoàn toàn, từ đó tác động đến khả năng tái lập và khả năng mở rộng. Các đặc điểm và kết quả chính ở mỗi cấp độ trưởng thành đều nhấn mạnh sự gắn kết về kiến trúc và tích hợp vòng đời, nhằm xây dựng các hệ thống machine learning dễ bảo trì. {#tbl-maturity-levels tbl-colwidths="[25,42,33]"}
 
@@ -3353,13 +3353,13 @@ Lợi ích vận hành của MLOps chỉ thực sự thuyết phục khi khoản
 
 Với một hệ thống ML chạy sản xuất đơn lẻ, ngưỡng đầu tiên là chi phí hàng năm để bảo đảm nút có thể quan sát, có thể triển khai và có thể phục hồi. @Tbl-mlops-single-model-investment tóm tắt các nhóm chi phí chính:
 
-| **Component**               | **Illustrative Assumption** | **Justification**                           |
+| **Thành phần** | **Giả định minh họa** | **Luận cứ** |
 |:----------------------------|:---------------------------:|:--------------------------------------------|
-| **CI/CD pipeline setup**    |      \$10–30K one-time      | Reduces deployment time from days to hours  |
-| **Monitoring and alerting** |         \$2–10K/year        | Catches degradation before user impact      |
-| **Feature store (basic)**   |         \$5–20K/year        | Reduces one source of training-serving skew |
-| **Model registry**          |         \$0–5K/year         | Enables rollback, audit trails              |
-| **Engineering time**        |     1–2 FTE-months setup    | Initial automation and integration          |
+| **Thiết lập CI/CD pipeline** |      $10–30K one-time | Giảm thời gian triển khai từ vài ngày xuống vài giờ |
+| **Giám sát và cảnh báo** |         $2–10K/year | Phát hiện sự xuống cấp trước khi ảnh hưởng đến người dùng |
+| **Feature store (cơ bản)** |         $5–20K/year | Giảm một nguồn độ lệch giữa huấn luyện và phục vụ (serving) |
+| **Model registry** |         $0–5K/year | Cho phép rollback, nhật ký kiểm toán |
+| **Thời gian kỹ thuật** |     1–2 FTE-months setup | Tự động hóa và tích hợp ban đầu |
 
 : **Đầu tư MLOps cho Mô hình Đơn lẻ**: Các đầu vào lập kế hoạch minh họa để vận hành một hệ thống ML sản xuất. Các công cụ mã nguồn mở (MLflow, Feast) có thể giảm chi phí phần mềm; các dịch vụ được quản lý trên đám mây chấp nhận chi phí đơn vị cao hơn để giảm gánh nặng kỹ thuật. {#tbl-mlops-single-model-investment}
 
@@ -3443,13 +3443,13 @@ Một chiếc nhẫn theo dõi giấc ngủ dùng pin và phần mềm y tế d�
 
 Các nguyên tắc vẫn giữ nguyên, nhưng cách triển khai sẽ thay đổi theo chế độ triển khai. Hệ thống edge dành ngân sách tự động hóa cho pin, đo từ xa và các bản cập nhật bị giới hạn; còn hệ thống lâm sàng thì tập trung vào khả năng kiểm toán, các cổng xác thực và sự kiểm soát có trách nhiệm của con người. Hai nghiên cứu điển hình sau đây lần theo cách mỗi môi trường đạt được các hạng mục đó.
 
-| **Principle**              | **Oura-inspired edge design**                                                          | **ClinAIOps**                                                                               |
+| **Nguyên tắc** | **Thiết kế edge lấy cảm hứng từ Oura** | **ClinAIOps** |
 |:---------------------------|:---------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------|
-| **Reproducibility**        | Versioned synchronized wearable and PSG datasets                                       | Audit trails, decision provenance                                                           |
-| **Separation of concerns** | Independent data, training, and serving layers with edge-specific deployment pipeline  | Distinct clinical validation and deployment stages with regulatory compliance isolation     |
-| **Consistency**            | PSG-aligned preprocessing across training and on-device inference                      | Standardized clinical data pipelines ensuring training-serving parity                       |
-| **Observable degradation** | On-device anomaly detection, limited telemetry                                         | Cohort-specific monitoring, outcome tracking                                                |
-| **Cost-aware automation**  | Battery-aware retraining triggers, CI/CD for edge balancing accuracy and resource cost | Automated model updates with human-in-the-loop gates balancing update cost and patient risk |
+| **Khả năng tái tạo** | Các tập dữ liệu thiết bị đeo và PSG được lập phiên bản, đồng bộ hóa | Nhật ký kiểm toán, nguồn gốc quyết định |
+| **Tách biệt các mối quan tâm** | Các lớp dữ liệu, huấn luyện và phục vụ (serving) độc lập với deployment pipeline dành riêng cho edge | Các giai đoạn xác thực lâm sàng và deployment riêng biệt với sự cô lập tuân thủ quy định |
+| **Tính nhất quán** | Tiền xử lý phù hợp với PSG trên toàn bộ quá trình huấn luyện và suy luận trên thiết bị (on-device) | Các data pipeline lâm sàng được tiêu chuẩn hóa đảm bảo sự tương đồng giữa huấn luyện và phục vụ (serving) |
+| **Suy giảm có thể quan sát được** | Phát hiện anomaly detection trên thiết bị (on-device), telemetry hạn chế | Monitoring theo cohort cụ thể, theo dõi kết quả (outcome tracking) |
+| **Tự động hóa có tính đến chi phí** | Các trình kích hoạt huấn luyện lại có nhận biết pin, CI/CD cho edge cân bằng độ chính xác và resource cost | Cập nhật mô hình tự động với các cổng human-in-the-loop cân bằng chi phí cập nhật và rủi ro bệnh nhân |
 
 : **Các nguyên tắc MLOps theo nghiên cứu điển hình**: Đối chiếu song song năm nguyên tắc MLOps nền tảng với một thiết kế edge giả định lấy cảm hứng từ Oura và framework ClinAIOps, cho thấy các ràng buộc của từng miền định hình lại cách triển khai như thế nào, mà không thay đổi việc các nguyên tắc nào được áp dụng. {#tbl-ml-ops-principle-mapping tbl-colwidths="[16,41,43]"}
 
@@ -4025,16 +4025,16 @@ Trường hợp tăng huyết áp minh họa sự so sánh giữa ClinAIOps và 
 
 ClinAIOps vượt ra ngoài hạ tầng kỹ thuật để hỗ trợ các hệ thống kỹ thuật - xã hội phức tạp, đưa machine learning vào những bối cảnh nơi bác sĩ lâm sàng, bệnh nhân và các bên liên quan cùng nhau định hình quyết định điều trị. @Tbl-clinical_ops đối chiếu các cách tiếp cận này trên tám khía cạnh.
 
-|                         | **General-purpose MLOps emphasis**               | **ClinAIOps extension**                                 |
+|                         | **Nhấn mạnh MLOps đa năng** | **Mở rộng ClinAIOps** |
 |:------------------------|:-------------------------------------------------|:--------------------------------------------------------|
-| **Focus**               | Technical model lifecycle                        | Human and AI decision-making                            |
-| **Stakeholders**        | ML, data, platform, and operations teams         | Adds patients, clinicians, and clinical governance      |
-| **Feedback loops**      | Monitoring, retraining, and release              | Adds treatment, clinician, and developer feedback       |
-| **Objective**           | Reliable, governed ML operations                 | Safe, effective, and accountable care support           |
-| **Processes**           | Automated pipelines and operational controls     | Integrates clinical workflows and human gates           |
-| **Data considerations** | Lineage, quality, freshness, and access control  | Adds consent, clinical provenance, and protected data   |
-| **Model validation**    | Predictive, operational, and slice-level metrics | Adds clinical utility, safety, and cohort outcomes      |
-| **Implementation**      | Technical integration and operational ownership  | Adds clinical accountability and stakeholder incentives |
+| **Trọng tâm** | Vòng đời mô hình kỹ thuật | Ra quyết định của con người và AI |
+| **Các bên liên quan** | Các nhóm ML, dữ liệu, platform và operations | Bổ sung bệnh nhân, bác sĩ lâm sàng và clinical governance |
+| **Vòng lặp phản hồi** | Monitoring, huấn luyện lại và phát hành | Bổ sung phản hồi từ điều trị, bác sĩ lâm sàng và nhà phát triển |
+| **Mục tiêu** | Các ML operations đáng tin cậy, được quản lý | Hỗ trợ chăm sóc an toàn, hiệu quả và có trách nhiệm |
+| **Quy trình** | Các pipelines tự động và operational controls | Tích hợp clinical workflows và human gates |
+| **Các cân nhắc về dữ liệu** | Nguồn gốc, chất lượng, độ mới và access control | Bổ sung sự đồng ý, clinical provenance và dữ liệu được bảo vệ |
+| **Xác thực mô hình** | Các chỉ số dự đoán, operational và slice-level metrics | Bổ sung clinical utility, an toàn và cohort outcomes |
+| **Triển khai** | Tích hợp kỹ thuật và operational ownership | Bổ sung clinical accountability và stakeholder incentives |
 
 : **Vận hành AI lâm sàng**: MLOps đa dụng cung cấp các cơ chế kiểm soát cho vòng đời kỹ thuật; ClinAIOps mở rộng chúng bằng cách tích hợp thêm quy trình làm việc lâm sàng, bằng chứng, giám sát của con người và trách nhiệm giải trình. {#tbl-clinical_ops tbl-colwidths="[18,39,43]"}
 

@@ -1250,14 +1250,14 @@ print(example.graph)
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Aspect**            | **Tracing**                  | **Scripting**                 |
+| **Khía cạnh** | **Dò vết (Tracing)** | **Scripting** |
 |:----------------------|:-----------------------------|:------------------------------|
-| **Input requirement** | Example inputs needed        | No inputs needed              |
-| **Control flow**      | Cannot handle data-dependent | Supports data-dependent       |
-| **Conversion ease**   | Simpler (just run function)  | Harder (restricted Python)    |
-| **Type annotations**  | Not required                 | Required when inference fails |
-| **Error detection**   | Runtime (wrong results)      | Compile time (syntax errors)  |
-| **Best for**          | Feed-forward models          | Models with conditionals      |
+| **Yêu cầu đầu vào** | Cần các đầu vào ví dụ | Không cần đầu vào |
+| **Luồng điều khiển** | Không thể xử lý phụ thuộc vào dữ liệu | Hỗ trợ phụ thuộc vào dữ liệu |
+| **Dễ dàng chuyển đổi** | Đơn giản hơn (chỉ cần chạy hàm) | Khó hơn (Python bị hạn chế) |
+| **Chú thích kiểu** | Không bắt buộc | Bắt buộc khi suy luận thất bại |
+| **Phát hiện lỗi** | Thời gian chạy (kết quả sai) | Thời gian biên dịch (lỗi cú pháp) |
+| **Tốt nhất cho** | Các mô hình truyền thẳng | Các mô hình có điều kiện |
 
 : **Đánh đổi lịch sử giữa Truy vết và Tạo script trong TorchScript**: Truy vết ghi lại các phép toán từ các lần thực thi ví dụ, trong khi tạo script bảo toàn luồng điều khiển được hỗ trợ với cái giá là một tập con Python bị hạn chế. TorchScript hiện không còn được khuyến nghị cho các dự án mới. {#tbl-tracing-vs-scripting}
 
@@ -1453,14 +1453,14 @@ Quy trình làm việc (workflow) kết quả là một quyết định về h�
 
 @Tbl-framework-execution-models đối chiếu ba mô hình thực thi trên sáu khía cạnh, cho thấy cách biên dịch JIT lai có thể khôi phục tối ưu hóa cấp đồ thị trong các vùng được thu thập trong khi vẫn duy trì cơ chế quay về thực thi tức thì bên ngoài các vùng đó.
 
-| **Aspect**               | **Eager + Autograd Tape** **(PyTorch default)** | **Static graph**\index{Static graph!definition} **(TensorFlow&nbsp;1.x)** | **JIT Compilation** **(torch.compile)** |
+| **Khía cạnh** | **Eager + Autograd Tape** **(mặc định của PyTorch)** | **Đồ thị tĩnh**\index{Static graph!definition} **(TensorFlow&nbsp;1.x)** | **Biên dịch JIT** **(torch.compile)** |
 |:-------------------------|:------------------------------------------------|:--------------------------------------------------------------------------|:----------------------------------------|
-| **Execution Model**      | Immediate                                       | Deferred                                                                  | Hybrid                                  |
-| **Graph Construction**   | During forward pass                             | Before execution                                                          | First execution (cached)                |
-| **Optimization**         | Per-operation kernels                           | Ahead-of-time                                                             | JIT compilation                         |
-| **Dynamic Control Flow** | Python control flow                             | Graph control flow                                                        | Captured regions or breaks              |
-| **Debugging**            | Easy (standard Python)                          | Difficult (symbolic)                                                      | Moderate (mixed)                        |
-| **Performance**          | Baseline                                        | High (optimized)                                                          | High (compiled regions)                 |
+| **Mô hình thực thi** | Tức thì | Trì hoãn | Lai |
+| **Xây dựng đồ thị** | Trong quá trình truyền thẳng | Trước khi thực thi | Lần thực thi đầu tiên (được lưu vào cache) |
+| **Tối ưu hóa** | Các kernel theo từng phép toán | Trước thời điểm thực thi | Biên dịch JIT |
+| **Luồng điều khiển động** | Luồng điều khiển Python | Luồng điều khiển đồ thị | Các vùng được nắm bắt hoặc ngắt quãng |
+| **Gỡ lỗi** | Dễ (Python tiêu chuẩn) | Khó (ký hiệu) | Trung bình (hỗn hợp) |
+| **Hiệu suất** | Đường cơ sở | Cao (đã tối ưu hóa) | Cao (các vùng đã biên dịch) |
 
 : **Đánh đổi của Mô hình Thực thi**: Mỗi mô hình thực thi chiếm một vị trí riêng biệt trong không gian đánh đổi giữa tính linh hoạt và tối ưu hóa. Thực thi tức thì tối đa hóa tính linh hoạt khi gỡ lỗi nhưng hạn chế tối ưu hóa giữa các thao tác; đồ thị tĩnh tối đa hóa tối ưu hóa nhưng yêu cầu luồng điều khiển phải được biểu diễn trong đồ thị; biên dịch JIT lai biên dịch các vùng được thu thập trong khi quay về thực thi tức thì đối với các mẫu không được hỗ trợ. {#tbl-framework-execution-models tbl-colwidths="[25,25,25,25]"}
 
@@ -1475,12 +1475,12 @@ Những đánh đổi này không phải là lựa chọn nhị phân. Các fram
 \renewcommand{\arraystretch}{1.25}
 ```
 
-| **Aspect**                       | **Static Graphs**                                    | **Dynamic Graphs**                            |
+| **Khía cạnh** | **Đồ thị tĩnh** | **Đồ thị động** |
 |:---------------------------------|:-----------------------------------------------------|:----------------------------------------------|
-| **Memory Management**            | Precise allocation planning, optimized memory usage  | Flexible but potentially less efficient       |
-| **Hardware Utilization**         | Can generate highly optimized hardware-specific code | May sacrifice hardware-specific optimizations |
-| **Research Velocity**            | Slower iteration due to define-then-run requirement  | Faster prototyping and model experimentation  |
-| **Integration with Legacy Code** | More separation between definition and execution     | Natural integration with imperative code      |
+| **Quản lý bộ nhớ** | Lập kế hoạch cấp phát chính xác, sử dụng bộ nhớ tối ưu | Linh hoạt nhưng có thể kém hiệu quả hơn |
+| **Tận dụng phần cứng** | Có thể tạo mã chuyên biệt cho phần cứng được tối ưu hóa cao | Có thể hy sinh các tối ưu hóa chuyên biệt cho phần cứng |
+| **Tốc độ nghiên cứu** | Lặp lại chậm hơn do yêu cầu định nghĩa rồi chạy | Tạo mẫu nhanh hơn và thử nghiệm mô hình |
+| **Tích hợp với mã nguồn cũ** | Phân tách nhiều hơn giữa định nghĩa và thực thi | Tích hợp tự nhiên với mã mệnh lệnh |
 
 : **Các Đánh đổi Đồ thị Bổ sung**: Các khác biệt cấp hệ thống giữa đồ thị tĩnh và động bổ sung cho @tbl-framework-execution-models. Những đánh đổi này xuất hiện lại khi chọn framework trong @sec-ml-frameworks-selecting-framework-2949. {#tbl-mlfm-graphs tbl-colwidths="[20,41,39]"}
 
@@ -1588,11 +1588,11 @@ class CompilationBenchmark:
 \renewcommand{\arraystretch}{1.25}
 ```
 
-| **Model**        | **Eager** **(examples/sec)** | **torch.compile** **(examples/sec)** | **TensorRT** **(examples/sec)** | **Compile Time** **(seconds)** |
+| **Mô hình** | **Eager** **(ví dụ/giây)** | **torch.compile** **(ví dụ/giây)** | **TensorRT** **(ví dụ/giây)** | **Thời gian biên dịch** **(giây)** |
 |:-----------------|:----------------------------:|:------------------------------------:|:-------------------------------:|:------------------------------:|
-| **ResNet-50**    |            1,450             |                2,150                 |              3,800              |             15--30             |
-| **BERT-Base**    |             380              |                 520                  |               890               |             30--60             |
-| **ViT-B/16**     |             620              |                 950                  |              1,650              |             25--45             |
+| **ResNet-50** |            1,450             |                2,150                 |              3,800              |             15--30             |
+| **BERT-Base** |             380              |                 520                  |               890               |             30--60             |
+| **ViT-B/16** |             620              |                 950                  |              1,650              |             25--45             |
 | **GPT-2 (124M)** |             180              |                 260                  |               420               |             45--90             |
 
 : **Thông lượng huấn luyện và suy luận minh họa**: Thông lượng giả định và đầu vào thời gian biên dịch để so sánh các chế độ thực thi trên GPU NVIDIA A100 với kích thước batch 32. Các giá trị này là giả định chứ không phải là các phép đo benchmark. Trong kịch bản này, bảng ngụ ý tốc độ tăng của torch.compile là `{python} CompilationBenchmark.torch_compile_speedup_range_mult_str` so với chế độ eager, trong khi TensorRT ngụ ý tốc độ tăng `{python} CompilationBenchmark.tensorrt_speedup_range_mult_str` nhưng yêu cầu thời gian biên dịch lâu hơn và chỉ dành cho suy luận. {#tbl-training-benchmark tbl-colwidths="[20,20,20,20,20]"}
@@ -1603,12 +1603,12 @@ class CompilationBenchmark:
 
 Những khác biệt về thông lượng này trên các chế độ thực thi đặt ra một câu hỏi thực tế—chiến lược thực thi framework nào phục vụ tốt nhất cho từng nguyên mẫu khối lượng công việc (workload). Chiến lược phù hợp phụ thuộc vào khối lượng công việc (workload), backend và thuật ngữ luật sắt chi phối, và @tbl-framework-archetype-strategy ánh xạ mỗi nguyên mẫu lặp lại tới một chiến lược thực thi ứng cử viên.
 
-| **Archetype**                 | **Dominant Iron Law Term**                                                 | **Candidate Framework Strategy**         | **Rationale**                                                                                                                                                         |
+| **Nguyên mẫu** | **Thuật ngữ luật sắt thống trị** | **Chiến lược framework ứng cử viên** | **Cơ sở lý luận** |
 |:------------------------------|:---------------------------------------------------------------------------|:-----------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **ResNet-50 (Compute Beast)** | $\frac{O}{R_{\text{peak}} \cdot \eta_{\text{hw}}}$ (Compute)               | Compiled dense kernels                   | Regular dense kernels benefit from layout selection, precision lowering, and backend specialization; fusion helps most in surrounding memory- or launch-bound regions |
-| **GPT-2 (Bandwidth Hog)**     | $\frac{D_{\text{vol}}}{\text{BW}}$ (Memory Bandwidth)                      | Fused attention + graph compilation      | Fused attention and compilation reduce HBM round-trips and improve cache reuse                                                                                        |
-| **DLRM (Sparse Scatter)**     | $\frac{D_{\text{vol}}}{\text{BW}_{\text{random}}}+L_{\text{lat, network}}$ | Eager execution with specialized kernels | Embedding lookups are inherently irregular and dynamic; compilation gains are small                                                                                   |
-| **DS-CNN (Tiny Constraint)**  | $L_{\text{lat}}$ (Overhead)                                                | Ahead-of-time microcontroller runtime    | Sub-ms inference; every microsecond of Python overhead is unacceptable                                                                                                |
+| **ResNet-50 (Quái vật tính toán)** | $\frac{O}{R_{\text{peak}} \cdot \eta_{\text{hw}}}$ (Tính toán) | Các kernel dày đặc đã biên dịch | Các kernel dày đặc thông thường được hưởng lợi từ việc lựa chọn bố cục, giảm độ chính xác và chuyên biệt hóa backend; hợp nhất giúp ích nhiều nhất trong các vùng bị giới hạn bởi bộ nhớ hoặc khởi chạy xung quanh |
+| **GPT-2 (Kẻ ngốn băng thông)** | $\frac{D_{\text{vol}}}{\text{BW}}$ (Băng thông bộ nhớ) | Fused attention + biên dịch đồ thị | Fused attention và biên dịch giảm số lượt truy cập HBM khứ hồi và cải thiện tái sử dụng cache |
+| **DLRM (Sparse Scatter)** | $\frac{D_{\text{vol}}}{\text{BW}_{\text{random}}}+L_{\text{lat, network}}$ | Eager execution với các kernel chuyên biệt | Tra cứu embedding vốn không đều và động; lợi ích biên dịch nhỏ |
+| **DS-CNN (Tiny Constraint)** | $L_{\text{lat}}$ (Chi phí phụ trội) | Runtime vi điều khiển trước thời điểm thực thi | Suy luận dưới mili giây; mỗi micro giây chi phí phụ trội Python là không thể chấp nhận được |
 
 : **Chiến lược thực thi Framework theo khối lượng công việc (workload)**: Các chiến lược thực thi ứng cử viên cho từng nguyên mẫu khối lượng công việc (workload), được căn chỉnh theo thuật ngữ luật sắt chi phối. {#tbl-framework-archetype-strategy tbl-colwidths="[17,28,22,33]"}
 
@@ -2265,13 +2265,13 @@ Hệ thống huấn luyện trong sản xuất yêu cầu kiểm soát chi tiế
 
 Các cơ chế kiểm soát này có chung một thiết kế hệ thống: chúng là các phần mở rộng dựa trên callback mà công cụ autograd gọi tại các điểm cụ thể trong quá trình duyệt đồ thị, mà không sửa đổi thuật toán vi phân cốt lõi. Mô hình khả năng mở rộng này cho phép framework duy trì một lượt truyền ngược được tối ưu hóa duy nhất trong khi hỗ trợ thao tác gradient phức tạp tùy ý. Trong thực tế, sự kiểm soát này xuất hiện thông qua một vài cơ chế PyTorch lặp lại: đồ thị được giữ lại, gradient tích lũy, quy tắc backward tùy chỉnh, hook và tách an toàn. @Tbl-autograd-control ánh xạ từng cơ chế với những gì nó kiểm soát và chi phí của nó.
 
-| **Mechanism**                                                           | **What it controls**                                                                                          | **Cost or hazard**                                                                                             |
+| **Cơ chế** | **Những gì nó kiểm soát** | **Chi phí hoặc rủi ro** |
 |:------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------|
-| **`retain_graph=True`**\index{Graph retention!multiple backward passes} | Keeps saved graph state available for another backward traversal                                              | Retains memory that would otherwise be released; the amount depends on the graph and saved values              |
-| **Gradient accumulation**                                               | Successive backward passes sum into `.grad` until `zero_grad()` resets them, enabling large effective batches | Forgetting the reset silently mixes gradients across optimization steps                                        |
-| **Custom `autograd.Function`**                                          | User-defined forward and backward rules for operations outside the built-in library                           | Moves the differentiation contract (what to save, how to differentiate) to the implementer                     |
-| **Gradient hooks**\index{Gradient hook!inspection and modification}     | Inspecting or modifying gradients mid-traversal (clipping, logging, debugging)                                | Runs arbitrary Python per registered tensor on every backward pass                                             |
-| **`.detach()`**\index{Gradient flow!tensor detachment}                  | Cuts gradient flow at a chosen boundary (frozen layers, inference outputs)                                    | The legacy `.data` attribute bypasses autograd and silently corrupts gradients; clone before in-place mutation |
+| **`retain_graph=True`**\index{Graph retention!multiple backward passes} | Giữ trạng thái đồ thị đã lưu có sẵn cho một lần duyệt ngược khác | Giữ lại bộ nhớ mà lẽ ra sẽ được giải phóng; lượng phụ thuộc vào đồ thị và các giá trị đã lưu |
+| **Tích lũy gradient** | Các lượt lan truyền ngược liên tiếp cộng dồn vào `.grad` cho đến khi `zero_grad()` đặt lại chúng, cho phép các batch hiệu quả lớn | Quên đặt lại âm thầm trộn lẫn các gradient qua các bước tối ưu hóa |
+| **`autograd.Function` tùy chỉnh** | Các quy tắc truyền xuôi và truyền ngược do người dùng định nghĩa cho các phép toán nằm ngoài thư viện tích hợp sẵn | Chuyển giao hợp đồng vi phân (những gì cần lưu, cách vi phân) cho người triển khai |
+| **Hook gradient**\index{Gradient hook!inspection and modification} | Kiểm tra hoặc sửa đổi gradient giữa quá trình duyệt (cắt bớt, ghi nhật ký, gỡ lỗi) | Chạy mã Python tùy ý cho mỗi tensor đã đăng ký trên mỗi lượt lan truyền ngược |
+| **`.detach()`**\index{Gradient flow!tensor detachment} | Cắt luồng gradient tại một ranh giới được chọn (các lớp đóng băng, đầu ra suy luận) | Thuộc tính `.data` cũ bỏ qua autograd và âm thầm làm hỏng gradient; nhân bản trước khi thay đổi tại chỗ |
 
 : **Cơ chế kiểm soát Autograd**: Các điểm mở rộng lặp lại mà công cụ autograd cung cấp trong quá trình duyệt đồ thị, những gì mỗi cơ chế kiểm soát và chi phí bộ nhớ hoặc độ chính xác mà mỗi cơ chế mang lại. {#tbl-autograd-control tbl-colwidths="[20,42,38]"}
 
@@ -3014,12 +3014,12 @@ Chi phí di chuyển dữ liệu giữa các thiết bị thay đổi theo cấp
 
 [^fn-nvlink-bandwidth-hierarchy]: **NVLink**\index{NVLink!bandwidth hierarchy}: Bộ kết nối GPU-to-GPU băng thông cao của NVIDIA (xem @sec-hardware-acceleration), cung cấp băng thông hai chiều `{python} DeviceBandwidthHierarchy.nvlink_a100_gb_per_s_str` (NVLink 3.0 trên A100) so với `{python} DeviceBandwidthHierarchy.pcie4_bidir_gb_per_s_str` cho PCIe 4.0 x16. Lợi thế băng thông gấp ~10$\times$ này quyết định liệu song song hóa tensor, chia một phép tính tensor lớn trên nhiều GPU, có thực tế hay không đối với một kích thước mô hình nhất định: Các GPU chỉ được kết nối bằng PCIe có thể làm cho thuật ngữ giao tiếp $D_{\text{vol}}/\text{BW}$ chiếm ưu thế trong tổng thời gian huấn luyện, xóa bỏ lợi ích của việc tính toán bổ sung.
 
-| **Interconnect** |                                                                             **Bandwidth**                                                                             |                   **Transfer Time**                   | **Path**       |
+| **Kết nối liên mạch** |                                                                             **Băng thông** |                   **Thời gian truyền** | **Đường dẫn** |
 |:-----------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------:|:---------------|
-| **PCIe 3.0 x16** |                                                         `{python} DeviceBandwidthHierarchy.pcie3_gb_per_s_str`                                                        |  `{python} DeviceBandwidthHierarchy.pcie3_4mb_ms_str` | Host to device |
-| **PCIe 4.0 x16** |                                                         `{python} DeviceBandwidthHierarchy.pcie4_gb_per_s_str`                                                        |  `{python} DeviceBandwidthHierarchy.pcie4_4mb_ms_str` | Host to device |
-| **NVLink 3.0**   | `{python} DeviceBandwidthHierarchy.nvlink_a100_per_direction_gb_per_s_str` per direction (`{python} DeviceBandwidthHierarchy.nvlink_a100_gb_per_s_str` bidirectional) | `{python} DeviceBandwidthHierarchy.nvlink_4mb_ms_str` | GPU to GPU     |
-| **GPU Memory**   |                                                        `{python} DeviceBandwidthHierarchy.a100_bw_gb_per_s_str`                                                       |   `{python} DeviceBandwidthHierarchy.hbm_4mb_ms_str`  | On device      |
+| **PCIe 3.0 x16** |                                                         `{python} DeviceBandwidthHierarchy.pcie3_gb_per_s_str`                                                        |  `{python} DeviceBandwidthHierarchy.pcie3_4mb_ms_str` | Từ máy chủ đến thiết bị |
+| **PCIe 4.0 x16** |                                                         `{python} DeviceBandwidthHierarchy.pcie4_gb_per_s_str`                                                        |  `{python} DeviceBandwidthHierarchy.pcie4_4mb_ms_str` | Từ máy chủ đến thiết bị |
+| **NVLink 3.0** | `{python} DeviceBandwidthHierarchy.nvlink_a100_per_direction_gb_per_s_str` mỗi hướng (`{python} DeviceBandwidthHierarchy.nvlink_a100_gb_per_s_str` hai chiều) | `{python} DeviceBandwidthHierarchy.nvlink_4mb_ms_str` | Từ GPU đến GPU |
+| **Bộ nhớ GPU** |                                                        `{python} DeviceBandwidthHierarchy.a100_bw_gb_per_s_str`                                                       |   `{python} DeviceBandwidthHierarchy.hbm_4mb_ms_str`  | Trên thiết bị |
 
 : **Chi phí truyền thiết bị**: Thời gian truyền cho một tensor 4 MB qua các bộ kết nối khác nhau. Băng thông PCIe được hiển thị là đơn hướng (điển hình cho các lần truyền GPU), với hoạt động song công toàn phần cung cấp tổng băng thông gấp 2$\times$. Băng thông NVLink là hai chiều (300 GB/s mỗi chiều). Những chi phí truyền này có thể chiếm ưu thế trong các phép toán nhẹ, khiến việc đặt thiết bị trở nên quan trọng. {#tbl-device-transfer-overhead tbl-colwidths="[25,25,20,30]"}
 
@@ -3149,12 +3149,12 @@ Cùng một nguyên tắc đồng bộ hóa có một cạm bẫy vận hành: m
 
 @Tbl-nsight-metrics là bản đồ chẩn đoán cho bước thứ hai đó. SM có nghĩa là bộ đa xử lý luồng (streaming multiprocessor), khối GPU lập lịch các nhóm luồng; một warp là một nhóm luồng đã được lập lịch.
 
-| **Metric**             | **Meaning**                | **Optimization Target**            |
+| **Số liệu** | **Ý nghĩa** | **Mục tiêu tối ưu hóa** |
 |:-----------------------|:---------------------------|:-----------------------------------|
-| **SM Occupancy**       | Active warps/maximum warps | Increase parallelism if low        |
-| **Memory Throughput**  | Achieved/peak bandwidth    | Optimize memory access patterns    |
-| **Compute Throughput** | Achieved/peak FLOP/s       | Reduce memory bottlenecks          |
-| **Tensor Core Active** | Time in Tensor Core ops    | Verify mixed-precision utilization |
+| **Mức độ chiếm dụng SM** | Số warps đang hoạt động/số warps tối đa | Tăng song song hóa nếu thấp |
+| **Thông lượng bộ nhớ** | Băng thông đạt được/đỉnh | Tối ưu hóa các mẫu truy cập bộ nhớ |
+| **Thông lượng tính toán** | FLOP/s đạt được/đỉnh | Giảm các nút thắt cổ chai bộ nhớ |
+| **Tensor Core hoạt động** | Thời gian trong các hoạt động của Tensor Core | Xác minh việc sử dụng độ chính xác hỗn hợp |
 
 : **Các chỉ số Nsight Compute**: Các chỉ số chính để chẩn đoán các kernel ML. Giải thích từng giá trị dựa trên tính phù hợp của khối lượng công việc (workload) và mục đích của kernel; Nsight Systems xác định kernel nào chiếm ưu thế trong runtime, và Nsight Compute tiết lộ lý do tại sao các kernel đó hoạt động kém hiệu quả. {#tbl-nsight-metrics}
 
@@ -3717,12 +3717,12 @@ for name, param in layer.named_parameters():
 
 @Tbl-frameworks-parameter-discovery-apis cho thấy cùng một nguyên tắc biểu hiện khác nhau giữa các framework. Mặc dù có sự khác biệt về cú pháp, tất cả các framework đều giải quyết cùng một vấn đề: cho phép các optimizer khám phá và cập nhật các tham số có thể huấn luyện trong khi vẫn bảo toàn trạng thái không thể huấn luyện qua các lượt truyền xuôi.
 
-| **Framework**                                       | **Parameter Access**                                         | **Nontrainable State**                                     |
+| **Framework** | **Truy cập tham số** | **Trạng thái không huấn luyện được** |
 |:----------------------------------------------------|:-------------------------------------------------------------|:-----------------------------------------------------------|
-| PyTorch                                             | `model.parameters()`                                         | `register_buffer()`                                        |
-| **Keras**                                           | `layer.trainable_weights`                                    | `layer.non_trainable_weights`                              |
-| **JAX/Flax**\index{Flax!JAX neural network library} | `variables["params"]` after `variables = model.init(key, x)` | Separate variable collections (for example, `batch_stats`) |
-| TensorFlow                                          | `module.trainable_variables`                                 | `module.non_trainable_variables`                           |
+| PyTorch | `model.parameters()`                                         | `register_buffer()`                                        |
+| **Keras** | `layer.trainable_weights`                                    | `layer.non_trainable_weights`                              |
+| **JAX/Flax**\index{Flax!JAX neural network library} | `variables["params"]` sau `variables = model.init(key, x)` | Các tập hợp biến riêng biệt (ví dụ, `batch_stats`) |
+| TensorFlow | `module.trainable_variables`                                 | `module.non_trainable_variables`                           |
 
 : **API Khám phá Tham số giữa các Framework**: Mỗi framework cung cấp một giao diện khác nhau để phân biệt các tham số có thể huấn luyện với các bộ đệm không thể huấn luyện, nhưng cả bốn đều giải quyết cùng một vấn đề cơ bản là cho phép các optimizer tìm thấy các trọng số để cập nhật trong khi vẫn bảo toàn trạng thái (thống kê chạy, tensor đóng băng) qua các lượt truyền xuôi. Trên cả bốn hàng, mẫu bền vững bao gồm một bộ truy cập tham số có thể huấn luyện cho optimizer và một kênh trạng thái không thể huấn luyện riêng biệt cho các giá trị phải tồn tại nhưng không được nhận gradient. {#tbl-frameworks-parameter-discovery-apis tbl-colwidths="[23,39,38]"}
 
@@ -4029,15 +4029,15 @@ Các ràng buộc hàm mà JAX áp đặt trở thành lợi thế trong các l�
 
 Các phần trước đã mô tả triết lý thiết kế của từng framework theo các thuật ngữ định tính: đồ thị-trước so với thực thi-ngay-lập-tức-trước, có trạng thái so với hàm. So sánh hữu ích không phải là framework nào nhanh nhất một cách trừu tượng, vì câu trả lời đó thay đổi tùy theo hình dạng mô hình, kích thước batch, phần cứng backend và cấu hình trình biên dịch. So sánh hữu ích là mỗi thiết kế cho phép hệ thống nhìn thấy và tối ưu hóa điều gì. Do đó, @Tbl-mlfm-comparison ánh xạ TensorFlow, PyTorch và JAX trở lại ba vấn đề của framework: khả năng hiển thị thực thi, mô hình vi phân và đường dẫn trừu tượng hóa phần cứng.
 
-| **Aspect**                    | TensorFlow                               | PyTorch                                      | JAX                                  |
+| **Khía cạnh** | TensorFlow | PyTorch | JAX |
 |:------------------------------|:-----------------------------------------|:---------------------------------------------|:-------------------------------------|
-| **Graph Type**                | Static roots, dynamic front end in 2.x   | Dynamic                                      | Functional transformations           |
-| **Programming Model**         | Imperative front end, graph capture path | Imperative                                   | Functional                           |
-| **Core Data Structure**       | Tensor with framework-managed state      | Tensor with framework-managed state          | Immutable array                      |
-| **Execution Mode**            | Eager by default, graph for optimization | Eager by default                             | Trace and just-in-time compilation   |
-| **Automatic Differentiation** | Reverse mode over captured computation   | Reverse mode over an eager tape              | Forward and reverse transformations  |
-| **Hardware Abstraction**      | Broad deployment runtimes and XLA paths  | Native GPU path plus export/compile runtimes | XLA-centered accelerator compilation |
-| **Optimization Risk**         | Graph capture and operator coverage      | Graph breaks after eager development         | Purity, shape stability, and tracing |
+| **Loại đồ thị** | Gốc tĩnh, giao diện người dùng động trong 2.x | Động | Các phép biến đổi hàm |
+| **Mô hình lập trình** | Giao diện người dùng mệnh lệnh, đường dẫn chụp đồ thị | Mệnh lệnh | Hàm |
+| **Cấu trúc dữ liệu cốt lõi** | Tensor với trạng thái được framework quản lý | Tensor với trạng thái được framework quản lý | Mảng bất biến |
+| **Chế độ thực thi** | Eager theo mặc định, đồ thị để tối ưu hóa | Eager theo mặc định | Dò vết và biên dịch just-in-time |
+| **Đạo hàm tự động** | Chế độ ngược trên tính toán đã được ghi lại | Chế độ ngược trên băng ghi eager | Các biến đổi thuận và ngược |
+| **Trừu tượng hóa phần cứng** | Các runtime triển khai rộng rãi và đường dẫn XLA | Đường dẫn GPU gốc cộng với các runtime xuất/biên dịch | Biên dịch bộ tăng tốc tập trung vào XLA |
+| **Rủi ro tối ưu hóa** | Ghi lại đồ thị và phạm vi bao phủ toán tử | Ngắt đồ thị sau phát triển eager | Tính thuần khiết, ổn định hình dạng và truy vết |
 
 : **Đánh đổi trong Thiết kế Framework**: Mỗi cột phản ánh một câu trả lời riêng biệt cho ba vấn đề cốt lõi. TensorFlow đặt triển khai và thu thập đồ thị làm trọng tâm, PyTorch đặt thực thi ngay lập tức và gỡ lỗi làm trọng tâm, còn JAX đặt biến đổi hàm và khả năng hiển thị của trình biên dịch làm trọng tâm. Bảng này là một bản đồ chẩn đoán, không phải là bảng xếp hạng benchmark. {#tbl-mlfm-comparison tbl-colwidths="[28,24,24,24]"}
 
@@ -4110,14 +4110,14 @@ Nguyên tắc tương tự mở rộng ra ngoài ba framework đa năng. Các h�
 \renewcommand{\arraystretch}{1.25}
 ```
 
-| **Runtime family**              | **Where it fits**              | **Constraint anchor**                                             | **Optimization path**                         | **Constraint to test**                     |
+| **Họ runtime** | **Nơi nó phù hợp** | **Neo ràng buộc** | **Đường dẫn tối ưu hóa** | **Ràng buộc để kiểm tra** |
 |:--------------------------------|:-------------------------------|:------------------------------------------------------------------|:----------------------------------------------|:-------------------------------------------|
-| **PyTorch eager**               | Research and iteration         | Baseline latency; full Python/runtime footprint                   | Dynamic graphs, eager debugging               | Dispatch overhead and missing graph view   |
-| **Compiled PyTorch/TensorFlow** | Server training and serving    | Workload-dependent gains when graph capture is clean              | Graph capture, fusion, layout planning        | Operator coverage and graph breaks         |
-| **TensorFlow Lite/Core ML**     | Mobile and edge inference      | Target-specific mobile latency and package-size budgets           | Quantization, static graphs, NPU delegates    | Target-specific conversion constraints     |
-| **TF Lite Micro/microTVM**      | Microcontroller inference      | Target-specific microcontroller RAM and flash budgets             | Static allocation, INT8 kernels               | Selected operators and constrained memory  |
-| **ONNX Runtime**                | Cross-framework serving        | Backend-dependent; can match native runtimes for supported graphs | Standard graph format, execution providers    | Export gaps and custom-operator fallbacks  |
-| **TensorRT/TVM**                | Hardware-specialized inference | Target-dependent gains over untuned eager baselines               | Kernel fusion, precision lowering, autotuning | Narrower target and conversion assumptions |
+| **PyTorch eager** | Nghiên cứu và lặp lại | Độ trễ đường cơ sở; dấu chân Python/runtime đầy đủ | Đồ thị động, gỡ lỗi eager | Chi phí điều phối và thiếu chế độ xem đồ thị |
+| **PyTorch/TensorFlow đã biên dịch** | Huấn luyện và phục vụ (serving) trên máy chủ | Lợi ích phụ thuộc vào khối lượng công việc (workload) khi việc ghi lại đồ thị rõ ràng | Ghi lại đồ thị, hợp nhất, lập kế hoạch bố cục | Phạm vi bao phủ toán tử và ngắt đồ thị |
+| **TensorFlow Lite/Core ML** | Suy luận trên thiết bị di động và edge | Độ trễ di động cụ thể cho mục tiêu và ngân sách kích thước gói | Lượng tử hoá, đồ thị tĩnh, đại diện NPU | Các ràng buộc chuyển đổi cụ thể cho mục tiêu |
+| **TF Lite Micro/microTVM** | Suy luận trên vi điều khiển | Ngân sách RAM và flash của vi điều khiển cụ thể cho mục tiêu | Cấp phát tĩnh, kernel INT8 | Các toán tử được chọn và bộ nhớ bị hạn chế |
+| **ONNX Runtime** | Phục vụ (serving) đa framework | Phụ thuộc vào backend; có thể khớp với các runtime gốc đối với các đồ thị được hỗ trợ | Định dạng đồ thị tiêu chuẩn, nhà cung cấp thực thi | Khoảng trống xuất và cơ chế dự phòng toán tử tùy chỉnh |
+| **TensorRT/TVM** | Suy luận chuyên biệt hóa phần cứng | Lợi ích phụ thuộc mục tiêu so với các đường cơ sở eager chưa được tinh chỉnh | Hợp nhất kernel, giảm độ chính xác, tự động tinh chỉnh | Mục tiêu hẹp hơn và các giả định chuyển đổi |
 
 : **Bản đồ Ràng buộc Runtime**: Đọc mỗi hàng từ trái sang phải như một sự đánh đổi, trong đó một họ từ bỏ sự linh hoạt, đạt được một đường dẫn tối ưu hóa và có một cách thất bại mới. Cột giữa ghi lại vị trí của một họ so với một đường cơ sở thực thi ngay lập tức chưa được tinh chỉnh chứ không phải là một kết quả đo lường, vì vậy độ trễ, mức sử dụng bộ nhớ, năng lượng và mức độ sử dụng vẫn phải được đo lường cho mô hình, phần cứng, độ chính xác, kích thước batch và cấu hình trình biên dịch cụ thể. {#tbl-framework-efficiency-matrix tbl-colwidths="[17,18,25,19,21]"}
 
@@ -4135,12 +4135,12 @@ Khi các mô hình ML chuyển từ máy chủ đám mây sang thiết bị edge
 
 @Tbl-deployment-frameworks tiếp tục bản đồ ràng buộc tương tự trên toàn phổ từ đám mây đến edge: mỗi hàng xác định các giả định runtime phù hợp với giới hạn mục tiêu.
 
-| **Environment**              | **Runtime assumptions that usually fit** | **Optimization lever**                       | **Binding constraint**               |
+| **Môi trường** | **Các giả định runtime thường phù hợp** | **Đòn bẩy tối ưu hóa** | **Ràng buộc liên kết** |
 |:-----------------------------|:-----------------------------------------|:---------------------------------------------|:-------------------------------------|
-| **Cloud/Server**             | Full training/serving frameworks         | Graph compilation, batching, lower precision | Throughput, cost                     |
-| **Edge**                     | Static graph or portable serving runtime | Static graphs, lower-precision kernels       | Workload-specific latency and memory |
-| **Mobile**                   | App-integrated runtime with delegates    | Accelerator delegates, compact model formats | Battery, thermal, app size limits    |
-| **Microcontroller (TinyML)** | Tiny runtime with fixed allocation       | Static allocation, small integer kernels     | Tight RAM, no dynamic memory         |
+| **Đám mây/Máy chủ** | Các frameworks huấn luyện/phục vụ (serving) đầy đủ | Biên dịch đồ thị, xử lý theo batch, độ chính xác thấp hơn | Thông lượng, chi phí |
+| **edge** | Đồ thị tĩnh hoặc runtime phục vụ (serving) di động | Đồ thị tĩnh, các kernel độ chính xác thấp hơn | Độ trễ và bộ nhớ đặc thù khối lượng công việc (workload) |
+| **Di động** | Runtime tích hợp ứng dụng với các delegate | Các delegate bộ tăng tốc, các định dạng mô hình nhỏ gọn | Giới hạn pin, nhiệt, kích thước ứng dụng |
+| **Vi điều khiển (TinyML)** | Runtime nhỏ gọn với cấp phát cố định | Cấp phát tĩnh, các kernel số nguyên nhỏ | RAM hạn chế, không có bộ nhớ động |
 
 : **Bản đồ Ràng buộc Mục tiêu Triển khai**: Các giả định runtime, đòn bẩy tối ưu hóa và ràng buộc ràng buộc cho từng cấp triển khai, từ máy chủ đám mây đến vi điều khiển. {#tbl-deployment-frameworks tbl-colwidths="[15,35,25,25]"}
 
@@ -4180,10 +4180,10 @@ Hệ sinh thái TensorFlow minh họa cách các trục này tương tác một 
 
 |                                    | TensorFlow | **TensorFlow Lite** | **TensorFlow Lite for Microcontrollers** |
 |:-----------------------------------|:----------:|:-------------------:|:----------------------------------------:|
-| **Training**                       |    Yes     |       Limited       |                    No                    |
-| **Inference**                      |    Yes     |         Yes         |                   Yes                    |
-| **Operator Coverage**              |   Broad    |  Inference-focused  |          Model-selected subset           |
-| **Native Lower-Precision Tooling** |    Yes     |         Yes         |                   Yes                    |
+| **Huấn luyện** |    Có |       Hạn chế |                    Không |
+| **Suy luận** |    Có |         Có |                   Có |
+| **Phạm vi toán tử** |   Rộng |  Tập trung vào suy luận |          Tập con được mô hình chọn |
+| **Công cụ độ chính xác thấp hơn gốc** |    Có |         Có |                   Có |
 
 : **Hỗ trợ mô hình của các biến thể TensorFlow**: Bốn hàng cho thấy mỗi biến thể có thể biểu diễn những gì, chứ không phải kích thước của nó. Khả năng huấn luyện biến mất qua các cấp độ trong khi suy luận và các công cụ độ chính xác thấp vẫn còn nguyên vẹn, điều này khiến phạm vi toán tử trở thành hàng phân biệt: rộng trong TensorFlow, tập trung vào suy luận trong TensorFlow Lite và giảm xuống chỉ còn các toán tử mà một mô hình chọn trong TensorFlow Lite Micro. Kích thước tệp nhị phân và dung lượng bộ nhớ xuất hiện trong @tbl-tf-hw-comparison. {#tbl-tf-comparison tbl-colwidths="[28,26,20,26]"}
 
@@ -4207,11 +4207,11 @@ Sự phân biệt đồ thị tĩnh so với động (được xem xét trong @s
 
 Khi các yêu cầu mô hình được đáp ứng, framework phải tích hợp với môi trường phần mềm mục tiêu. @Tbl-tf-sw-comparison tiết lộ cách các yêu cầu hệ điều hành, quản lý bộ nhớ và hỗ trợ bộ tăng tốc khác nhau giữa các biến thể TensorFlow.
 
-|                         |       TensorFlow      |        **TensorFlow Lite**        |   **TensorFlow Lite for Microcontrollers**   |
+|                         |       TensorFlow |        **TensorFlow Lite** |   **TensorFlow Lite for Microcontrollers** |
 |:------------------------|:---------------------:|:---------------------------------:|:--------------------------------------------:|
-| **Needs an OS**         |          Yes          |                Yes                |                      No                      |
-| **Model Access**        | Filesystem or service | Platform-specific storage mapping | Platform-specific compiled or mapped storage |
-| **Accelerator Support** |          Yes          |             Delegates             |      Optimized kernels and integrations      |
+| **Cần một hệ điều hành** |          Có |                Có |                      Không |
+| **Truy cập mô hình** | Hệ thống tệp hoặc dịch vụ | Ánh xạ lưu trữ dành riêng cho nền tảng | Lưu trữ đã biên dịch hoặc được ánh xạ dành riêng cho nền tảng |
+| **Hỗ trợ bộ tăng tốc** |          Có |             Delegates |      Các kernel và tích hợp được tối ưu hóa |
 
 : **So sánh Khả năng của các Biến thể TensorFlow**: Khả năng của TensorFlow, TensorFlow Lite và TensorFlow Lite Micro về sự phụ thuộc vào hệ điều hành, quản lý bộ nhớ và tăng tốc phần cứng. Các ràng buộc tăng dần giữa các biến thể cho phép lựa chọn theo ngữ cảnh triển khai, từ máy chủ quy mô đầy đủ đến các thiết bị edge bị hạn chế tài nguyên. {#tbl-tf-sw-comparison tbl-colwidths="[28,24,24,24]"}
 
@@ -4223,11 +4223,11 @@ Chỉ riêng khả năng tương thích phần mềm không đảm bảo việc 
 
 Kích thước tệp nhị phân và dung lượng bộ nhớ phụ thuộc vào bản dựng được chọn, các toán tử, delegates, mô hình và cấu hình runtime. Hỗ trợ kiến trúc bộ xử lý chuyển từ bộ xử lý x86, GPU và TPU trong các trung tâm dữ liệu, qua các nền tảng Arm Cortex-A ở cấp độ di động/edge, đến các bộ xử lý Arm Cortex-M, DSP và MCU trong các hệ thống nhúng. Đây không phải là các cấp độ kỹ thuật tùy ý---chúng phản ánh các ràng buộc vật lý (Rào cản ánh sáng, bức tường công suất, bức tường bộ nhớ) phân chia phổ triển khai thành các mô hình riêng biệt (@sec-ml-systems-deployment-spectrum-71be). Bài học kỹ thuật này tổng quát hóa vượt ra ngoài TensorFlow: mọi họ framework trải rộng các cấp độ triển khai đều thực hiện các đánh đổi tương tự giữa khả năng và dung lượng tài nguyên, và công việc của framework là làm cho những đánh đổi đó dễ điều hướng hơn là vô hình.
 
-|                             | TensorFlow                                | **TensorFlow Lite**                        | **TensorFlow Lite for Microcontrollers** |
+|                             | TensorFlow | **TensorFlow Lite** | **TensorFlow Lite for Microcontrollers** |
 |:----------------------------|:------------------------------------------|:-------------------------------------------|:-----------------------------------------|
-| **Base Binary Size**        | Build- and package-dependent              | Build- and delegate-dependent              | Model- and operator-selection-dependent  |
-| **Base Memory Footprint**   | Model-, runtime-, and allocator-dependent | Model-, delegate-, and allocator-dependent | Fixed arena plus runtime state           |
-| **Optimized Architectures** | x86, TPUs, GPUs                           | Arm Cortex-A, x86                          | Arm Cortex-M, DSPs, MCUs                 |
+| **Kích thước nhị phân cơ sở** | Phụ thuộc vào bản dựng và gói | Phụ thuộc vào bản dựng và delegate | Phụ thuộc vào mô hình và lựa chọn toán tử |
+| **Dung lượng bộ nhớ cơ sở** | Phụ thuộc vào mô hình, runtime và bộ cấp phát | Phụ thuộc vào mô hình, delegate và bộ cấp phát | Vùng nhớ cố định cộng với trạng thái runtime |
+| **Các kiến trúc được tối ưu hóa** | x86, TPUs, GPUs | Arm Cortex-A, x86 | Arm Cortex-M, DSPs, MCUs |
 
 : **Mục tiêu Phần cứng của TensorFlow**: Các biến thể TensorFlow nhắm đến phần cứng ngày càng bị ràng buộc hơn, chuyển từ x86, GPU và TPU sang các nền tảng Arm Cortex-A và sau đó là các bộ xử lý Arm Cortex-M, DSP và MCU. Kích thước tệp nhị phân thực tế và dung lượng bộ nhớ phụ thuộc vào bản dựng, các toán tử được chọn, delegates, mô hình và cấu hình runtime. {#tbl-tf-hw-comparison tbl-colwidths="[24,26,25,25]"}
 
@@ -4454,13 +4454,13 @@ class TrainingStepCalc:
     train_bwd_ai_str = fmt_arithmetic_intensity((bwd_flops / bwd_mem), unit=flop / byte, commas=False)
 ```
 
-| **Component**                            |                                           **Modeled Work**                                          |                 **Memory Traffic**                |            **Arithmetic Intensity**           |
+| **Thành phần** |                                           **Công việc được mô hình hóa** |                 **Lưu lượng bộ nhớ** |            **Cường độ số học** |
 |:-----------------------------------------|:---------------------------------------------------------------------------------------------------:|:-------------------------------------------------:|:---------------------------------------------:|
-| **MatMul (x @ W1)**                      |  `{python} TrainingStepCalc.train_mm1_dims_math` = `{python} TrainingStepCalc.train_mm1_mflop_str`  |  `{python} TrainingStepCalc.train_mm1_mem_mb_str` |  `{python} TrainingStepCalc.train_mm1_ai_str` |
-| **ReLU**                                 | `{python} TrainingStepCalc.train_relu_dims_math` = `{python} TrainingStepCalc.train_relu_kflop_str` | `{python} TrainingStepCalc.train_relu_mem_kb_str` | `{python} TrainingStepCalc.train_relu_ai_str` |
-| **MatMul (h @ W2)**                      |  `{python} TrainingStepCalc.train_mm2_dims_math` = `{python} TrainingStepCalc.train_mm2_kflop_str`  |  `{python} TrainingStepCalc.train_mm2_mem_kb_str` |  `{python} TrainingStepCalc.train_mm2_ai_str` |
-| **Cross-entropy (simplified)**           |                           ~`{python} TrainingStepCalc.train_ce_kflop_str`                           |  `{python} TrainingStepCalc.train_ce_mem_kb_str`  |  `{python} TrainingStepCalc.train_ce_ai_str`  |
-| **Backward (assumed 2$\times$ forward)** |                           ~`{python} TrainingStepCalc.train_bwd_mflop_str`                          |  `{python} TrainingStepCalc.train_bwd_mem_mb_str` |  `{python} TrainingStepCalc.train_bwd_ai_str` |
+| **MatMul (x @ W1)** |  `{python} TrainingStepCalc.train_mm1_dims_math` = `{python} TrainingStepCalc.train_mm1_mflop_str`  |  `{python} TrainingStepCalc.train_mm1_mem_mb_str` |  `{python} TrainingStepCalc.train_mm1_ai_str` |
+| **ReLU** | `{python} TrainingStepCalc.train_relu_dims_math` = `{python} TrainingStepCalc.train_relu_kflop_str` | `{python} TrainingStepCalc.train_relu_mem_kb_str` | `{python} TrainingStepCalc.train_relu_ai_str` |
+| **MatMul (h @ W2)** |  `{python} TrainingStepCalc.train_mm2_dims_math` = `{python} TrainingStepCalc.train_mm2_kflop_str`  |  `{python} TrainingStepCalc.train_mm2_mem_kb_str` |  `{python} TrainingStepCalc.train_mm2_ai_str` |
+| **Entropy chéo (đơn giản hóa)** |                           ~`{python} TrainingStepCalc.train_ce_kflop_str`                           |  `{python} TrainingStepCalc.train_ce_mem_kb_str`  |  `{python} TrainingStepCalc.train_ce_ai_str`  |
+| **Lan truyền ngược (giả định 2$\times$ lan truyền tiến)** |                           ~`{python} TrainingStepCalc.train_bwd_mflop_str`                          |  `{python} TrainingStepCalc.train_bwd_mem_mb_str` |  `{python} TrainingStepCalc.train_bwd_ai_str` |
 
 : **Phân tích Roofline theo từng thao tác**: Ước tính công việc phân tích và lưu lượng bộ nhớ cho một bước huấn luyện MLP hai lớp. Hàng cross-entropy gán một thao tác tương đương cho mỗi phép lũy thừa, tích lũy và chuẩn hóa trên mỗi logit, trong khi hàng backward giả định công việc gấp đôi và lưu lượng bộ nhớ gấp ba lần so với lan truyền tiến. Đây là các giả định mô hình chứ không phải số lượng lệnh đo được. Các thao tác MatMul có cường độ số học cao hơn nhiều so với các thao tác theo từng phần tử, trong khi các mô hình ReLU và cross-entropy đơn giản hóa vẫn nhạy cảm với bộ nhớ. {#tbl-training-step-roofline tbl-colwidths="[27,33,18,22]"}
 
@@ -4550,12 +4550,12 @@ Cùng một mã Python chạy trên các phần cứng khác nhau thông qua cá
 
 Mỗi backend triển khai ngữ nghĩa thao tác tensor chung với các tối ưu hóa dành riêng cho phần cứng. Do đó, một lệnh gọi `loss.backward()` duy nhất có thể kích hoạt các đường dẫn mã khác nhau tùy thuộc vào phần cứng. Độ chính xác dấu phẩy động, thứ tự giảm, lựa chọn kernel và các thao tác không xác định có thể tạo ra sự khác biệt số học giữa các backend, vì vậy sự tương đương phải được đánh giá trong phạm vi dung sai được tài liệu hóa và đảm bảo tính xác định của framework.
 
-| **Hardware**                                        | **Backend library**                                    | **Execution mechanism**                                           |
+| **Phần cứng** | **Thư viện backend** | **Cơ chế thực thi** |
 |:----------------------------------------------------|:-------------------------------------------------------|:------------------------------------------------------------------|
-| **CUDA GPU**\index{GPU backend!CUDA implementation} | cuBLAS [@nvidia_cublas; @choquette2021]                | GEMM kernels and CUDA streams for async execution                 |
-| **CPU**\index{CPU backend!optimized BLAS libraries} | Intel oneMKL or OpenBLAS [@intelOneMKL; @openblasDocs] | Thread-level parallelism around optimized kernels                 |
-| **TPU**\index{TPU!XLA compilation}                  | XLA [@GoogleXLA]                                       | Compilation to TPU-specific high-level optimizer (HLO) operations |
-| **Apple Silicon**                                   | Metal Performance Shaders                              | MPS backend                                                       |
+| **CUDA GPU**\index{GPU backend!triển khai CUDA} | cuBLAS [@nvidia_cublas; @choquette2021] | Các kernel GEMM và các luồng CUDA để thực thi bất đồng bộ |
+| **CPU**\index{CPU backend!các thư viện BLAS được tối ưu hóa} | Intel oneMKL hoặc OpenBLAS [@intelOneMKL; @openblasDocs] | Song song hóa cấp độ luồng xung quanh các kernel được tối ưu hóa |
+| **TPU**\index{TPU!biên dịch XLA} | XLA [@GoogleXLA] | Biên dịch thành các phép toán của bộ tối ưu hóa cấp cao (HLO) dành riêng cho TPU |
+| **Apple Silicon** | Metal Performance Shaders | MPS backend |
 
 : **Các Backend Phần cứng Đằng sau Một Đường dẫn Mã Duy nhất**: Mỗi backend triển khai các thao tác tensor giống nhau thông qua một thư viện và cơ chế thực thi khác nhau, do đó mã Python giống hệt nhau được ánh xạ tới các silicon khác nhau. {#tbl-framework-backends tbl-colwidths="[15,44,41]"}
 

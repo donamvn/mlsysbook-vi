@@ -283,12 +283,12 @@ class DeploymentOverviewTable:
     )
 ```
 
-| **Paradigm**  | **Where**        |                       **Latency (ms)**                      |                        **Power**                        | **Memory** | **Best For**                 |
+| **Mô hình** | **Nơi** |                       **Độ trễ (ms)** |                        **Công suất** | **Bộ nhớ** | **Tốt nhất cho** |
 |:--------------|:-----------------|:-----------------------------------------------------------:|:-------------------------------------------------------:|:----------:|:-----------------------------|
-| **Cloud ML**  | Data centers     |  `{python} DeploymentOverviewTable.cloud_latency_range_str` |                            MW                           |     TB     | Training, complex inference  |
-| **Edge ML**   | Local servers    |  `{python} DeploymentOverviewTable.edge_latency_range_str`  |                          100 W                          |     GB     | Real-time inference, privacy |
-| **Mobile ML** | Smartphones      | `{python} DeploymentOverviewTable.mobile_latency_range_str` | `{python} DeploymentOverviewTable.mobile_tdp_range_str` |     GB     | Personal AI, offline         |
-| **TinyML**    | Microcontrollers |  `{python} DeploymentOverviewTable.tiny_latency_range_str`  |                            mW                           |     KB     | Always-on sensing            |
+| **Cloud ML** | Trung tâm dữ liệu |  `{python} DeploymentOverviewTable.cloud_latency_range_str` |                            MW |     TB | Huấn luyện, suy luận phức tạp |
+| **Edge ML** | Máy chủ cục bộ |  `{python} DeploymentOverviewTable.edge_latency_range_str`  |                          100 W                          |     GB | Suy luận thời gian thực, quyền riêng tư |
+| **Mobile ML** | Điện thoại thông minh | `{python} DeploymentOverviewTable.mobile_latency_range_str` | `{python} DeploymentOverviewTable.mobile_tdp_range_str` |     GB | AI cá nhân, ngoại tuyến |
+| **TinyML** | Vi điều khiển |  `{python} DeploymentOverviewTable.tiny_latency_range_str`  |                            mW |     KB | Cảm biến luôn bật |
 
 : **Phổ Triển khai (Khái niệm)**: Bốn phương thức này trải dài trên chín bậc độ lớn về công suất (từ MW đến mW) và bộ nhớ (từ TB đến KB). Cái nhìn tổng quan mang tính khái niệm này định nghĩa từng phương thức theo chế độ vận hành của chúng; về sau, phổ phần cứng cụ thể sẽ gắn các danh mục này với những nền tảng cụ thể và các ngưỡng quyết định định lượng. Các thông số kỹ thuật phần cứng và hằng số vật lý làm cơ sở cho các con số này được liệt kê trong phụ lục Giả định Hệ thống. {#tbl-deployment-paradigms-overview tbl-colwidths="[14,17,12,12,15,30]"}
 
@@ -624,13 +624,13 @@ Phân loại thứ hai đề cập đến các khối lượng công việc (wor
 
 Năm mô hình hải đăng, được tóm tắt trong @tbl-ml-systems-lighthouse-archetypes, sẽ được nhắc lại nhiều lần trong cuốn sách này như những khối lượng công việc (workload) cụ thể. Chúng trải dọc phổ triển khai và giúp chúng ta nhận diện các nút cổ chai hệ thống riêng biệt. @Sec-network-architectures cung cấp đầy đủ chi tiết kiến trúc và “tiểu sử” của các mô hình này.
 
-| **Lighthouse**             | **Archetype**             | **Deployment Paradigm**        |
+| **Hải đăng** | **Nguyên mẫu** | **Mô hình triển khai** |
 |:---------------------------|:--------------------------|:-------------------------------|
-| **ResNet-50**              | Compute Beast             | Cloud training, edge inference |
-| **GPT-2/Llama**            | Bandwidth Hog             | Cloud inference                |
-| **DLRM**                   | Sparse Scatter            | Cloud only (distributed)       |
-| **MobileNetV2**            | Compute Beast (efficient) | Mobile, edge                   |
-| **Keyword Spotting (KWS)** | Tiny Constraint           | TinyML, always-on              |
+| **ResNet-50** | Quái vật tính toán | Huấn luyện trên đám mây, suy luận biên (edge) |
+| **GPT-2/Llama** | Kẻ ngốn băng thông | Suy luận trên đám mây |
+| **DLRM** | Phân tán thưa thớt | Chỉ trên đám mây (phân tán) |
+| **MobileNetV2** | Quái vật tính toán (hiệu quả) | Di động, biên (edge) |
+| **Keyword Spotting (KWS)** | Ràng buộc nhỏ | TinyML, always-on |
 
 : **Năm Mô hình Hải đăng**: Đây là những khối lượng công việc (workload) được dùng lặp lại xuyên suốt cuốn sách để gắn định luật sắt với thực hành cụ thể. Mỗi mô hình hải đăng được ghép với một nguyên mẫu (Compute Beast, Bandwidth Hog, Sparse Scatter, Tiny Constraint) và mô hình triển khai mà nó chủ yếu chạy, qua đó cô lập một nút cổ chai hệ thống đặc trưng. {#tbl-ml-systems-lighthouse-archetypes}
 ```{=latex}
@@ -812,25 +812,25 @@ Các ràng buộc vật lý chuyển những đánh đổi giữa độ trễ v�
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Operation**                    | **Latency** | **Deployment Implication**           |
+| **Hoạt động** | **Độ trễ** | **Ý nghĩa triển khai** |
 |:---------------------------------|:-----------:|:-------------------------------------|
-| **Compute**                      |             |                                      |
-| **GPU matrix multiply (per op)** |    ~1 ns    | Per-operation latency is small       |
-| **NPU inference (MobileNetV2)**  |   5–20 ms   | Mobile can do real-time vision       |
-| **LLM token generation**         |  20–100 ms  | Perceived as "typing speed"          |
-| **Memory**                       |             |                                      |
-| **L1 cache hit**                 |    ~1 ns    | Keep hot data in registers           |
-| **Uncached GPU memory read**     | ~200–500 ns | Hide latency; coalesce accesses      |
-| **DRAM read (mobile)**           |  50–100 ns  | Repeated reads can limit workloads   |
-| **Network**                      |             |                                      |
-| **Same data center**             |    0.5 ms   | Microservices feasible               |
-| **Same region**                  |    1–5 ms   | Edge servers viable                  |
-| **Cross-region**                 |  50–150 ms  | Poor fit for tight latency budgets   |
-| **ML Operations**                |             |                                      |
-| **Wake-word detection (TinyML)** |   ~1–10 ms  | Always-on feasible at $<1\text{ mW}$ |
-| **Face detection (mobile)**      |   10–30 ms  | Real-time at 30 FPS                  |
-| **GPT-4 first token**            |  200–500 ms | User notices delay                   |
-| **ResNet-50 training step**      |  200–400 ms | Throughput-optimized                 |
+| **Tính toán** |             |                                      |
+| **Nhân ma trận trên GPU (mỗi phép toán)** |    ~1 ns | Độ trễ mỗi phép toán nhỏ |
+| **Suy luận NPU (MobileNetV2)** |   5–20 ms | Di động có thể thực hiện thị giác thời gian thực |
+| **Tạo token LLM** |  20–100 ms | Được cảm nhận như "tốc độ gõ phím" |
+| **Bộ nhớ** |             |                                      |
+| **L1 cache hit** |    ~1 ns | Giữ dữ liệu nóng trong thanh ghi |
+| **Đọc bộ nhớ GPU không được cache** | ~200–500 ns | Ẩn độ trễ; gom các truy cập lại |
+| **Đọc DRAM (di động)** |  50–100 ns | Các lần đọc lặp lại có thể hạn chế khối lượng công việc (workload) |
+| **Mạng** |             |                                      |
+| **Cùng trung tâm dữ liệu** |    0.5 ms | Microservices khả thi |
+| **Cùng khu vực** |    1–5 ms | Máy chủ edge khả thi |
+| **Liên khu vực** |  50–150 ms | Không phù hợp với ngân sách độ trễ chặt chẽ |
+| **Vận hành ML** |             |                                      |
+| **Phát hiện từ đánh thức (TinyML)** |   ~1–10 ms | Always-on khả thi ở mức $<1\text{ mW}$ |
+| **Phát hiện khuôn mặt (di động)** |   10–30 ms | Thời gian thực ở 30 FPS |
+| **Token đầu tiên của GPT-4** |  200–500 ms | Người dùng nhận thấy độ trễ |
+| **Bước huấn luyện ResNet-50** |  200–400 ms | Tối ưu hóa thông lượng |
 
 : **Các con số độ trễ khi thiết kế hệ thống ML**: Khi thiết kế hệ thống ML, chúng ta cần quan tâm đến các độ trễ theo từng bậc độ lớn của các thao tác tính toán, bộ nhớ, mạng và các phép toán ML. Những độ trễ này, trải dài tám bậc độ lớn – từ các phép tính ở mức nano giây cho đến hàng trăm mili giây đối với các cuộc gọi mạng liên vùng – sẽ quyết định liệu việc triển khai hệ thống có khả thi hay không. Đây là những ràng buộc vật lý quan trọng, định hình các quyết định kiến trúc. Để có bảng tham khảo nhanh, bao gồm các tỷ lệ năng lượng và quy tắc mở rộng, xem @sec-appdx-machine-foundations-numbers-know-b531. {#tbl-latency-numbers}
 
@@ -845,13 +845,13 @@ $$T \geq \max\left( \frac{O}{R_{\text{peak}} \cdot \eta_{\text{hw}}}, \frac{D_{\
 
 Ở đây, $O$ là tổng số phép toán, $R_{\text{peak}}$ là tốc độ tính toán tối đa, $\eta_{\text{hw}}$ là hiệu suất sử dụng phần cứng, $D_{\text{vol}}$ là lượng dữ liệu, $\text{BW}$ là băng thông bộ nhớ, $\text{BW}_{\text{IO}}$ là băng thông I/O (lưu trữ hoặc mạng), và $L_{\text{lat}}$ là chi phí cố định. Giới hạn dưới này cho biết tài nguyên nào (tính toán, bộ nhớ hay I/O) đang giới hạn hiệu suất; để đạt dấu bằng, cần chồng chéo lý tưởng giữa các tác vụ mà không có thêm dừng trệ. Yếu tố chi phối\index{System bottleneck!dominant constraints} thay đổi theo khối lượng công việc (workload) và chế độ triển khai. Bộ tăng tốc nhanh hơn giúp huấn luyện trên đám mây khi bị giới hạn bởi tính toán; còn giải mã mô hình ngôn ngữ lớn (LLM) bị giới hạn bởi bộ nhớ và các khối lượng công việc (workload) ở edge được lợi hơn khi giảm số byte phải chuyển hoặc tăng băng thông. @Tbl-ml-systems-paradigm-bottlenecks phân tích cả bốn mô hình, trong đó tách đám mây thành huấn luyện và suy luận LLM, và @sec-appdx-dam-taxonomy-bottleneck-diagnostic-3fc9 ánh xạ từng yếu tố chi phối tới các tối ưu hóa hiệu quả cũng như các tối ưu hóa lãng phí, biến chẩn đoán này thành một kế hoạch hành động.
 
-| **Paradigm**            | **Dominant Constraint**                                | **Why**                                                    | **Optimization Focus**                       |
+| **Mô hình** | **Ràng buộc chi phối** | **Tại sao** | **Trọng tâm tối ưu hóa** |
 |:------------------------|:-------------------------------------------------------|:-----------------------------------------------------------|:---------------------------------------------|
-| **Cloud Training**      | $O/(R_{\text{peak}} \cdot \eta_{\text{hw}})$ (Compute) | Abundant memory/network; FLOP/s limit throughput           | Maximize accelerator utilization, batch size |
-| **Cloud LLM Inference** | $D_{\text{vol}}/\text{BW}$ (memory bandwidth)          | Sequential generation repeatedly moves model state         | Increase reuse; reduce bytes moved           |
-| **Edge Inference**      | $D_{\text{vol}}/\text{BW}$ (memory bandwidth)          | Limited local bandwidth; models often memory-bound         | Smaller models; fewer memory transfers       |
-| **Mobile**              | Energy (implicit)                                      | Battery = $\int \text{Power} \cdot dt$; thermal throttling | Lower precision; duty cycling                |
-| **TinyML**              | Model footprint must fit on-chip (capacity)            | Kilobyte-scale memory; model must fit on-chip              | Tiny models and fixed-point arithmetic       |
+| **Huấn luyện trên đám mây** | $O/(R_{\text{peak}} \cdot \eta_{\text{hw}})$ (Compute) | Bộ nhớ/mạng dồi dào; FLOP/s giới hạn thông lượng | Tối đa hóa việc sử dụng bộ tăng tốc, kích thước batch |
+| **Suy luận LLM trên đám mây** | $D_{\text{vol}}/\text{BW}$ (memory bandwidth) | Tạo tuần tự liên tục di chuyển trạng thái mô hình | Tăng khả năng tái sử dụng; giảm số byte di chuyển |
+| **Suy luận tại edge** | $D_{\text{vol}}/\text{BW}$ (memory bandwidth) | Băng thông cục bộ hạn chế; các mô hình thường bị giới hạn bởi bộ nhớ | Các mô hình nhỏ hơn; ít truyền bộ nhớ hơn |
+| **Di động** | Năng lượng (ngầm định) | Battery = $\int \text{Power} \cdot dt$; thermal throttling | Độ chính xác thấp hơn; chu kỳ hoạt động (duty cycling) |
+| **TinyML** | Dấu chân mô hình phải vừa trên chip (dung lượng) | Bộ nhớ quy mô kilobyte; mô hình phải vừa trên chip | Các mô hình nhỏ và số học dấu chấm cố định |
 
 : **Nút thắt cổ chai chiếm ưu thế theo mô hình**: Yếu tố nào trong định luật sắt giới hạn hiệu suất trong mỗi mô hình triển khai, lý do vật lý khiến nó trở thành yếu tố chi phối, và từ đó xác định trọng tâm tối ưu hóa. Yếu tố chi phối này sẽ thay đổi hoàn toàn chiến lược tối ưu hóa: huấn luyện trên đám mây tập trung tối đa hóa sử dụng tài nguyên tính toán, trong khi suy luận LLM phải giải quyết băng thông bộ nhớ. {#tbl-ml-systems-paradigm-bottlenecks tbl-colwidths="[18,26,30,26]"}
 
@@ -871,11 +871,11 @@ Phân tích Roofline phân loại các nút thắt cổ chai bằng cách so sá
 
 Sự chuyển dịch giữa huấn luyện và suy luận này rất quan trọng để nắm rõ. Nhớ lại phân loại D·A·M\index{DAM taxonomy@D·A·M taxonomy!training vs. inference} từ @fig-ai-triad: mọi hệ thống ML gồm Dữ liệu, Thuật toán và Máy. @Tbl-dam-phase cho thấy mỗi thành phần ứng xử khác nhau tùy thuộc vào việc hệ thống đang huấn luyện (học các mẫu) hay phục vụ (serving, áp dụng chúng).
 
-| **Component**                                           | **Training (Mutable)**                                      | **Inference (Immutable)**                               |
+| **Thành phần** | **Huấn luyện (Có thể thay đổi)** | **Suy luận (Bất biến)** |
 |:--------------------------------------------------------|:------------------------------------------------------------|:--------------------------------------------------------|
-| **Data**\index{Training!data throughput}                | Massive throughput: large batches, shuffling, augmentation  | Low latency: single samples, freshness, speed           |
-| **Algorithm**\index{Training!bidirectional computation} | Learning phase: update model parameters from examples       | Prediction phase: apply fixed weights to new inputs     |
-| **Machine**\index{Inference!latency optimization}       | Throughput-optimized: high-bandwidth clusters, large memory | Latency-optimized: edge devices, inference accelerators |
+| **Dữ liệu**\index{Training!data throughput} | Thông lượng lớn: các batch lớn, xáo trộn, tăng cường dữ liệu | Độ trễ thấp: các mẫu đơn lẻ, tính mới, tốc độ |
+| **Thuật toán**\index{Training!bidirectional computation} | Giai đoạn học: cập nhật các tham số mô hình từ các ví dụ | Giai đoạn dự đoán: áp dụng các trọng số cố định cho các đầu vào mới |
+| **Máy**\index{Inference!latency optimization} | Tối ưu hóa thông lượng: các cụm băng thông cao, bộ nhớ lớn | Tối ưu hóa độ trễ: thiết bị edge, bộ tăng tốc suy luận |
 
 : **D·A·M $\times$ Giai đoạn**: Cùng một mô hình đặt ra những yêu cầu rất khác nhau lên Dữ liệu (Data), Thuật toán (Algorithm) và Máy (Machine) tùy thuộc vào hệ thống đang huấn luyện hay phục vụ (serving). Khi các nút thắt cổ chai thay đổi bất ngờ, hãy kiểm tra xem giai đoạn nào hiện đang được tối ưu hóa. {#tbl-dam-phase tbl-colwidths="[14,44,42]"}
 
@@ -1198,12 +1198,12 @@ class RepresentativeSystemsMobileRow:
     )
 ```
 
-| **Category**  |  **Example Device** |                                                     **Processor**                                                     |                           **Memory**                           |                            **Storage**                             |                                                         **Power**                                                          |                                             **Price Range**                                              |
+| **Danh mục** |  **Thiết bị ví dụ** |                                                     **Bộ xử lý** |                           **Bộ nhớ** |                            **Lưu trữ** |                                                         **Công suất** |                                             **Phạm vi giá** |
 |:--------------|:-------------------:|:---------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------:|:------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------:|
-| **Cloud ML**  |  Google TPU v4 Pod  | `{python} HardwareSpectrumSetup.tpu_chip_count_str`, `{python} HardwareSpectrumSetup.cloud_peak_eflop_per_s_str` BF16 |     `{python} HardwareSpectrumSetup.cloud_mem_tb_str` HBM2     |                          Cloud-scale (PB)                          |                                     ~`{python} HardwareSpectrumSetup.cloud_pwr_mw_str`                                     |                                          Cloud service (rental)                                          |
-| **Edge ML**   |   NVIDIA DGX Spark  |              GB10 Grace Blackwell, `{python} HardwareSpectrumSetup.edge_peak_pflop_per_s_str` sparse FP4              |    `{python} HardwareSpectrumSetup.edge_mem_gb_str` LPDDR5x    |       `{python} HardwareSpectrumSetup.edge_stor_tb_str` NVMe       |                                      ~`{python} HardwareSpectrumSetup.edge_pwr_w_str`                                      | ~`{python} HardwareSpectrumSetup.edge_price_min_str`–`{python} HardwareSpectrumSetup.edge_price_max_str` |
-| **Mobile ML** | Flagship Smartphone |                                              Mobile SoC (CPU + GPU + NPU)                                             | `{python} RepresentativeSystemsMobileRow.mobile_ram_range_str` | `{python} RepresentativeSystemsMobileRow.mobile_storage_range_str` |                               `{python} RepresentativeSystemsMobileRow.mobile_tdp_range_str`                               |                                                  \$999+                                                  |
-| **TinyML**    |       ESP32-S3      |                                                  Dual-core @ 240 MHz                                                  |                          512 KB SRAM                           |      `{python} HardwareSpectrumSetup.tiny_flash_mb_str` Flash      | `{python} HardwareSpectrumSetup.tiny_pwr_min_w_str`–`{python} HardwareSpectrumSetup.tiny_pwr_max_w_str` active board power |                           `{python} HardwareSpectrumSetup.tiny_price_usd_str`                            |
+| **Cloud ML** |  Google TPU v4 Pod | `{python} HardwareSpectrumSetup.tpu_chip_count_str`, `{python} HardwareSpectrumSetup.cloud_peak_eflop_per_s_str` BF16 |     `{python} HardwareSpectrumSetup.cloud_mem_tb_str` HBM2 |                          Quy mô đám mây (PB) |                                     ~`{python} HardwareSpectrumSetup.cloud_pwr_mw_str`                                     |                                          Dịch vụ đám mây (thuê) |
+| **Edge ML** |   NVIDIA DGX Spark |              GB10 Grace Blackwell, `{python} HardwareSpectrumSetup.edge_peak_pflop_per_s_str` thưa thớt FP4 |    `{python} HardwareSpectrumSetup.edge_mem_gb_str` LPDDR5x |       `{python} HardwareSpectrumSetup.edge_stor_tb_str` NVMe |                                      ~`{python} HardwareSpectrumSetup.edge_pwr_w_str`                                      | ~`{python} HardwareSpectrumSetup.edge_price_min_str`–`{python} HardwareSpectrumSetup.edge_price_max_str` |
+| **Mobile ML** | Điện thoại thông minh cao cấp |                                              SoC di động (CPU + GPU + NPU) | `{python} RepresentativeSystemsMobileRow.mobile_ram_range_str` | `{python} RepresentativeSystemsMobileRow.mobile_storage_range_str` |                               `{python} RepresentativeSystemsMobileRow.mobile_tdp_range_str`                               |                                                  \$999+                                                  |
+| **TinyML** |       ESP32-S3 |                                                  Lõi kép @ 240 MHz |                          512 KB SRAM |      `{python} HardwareSpectrumSetup.tiny_flash_mb_str` Flash | `{python} HardwareSpectrumSetup.tiny_pwr_min_w_str`–`{python} HardwareSpectrumSetup.tiny_pwr_max_w_str` công suất bảng mạch hoạt động |                           `{python} HardwareSpectrumSetup.tiny_price_usd_str`                            |
 
 : **Phổ phần cứng (Nền tảng cụ thể)**: Các thiết bị đại diện cho từng mô hình triển khai từ @tbl-deployment-paradigms-overview. Nếu bảng khái niệm xác định các chế độ vận hành, thì bảng này liệt kê bộ xử lý cụ thể, dung lượng bộ nhớ, dải công suất và mức giá mà người làm nghề dùng để ghép khối lượng công việc (workload) với phần cứng. DGX Spark nằm ở đầu cao của phổ edge; phần lớn triển khai edge dùng các thiết bị nhỏ hơn nhiều (ví dụ: Jetson Orin Nano). Chúng tôi đưa DGX Spark vào để minh họa trần trên của triển khai ngoài đám mây. Bản thân dòng Jetson của NVIDIA trải dài nhiều SKU, từ Jetson Orin Nano (7--15 W), Jetson Orin NX (10--25 W) đến Jetson AGX Orin (15--60 W); trong suốt cuốn sách này, các số liệu công suất của Jetson cần được hiểu theo đúng SKU được nêu trong ngữ cảnh. {#tbl-representative-systems tbl-colwidths="[12,14,22,13,11,14,14]"}
 
@@ -1307,12 +1307,12 @@ class DeploymentThresholdsTable:
     tiny_latency_range_str = MarkdownStr(Platforms.Tiny.latency_range_ms)
 ```
 
-| **Paradigm**  |                            **Compute**                            |                        **Memory bandwidth**                       |                                    **Power**                                     |                        **Latency (ms)**                       |
+| **Mô hình** |                            **Tính toán** |                        **Băng thông bộ nhớ** |                                    **Công suất** |                        **Độ trễ (ms)** |
 |:--------------|:-----------------------------------------------------------------:|:-----------------------------------------------------------------:|:--------------------------------------------------------------------------------:|:-------------------------------------------------------------:|
-| **Cloud ML**  | `{python} DeploymentThresholdsTable.cloud_thresh_tflop_per_s_str` | `{python} DeploymentThresholdsTable.cloud_thresh_bw_gb_per_s_str` |                              MW class (PUE 1.1–1.3)                              |  `{python} DeploymentThresholdsTable.cloud_latency_range_str` |
-| **Edge ML**   |  `{python} DeploymentThresholdsTable.edge_thresh_pflop_per_s_str` |  `{python} DeploymentThresholdsTable.edge_thresh_bw_gb_per_s_str` |                                   100 W class                                    |  `{python} DeploymentThresholdsTable.edge_latency_range_str`  |
+| **Cloud ML** | `{python} DeploymentThresholdsTable.cloud_thresh_tflop_per_s_str` | `{python} DeploymentThresholdsTable.cloud_thresh_bw_gb_per_s_str` |                              Loại MW (PUE 1.1–1.3) |  `{python} DeploymentThresholdsTable.cloud_latency_range_str` |
+| **Edge ML** |  `{python} DeploymentThresholdsTable.edge_thresh_pflop_per_s_str` |  `{python} DeploymentThresholdsTable.edge_thresh_bw_gb_per_s_str` |                                   Loại 100 W |  `{python} DeploymentThresholdsTable.edge_latency_range_str`  |
 | **Mobile ML** |     `{python} DeploymentThresholdsTable.mobile_npu_range_str`     |      `{python} DeploymentThresholdsTable.mobile_bw_range_str`     |            `{python} DeploymentThresholdsTable.mobile_tdp_range_str`             | `{python} DeploymentThresholdsTable.mobile_latency_range_str` |
-| **TinyML**    |     `{python} DeploymentThresholdsTable.tiny_thresh_tops_str`     |                                 —                                 | `{python} DeploymentThresholdsTable.tiny_thresh_mw_str` always-on average target |  `{python} DeploymentThresholdsTable.tiny_latency_range_str`  |
+| **TinyML** |     `{python} DeploymentThresholdsTable.tiny_thresh_tops_str`     |                                 —                                 | `{python} DeploymentThresholdsTable.tiny_thresh_mw_str` mục tiêu trung bình luôn bật |  `{python} DeploymentThresholdsTable.tiny_latency_range_str`  |
 
 : **Ngưỡng quyết định triển khai**: Các phạm vi thực tế mà người làm nghề dùng để đánh giá tính khả thi của việc triển khai cho mỗi mô hình trong @tbl-representative-systems. Các giá trị này trả lời câu hỏi "khối lượng công việc (workload) của tôi có thể chạy ở đây không?" bằng cách nêu rõ cấp độ tính toán, băng thông bộ nhớ và phạm vi công suất mà mỗi mô hình cung cấp. Mỗi con số về công suất thể hiện một lớp điển hình của mô hình chứ không phải trần cứng; đặc biệt, phạm vi edge trải từ các module nhúng công suất thấp đến các thiết bị hạng máy trạm. {#tbl-deployment-thresholds tbl-colwidths="[12,18,18,34,18]"}
 
@@ -1667,13 +1667,13 @@ class CloudEdgeTCO:
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Cost Component**       | **Calculation**                                                                                                                                        |                             **Annual Cost** |
+| **Thành phần chi phí** | **Tính toán** |                             **Chi phí hàng năm** |
 |:-------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------:|
-| **GPU inference (A10G)** | `{python} CloudEdgeTCO.gpu_instances_str` instances $\times$ `{python} CloudEdgeTCO.hours_per_year_str` $\times$ `{python} CloudEdgeTCO.gpu_price_str` |       `{python} CloudEdgeTCO.c_gpu_usd_str` |
-| **Network egress**       | `{python} CloudEdgeTCO.egress_gb_str` $\times$ `{python} CloudEdgeTCO.days_per_year_str` $\times$ `{python} CloudEdgeTCO.egress_price_str`             |    `{python} CloudEdgeTCO.c_egress_usd_str` |
-| **Load balancer**        | `{python} CloudEdgeTCO.lb_base_usd_str` + LCU charges                                                                                                  |        `{python} CloudEdgeTCO.c_lb_usd_str` |
-| **CloudWatch/logging**   | Monitoring, alerts                                                                                                                                     |      `{python} CloudEdgeTCO.c_logs_usd_str` |
-| **Total Cloud**          |                                                                                                                                                        | **`{python} CloudEdgeTCO.c_total_usd_str`** |
+| **Suy luận GPU (A10G)** | `{python} CloudEdgeTCO.gpu_instances_str` phiên bản $\times$ `{python} CloudEdgeTCO.hours_per_year_str` $\times$ `{python} CloudEdgeTCO.gpu_price_str` |       `{python} CloudEdgeTCO.c_gpu_usd_str` |
+| **Thoát mạng** | `{python} CloudEdgeTCO.egress_gb_str` $\times$ `{python} CloudEdgeTCO.days_per_year_str` $\times$ `{python} CloudEdgeTCO.egress_price_str`             |    `{python} CloudEdgeTCO.c_egress_usd_str` |
+| **Bộ cân bằng tải** | `{python} CloudEdgeTCO.lb_base_usd_str` + phí LCU |        `{python} CloudEdgeTCO.c_lb_usd_str` |
+| **CloudWatch/ghi nhật ký** | Giám sát, cảnh báo |      `{python} CloudEdgeTCO.c_logs_usd_str` |
+| **Tổng cộng đám mây** |                                                                                                                                                        | **`{python} CloudEdgeTCO.c_total_usd_str`** |
 
 : **TCO hàng năm cho suy luận trên đám mây**: Các chi phí chi tiết cho GPU, mạng, bộ cân bằng tải và giám sát, áp dụng cho triển khai đám mây với dung lượng cố định của khối lượng công việc (workload) thị giác ở quy mô ResNet-50. {#tbl-ml-systems-cloud-tco tbl-colwidths="[33,37,30]"}
 
@@ -1688,14 +1688,14 @@ Các triển khai trên đám mây cũng có những ràng buộc vận hành. C
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Cost Component**   | **Calculation**                                                                                                                              |                             **Annual Cost** |
+| **Thành phần chi phí** | **Tính toán** |                             **Chi phí hàng năm** |
 |:---------------------|:---------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------:|
-| **Hardware CapEx**   | `{python} CloudEdgeTCO.server_cost_str` ÷ `{python} CloudEdgeTCO.server_life_years_str` life                                                 |         `{python} CloudEdgeTCO.e_capex_str` |
-| **Power (24/7)**     | `{python} CloudEdgeTCO.power_w_str` $\times$ `{python} CloudEdgeTCO.hours_per_year_str` $\times$ `{python} CloudEdgeTCO.electricity_usd_str` |     `{python} CloudEdgeTCO.e_power_usd_str` |
-| **Cooling overhead** | ~`{python} CloudEdgeTCO.cooling_overhead_pct_str` of power                                                                                   |      `{python} CloudEdgeTCO.e_cool_usd_str` |
-| **Network (fiber)**  | Fixed line for remote management                                                                                                             |       `{python} CloudEdgeTCO.e_net_usd_str` |
-| **DevOps labor**     | `{python} CloudEdgeTCO.devops_fte_str` $\times$ `{python} CloudEdgeTCO.devops_salary_usd_str` salary                                         |     `{python} CloudEdgeTCO.e_labor_usd_str` |
-| **Total Edge**       |                                                                                                                                              | **`{python} CloudEdgeTCO.e_total_usd_str`** |
+| **CapEx phần cứng** | `{python} CloudEdgeTCO.server_cost_str` ÷ `{python} CloudEdgeTCO.server_life_years_str` tuổi thọ |         `{python} CloudEdgeTCO.e_capex_str` |
+| **Công suất (24/7)** | `{python} CloudEdgeTCO.power_w_str` $\times$ `{python} CloudEdgeTCO.hours_per_year_str` $\times$ `{python} CloudEdgeTCO.electricity_usd_str` |     `{python} CloudEdgeTCO.e_power_usd_str` |
+| **Chi phí làm mát phụ trội** | ~`{python} CloudEdgeTCO.cooling_overhead_pct_str` của công suất |      `{python} CloudEdgeTCO.e_cool_usd_str` |
+| **Mạng (cáp quang)** | Đường dây cố định để quản lý từ xa |       `{python} CloudEdgeTCO.e_net_usd_str` |
+| **Lao động DevOps** | Lương `{python} CloudEdgeTCO.devops_fte_str` $\times$ `{python} CloudEdgeTCO.devops_salary_usd_str` |     `{python} CloudEdgeTCO.e_labor_usd_str` |
+| **Tổng Edge** |                                                                                                                                              | **`{python} CloudEdgeTCO.e_total_usd_str`** |
 
 : **TCO suy luận edge hàng năm**: Chi phí chi tiết cho phần cứng, công suất, làm mát, mạng và nhân công DevOps khi triển khai máy chủ edge tại chỗ, cho thấy chi phí nhân công là thành phần lớn nhất trong kịch bản này. {#tbl-ml-systems-edge-tco tbl-colwidths="[33,37,30]"}
 
@@ -2344,11 +2344,11 @@ Một ví dụ triển khai bán lẻ thực tế cho thấy những ràng buộ
 \renewcommand{\arraystretch}{1.45}
 ```
 
-| **Metric**               |                                                          **Calculation**                                                          |                           **Result**                           |
+| **Chỉ số** |                                                          **Tính toán** |                           **Kết quả** |
 |:-------------------------|:---------------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------:|
-| **Inferences per store** |               `{python} EdgeSizingThroughput.cameras_per_store_str` $\times$ `{python} EdgeSizingThroughput.fps_str`              |        `{python} EdgeSizingThroughput.inf_per_sec_str`         |
-| **Model compute**        |                             YOLOv8-nano: `{python} EdgeSizingThroughput.yolo_gflop_per_inference_str`                             |   `{python} EdgeSizingThroughput.sustained_gflop_per_s_str`    |
-| **Required throughput**  | `{python} EdgeSizingThroughput.sustained_gflop_per_s_str` $\times$ `{python} EdgeSizingThroughput.headroom_factor_str` (headroom) | ~`{python} EdgeSizingThroughput.req_tops_equiv_str` equivalent |
+| **Số suy luận mỗi cửa hàng** |               `{python} EdgeSizingThroughput.cameras_per_store_str` $\times$ `{python} EdgeSizingThroughput.fps_str`              |        `{python} EdgeSizingThroughput.inf_per_sec_str`         |
+| **Tính toán mô hình** |                             YOLOv8-nano: `{python} EdgeSizingThroughput.yolo_gflop_per_inference_str` |   `{python} EdgeSizingThroughput.sustained_gflop_per_s_str`    |
+| **Thông lượng yêu cầu** | `{python} EdgeSizingThroughput.sustained_gflop_per_s_str` $\times$ `{python} EdgeSizingThroughput.headroom_factor_str` (headroom) | ~`{python} EdgeSizingThroughput.req_tops_equiv_str` tương đương |
 
 : **Yêu cầu định cỡ suy luận edge**: Mục tiêu thông lượng cho mỗi cửa hàng trong kịch bản phát hiện người của chuỗi bán lẻ thông minh. {#tbl-ml-systems-edge-sizing-requirements tbl-colwidths="[33,42,25]"}
 
@@ -2459,11 +2459,11 @@ class EdgeSizingFleetTCO:
 \renewcommand{\arraystretch}{1.4}
 ```
 
-| **Edge Device**                                                                |                                                              **INT8 TOPS**                                                               |                        **Power**                        |                       **Unit Cost**                       |                       **Fleet Cost**                      |
+| **Thiết bị Edge** |                                                              **INT8 TOPS** |                        **Công suất** |                       **Chi phí đơn vị** |                       **Chi phí đội thiết bị** |
 |:-------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------:|:---------------------------------------------------------:|:---------------------------------------------------------:|
-| **NVIDIA Jetson Orin NX**                                                      |                                              `{python} EdgeSizingFleetTCO.jetson_tops_str`                                               |   `{python} EdgeSizingFleetTCO.jetson_power_range_str`  |       `{python} EdgeSizingFleetTCO.jetson_cost_str`       |     `{python} EdgeSizingFleetTCO.jetson_fleet_usd_str`    |
-| **Intel NUC + Movidius**                                                       |                                                `{python} EdgeSizingFleetTCO.nuc_tops_str`                                                |      `{python} EdgeSizingFleetTCO.nuc_power_w_str`      |         `{python} EdgeSizingFleetTCO.nuc_cost_str`        |      `{python} EdgeSizingFleetTCO.nuc_fleet_usd_str`      |
-| **Google Coral Dev (`{python} EdgeSizingFleetTCO.coral_units_per_store_str`)** | peak `{python} EdgeSizingFleetTCO.coral_cluster_peak_tops_str`<br>derated `{python} EdgeSizingFleetTCO.coral_cluster_sustained_tops_str` | `{python} EdgeSizingFleetTCO.coral_cluster_power_w_str` | `{python} EdgeSizingFleetTCO.coral_cluster_unit_cost_str` | `{python} EdgeSizingFleetTCO.coral_cluster_fleet_usd_str` |
+| **NVIDIA Jetson Orin NX** |                                              `{python} EdgeSizingFleetTCO.jetson_tops_str`                                               |   `{python} EdgeSizingFleetTCO.jetson_power_range_str`  |       `{python} EdgeSizingFleetTCO.jetson_cost_str`       |     `{python} EdgeSizingFleetTCO.jetson_fleet_usd_str`    |
+| **Intel NUC + Movidius** |                                                `{python} EdgeSizingFleetTCO.nuc_tops_str`                                                |      `{python} EdgeSizingFleetTCO.nuc_power_w_str`      |         `{python} EdgeSizingFleetTCO.nuc_cost_str`        |      `{python} EdgeSizingFleetTCO.nuc_fleet_usd_str`      |
+| **Google Coral Dev (`{python} EdgeSizingFleetTCO.coral_units_per_store_str`)** | đỉnh `{python} EdgeSizingFleetTCO.coral_cluster_peak_tops_str`, giảm định mức `{python} EdgeSizingFleetTCO.coral_cluster_sustained_tops_str` | `{python} EdgeSizingFleetTCO.coral_cluster_power_w_str` | `{python} EdgeSizingFleetTCO.coral_cluster_unit_cost_str` | `{python} EdgeSizingFleetTCO.coral_cluster_fleet_usd_str` |
 
 : **Các tùy chọn bộ tăng tốc edge**: Thông lượng, công suất và chi phí của ba bộ tăng tốc edge tiềm năng khi triển khai ở quy mô đội thiết bị. {#tbl-ml-systems-edge-hardware-options tbl-colwidths="[40,15,15,15,15]"}
 
@@ -3123,13 +3123,13 @@ Khoảng cách về hiệu quả năng lượng của TinyML\index{TinyML!energy
 
 Khoảng cách về năng lượng giữa các phương pháp\index{Energy per inference!paradigm comparison} không chỉ là vấn đề về mức độ mà là về quy mô, trải rộng tám bậc độ lớn như được minh họa trong @fig-energy-per-inference. Bảng @Tbl-ml-systems-energy-per-inference đặt khoảng cách đó trên các con số cụ thể, bằng cách quy đổi chi phí năng lượng của từng phương pháp thành số lượng suy luận mà một viên pin điện thoại thông minh có thể duy trì.
 
-| **Paradigm** | **Example Workload**           |               **Energy/Inference**               | **Inferences per Battery (`{python} EnergyInference.batt_volt_str`, `{python} EnergyInference.batt_cap_mah_str`)** |
+| **Mô hình** | **Khối lượng công việc (workload) ví dụ** |               **Năng lượng/Suy luận** | **Số suy luận mỗi Pin (`{python} EnergyInference.batt_volt_str`, `{python} EnergyInference.batt_cap_mah_str`)** |
 |:-------------|:-------------------------------|:------------------------------------------------:|-------------------------------------------------------------------------------------------------------------------:|
-| **Cloud**    | GPT-4 query                    |      `{python} EnergyInference.e_gpt4_str`       |                                                                              `{python} EnergyInference.q_gpt4_str` |
-| **Cloud**    | ResNet-50 (accelerator server) | `{python} EnergyInference.e_resnet_cloud_mj_str` |                                                                      `{python} EnergyInference.q_resnet_cloud_str` |
-| **Edge**     | ResNet-50 (Jetson)             | `{python} EnergyInference.e_resnet_edge_mj_str`  |                                                                       `{python} EnergyInference.q_resnet_edge_str` |
-| **Mobile**   | MobileNet (NPU)                |  `{python} EnergyInference.e_mobilenet_mj_str`   |                                                                         `{python} EnergyInference.q_mobilenet_str` |
-| **TinyML**   | Keyword spotting               |       `{python} EnergyInference.e_kws_str`       |                                                                               `{python} EnergyInference.q_kws_str` |
+| **Đám mây** | Truy vấn GPT-4 |      `{python} EnergyInference.e_gpt4_str`       |                                                                              `{python} EnergyInference.q_gpt4_str` |
+| **Đám mây** | ResNet-50 (máy chủ bộ tăng tốc) | `{python} EnergyInference.e_resnet_cloud_mj_str` |                                                                      `{python} EnergyInference.q_resnet_cloud_str` |
+| **Edge** | ResNet-50 (Jetson) | `{python} EnergyInference.e_resnet_edge_mj_str`  |                                                                       `{python} EnergyInference.q_resnet_edge_str` |
+| **Di động** | MobileNet (NPU) |  `{python} EnergyInference.e_mobilenet_mj_str`   |                                                                         `{python} EnergyInference.q_mobilenet_str` |
+| **TinyML** | Phát hiện từ khóa |       `{python} EnergyInference.e_kws_str`       |                                                                               `{python} EnergyInference.q_kws_str` |
 
 : **Năng lượng trên mỗi suy luận giữa các phương pháp**: Các ước tính phân tích về năng lượng thiết bị và các mốc tham chiếu về quy mô, cùng với số lượng suy luận tương ứng từ một viên pin điện thoại thông minh. Đây không phải là các phép đo toàn hệ thống được kiểm soát. {#tbl-ml-systems-energy-per-inference tbl-colwidths="[18,29,25,28]"}
 
@@ -3316,22 +3316,22 @@ class ParadigmComparisonTable:
     mobile_tdp_range_str = fmt_range(mobile_tdp_min_w, mobile_tdp_max_w, precision=0, commas=False, unit="W")
 ```
 
-| **Aspect**                 | **Cloud ML**                                               | **Edge ML**                                               | **Mobile ML**                                                      | **TinyML**                                                |
+| **Khía cạnh** | **Cloud ML** | **Edge ML** | **Mobile ML** | **TinyML** |
 |:---------------------------|:-----------------------------------------------------------|:----------------------------------------------------------|:-------------------------------------------------------------------|:----------------------------------------------------------|
-| **Processing Location**    | Centralized cloud servers (Data Centers)                   | Local edge devices (gateways, servers)                    | Smartphones and tablets                                            | Ultra-low-power microcontrollers and embedded systems     |
-| **Latency**                | `{python} ParadigmComparisonTable.cloud_latency_range_str` | `{python} ParadigmComparisonTable.edge_latency_range_str` | `{python} ParadigmComparisonTable.mobile_latency_range_str`        | `{python} ParadigmComparisonTable.tiny_latency_range_str` |
-| **Compute Power**          | Very High (Multiple GPUs/TPUs)                             | High (Edge GPUs)                                          | Moderate (Mobile NPUs/GPUs)                                        | Very Low (MCU/tiny processors)                            |
-| **Storage Capacity**       | Cloud-scale (petabytes+)                                   | Large (terabytes)                                         | Moderate (gigabytes)                                               | Very Limited (kilobytes–megabytes)                        |
-| **Energy Consumption**     | Very High (kW–MW range)                                    | High (hundreds of watts)                                  | Moderate (`{python} ParadigmComparisonTable.mobile_tdp_range_str`) | Very Low (mW range)                                       |
-| **Scalability**            | High (provider capacity limits)                            | Good (limited by edge hardware)                           | Moderate (per-device scaling)                                      | Limited (fixed hardware)                                  |
-| **Data Exposure**          | Remote processing expands the surface                      | Local processing reduces transmission                     | On-device processing reduces transmission                          | Raw data can remain local                                 |
-| **Connectivity Required**  | Constant high-bandwidth                                    | Intermittent                                              | Optional                                                           | None                                                      |
-| **Offline Capability**     | None                                                       | Good                                                      | Excellent                                                          | Complete                                                  |
-| **Real-time Processing**   | Dependent on network                                       | Good                                                      | Very Good                                                          | Excellent                                                 |
-| **Cost**                   | High (\$1000s+/month)                                      | Moderate (\$100s–\$1000s)                                 | Device purchase (\$200–\$1000+; often user-owned)                  | Very Low (\$1–\$10)                                       |
-| **Hardware Requirements**  | Cloud infrastructure                                       | Edge servers/gateways                                     | Modern smartphones                                                 | MCUs/embedded systems                                     |
-| **Development Complexity** | High (cloud expertise needed)                              | Moderate-High (edge+networking)                           | Moderate (mobile SDKs)                                             | High (embedded expertise)                                 |
-| **Deployment Speed**       | Fast                                                       | Moderate                                                  | Fast                                                               | Slow                                                      |
+| **Vị trí xử lý** | Máy chủ đám mây tập trung (Trung tâm dữ liệu) | Thiết bị edge cục bộ (cổng, máy chủ) | Điện thoại thông minh và máy tính bảng | Vi điều khiển công suất cực thấp và hệ thống nhúng |
+| **Độ trễ** | `{python} ParadigmComparisonTable.cloud_latency_range_str` | `{python} ParadigmComparisonTable.edge_latency_range_str` | `{python} ParadigmComparisonTable.mobile_latency_range_str`        | `{python} ParadigmComparisonTable.tiny_latency_range_str` |
+| **Công suất tính toán** | Rất cao (Nhiều GPUs/TPUs) | Cao (Edge GPUs) | Trung bình (NPUs/GPUs di động) | Rất thấp (MCU/bộ xử lý siêu nhỏ) |
+| **Dung lượng lưu trữ** | Quy mô đám mây (petabytes+) | Lớn (terabytes) | Vừa phải (gigabytes) | Rất hạn chế (kilobytes–megabytes) |
+| **Mức tiêu thụ năng lượng** | Rất cao (phạm vi kW–MW) | Cao (hàng trăm watt) | Vừa phải (`{python} ParadigmComparisonTable.mobile_tdp_range_str`) | Rất thấp (phạm vi mW) |
+| **Khả năng mở rộng** | Cao (giới hạn bởi năng lực nhà cung cấp) | Tốt (giới hạn bởi phần cứng edge) | Vừa phải (mở rộng theo từng thiết bị) | Hạn chế (phần cứng cố định) |
+| **Tiếp xúc dữ liệu** | Xử lý từ xa làm tăng bề mặt tiếp xúc | Xử lý cục bộ giảm việc truyền tải | Xử lý trên thiết bị giảm việc truyền tải | Dữ liệu thô có thể giữ nguyên cục bộ |
+| **Yêu cầu kết nối** | Băng thông cao liên tục | Không liên tục | Tùy chọn | Không |
+| **Khả năng ngoại tuyến** | Không | Tốt | Xuất sắc | Hoàn toàn |
+| **Xử lý thời gian thực** | Phụ thuộc vào mạng | Tốt | Rất tốt | Xuất sắc |
+| **Chi phí** | Cao (\$1000s+/tháng) | Vừa phải (\$100s–\$1000s) | Mua thiết bị (\$200–\$1000+; thường thuộc sở hữu người dùng) | Rất thấp (\$1–\$10) |
+| **Yêu cầu phần cứng** | Cơ sở hạ tầng đám mây | Máy chủ edge/cổng (gateways) | Điện thoại thông minh hiện đại | MCUs/hệ thống nhúng |
+| **Độ phức tạp phát triển** | Cao (cần chuyên môn về đám mây) | Trung bình-Cao (edge + mạng) | Trung bình (SDK di động) | Cao (chuyên môn về hệ thống nhúng) |
+| **Tốc độ triển khai** | Nhanh | Trung bình | Nhanh | Chậm |
 
 : **So sánh các mô hình theo 14 tiêu chí**: Đây là bảng so sánh toàn diện 14 tiêu chí quan trọng khi quyết định triển khai. ML trên đám mây có năng lực tính toán mạnh nhất, còn xử lý cục bộ giúp giảm truyền tải dữ liệu và nguy cơ lộ thông tin khi lưu trữ tập trung, dù bản thân nó không đảm bảo hoàn toàn quyền riêng tư. Bảng này là tài liệu tham khảo chính cho các kiến trúc sư hệ thống khi đánh giá các phương án triển khai. {#tbl-big_vs_tiny tbl-colwidths="[16,20,20,22,22]"}
 
@@ -3647,11 +3647,11 @@ Mẫu thứ ba là **triển khai lũy tiến**\index{Progressive deployment!mod
 
 Khi có ba mẫu tích hợp để lựa chọn, việc quyết định trở thành bài toán ghép ràng buộc: chọn mẫu có đặc điểm đánh đổi phù hợp với điểm nghẽn chính của hệ thống. @Tbl-ml-systems-hybrid-pattern-selection tóm tắt các yếu tố đánh đổi, các điều kiện nên dùng và các điều kiện không nên dùng.
 
-| **Pattern**                 | **Trade-off**                          | **Choose when**                                                                                 | **Avoid when**                                                     |
+| **Mô hình** | **Sự đánh đổi** | **Chọn khi** | **Tránh khi** |
 |:----------------------------|:---------------------------------------|:------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------|
-| **Train-Serve Split**       | Training cost vs. inference latency    | Training requires scale that inference does not; privacy matters for inference but not training | Model needs continuous learning from deployed data                 |
-| **Hierarchical Processing** | Local autonomy vs. global optimization | Data volume exceeds transmission capacity; decisions needed at multiple timescales              | All processing can occur at one tier; network is reliable and fast |
-| **Progressive Deployment**  | Model quality vs. deployment reach     | Same model needed at multiple capability levels; graceful degradation required                  | Model cannot be meaningfully compressed; single deployment target  |
+| **Phân tách huấn luyện-phục vụ** | Chi phí huấn luyện so với độ trễ suy luận | Huấn luyện yêu cầu quy mô mà suy luận không cần; quyền riêng tư quan trọng đối với suy luận nhưng không quan trọng đối với huấn luyện | Mô hình cần học liên tục từ dữ liệu đã triển khai |
+| **Xử lý phân cấp** | Quyền tự chủ cục bộ so với tối ưu hóa toàn cầu | Khối lượng dữ liệu vượt quá khả năng truyền tải; cần đưa ra quyết định ở nhiều khung thời gian | Tất cả quá trình xử lý có thể diễn ra ở một cấp; mạng đáng tin cậy và nhanh chóng |
+| **Triển khai lũy tiến** | Chất lượng mô hình so với phạm vi triển khai | Cần cùng một mô hình ở nhiều cấp độ khả năng; yêu cầu suy giảm hiệu suất một cách duyên dáng | Mô hình không thể được nén một cách có ý nghĩa; mục tiêu triển khai đơn lẻ |
 
 : **Hướng dẫn lựa chọn mẫu lai**: Các yếu tố đánh đổi, các điều kiện nên dùng và các điều kiện không nên dùng cho từng trong ba mẫu tích hợp lai. Việc lựa chọn cần khớp đặc điểm đánh đổi của mẫu với điểm nghẽn chính của hệ thống. {#tbl-ml-systems-hybrid-pattern-selection tbl-colwidths="[22,22,30,26]"}
 

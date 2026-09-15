@@ -883,15 +883,15 @@ Các tầng triển khai khác nhau trước hết ở các giới hạn hoạt 
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Characteristic**   | **Cloud/Data center** | **Mobile/Edge**      | **TinyML**                  |
+| **Đặc điểm** | **Đám mây/Trung tâm dữ liệu** | **Di động/Edge** | **TinyML** |
 |:---------------------|:----------------------|:---------------------|:----------------------------|
-| **Latency Target**   | 10–100 ms             | 20–50 ms             | 1–100 ms                    |
-| **Batch Size**       | 1–128 (dynamic)       | 1 (fixed)            | 1 (fixed)                   |
-| **Memory**           | 16–80 GB VRAM         | 2–8 GB shared        | 256 KB–2 MB SRAM            |
-| **Power**            | 300–700 W             | 1–10 W               | 1–100 mW                    |
-| **Update Mechanism** | Container deploy      | App store update     | Firmware over-the-air (OTA) |
-| **Failure Mode**     | Retry/failover        | Graceful degradation | Silent or reset             |
-| **Monitoring**       | Full telemetry        | Limited analytics    | Heartbeat only              |
+| **Mục tiêu độ trễ** | 10–100 ms | 20–50 ms | 1–100 ms |
+| **Kích thước batch** | 1–128 (động) | 1 (cố định) | 1 (cố định) |
+| **Bộ nhớ** | 16–80 GB VRAM | 2–8 GB chia sẻ | 256 KB–2 MB SRAM |
+| **Công suất** | 300–700 W             | 1–10 W               | 1–100 mW |
+| **Cơ chế cập nhật** | Triển khai container | Cập nhật qua cửa hàng ứng dụng | Firmware qua mạng (OTA) |
+| **Chế độ lỗi** | Thử lại/chuyển đổi dự phòng | Giảm hiệu suất có kiểm soát | Im lặng hoặc đặt lại |
+| **Giám sát** | Đo từ xa đầy đủ | Phân tích hạn chế | Chỉ nhịp tim |
 
 : **Phổ Kiến trúc Phục vụ**: Các giới hạn triển khai điển hình cho việc phục vụ trên đám mây, di động và TinyML. Các phạm vi về độ trễ, kích thước batch, bộ nhớ và công suất là hướng dẫn thiết kế chứ không phải giới hạn phổ quát; các hàng về cập nhật, lỗi và giám sát tóm tắt mô hình vận hành đặc trưng cho từng môi trường. {#tbl-serving-spectrum}
 
@@ -1007,13 +1007,13 @@ class ResNetServingSpectrum:
 \renewcommand{\arraystretch}{1.65}
 ```
 
-| **Dimension**           |                                  **`{python} ResNetServingSpectrum.cloud_name_str`**                                   |                                       **`{python} ResNetServingSpectrum.mobile_name_str`**                                       |                                                  **`{python} ResNetServingSpectrum.tiny_name_str`**                                                 |
+| **Kích thước** |                                  **`{python} ResNetServingSpectrum.cloud_name_str`**                                   |                                       **`{python} ResNetServingSpectrum.mobile_name_str`**                                       |                                                  **`{python} ResNetServingSpectrum.tiny_name_str`**                                                 |
 |:------------------------|:----------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------:|
-| **Model format**        |                   TensorRT FP16 engine \mbox{(`{python} ResNetServingSpectrum.cloud_model_mb_str`)}                    |                        TensorFlow Lite INT8 \mbox{(`{python} ResNetServingSpectrum.mobile_model_mb_str`)}                        | Not feasible (`{python} ResNetServingSpectrum.tiny_model_mb_str`); alternative: MobileNetV2 INT8 (`{python} ResNetServingSpectrum.tiny_alt_mb_str`) |
-| **Inference (batch-1)** | `{python} ResNetServingSpectrum.cloud_inf_b1_ms_str` (batch-16: `{python} ResNetServingSpectrum.cloud_inf_b16_ms_str`) |    `{python} ResNetServingSpectrum.mobile_inf_npu_ms_str` (NPU), `{python} ResNetServingSpectrum.mobile_inf_cpu_ms_str` (CPU)    |                                                   `{python} ResNetServingSpectrum.tiny_inf_ms_str`                                                  |
-| **Throughput**          |                       `{python} ResNetServingSpectrum.cloud_throughput_img_per_s_str` (batched)                        |                        ~`{python} ResNetServingSpectrum.mobile_throughput_img_per_s_str` (single-stream)                         |                                                ~`{python} ResNetServingSpectrum.tiny_throughput_str`                                                |
-| **Memory**              |                           `{python} ResNetServingSpectrum.cloud_vram_gb_str` VRAM (batch-32)                           |                            `{python} ResNetServingSpectrum.mobile_mem_mb_str` peak (shared with app)                             |              `{python} ResNetServingSpectrum.tiny_arena_kb_str` arena (fits in `{python} ResNetServingSpectrum.tiny_sram_kb_str` SRAM)              |
-| **Energy/inference**    |                                                           —                                                            | `{python} ResNetServingSpectrum.mobile_energy_npu_mj_str` (NPU), `{python} ResNetServingSpectrum.mobile_energy_cpu_mj_str` (CPU) |                                                 `{python} ResNetServingSpectrum.tiny_energy_mj_str`                                                 |
+| **Định dạng mô hình** |                   TensorRT FP16 engine \mbox{(`{python} ResNetServingSpectrum.cloud_model_mb_str`)} |                        TensorFlow Lite INT8 \mbox{(`{python} ResNetServingSpectrum.mobile_model_mb_str`)} | Không khả thi (`{python} ResNetServingSpectrum.tiny_model_mb_str`); thay thế: MobileNetV2 INT8 (`{python} ResNetServingSpectrum.tiny_alt_mb_str`) |
+| **Suy luận (batch-1)** | `{python} ResNetServingSpectrum.cloud_inf_b1_ms_str` (batch-16: `{python} ResNetServingSpectrum.cloud_inf_b16_ms_str`) |    `{python} ResNetServingSpectrum.mobile_inf_npu_ms_str` (NPU), `{python} ResNetServingSpectrum.mobile_inf_cpu_ms_str` (CPU) |                                                   `{python} ResNetServingSpectrum.tiny_inf_ms_str`                                                  |
+| **Thông lượng** |                       `{python} ResNetServingSpectrum.cloud_throughput_img_per_s_str` (theo batch) |                        ~`{python} ResNetServingSpectrum.mobile_throughput_img_per_s_str` (luồng đơn) |                                                ~`{python} ResNetServingSpectrum.tiny_throughput_str`                                                |
+| **Bộ nhớ** |                           `{python} ResNetServingSpectrum.cloud_vram_gb_str` VRAM (batch-32) |                            `{python} ResNetServingSpectrum.mobile_mem_mb_str` đỉnh (chia sẻ với ứng dụng) |              `{python} ResNetServingSpectrum.tiny_arena_kb_str` vùng nhớ (vừa với `{python} ResNetServingSpectrum.tiny_sram_kb_str` SRAM) |
+| **Năng lượng/suy luận** |                                                           —                                                            | `{python} ResNetServingSpectrum.mobile_energy_npu_mj_str` (NPU), `{python} ResNetServingSpectrum.mobile_energy_cpu_mj_str` (CPU) |                                                 `{python} ResNetServingSpectrum.tiny_energy_mj_str`                                                 |
 
 : **Phân loại hình ảnh trên phổ phục vụ (serving)**: Minh họa so sánh song song giữa phục vụ (serving) trên đám mây, thiết bị di động và TinyML cho cùng một tác vụ phân loại hình ảnh, cho thấy định dạng mô hình, độ trễ, thông lượng, mức sử dụng bộ nhớ và ngân sách năng lượng khác nhau ra sao giữa các bối cảnh triển khai. {#tbl-resnet-serving-spectrum tbl-colwidths="[20,26,27,27]"}
 
@@ -1653,15 +1653,15 @@ class LatencyBudgetCalc:
 \renewcommand{\arraystretch}{1.22}
 ```
 
-| **Phase**          | **Operation**              |                    **Time**                    |               **Percentage**               |
+| **Giai đoạn** | **Thao tác** |                    **Thời gian** |               **Tỷ lệ phần trăm** |
 |:-------------------|:---------------------------|:----------------------------------------------:|:------------------------------------------:|
-| **Preprocessing**  | JPEG decode                |   `{python} LatencyTableCalc.l_jpeg_ms_str`    |   `{python} LatencyTableCalc.p_jpeg_str`   |
-| **Preprocessing**  | Resize to $224{\times}224$ |  `{python} LatencyTableCalc.l_resize_ms_str`   |  `{python} LatencyTableCalc.p_resize_str`  |
-| **Preprocessing**  | Normalize (mean/std)       |   `{python} LatencyTableCalc.l_norm_ms_str`    |   `{python} LatencyTableCalc.p_norm_str`   |
-| **Data Transfer**  | CPU→GPU copy               | `{python} LatencyTableCalc.l_transfer_ms_str`  | `{python} LatencyTableCalc.p_transfer_str` |
-| **Inference**      | ResNet-50 forward pass     |    `{python} LatencyTableCalc.l_inf_ms_str`    |   `{python} LatencyTableCalc.p_inf_str`    |
-| **Postprocessing** | Softmax + top-5            |   `{python} LatencyTableCalc.l_post_ms_str`    |  ~`{python} LatencyTableCalc.p_post_str`   |
-| **Total**          |                            | **`{python} LatencyTableCalc.l_total_ms_str`** |                  **100%**                  |
+| **Tiền xử lý** | Giải mã JPEG |   `{python} LatencyTableCalc.l_jpeg_ms_str`    |   `{python} LatencyTableCalc.p_jpeg_str`   |
+| **Tiền xử lý** | Thay đổi kích thước thành $224{\times}224$ |  `{python} LatencyTableCalc.l_resize_ms_str`   |  `{python} LatencyTableCalc.p_resize_str`  |
+| **Tiền xử lý** | Chuẩn hóa (trung bình/độ lệch chuẩn) |   `{python} LatencyTableCalc.l_norm_ms_str`    |   `{python} LatencyTableCalc.p_norm_str`   |
+| **Truyền tải dữ liệu** | Sao chép CPU→GPU | `{python} LatencyTableCalc.l_transfer_ms_str`  | `{python} LatencyTableCalc.p_transfer_str` |
+| **Suy luận** | Chuyển tiếp ResNet-50 |    `{python} LatencyTableCalc.l_inf_ms_str`    |   `{python} LatencyTableCalc.p_inf_str`    |
+| **Hậu xử lý** | Softmax + top-5 |   `{python} LatencyTableCalc.l_post_ms_str`    |  ~`{python} LatencyTableCalc.p_post_str`   |
+| **Tổng cộng** |                            | **`{python} LatencyTableCalc.l_total_ms_str`** |                  **100%**                  |
 
 : **Ngân sách độ trễ của ResNet-50**: Biểu đồ phân tích minh họa độ trễ theo từng giai đoạn cho một yêu cầu phục vụ, cho thấy tổng thời gian tiền xử lý và truyền dữ liệu có thể ngang bằng với thời gian của chính bước chuyển tiếp (forward pass) của ResNet-50. Các tỷ lệ phần trăm này cho thấy nên dồn công sức kỹ thuật vào đâu trong kịch bản này. Tỷ lệ phần trăm của mỗi giai đoạn được làm tròn đến số nguyên gần nhất, nên tổng có thể không đúng chính xác 100%. {#tbl-model-serving-resnet50-latency-budget tbl-colwidths="[28,28,22,22]"}
 
@@ -1727,13 +1727,13 @@ class DlrmLatencyCalc:
 
 **Phân tích**: Trong khi giai đoạn mô hình của ResNet-50 chủ yếu bị chi phối bởi các phép tính của mạng nơ-ron tích chập, thì chi phí chính ở giai đoạn mô hình của DLRM là truy cập bộ nhớ bảng embedding. Để xác định nút thắt cổ chai trong quá trình phục vụ (serving) từ đầu đến cuối, ta vẫn cần đo lường toàn bộ chuỗi: tiền xử lý, suy luận, hậu xử lý và luân chuyển dữ liệu. @Tbl-model-serving-dlrm-latency-budget phân rã yêu cầu khuyến nghị theo từng giai đoạn như sau:
 
-| **Phase**            | **Operation**            |                     **Time**                     |  **Bottleneck**  |
+| **Giai đoạn** | **Thao tác** |                     **Thời gian** |  **Nút thắt cổ chai** |
 |:---------------------|:-------------------------|:------------------------------------------------:|:----------------:|
-| **Input Parsing**    | Request parsing          |   `{python} DlrmLatencyCalc.dlrm_input_ms_str`   |       CPU        |
-| **Embedding Lookup** | Fetch 100+ dense vectors |   `{python} DlrmLatencyCalc.dlrm_embed_ms_str`   | memory bandwidth |
-| **Inference**        | MLP forward pass         |    `{python} DlrmLatencyCalc.dlrm_mlp_ms_str`    |     Compute      |
-| **Postprocessing**   | Ranking & Filtering      |   `{python} DlrmLatencyCalc.dlrm_post_ms_str`    |       CPU        |
-| **Total**            |                          | **`{python} DlrmLatencyCalc.dlrm_total_ms_str`** |                  |
+| **Phân tích cú pháp đầu vào** | Phân tích cú pháp yêu cầu |   `{python} DlrmLatencyCalc.dlrm_input_ms_str`   |       CPU |
+| **Tra cứu embedding** | Lấy 100+ vector dày đặc |   `{python} DlrmLatencyCalc.dlrm_embed_ms_str`   | băng thông bộ nhớ |
+| **Suy luận** | Chuyển tiếp MLP |    `{python} DlrmLatencyCalc.dlrm_mlp_ms_str`    |     Tính toán |
+| **Hậu xử lý** | Xếp hạng & Lọc |   `{python} DlrmLatencyCalc.dlrm_post_ms_str`    |       CPU |
+| **Tổng cộng** |                          | **`{python} DlrmLatencyCalc.dlrm_total_ms_str`** |                  |
 
 : **Độ trễ phục vụ (serving) DLRM**: Biểu đồ phân tích minh họa độ trễ theo từng giai đoạn cho một yêu cầu khuyến nghị với ngân sách p99 là 10 ms, so sánh việc tra cứu embedding của DLRM (bị giới hạn bởi băng thông bộ nhớ) với bước chuyển tiếp của ResNet-50 (bị giới hạn bởi tính toán). Việc bổ sung sức mạnh tính toán cho giai đoạn suy luận sẽ không còn hiệu quả khi băng thông của bảng embedding trở thành ràng buộc chính. {#tbl-model-serving-dlrm-latency-budget tbl-colwidths="[28,28,22,22]"}
 
@@ -1858,13 +1858,13 @@ Barroso, Patterson và các cộng sự đã chỉ ra một khoảng cách lớn
 \renewcommand{\arraystretch}{1.18}
 ```
 
-| **Tax Component** |    **Typical Cost**   | **Scaling Behavior**   | **Tax Evasion Strategy**        |
+| **Thành phần chi phí** |    **Chi phí điển hình** | **Hành vi mở rộng** | **Chiến lược tránh chi phí** |
 |:------------------|:---------------------:|:-----------------------|:--------------------------------|
-| **Network I/O**   |         1–5 ms        | Linear with payload    | Compression, Region Colocation  |
-| **Serialization** |  50–500 $\mu\text{s}$ | Linear with payload    | gRPC/Protobuf (vs. JSON)        |
-| **Queuing**       |       0.1–10 ms       | Diverges near capacity | Dynamic Batching, Autoscaling   |
-| **Dispatch**      |  10–50 $\mu\text{s}$  | Constant per batch     | Kernel Fusion (reduce launches) |
-| **Data Copy**     | 100–500 $\mu\text{s}$ | Linear with tensor     | Zero-Copy/Shared Memory         |
+| **I/O mạng** |         1–5 ms | Tuyến tính theo tải trọng | Nén, Đồng vị trí khu vực |
+| **Tuần tự hóa** |  50–500 $\mu\text{s}$ | Tuyến tính theo tải trọng | gRPC/Protobuf (so với JSON) |
+| **Xếp hàng đợi** |       0.1–10 ms | Phân kỳ gần công suất tối đa | Dynamic Batching, Autoscaling |
+| **Điều phối** |  10–50 $\mu\text{s}$  | Hằng số trên mỗi batch | Kernel Fusion (giảm số lần khởi chạy) |
+| **Sao chép dữ liệu** | 100–500 $\mu\text{s}$ | Tuyến tính với tensor | Zero-Copy/Bộ nhớ chia sẻ |
 
 : **Chi phí phục vụ (serving)**: Đây là phân tích điển hình về các nguồn độ trễ không thuộc phần suy luận. Mặc dù các thành phần riêng lẻ như tuần tự hóa có thể dưới 1 ms, chúng sẽ cộng dồn. Ở các giới hạn trên của các khoảng được hiển thị, tổng chi phí này có thể sánh với một lần gọi mô hình 5 ms. Mục tiêu kỹ thuật là đo lường đường đi thực tế của yêu cầu và giảm các chi phí ràng buộc thông qua các lựa chọn như tải trọng nhị phân, kết nối duy trì và giảm số lần sao chép dữ liệu. {#tbl-serving-tax}
 
@@ -1996,12 +1996,12 @@ class ResolutionBottleneckCalc:
 \renewcommand{\arraystretch}{1.18}
 ```
 
-| **Resolution**       |            **Assumed Activation Term**             |                  **Modeled Arith. Intensity**                 | **Bottleneck Classification** |
+| **Độ phân giải** |            **Thuật ngữ Activation giả định** |                  **Cường độ số học được mô hình hóa** | **Phân loại nút thắt cổ chai** |
 |:---------------------|:--------------------------------------------------:|:-------------------------------------------------------------:|:-----------------------------:|
-| **$224{\times}224$** | `{python} ResolutionBottleneckCalc.act_224_mb_str` | `{python} ResolutionBottleneckCalc.ai_224_flops_per_byte_str` |        Not established        |
-| **$384{\times}384$** | `{python} ResolutionBottleneckCalc.act_384_mb_str` | `{python} ResolutionBottleneckCalc.ai_384_flops_per_byte_str` |        Not established        |
-| **$512{\times}512$** | `{python} ResolutionBottleneckCalc.act_512_mb_str` | `{python} ResolutionBottleneckCalc.ai_512_flops_per_byte_str` |        Not established        |
-| **$640{\times}640$** | `{python} ResolutionBottleneckCalc.act_640_mb_str` | `{python} ResolutionBottleneckCalc.ai_640_flops_per_byte_str` |        Not established        |
+| **$224{\times}224$** | `{python} ResolutionBottleneckCalc.act_224_mb_str` | `{python} ResolutionBottleneckCalc.ai_224_flops_per_byte_str` |        Chưa được thiết lập |
+| **$384{\times}384$** | `{python} ResolutionBottleneckCalc.act_384_mb_str` | `{python} ResolutionBottleneckCalc.ai_384_flops_per_byte_str` |        Chưa được thiết lập |
+| **$512{\times}512$** | `{python} ResolutionBottleneckCalc.act_512_mb_str` | `{python} ResolutionBottleneckCalc.ai_512_flops_per_byte_str` |        Chưa được thiết lập |
+| **$640{\times}640$** | `{python} ResolutionBottleneckCalc.act_640_mb_str` | `{python} ResolutionBottleneckCalc.ai_640_flops_per_byte_str` |        Chưa được thiết lập |
 
 : **Độ phân giải và Cường độ tính toán số học theo mô hình**: Ước tính này được tính bằng cách lấy FLOPs chia cho tổng số byte trọng số cộng với một lần đọc/ghi giả định của một thành phần activation đã được điều chỉnh tỉ lệ. Nó bỏ qua lưu lượng tổng thể của các tensor trung gian, cache và không gian làm việc (workspace). Do đó, việc vượt qua điểm đỉnh V100 không khẳng định rằng nút thắt là do kernel đang thực thi. {#tbl-resolution-bottleneck tbl-colwidths="[25,25,25,25]"}
 
@@ -2385,7 +2385,7 @@ class UtilizationLatency:
     service_ms_str = fmt_time(service_ms_value, 'millisecond', precision=0, commas=False)
 ```
 
-| **Utilization $(\rho_{\text{serv}})$**       |                    **Latency Multiple**                    | **Example (`{python} UtilizationLatency.service_ms_str` service)** |
+| **Tỷ lệ sử dụng $(\rho_{\text{serv}})$** |                    **Bội số độ trễ** | **Ví dụ (`{python} UtilizationLatency.service_ms_str` service)** |
 |:---------------------------------------------|:----------------------------------------------------------:|:------------------------------------------------------------------:|
 | **`{python} UtilizationLatency.rho_str[0]`** | `{python} UtilizationLatency.latency_multiple_mult_str[0]` |          `{python} UtilizationLatency.example_ms_str[0]`           |
 | **`{python} UtilizationLatency.rho_str[1]`** | `{python} UtilizationLatency.latency_multiple_mult_str[1]` |          `{python} UtilizationLatency.example_ms_str[1]`           |
@@ -2697,16 +2697,16 @@ class ColdStartCalc:
 \renewcommand{\arraystretch}{1.4}
 ```
 
-| **Phase**                       |                    **Duration**                    | **Notes**                                           |
+| **Giai đoạn** |                    **Thời lượng** | **Ghi chú** |
 |:--------------------------------|:--------------------------------------------------:|:----------------------------------------------------|
-| **Weight loading (SSD)**        |       `{python} ColdStartCalc.cs_ssd_s_str`        | 98 MB FP32 weights from local storage               |
-| **Weight loading (S3)**         |         `{python} ColdStartCalc.cs_s3_str`         | Network latency dominates for cloud storage         |
-| **CUDA context**                |        `{python} ColdStartCalc.cs_cuda_str`        | GPU driver initialization and memory setup          |
-| **TensorRT compilation**        |      `{python} ColdStartCalc.cs_compile_str`       | Converts PyTorch model to optimized engine          |
-| **Warmup (10 inferences)**      |      `{python} ColdStartCalc.cs_warmup_s_str`      | Triggers remaining lazy initialization              |
-| **Runtime overhead**            | `{python} ColdStartCalc.cs_runtime_overhead_s_str` | Process startup, framework hooks, and runtime setup |
-| **Total (local, optimized)**    |    **`{python} ColdStartCalc.cs_local_s_str`**     | With precompiled TensorRT engine, warm container    |
-| **Total (cloud, first deploy)** |    **`{python} ColdStartCalc.cs_cloud_s_str`**     | Including compilation from cold state               |
+| **Tải trọng số (SSD)** |       `{python} ColdStartCalc.cs_ssd_s_str`        | 98 MB trọng số FP32 từ bộ nhớ cục bộ |
+| **Tải trọng số (S3)** |         `{python} ColdStartCalc.cs_s3_str`         | Độ trễ mạng chiếm ưu thế đối với lưu trữ đám mây |
+| **Ngữ cảnh CUDA** |        `{python} ColdStartCalc.cs_cuda_str`        | Khởi tạo driver GPU và thiết lập bộ nhớ |
+| **Biên dịch TensorRT** |      `{python} ColdStartCalc.cs_compile_str`       | Chuyển đổi mô hình PyTorch thành engine được tối ưu hóa |
+| **Khởi động (10 suy luận)** |      `{python} ColdStartCalc.cs_warmup_s_str`      | Kích hoạt phần khởi tạo lười biếng còn lại |
+| **Chi phí runtime** | `{python} ColdStartCalc.cs_runtime_overhead_s_str` | Khởi động tiến trình, framework hooks và thiết lập runtime |
+| **Tổng cộng (cục bộ, tối ưu hóa)** |    **`{python} ColdStartCalc.cs_local_s_str`**     | Với engine TensorRT được biên dịch sẵn, container "nóng" |
+| **Tổng cộng (đám mây, triển khai lần đầu)** |    **`{python} ColdStartCalc.cs_cloud_s_str`**     | Bao gồm biên dịch từ trạng thái "lạnh" |
 
 : **Dòng thời gian khởi động nguội của ResNet-50**: Thời lượng minh họa cho từng giai đoạn: tải các trọng số, tạo ngữ cảnh CUDA, biên dịch TensorRT và warmup. Bảng cũng tổng hợp thời gian cho trường hợp cục bộ đã tối ưu hóa và trường hợp triển khai lần đầu trên đám mây, qua đó cho thấy chi phí chủ yếu nằm ở đâu. {#tbl-model-serving-resnet-coldstart tbl-colwidths="[30,20,50]"}
 
@@ -2975,7 +2975,7 @@ plt.close()
 %\renewcommand{\arraystretch}{1.3}
 ```
 
-| **Batch Size**                                       |                 **Inference Time**                 |               **Per-Image Compute**                |                       **Throughput**                       |                 **GPU Util.**                  |
+| **Kích thước batch** |                 **Thời gian suy luận** |               **Tính toán trên mỗi hình ảnh** |                       **Thông lượng** |                 **Tỷ lệ sử dụng GPU** |
 |:-----------------------------------------------------|:--------------------------------------------------:|:--------------------------------------------------:|:----------------------------------------------------------:|:----------------------------------------------:|
 | **`{python} BatchThroughputCalc.batch_size_str[0]`** | `{python} BatchThroughputCalc.inference_ms_str[0]` | `{python} BatchThroughputCalc.per_image_ms_str[0]` | `{python} BatchThroughputCalc.throughput_img_per_s_str[0]` | `{python} BatchThroughputCalc.gpu_util_str[0]` |
 | **`{python} BatchThroughputCalc.batch_size_str[1]`** | `{python} BatchThroughputCalc.inference_ms_str[1]` | `{python} BatchThroughputCalc.per_image_ms_str[1]` | `{python} BatchThroughputCalc.throughput_img_per_s_str[1]` | `{python} BatchThroughputCalc.gpu_util_str[1]` |
@@ -3119,7 +3119,7 @@ class BatchVariability:
 
 @Tbl-batch-variability định lượng sự biến động này, chỉ ra cách kích thước batch thay đổi tùy theo mức lưu lượng, trong một cửa sổ `{python} BatchVariability.window_ms_str` cố định:
 
-| **Arrival Rate**                               |              **Mean Batch**             |              **Std Dev**               |       **$\Pr(\text{batch}=0)$**       | **$\Pr(\text{batch} \ge 2 \times \text{mean})$** |
+| **Tốc độ đến** |              **Trung bình Batch** |              **Độ lệch chuẩn** |       **$\Pr(\text{batch}=0)$**       | **$\Pr(\text{batch} \ge 2 \times \text{mean})$** |
 |:-----------------------------------------------|:---------------------------------------:|:--------------------------------------:|:-------------------------------------:|:------------------------------------------------:|
 | **`{python} BatchVariability.qps_str[0]` QPS** | `{python} BatchVariability.mean_str[0]` | `{python} BatchVariability.std_str[0]` | `{python} BatchVariability.p0_str[0]` |     `{python} BatchVariability.p_ge_str[0]`      |
 | **`{python} BatchVariability.qps_str[1]` QPS** | `{python} BatchVariability.mean_str[1]` | `{python} BatchVariability.std_str[1]` | `{python} BatchVariability.p0_str[1]` |     `{python} BatchVariability.p_ge_str[1]`      |
@@ -3220,13 +3220,13 @@ class BatchingAnalysisCalc:
 # service_time_value, total_latency_value, throughput_value already at module scope
 ```
 
-| **Batch Size** |                **Service Time**               |                 **Total Latency**                  |                        **Throughput**                        | **Efficiency** |
+| **Kích thước batch** |                **Thời gian phục vụ** |                 **Tổng độ trễ** |                        **Thông lượng** | **Hiệu quả** |
 |:--------------:|:---------------------------------------------:|:--------------------------------------------------:|:------------------------------------------------------------:|:--------------:|
-|     **1**      |  `{python} BatchingAnalysisCalc.st_b1_ms_str` | `{python} BatchingAnalysisCalc.b1_latency_ms_str`  | `{python} BatchingAnalysisCalc.b1_throughput_img_per_s_str`  |      Low       |
-|     **4**      |  `{python} BatchingAnalysisCalc.st_b4_ms_str` |    `{python} BatchingAnalysisCalc.tl_b4_ms_str`    |     `{python} BatchingAnalysisCalc.tp_b4_img_per_s_str`      |    Moderate    |
-|     **8**      |  `{python} BatchingAnalysisCalc.st_b8_ms_str` |    `{python} BatchingAnalysisCalc.tl_b8_ms_str`    |     `{python} BatchingAnalysisCalc.tp_b8_img_per_s_str`      |      Good      |
-|     **16**     | `{python} BatchingAnalysisCalc.st_b16_ms_str` |   `{python} BatchingAnalysisCalc.tl_b16_ms_str`    |     `{python} BatchingAnalysisCalc.tp_b16_img_per_s_str`     |      High      |
-|     **32**     | `{python} BatchingAnalysisCalc.st_b32_ms_str` | `{python} BatchingAnalysisCalc.b32_latency_ms_str` | `{python} BatchingAnalysisCalc.b32_throughput_img_per_s_str` |    Maximum     |
+|     **1**      |  `{python} BatchingAnalysisCalc.st_b1_ms_str` | `{python} BatchingAnalysisCalc.b1_latency_ms_str`  | `{python} BatchingAnalysisCalc.b1_throughput_img_per_s_str`  |      Thấp |
+|     **4**      |  `{python} BatchingAnalysisCalc.st_b4_ms_str` |    `{python} BatchingAnalysisCalc.tl_b4_ms_str`    |     `{python} BatchingAnalysisCalc.tp_b4_img_per_s_str`      |    Trung bình |
+|     **8**      |  `{python} BatchingAnalysisCalc.st_b8_ms_str` |    `{python} BatchingAnalysisCalc.tl_b8_ms_str`    |     `{python} BatchingAnalysisCalc.tp_b8_img_per_s_str`      |      Tốt |
+|     **16**     | `{python} BatchingAnalysisCalc.st_b16_ms_str` |   `{python} BatchingAnalysisCalc.tl_b16_ms_str`    |     `{python} BatchingAnalysisCalc.tp_b16_img_per_s_str`     |      Cao |
+|     **32**     | `{python} BatchingAnalysisCalc.st_b32_ms_str` | `{python} BatchingAnalysisCalc.b32_latency_ms_str` | `{python} BatchingAnalysisCalc.b32_throughput_img_per_s_str` |    Tối đa |
 
 : **Phân tích thông lượng batch**: Phân tích kịch bản thông lượng của mô hình ResNet-50 trên GPU V100, sử dụng cửa sổ batch `{python} BatchingAnalysisCalc.T_window_ms_str`. Thông lượng tăng `{python} BatchingAnalysisCalc.throughput_increase_mult_str` khi kích thước batch tăng từ 1 lên 32 (từ `{python} BatchingAnalysisCalc.b1_throughput_img_per_s_str` lên `{python} BatchingAnalysisCalc.b32_throughput_img_per_s_str`). Tuy nhiên, tổng độ trễ tăng hơn gấp đôi (từ `{python} BatchingAnalysisCalc.b1_latency_ms_str` lên `{python} BatchingAnalysisCalc.b32_latency_ms_str`). Cấu hình tối ưu phụ thuộc vào việc SLO về độ trễ hay mục tiêu thông lượng là ràng buộc chính. {#tbl-batching-throughput tbl-colwidths="[20,20,20,20,20]"}
 
@@ -3330,12 +3330,12 @@ class BatchingOptimization:
 
 Trong kịch bản minh họa với ResNet-50 này, với SLO độ trễ p95 là 50 ms, khi so sánh một cửa sổ *batching* thận trọng với một cửa sổ *batching* tích cực, ta sẽ thấy các cấu hình giả định này đánh đổi giữa thời gian chờ, ngân sách *suy luận* và dung lượng bão hòa như thế nào. @Tbl-batching-windows trình bày hai cấu hình này cạnh nhau.
 
-| **Metric**                       | **Conservative ($T_{\text{window}}$ = `{python} BatchingOptimization.s1_window_ms_str`)**                                                      | **Aggressive ($T_{\text{window}}$ = `{python} BatchingOptimization.s2_window_ms_str`)** |
+| **Chỉ số** | **Thận trọng ($T_{\text{window}}$ = `{python} BatchingOptimization.s1_window_ms_str`)** | **Mạnh mẽ ($T_{\text{window}}$ = `{python} BatchingOptimization.s2_window_ms_str`)** |
 |:---------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------|
-| **Average wait**                 | `{python} BatchingOptimization.s1_wait_ms_str` (max wait = `{python} BatchingOptimization.s1_window_ms_str` for the first request in a window) | `{python} BatchingOptimization.s2_wait_ms_str`                                          |
-| **Latency budget for inference** | `{python} BatchingOptimization.s1_budget_ms_str` (mean-latency planning; tail SLOs should budget the full window)                              | `{python} BatchingOptimization.s2_budget_ms_str`                                        |
-| **Batch size cap**               | `{python} BatchingOptimization.s1_batch_str`                                                                                                   | `{python} BatchingOptimization.s2_batch_str`                                            |
-| **Assumed saturated capacity**   | ~`{python} BatchingOptimization.s1_throughput_img_per_s_str`                                                                                   | ~`{python} BatchingOptimization.s2_throughput_img_per_s_str`                            |
+| **Thời gian chờ trung bình** | `{python} BatchingOptimization.s1_wait_ms_str` (thời gian chờ tối đa = `{python} BatchingOptimization.s1_window_ms_str` cho yêu cầu đầu tiên trong một cửa sổ) | `{python} BatchingOptimization.s2_wait_ms_str`                                          |
+| **Ngân sách độ trễ cho suy luận** | `{python} BatchingOptimization.s1_budget_ms_str` (lập kế hoạch độ trễ trung bình; SLO đuôi nên phân bổ toàn bộ cửa sổ) | `{python} BatchingOptimization.s2_budget_ms_str`                                        |
+| **Giới hạn kích thước batch** | `{python} BatchingOptimization.s1_batch_str`                                                                                                   | `{python} BatchingOptimization.s2_batch_str`                                            |
+| **Dung lượng bão hòa giả định** | ~`{python} BatchingOptimization.s1_throughput_img_per_s_str`                                                                                   | ~`{python} BatchingOptimization.s2_throughput_img_per_s_str`                            |
 
 : **Sự đánh đổi của cửa sổ *batching* minh họa**: Hai cấu hình *batching* giả định đánh đổi thời gian chờ trung bình, ngân sách *suy luận*, giới hạn kích thước *batch* và dung lượng bão hòa như thế nào. {#tbl-batching-windows tbl-colwidths="[25,49,26]"}
 
@@ -3499,13 +3499,13 @@ class ParetoBatching:
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Window (ms)**                             |               **Max Batch**                |             **Avg Latency**             |             **p99 Latency**             |                **Throughput**               | **Configuration**    |
+| **Cửa sổ (ms)** |               **Batch tối đa** |             **Độ trễ trung bình** |             **Độ trễ p99** |                **Thông lượng** | **Cấu hình** |
 |:--------------------------------------------|:------------------------------------------:|:---------------------------------------:|:---------------------------------------:|:-------------------------------------------:|:---------------------|
-| **`{python} ParetoBatching.window_str[0]`** | `{python} ParetoBatching.max_batch_str[0]` | `{python} ParetoBatching.avg_ms_str[0]` | `{python} ParetoBatching.p99_ms_str[0]` | `{python} ParetoBatching.throughput_str[0]` | Ultra-low latency    |
-| **`{python} ParetoBatching.window_str[1]`** | `{python} ParetoBatching.max_batch_str[1]` | `{python} ParetoBatching.avg_ms_str[1]` | `{python} ParetoBatching.p99_ms_str[1]` | `{python} ParetoBatching.throughput_str[1]` | Balanced             |
-| **`{python} ParetoBatching.window_str[2]`** | `{python} ParetoBatching.max_batch_str[2]` | `{python} ParetoBatching.avg_ms_str[2]` | `{python} ParetoBatching.p99_ms_str[2]` | `{python} ParetoBatching.throughput_str[2]` | Moderate latency     |
-| **`{python} ParetoBatching.window_str[3]`** | `{python} ParetoBatching.max_batch_str[3]` | `{python} ParetoBatching.avg_ms_str[3]` | `{python} ParetoBatching.p99_ms_str[3]` | `{python} ParetoBatching.throughput_str[3]` | Throughput-optimized |
-| **`{python} ParetoBatching.window_str[4]`** | `{python} ParetoBatching.max_batch_str[4]` | `{python} ParetoBatching.avg_ms_str[4]` | `{python} ParetoBatching.p99_ms_str[4]` | `{python} ParetoBatching.throughput_str[4]` | Maximum throughput   |
+| **`{python} ParetoBatching.window_str[0]`** | `{python} ParetoBatching.max_batch_str[0]` | `{python} ParetoBatching.avg_ms_str[0]` | `{python} ParetoBatching.p99_ms_str[0]` | `{python} ParetoBatching.throughput_str[0]` | Độ trễ cực thấp |
+| **`{python} ParetoBatching.window_str[1]`** | `{python} ParetoBatching.max_batch_str[1]` | `{python} ParetoBatching.avg_ms_str[1]` | `{python} ParetoBatching.p99_ms_str[1]` | `{python} ParetoBatching.throughput_str[1]` | Cân bằng |
+| **`{python} ParetoBatching.window_str[2]`** | `{python} ParetoBatching.max_batch_str[2]` | `{python} ParetoBatching.avg_ms_str[2]` | `{python} ParetoBatching.p99_ms_str[2]` | `{python} ParetoBatching.throughput_str[2]` | Độ trễ trung bình |
+| **`{python} ParetoBatching.window_str[3]`** | `{python} ParetoBatching.max_batch_str[3]` | `{python} ParetoBatching.avg_ms_str[3]` | `{python} ParetoBatching.p99_ms_str[3]` | `{python} ParetoBatching.throughput_str[3]` | Tối ưu hóa thông lượng |
+| **`{python} ParetoBatching.window_str[4]`** | `{python} ParetoBatching.max_batch_str[4]` | `{python} ParetoBatching.avg_ms_str[4]` | `{python} ParetoBatching.p99_ms_str[4]` | `{python} ParetoBatching.throughput_str[4]` | Thông lượng tối đa |
 
 : **Biên Pareto Batching Minh họa**: Năm cấu hình giả định này cho thấy sự đánh đổi giữa độ trễ đuôi và thông lượng. Từ cấu hình đầu tiên đến cuối cùng, thông lượng giả định tăng `{python} ParetoBatching.throughput_gain_str` và độ trễ p99 giả định tăng lên `{python} ParetoBatching.p99_ratio_mult_str` so với giá trị ban đầu. {#tbl-pareto-batching tbl-colwidths="[13,12,13,13,15,34]"}
 
@@ -3596,17 +3596,17 @@ Với một hệ thống phục vụ (serving) ResNet-50 minh họa có SLO 50 m
 \renewcommand{\arraystretch}{1.4}
 ```
 
-| **Quantity**                        | **Value**                                                                                                                                           | **Engineering role**                                  |
+| **Số lượng** | **Giá trị** | **Vai trò kỹ thuật** |
 |:------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------|
-| **Latency budget for batching**     | `{python} PracticalConfigCalc.pc_batch_budget_ms_str`                                                                                               | Portion of the SLO available for queueing delay.      |
-| **Maximum window**                  | `{python} PracticalConfigCalc.pc_max_window_ms_str`                                                                                                 | Upper bound implied by the latency budget.            |
-| **Expected request-seen batch**     | `{python} PracticalConfigCalc.pc_expected_batch_str`                                                                                                | Average batch seen by an arriving request.            |
-| **Request-seen p99 batch**          | `{python} PracticalConfigCalc.pc_p99_batch_str`                                                                                                     | Tail batch size under Poisson arrivals.               |
-| **Assumed memory-limited batch**    | `{python} PracticalConfigCalc.pc_mem_limit_batch_str`                                                                                               | Scenario cap for accelerator memory.                  |
-| **Selected configuration**          | $T_{\text{window}}$ = `{python} PracticalConfigCalc.pc_config_window_ms_str`, $B_{\text{max}}$ = `{python} PracticalConfigCalc.pc_config_batch_str` | Practical knob setting for deployment.                |
-| **Conservative tail envelope**      | `{python} PracticalConfigCalc.pc_tail_envelope_ms_str`                                                                                              | Full window plus request-seen p99 batch service time. |
-| **Illustrative saturated capacity** | `{python} PracticalConfigCalc.pc_predicted_throughput_img_per_s_str`                                                                                | Estimate using the assumed 0.89 efficiency factor.    |
-| **Served throughput**               | `{python} PracticalConfigCalc.pc_qps_img_per_s_str`                                                                                                 | Arrival-limited load handled by the configuration.    |
+| **Ngân sách độ trễ cho việc batching** | `{python} PracticalConfigCalc.pc_batch_budget_ms_str`                                                                                               | Phần SLO khả dụng cho độ trễ xếp hàng. |
+| **Cửa sổ tối đa** | `{python} PracticalConfigCalc.pc_max_window_ms_str`                                                                                                 | Giới hạn trên được ngụ ý bởi ngân sách độ trễ. |
+| **Batch dự kiến mà yêu cầu nhìn thấy** | `{python} PracticalConfigCalc.pc_expected_batch_str`                                                                                                | Kích thước batch trung bình mà một yêu cầu đến nhìn thấy. |
+| **Batch p99 được yêu cầu ghi nhận** | `{python} PracticalConfigCalc.pc_p99_batch_str`                                                                                                     | Kích thước batch ở phần đuôi trong điều kiện các yêu cầu đến theo phân phối Poisson. |
+| **Batch giả định bị giới hạn bởi bộ nhớ** | `{python} PracticalConfigCalc.pc_mem_limit_batch_str`                                                                                               | Giới hạn kịch bản cho bộ nhớ của bộ tăng tốc. |
+| **Cấu hình đã chọn** | $T_{\text{window}}$ = `{python} PracticalConfigCalc.pc_config_window_ms_str`, $B_{\text{max}}$ = `{python} PracticalConfigCalc.pc_config_batch_str` | Thiết lập tham số thực tế cho triển khai. |
+| **Bao đuôi bảo thủ** | `{python} PracticalConfigCalc.pc_tail_envelope_ms_str`                                                                                              | Toàn bộ cửa sổ cộng với thời gian phục vụ batch p99 được yêu cầu ghi nhận. |
+| **Dung lượng bão hòa minh họa** | `{python} PracticalConfigCalc.pc_predicted_throughput_img_per_s_str`                                                                                | Ước tính sử dụng hệ số hiệu suất giả định là 0.89. |
+| **Thông lượng được phục vụ** | `{python} PracticalConfigCalc.pc_qps_img_per_s_str`                                                                                                 | Tải bị giới hạn bởi lượt đến được cấu hình xử lý. |
 
 : **Cấu hình Batching Thực tế**: Phân bổ 30% đặt cửa sổ tối đa ở 15 ms; kịch bản minh họa này chọn cửa sổ 12 ms thấp hơn mức đó và giả định giới hạn batch-32. Độ trễ được báo cáo là một đường bao bảo thủ, không phải p99 của độ trễ yêu cầu. {#tbl-practical-batching-config tbl-colwidths="[30,25,45]"}
 
@@ -3765,7 +3765,7 @@ class TrafficAdaptiveBatchingCalc:
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Arrival Rate**                                        |                     **Optimal Window**                    |                     **Avg Batch Size**                    |                    **Approx. Latency**                     |
+| **Tốc độ đến** |                     **Cửa sổ tối ưu** |                     **Kích thước Batch trung bình** |                    **Độ trễ xấp xỉ** |
 |:--------------------------------------------------------|:---------------------------------------------------------:|:---------------------------------------------------------:|:----------------------------------------------------------:|
 | **`{python} TrafficAdaptiveBatchingCalc.qps_100_str`**  |  `{python} TrafficAdaptiveBatchingCalc.window_100_ms_str` |  `{python} TrafficAdaptiveBatchingCalc.avg_batch_100_str` | `{python} TrafficAdaptiveBatchingCalc.latency_100_ms_str`  |
 | **`{python} TrafficAdaptiveBatchingCalc.qps_500_str`**  |  `{python} TrafficAdaptiveBatchingCalc.window_500_ms_str` |  `{python} TrafficAdaptiveBatchingCalc.avg_batch_500_str` | `{python} TrafficAdaptiveBatchingCalc.latency_500_ms_str`  |
@@ -3788,15 +3788,15 @@ Các hệ thống xe tự hành\index{Streaming traffic!sensor synchronization},
 
 :::
 
-| **Time**        | **Event**                         |
+| **Thời gian** | **Sự kiện** |
 |:----------------|:----------------------------------|
-| **$T = 0$ ms**  | Cameras begin capturing frame N   |
-| **$T = 8$ ms**  | Camera 1 frame arrives            |
-| **$T = 10$ ms** | Cameras 2–5 frames arrive         |
-| **$T = 15$ ms** | Camera 6 arrives (jitter)         |
-| **$T = 15$ ms** | Batch inference begins (6 images) |
-| **$T = 25$ ms** | Inference complete                |
-| **$T = 32$ ms** | Result ready for planning module  |
+| **$T = 0$ ms** | Các camera bắt đầu chụp khung hình N |
+| **$T = 8$ ms** | Khung hình từ camera 1 đến |
+| **$T = 10$ ms** | Khung hình từ camera 2–5 đến |
+| **$T = 15$ ms** | Camera 6 đến (jitter) |
+| **$T = 15$ ms** | Suy luận theo batch bắt đầu (6 ảnh) |
+| **$T = 25$ ms** | Suy luận hoàn tất |
+| **$T = 32$ ms** | Kết quả sẵn sàng cho module lập kế hoạch |
 
 : **Dòng thời gian khung hình đa camera**: Dòng thời gian theo từng sự kiện cho một tập khung hình đồng bộ trên sáu camera ở 30 FPS. Các khung hình đến trải trong 7 ms, suy luận chỉ có thể bắt đầu khi khung hình cuối cùng đến lúc 15 ms, và kết quả đến mô-đun lập kế hoạch lúc 32 ms, còn 1 ms dự phòng trong thời hạn 33 ms. {#tbl-model-serving-multicamera-timeline}
 
@@ -3893,14 +3893,14 @@ Các dịch vụ đám mây thường ưu tiên chi phí hạ tầng và độ t
 
 @Tbl-model-serving-mobile-pipeline-breakdown phân tích độ trễ và năng lượng theo từng giai đoạn cho một suy luận thị giác di động của một người dùng:
 
-| **Phase**              |                   **Duration**                  |                    **Energy**                   | **Notes**                                      |
+| **Giai đoạn** |                   **Thời lượng** |                    **Năng lượng** | **Ghi chú** |
 |:-----------------------|:-----------------------------------------------:|:-----------------------------------------------:|:-----------------------------------------------|
-| **Camera buffer read** |    `{python} MobileServingCalc.m_cam_ms_str`    |    `{python} MobileServingCalc.m_cam_mj_str`    | System API                                     |
-| **JPEG decode (CPU)**  |    `{python} MobileServingCalc.m_jpeg_ms_str`   |    `{python} MobileServingCalc.m_jpeg_mj_str`   | Single-threaded                                |
-| **Resize + Normalize** |   `{python} MobileServingCalc.m_resize_ms_str`  |   `{python} MobileServingCalc.m_resize_mj_str`  | CPU preprocessing                              |
-| **NPU inference**      |    `{python} MobileServingCalc.m_npu_ms_str`    |    `{python} MobileServingCalc.m_npu_mj_str`    | 82% utilization                                |
-| **Postprocess + UI**   |     `{python} MobileServingCalc.m_ui_ms_str`    |     `{python} MobileServingCalc.m_ui_mj_str`    | Result rendering                               |
-| **Total**              | **`{python} MobileServingCalc.m_total_ms_str`** | **`{python} MobileServingCalc.m_total_mj_str`** | `{python} MobileServingCalc.fps_str` sustained |
+| **Đọc bộ đệm camera** |    `{python} MobileServingCalc.m_cam_ms_str`    |    `{python} MobileServingCalc.m_cam_mj_str`    | API hệ thống |
+| **Giải mã JPEG (CPU)** |    `{python} MobileServingCalc.m_jpeg_ms_str`   |    `{python} MobileServingCalc.m_jpeg_mj_str`   | Đơn luồng |
+| **Thay đổi kích thước + Chuẩn hóa** |   `{python} MobileServingCalc.m_resize_ms_str`  |   `{python} MobileServingCalc.m_resize_mj_str`  | Tiền xử lý trên CPU |
+| **Suy luận trên NPU** |    `{python} MobileServingCalc.m_npu_ms_str`    |    `{python} MobileServingCalc.m_npu_mj_str`    | Mức sử dụng 82% |
+| **Hậu xử lý + Giao diện người dùng** |     `{python} MobileServingCalc.m_ui_ms_str`    |     `{python} MobileServingCalc.m_ui_mj_str`    | Kết xuất kết quả |
+| **Tổng cộng** | **`{python} MobileServingCalc.m_total_ms_str`** | **`{python} MobileServingCalc.m_total_mj_str`** | `{python} MobileServingCalc.fps_str` duy trì |
 
 : **Pipeline ResNet-50 trên di động**: Minh họa độ trễ và năng lượng theo từng giai đoạn cho một suy luận thị giác trên thiết bị di động của một người dùng, cho thấy việc giải mã JPEG trên CPU chiếm phần lớn ngân sách năng lượng, dù giai đoạn suy luận trên NPU mới gánh phần tính toán của mô hình. Ở edge, mục tiêu tối ưu chuyển từ thông lượng sang năng lượng cho mỗi lần suy luận. {#tbl-model-serving-mobile-pipeline-breakdown tbl-colwidths="[30,20,20,30]"}
 
@@ -3927,12 +3927,12 @@ Batching thích ứng với lưu lượng truy cập\index{Traffic-adaptive batc
 
 Các kịch bản này là trừu tượng cho benchmark, không phải hướng dẫn triển khai. Chính sách batching thực tế vẫn phải tuân theo các ràng buộc hiện tại của dịch vụ về mức độ đồng thời, hạn chót và công suất.
 
-| **Scenario**     | **Context**                         | **Strategy**                  | **Focus**                                |
+| **Kịch bản** | **Ngữ cảnh** | **Chiến lược** | **Trọng tâm** |
 |:-----------------|:------------------------------------|:------------------------------|:-----------------------------------------|
-| **Server**       | Cloud APIs, web services            | Dynamic batching with timeout | Window tuning, utilization-latency curve |
-| **MultiStream**  | Autonomous driving, video analytics | Synchronized sensor fusion    | Jitter handling, deadline guarantees     |
-| **SingleStream** | Mobile apps, embedded devices       | No batching ($B = 1$)         | Preprocessing, power efficiency          |
-| **Offline**      | Batch processing, data pipelines    | Maximum batch size            | Throughput, hardware utilization         |
+| **Máy chủ** | API đám mây, dịch vụ web | Tạo batch động với thời gian chờ | Điều chỉnh cửa sổ, đường cong sử dụng-độ trễ |
+| **MultiStream** | Lái xe tự hành, phân tích video | Hợp nhất cảm biến đồng bộ hóa | Xử lý jitter, đảm bảo thời hạn |
+| **SingleStream** | Ứng dụng di động, thiết bị nhúng | Không tạo batch ($B = 1$) | Tiền xử lý, hiệu quả công suất |
+| **Ngoại tuyến** | Xử lý theo batch, pipeline dữ liệu | Kích thước batch tối đa | Thông lượng, sử dụng phần cứng |
 
 : **Kiểu lưu lượng và chiến lược batching**: Bốn kịch bản suy luận của MLPerf mô phỏng các ngữ cảnh triển khai khác nhau. Lưu lượng máy chủ (API đám mây) dùng batching động kèm thời gian chờ; MultiStream mô phỏng dữ liệu cảm biến đồng bộ; SingleStream xử lý từng yêu cầu; còn Offline dùng các batch lớn (giới hạn bởi dung lượng bộ nhớ) để tối đa hóa thông lượng. {#tbl-traffic-patterns-summary tbl-colwidths="[13,29,28,30]"}
 
@@ -4238,14 +4238,14 @@ class RuntimeComparisonCalc:
 %\renewcommand{\arraystretch}{1.3}
 ```
 
-| **Runtime**         |                      **Latency**                       |                           **Speedup**                            | **Notes**                 |
+| **Runtime** |                      **Độ trễ** |                           **Tăng tốc** | **Ghi chú** |
 |:--------------------|:------------------------------------------------------:|:----------------------------------------------------------------:|:--------------------------|
-| **PyTorch (eager)** |   `{python} RuntimeComparisonCalc.rt_pytorch_ms_str`   |   `{python} RuntimeComparisonCalc.rt_pytorch_speedup_mult_str`   | Baseline, no optimization |
-| **TorchScript**     | `{python} RuntimeComparisonCalc.rt_torchscript_ms_str` | `{python} RuntimeComparisonCalc.rt_torchscript_speedup_mult_str` | JIT compilation           |
-| **ONNX Runtime**    |    `{python} RuntimeComparisonCalc.rt_onnx_ms_str`     |    `{python} RuntimeComparisonCalc.rt_onnx_speedup_mult_str`     | Cross-platform            |
-| **TensorRT FP32**   |  `{python} RuntimeComparisonCalc.rt_trt_fp32_ms_str`   |  `{python} RuntimeComparisonCalc.rt_trt_fp32_speedup_mult_str`   | NVIDIA-specific           |
-| **TensorRT FP16**   |  `{python} RuntimeComparisonCalc.rt_trt_fp16_ms_str`   |  `{python} RuntimeComparisonCalc.rt_trt_fp16_speedup_mult_str`   | Tensor Core acceleration  |
-| **TensorRT INT8**   |  `{python} RuntimeComparisonCalc.rt_trt_int8_ms_str`   |  `{python} RuntimeComparisonCalc.rt_trt_int8_speedup_mult_str`   | Requires calibration      |
+| **PyTorch (eager)** |   `{python} RuntimeComparisonCalc.rt_pytorch_ms_str`   |   `{python} RuntimeComparisonCalc.rt_pytorch_speedup_mult_str`   | Đường cơ sở, không tối ưu hóa |
+| **TorchScript** | `{python} RuntimeComparisonCalc.rt_torchscript_ms_str` | `{python} RuntimeComparisonCalc.rt_torchscript_speedup_mult_str` | Biên dịch JIT |
+| **ONNX Runtime** |    `{python} RuntimeComparisonCalc.rt_onnx_ms_str`     |    `{python} RuntimeComparisonCalc.rt_onnx_speedup_mult_str`     | Đa nền tảng |
+| **TensorRT FP32** |  `{python} RuntimeComparisonCalc.rt_trt_fp32_ms_str`   |  `{python} RuntimeComparisonCalc.rt_trt_fp32_speedup_mult_str`   | Đặc trưng của NVIDIA |
+| **TensorRT FP16** |  `{python} RuntimeComparisonCalc.rt_trt_fp16_ms_str`   |  `{python} RuntimeComparisonCalc.rt_trt_fp16_speedup_mult_str`   | Tăng tốc Tensor Core |
+| **TensorRT INT8** |  `{python} RuntimeComparisonCalc.rt_trt_int8_ms_str`   |  `{python} RuntimeComparisonCalc.rt_trt_int8_speedup_mult_str`   | Yêu cầu hiệu chuẩn |
 
 : **So sánh runtime suy luận minh hoạ**: Độ trễ giả định và mức tăng tốc đạt được cho ResNet-50 với batch-one trên PyTorch eager, TorchScript, ONNX Runtime và TensorRT trên V100. {#tbl-model-serving-runtime-comparison tbl-colwidths="[30,20,20,30]"}
 
@@ -4334,12 +4334,12 @@ class PrecisionTradeoffCalc:
 
 @Tbl-model-serving-precision-tradeoffs trình bày các giả định minh họa về độ trễ, bộ nhớ và độ chính xác cho ResNet-50 ở các định dạng FP32, FP16 và hai phương án INT8, kèm theo mức độ sử dụng Tensor Core (nếu có hỗ trợ):
 
-| **Precision**  |                   **Latency**                   |                      **Memory**                     |                     **Accuracy**                     |               **Tensor Core Util.**               | **Calibration**     |
+| **Độ chính xác** |                   **Độ trễ** |                      **Bộ nhớ** |                     **Độ chính xác** |               **Mức độ sử dụng Tensor Core** | **Hiệu chuẩn** |
 |:---------------|:-----------------------------------------------:|:---------------------------------------------------:|:----------------------------------------------------:|:-------------------------------------------------:|:--------------------|
-| **FP32**       | `{python} PrecisionTradeoffCalc.pt_fp32_ms_str` | `{python} PrecisionTradeoffCalc.pt_fp32_mem_mb_str` |   `{python} PrecisionTradeoffCalc.pt_fp32_acc_str`   |                         0%                        | None                |
-| **FP16**       | `{python} PrecisionTradeoffCalc.pt_fp16_ms_str` | `{python} PrecisionTradeoffCalc.pt_fp16_mem_mb_str` |   `{python} PrecisionTradeoffCalc.pt_fp16_acc_str`   | `{python} PrecisionTradeoffCalc.pt_fp16_util_str` | None                |
-| **INT8 (PTQ)** | `{python} PrecisionTradeoffCalc.pt_int8_ms_str` | `{python} PrecisionTradeoffCalc.pt_int8_mem_mb_str` | `{python} PrecisionTradeoffCalc.pt_int8_ptq_acc_str` |                        N/A                        | 1,000 samples       |
-| **INT8 (QAT)** | `{python} PrecisionTradeoffCalc.pt_int8_ms_str` | `{python} PrecisionTradeoffCalc.pt_int8_mem_mb_str` | `{python} PrecisionTradeoffCalc.pt_int8_qat_acc_str` |                        N/A                        | Additional training |
+| **FP32** | `{python} PrecisionTradeoffCalc.pt_fp32_ms_str` | `{python} PrecisionTradeoffCalc.pt_fp32_mem_mb_str` |   `{python} PrecisionTradeoffCalc.pt_fp32_acc_str`   |                         0%                        | Không |
+| **FP16** | `{python} PrecisionTradeoffCalc.pt_fp16_ms_str` | `{python} PrecisionTradeoffCalc.pt_fp16_mem_mb_str` |   `{python} PrecisionTradeoffCalc.pt_fp16_acc_str`   | `{python} PrecisionTradeoffCalc.pt_fp16_util_str` | Không |
+| **INT8 (PTQ)** | `{python} PrecisionTradeoffCalc.pt_int8_ms_str` | `{python} PrecisionTradeoffCalc.pt_int8_mem_mb_str` | `{python} PrecisionTradeoffCalc.pt_int8_ptq_acc_str` |                        N/A                        | 1.000 mẫu |
+| **INT8 (QAT)** | `{python} PrecisionTradeoffCalc.pt_int8_ms_str` | `{python} PrecisionTradeoffCalc.pt_int8_mem_mb_str` | `{python} PrecisionTradeoffCalc.pt_int8_qat_acc_str` |                        N/A                        | Huấn luyện bổ sung |
 
 : **Đánh đổi độ chính xác minh họa trên V100**: Độ trễ, dung lượng bộ nhớ và độ chính xác giả định cho ResNet-50 ở các định dạng FP32, FP16 và INT8 (PTQ và QAT), kèm theo mức độ sử dụng Tensor Core (nếu có hỗ trợ). {#tbl-model-serving-precision-tradeoffs tbl-colwidths="[23,11,11,11,22,22]"}
 
@@ -4497,13 +4497,13 @@ Cách đọc dấu vết hữu ích là bắt đầu từ nút thắt cổ chai.
 
 @Tbl-optimization-impact là công cụ hỗ trợ ra quyết định hơn là danh sách kiểm tra: hãy chọn kỹ thuật có chỉ số mục tiêu khớp với nút thắt cổ chai đã đo, không phải hàng có mức tăng hiển thị lớn nhất.
 
-| **Technique**         | **Target Metric**    | **Illustrative Gain** | **Implement. Cost** | **Best For**           |
+| **Kỹ thuật** | **Chỉ số mục tiêu** | **Mức tăng minh họa** | **Chi phí triển khai** | **Tốt nhất cho** |
 |:----------------------|:---------------------|:---------------------:|:--------------------|:-----------------------|
-| **Operator Fusion**   | Latency & Throughput |      2–5$\times$      | Medium (Compiler)   | Memory-bound layers    |
-| **INT8 Quantization** | Throughput           |      3–4$\times$      | High (Calibration)  | Inference-heavy nodes  |
-| **Graph Compilation** | Latency              |     1.5–3$\times$     | Low (One-line)      | Static graph models    |
-| **Zero-Copy Loading** | Startup Time         |     10–50$\times$     | Low (File format)   | Autoscaling/Cold Start |
-| **CPU Pinning**       | Tail Latency (p99)   |    20–50% reduction   | Low (Config)        | Latency-critical apps  |
+| **Operator Fusion** | Độ trễ và Thông lượng |      2–5$\times$      | Trung bình (Compiler) | Các lớp giới hạn bộ nhớ |
+| **Lượng tử hoá INT8** | Thông lượng |      3–4$\times$      | Cao (Hiệu chuẩn) | Các nút nặng về suy luận |
+| **Biên dịch đồ thị** | Độ trễ |     1.5–3$\times$     | Thấp (Một dòng) | Các mô hình đồ thị tĩnh |
+| **Zero-Copy Loading** | Thời gian khởi động |     10–50$\times$     | Thấp (Định dạng tệp) | Autoscaling/Cold Start |
+| **CPU Pinning** | Độ trễ đuôi (p99) |    Giảm 20–50% | Thấp (Cấu hình) | Các ứng dụng quan trọng về độ trễ |
 
 : **Tác động tối ưu hóa cấp nút**: Các khoảng giá trị minh họa để ghép kỹ thuật với các nút thắt cổ chai đã đo. Lợi ích đạt được và chi phí triển khai phụ thuộc vào mô hình, runtime, phần cứng và khối lượng công việc (workload). {#tbl-optimization-impact tbl-colwidths="[18,22,17,20,23]"}
 
@@ -4592,10 +4592,10 @@ Khi các bản sao của bộ tăng tốc có độ trễ sẵn sàng dài, mở
 
 @Tbl-model-serving-resnet-cloud-cost đưa ra một kịch bản kiểu AWS để minh họa chi phí theo giờ, thông lượng, và chi phí trên mỗi triệu ảnh khi phục vụ (serving) ResNet-50:
 
-| **Instance Type**         |                **Cost/Hour**                 |                        **Throughput**                        |              **Cost per 1M Images**             |
+| **Loại phiên bản** |                **Chi phí/Giờ** |                        **Thông lượng** |              **Chi phí mỗi 1M Hình ảnh** |
 |:--------------------------|:--------------------------------------------:|:------------------------------------------------------------:|:-----------------------------------------------:|
-| **c5.xlarge (CPU)**       | `{python} CostAnalysisCalc.ca_cpu_cost_str`  | `{python} CostAnalysisCalc.ca_cpu_throughput_img_per_s_str`  |  `{python} CostAnalysisCalc.ca_cpu_cpm_usd_str` |
-| **g4dn.xlarge (T4 GPU)**  |  `{python} CostAnalysisCalc.ca_t4_cost_str`  |  `{python} CostAnalysisCalc.ca_t4_throughput_img_per_s_str`  |  `{python} CostAnalysisCalc.ca_t4_cpm_usd_str`  |
+| **c5.xlarge (CPU)** | `{python} CostAnalysisCalc.ca_cpu_cost_str`  | `{python} CostAnalysisCalc.ca_cpu_throughput_img_per_s_str`  |  `{python} CostAnalysisCalc.ca_cpu_cpm_usd_str` |
+| **g4dn.xlarge (T4 GPU)** |  `{python} CostAnalysisCalc.ca_t4_cost_str`  |  `{python} CostAnalysisCalc.ca_t4_throughput_img_per_s_str`  |  `{python} CostAnalysisCalc.ca_t4_cpm_usd_str`  |
 | **p3.2xlarge (V100 GPU)** | `{python} CostAnalysisCalc.ca_v100_cost_str` | `{python} CostAnalysisCalc.ca_v100_throughput_img_per_s_str` | `{python} CostAnalysisCalc.ca_v100_cpm_usd_str` |
 
 : **So sánh chi phí suy luận ResNet-50 trên đám mây (minh họa)**: Giả định chi phí theo giờ và thông lượng ở mức bão hòa, kèm chi phí cho mỗi một triệu hình ảnh đối với các instance CPU, T4 và V100. {#tbl-model-serving-resnet-cloud-cost tbl-colwidths="[31,22,22,25]"}

@@ -419,14 +419,14 @@ Những khác biệt này làm thay đổi cách các giai đoạn trong vòng �
 
 [^fn-data-versioning-drift]: **Quản lý phiên bản dữ liệu**\index{Data versioning!reproducibility}: Không giống như code thay đổi qua các commit rời rạc, có thể kiểm chứng, dữ liệu có thể dịch chuyển dần (distribution shift), đột ngột (thay đổi schema), hoặc tinh vi (chất lượng nhãn suy giảm). Git thuần không thực tế với nhiều tập dữ liệu cỡ nhiều terabyte, nên các nhóm thường phiên bản hóa các tệp manifest hoặc con trỏ tới dữ liệu ngoài bằng các công cụ như DVC và Git LFS. Nếu không có quản lý phiên bản dữ liệu, các nhóm không thể tái lập đáng tin cậy một lần huấn luyện trước đó hoặc xác định việc giảm độ chính xác là do thay đổi code hay thay đổi dữ liệu.
 
-| **Aspect**                 | **Traditional Software Lifecycles**                                                                 | **Machine Learning Lifecycles**                                                                             |
+| **Khía cạnh** | **Vòng đời phần mềm truyền thống** | **Vòng đời machine learning** |
 |:---------------------------|:----------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------|
-| **Problem Definition**     | Precise functional specifications are defined upfront.                                              | Performance-driven objectives evolve as the problem space is explored.                                      |
-| **Development Process**    | Iterative code, configuration, and interface development.                                           | Iterative experimentation with data, features, and models.                                                  |
-| **Testing and Validation** | Many functional tests have exact expected results; performance and reliability remain quantitative. | Statistical validation and metrics that involve uncertainty.                                                |
-| **Deployment**             | Behavior remains static until explicitly updated.                                                   | Performance may change over time due to shifts in data distributions.                                       |
-| **Maintenance**            | Maintenance involves modifying code to address bugs or add features.                                | Continuous monitoring, updating data pipelines, retraining models, and adapting to new data distributions.  |
-| **Feedback Loops**         | Production feedback commonly changes code, configuration, and requirements.                         | Insights from deployment and monitoring often refine earlier stages like data preparation and model design. |
+| **Định nghĩa vấn đề** | Các đặc tả chức năng chính xác được định nghĩa ngay từ đầu. | Các mục tiêu dựa trên hiệu suất phát triển khi không gian vấn đề được khám phá. |
+| **Quy trình phát triển** | Phát triển lặp đi lặp lại mã, cấu hình và giao diện. | Thử nghiệm lặp đi lặp lại với dữ liệu, đặc trưng và mô hình. |
+| **Kiểm thử và xác thực** | Nhiều kiểm thử chức năng có kết quả mong đợi chính xác; hiệu suất và độ tin cậy vẫn mang tính định lượng. | Xác thực thống kê và các số liệu liên quan đến sự không chắc chắn. |
+| **Triển khai** | Hành vi vẫn tĩnh cho đến khi được cập nhật rõ ràng. | Hiệu suất có thể thay đổi theo thời gian do sự dịch chuyển trong phân phối dữ liệu. |
+| **Bảo trì** | Bảo trì liên quan đến việc sửa đổi mã để khắc phục lỗi hoặc thêm đặc trưng. | Giám sát liên tục, cập nhật các pipeline dữ liệu, huấn luyện lại mô hình và thích ứng với các phân phối dữ liệu mới. |
+| **Vòng lặp phản hồi** | Phản hồi từ sản xuất thường thay đổi mã, cấu hình và yêu cầu. | Thông tin chi tiết từ việc triển khai và giám sát thường tinh chỉnh các giai đoạn trước đó như chuẩn bị dữ liệu và thiết kế mô hình. |
 
 : **Vòng đời phát triển phần mềm truyền thống và ML**: Sáu khía cạnh cho thấy phát triển ML khác biệt so với kỹ thuật phần mềm truyền thống. Cả hai đều sử dụng phản hồi từ môi trường sản xuất, trong khi các hệ thống ML bổ sung các vòng lặp phản hồi: thông tin từ quá trình triển khai định hình lại thu thập dữ liệu, giám sát thúc đẩy cập nhật mô hình, và kinh nghiệm sản xuất định hướng thiết kế mô hình. {#tbl-sw-ml-cycles tbl-colwidths="[15,40,45]"}
 
@@ -821,11 +821,11 @@ Ràng buộc chi phối khác nhau rất nhiều giữa các dạng khối lư�
 
 Các hệ thống sản xuất hiếm khi khớp gọn với một nguyên mẫu duy nhất. Ví dụ, một bộ phân loại hình ảnh y tế có thể cần tính toán liên tục khi được huấn luyện trên các tập dữ liệu hình ảnh lớn, nhưng lại đối mặt với các ràng buộc nghiêm ngặt về năng lượng và bộ nhớ khi triển khai trên các thiết bị phòng khám di động. Hiểu *cách* cùng một framework quy trình làm việc thích ứng với từng nguyên mẫu, và *cách* một dự án đơn lẻ có thể đồng thời trải rộng qua nhiều nguyên mẫu, là điều thiết yếu để đưa ra các quyết định kỹ thuật đúng đắn.
 
-| **Stage**    | **ResNet-50 vision training**                                                                             | **DLRM recommendation**                                                                                               | **KWS TinyML**                                                                          |
+| **Giai đoạn** | **Huấn luyện thị giác ResNet-50** | **Đề xuất DLRM** | **KWS TinyML** |
 |:-------------|:----------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------|
-| **Data Eng** | Keep image batches available fast enough to sustain high GPU utilization.                                 | Keep online feature-store lookups within the serving latency budget; embedding tables dominate storage and freshness. | Curate short audio clips for an SRAM-constrained device.                                |
-| **Training** | Coordinate preprocessing, batching, mixed precision, and model execution to reduce accelerator idle time. | Optimize sparse embedding lookups because memory bandwidth limits throughput.                                         | Search for the smallest model family that still recognizes the trigger phrase reliably. |
-| **Deploy**   | Use large batches when throughput and cost matter more than single-request latency.                       | Meet strict interactive p99 latency targets while keeping features fresh.                                             | Stay within a strict always-on energy budget.                                           |
+| **Kỹ thuật dữ liệu** | Giữ các batch hình ảnh sẵn sàng đủ nhanh để duy trì mức sử dụng GPU cao. | Giữ các tra cứu feature-store trực tuyến trong giới hạn ngân sách độ trễ phục vụ (serving); các bảng embedding chiếm ưu thế về lưu trữ và độ tươi mới. | Tuyển chọn các đoạn âm thanh ngắn cho một thiết bị bị giới hạn SRAM. |
+| **Huấn luyện** | Phối hợp tiền xử lý, tạo batch, độ chính xác hỗn hợp và thực thi mô hình để giảm thời gian nhàn rỗi của bộ tăng tốc. | Tối ưu hóa các tra cứu embedding thưa thớt vì băng thông bộ nhớ giới hạn thông lượng. | Tìm kiếm họ mô hình nhỏ nhất vẫn nhận diện cụm từ kích hoạt một cách đáng tin cậy. |
+| **Triển khai** | Sử dụng các batch lớn khi thông lượng và chi phí quan trọng hơn độ trễ của một yêu cầu đơn lẻ. | Đáp ứng các mục tiêu độ trễ p99 tương tác nghiêm ngặt trong khi vẫn giữ các đặc trưng tươi mới. | Duy trì trong một ngân sách năng lượng luôn bật nghiêm ngặt. |
 
 : **Các biến thể quy trình làm việc theo mô hình Lighthouse**: Ba giai đoạn vòng đời được chọn nhắm đến các thành phần khác nhau trong định luật sắt tùy thuộc vào ràng buộc chính của khối lượng công việc (workload). ResNet-50 nhấn mạnh lượng tính toán hữu ích trên mỗi đơn vị thời gian, DLRM tập trung vào việc di chuyển dữ liệu và độ mới của embedding, còn KWS chú trọng năng lượng và dung lượng bộ nhớ. {#tbl-lighthouse-workflow-comparison tbl-colwidths="[9,30,31,30]"}
 
@@ -868,14 +868,14 @@ Nghiên cứu ban đầu đạt hiệu suất ngang chuyên gia trong môi trư�
 
 Mỗi giai đoạn trong vòng đời là một pha kỹ thuật riêng, có đầu vào, đầu ra và các bất biến chất lượng được xác định rõ. Hãy coi đó như *API contracts* giữa các nhóm. Một microservice dựa vào đặc tả giao diện để làm rõ các giả định tích hợp; một pipeline dữ liệu cũng vậy, dựa vào các hợp đồng về lược đồ và phân phối để phát hiện bất tương thích trước khi chúng lan truyền. @Tbl-stage-interface chuẩn hóa những hợp đồng này, nêu rõ mỗi giai đoạn phải nhận gì và tạo ra gì. Nhờ vậy, sơ đồ vòng đời trừu tượng (@fig-lifecycle-overview) được chuyển thành các yêu cầu kỹ thuật có thể thực thi. Khi đầu ra của một giai đoạn không đáp ứng hợp đồng, thiếu sót đó có thể lan sang các giai đoạn phụ thuộc.
 
-| **Stage**                         | **Input Contract**                                                                  | **Output Contract**                                                                 | **Quality Invariant**                                                                                 |
+| **Giai đoạn** | **Hợp đồng đầu vào** | **Hợp đồng đầu ra** | **Bất biến chất lượng** |
 |:----------------------------------|:------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------|
-| **Problem Definition**            | Business requirements; operational context                                          | Measurable objectives; deployment paradigm selection; resource constraints          | All success criteria are quantifiable; target deployment paradigm is explicit                         |
-| **Data Collection & Preparation** | Objectives; deployment target; quality requirements                                 | Versioned dataset with schema; preprocessing pipeline; data validation rules        | Distribution approximates anticipated production environment; labeling meets accuracy requirements    |
-| **Model Development & Training**  | Dataset; accuracy targets;  resource constraints                                    | Trained model weights;  training configuration; experiment logs                     | Meets accuracy thresholds within computational budget; architecture compatible with deployment target |
-| **Evaluation & Validation**       | Trained model; held-out test data; evaluation criteria                              | Performance metrics across subgroups; failure mode analysis; validation certificate | No critical subgroup falls below minimum thresholds; confidence calibration meets domain requirements |
-| **Deployment & Integration**      | Validated model; infrastructure requirements; service-level agreement (SLA) targets | Serving endpoint; monitoring  instrumentation; rollback procedures                  | Latency and throughput meet  paradigm requirements; integration tests pass                            |
-| **Monitoring & Maintenance**      | Live system; performance baselines; alert threshold                                 | Drift detection alerts; update-review criteria; incident reports                    | Alert coverage and detection windows are defined; detected degradation triggers review                |
+| **Định nghĩa vấn đề** | Yêu cầu kinh doanh; bối cảnh vận hành | Mục tiêu có thể đo lường; lựa chọn mô hình triển khai; ràng buộc tài nguyên | Tất cả các tiêu chí thành công đều có thể định lượng; mô hình triển khai mục tiêu được xác định rõ ràng |
+| **Thu thập & Chuẩn bị dữ liệu** | Mục tiêu; mục tiêu triển khai; yêu cầu chất lượng | Tập dữ liệu có phiên bản kèm lược đồ; pipeline tiền xử lý; quy tắc xác thực dữ liệu | Phân phối gần đúng với môi trường sản xuất dự kiến; việc gán nhãn đáp ứng yêu cầu độ chính xác |
+| **Phát triển & Huấn luyện mô hình** | Tập dữ liệu; mục tiêu độ chính xác; ràng buộc tài nguyên | Trọng số mô hình đã huấn luyện; cấu hình huấn luyện; nhật ký thử nghiệm | Đạt ngưỡng độ chính xác trong giới hạn ngân sách tính toán; kiến trúc tương thích với mục tiêu triển khai |
+| **Đánh giá & Xác thực** | Mô hình đã huấn luyện; dữ liệu kiểm thử giữ lại; tiêu chí đánh giá | Các chỉ số hiệu suất trên các nhóm con; phân tích chế độ lỗi; chứng nhận xác thực | Không có nhóm con quan trọng nào dưới ngưỡng tối thiểu; hiệu chuẩn độ tin cậy đáp ứng yêu cầu miền |
+| **Triển khai & Tích hợp** | Mô hình đã xác thực; yêu cầu hạ tầng; mục tiêu thỏa thuận mức dịch vụ (SLA) | Điểm cuối phục vụ (serving); công cụ giám sát; quy trình khôi phục | Độ trễ và thông lượng đáp ứng yêu cầu mô hình; các kiểm thử tích hợp vượt qua |
+| **Giám sát & Bảo trì** | Hệ thống trực tiếp; đường cơ sở hiệu suất; ngưỡng cảnh báo | Cảnh báo phát hiện trôi dạt; tiêu chí xem xét cập nhật; báo cáo sự cố | Phạm vi cảnh báo và cửa sổ phát hiện được xác định; suy giảm được phát hiện kích hoạt xem xét |
 
 : **Đặc tả Giao diện Giai đoạn**: Mỗi giai đoạn trong vòng đời có các yêu cầu đầu vào rõ ràng, sản phẩm đầu ra, và các bất biến về chất lượng phải được bảo đảm để giai đoạn đó được xem là hoàn thành. Vi phạm các hợp đồng này sẽ tạo ra nợ kỹ thuật, tích lũy dần qua các giai đoạn tiếp theo. Việc lựa chọn cách thức triển khai trong Định nghĩa Vấn đề (Đám mây, Edge, Di động hoặc TinyML từ @sec-ml-systems) sẽ ràng buộc tất cả các giai đoạn phía sau, vì mục tiêu TinyML sẽ kéo theo các yêu cầu về dữ liệu, mô hình và giám sát khác với mục tiêu Đám mây. {#tbl-stage-interface tbl-colwidths="[14,24,27,35]"}
 
@@ -1808,12 +1808,12 @@ Quy trình xác thực bắt đầu ở môi trường ngoại tuyến, rồi d�
 
 Mỗi giai đoạn xác thực bổ sung các bằng chứng khác nhau và có phần chồng lấp, như @tbl-ml-workflow-validation-stages tóm tắt.
 
-| **Validation stage**   | **Typical evidence it adds** |
+| **Giai đoạn xác thực** | **Bằng chứng điển hình nó bổ sung** |
 |:-----------------------|:-----------------------------|
-| **Offline evaluation** | Algorithmic behavior         |
-| **Shadow mode**        | Integration behavior         |
-| **Canary deployment**  | Limited-traffic behavior     |
-| **A/B testing**        | Comparative outcomes         |
+| **Đánh giá ngoại tuyến** | Hành vi thuật toán |
+| **Chế độ bóng (Shadow mode)** | Hành vi tích hợp |
+| **Triển khai Canary** | Hành vi với lưu lượng hạn chế |
+| **Kiểm thử A/B** | Kết quả so sánh |
 
 : **Xác thực theo Giai đoạn: Mức độ Bao phủ**: Các giai đoạn cung cấp bằng chứng bổ sung, chồng chéo thay vì phân loại lỗi thành các nhóm riêng biệt. {#tbl-ml-workflow-validation-stages}
 

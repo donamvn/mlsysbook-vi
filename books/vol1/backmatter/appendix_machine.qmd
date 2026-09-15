@@ -188,12 +188,12 @@ Các mối quan hệ này kết hợp các giới hạn vật lý hoặc số h�
 
 @Tbl-speed-of-light-ref trình bày các mốc thời gian khứ hồi xấp xỉ. Phần thời gian do truyền dẫn là không thể giảm bớt.
 
-| **Distance**           | **Round-Trip Latency** | **Implication**                      |
+| **Khoảng cách** | **Độ trễ khứ hồi** | **Ý nghĩa** |
 |:-----------------------|:----------------------:|:-------------------------------------|
-| **Same data center**   |         ~1 ms          | Distributed training feasible        |
-| **Cross-country (US)** |         ~40 ms         | Reduces the remaining request budget |
-| **Cross-Atlantic**     |         ~60 ms         | Further reduces the request budget   |
-| **Cross-Pacific**      |        ~100 ms         | Data locality is critical            |
+| **Cùng trung tâm dữ liệu** |         ~1 ms | Huấn luyện phân tán khả thi |
+| **Xuyên quốc gia (US)** |         ~40 ms | Giảm ngân sách yêu cầu còn lại |
+| **Xuyên Đại Tây Dương** |         ~60 ms | Giảm thêm ngân sách yêu cầu |
+| **Xuyên Thái Bình Dương** |        ~100 ms | Tính cục bộ của dữ liệu là rất quan trọng |
 
 : **Tham chiếu tốc độ ánh sáng**: Ánh sáng trong sợi quang đi được khoảng ~200 km/ms. Các con số khứ hồi xấp xỉ này có bao gồm phần chi phí phụ có thể giảm; chỉ độ trễ do lan truyền là không thể giảm. {#tbl-speed-of-light-ref tbl-colwidths="[34,33,33]"}
 
@@ -201,12 +201,12 @@ Các mối quan hệ này kết hợp các giới hạn vật lý hoặc số h�
 
 @Tbl-energy-ratios-ref định lượng chi phí năng lượng của việc di chuyển dữ liệu so với tính toán—lý do cơ bản vì sao cường độ số học chi phối tối ưu hóa hiệu suất ML.[^fn-horowitz-energy-app]
 
-| **Relationship**                  |                   **Reference Ratio**                    | **Source and Interpretation**                                             |
+| **Mối quan hệ** |                   **Tỷ lệ tham chiếu** | **Nguồn và Giải thích** |
 |:----------------------------------|:--------------------------------------------------------:|:--------------------------------------------------------------------------|
-| **DRAM access vs. FP16 multiply** | ~`{python} NumbersToKnow.dram_vs_compute_ratio_mult_str` | Horowitz 45 nm; wire capacitance scales with distance                     |
-| **FP32 vs. INT8 energy**          |  ~`{python} NumbersToKnow.fp32_vs_int8_ratio_mult_str`   | Horowitz 45 nm; bit width determines switching energy                     |
-| **FP32 vs. FP16 energy**          |  ~`{python} NumbersToKnow.fp32_vs_fp16_ratio_mult_str`   | Horowitz 45 nm; narrower arithmetic reduces switching and datapath energy |
-| **L1 SRAM vs. register**          |    ~`{python} NumbersToKnow.l1_vs_reg_ratio_mult_str`    | Illustrative on-chip hierarchy anchor; distance to the arithmetic unit    |
+| **Truy cập DRAM so với phép nhân FP16** | ~`{python} NumbersToKnow.dram_vs_compute_ratio_mult_str` | Horowitz 45 nm; điện dung dây dẫn tỷ lệ với khoảng cách |
+| **Năng lượng FP32 so với INT8** |  ~`{python} NumbersToKnow.fp32_vs_int8_ratio_mult_str`   | Horowitz 45 nm; độ rộng bit xác định năng lượng chuyển mạch |
+| **Năng lượng FP32 so với FP16** |  ~`{python} NumbersToKnow.fp32_vs_fp16_ratio_mult_str`   | Horowitz 45 nm; số học hẹp hơn làm giảm năng lượng chuyển mạch và đường dẫn dữ liệu |
+| **L1 SRAM so với register** |    ~`{python} NumbersToKnow.l1_vs_reg_ratio_mult_str`    | Điểm neo hệ thống phân cấp trên chip minh họa; khoảng cách đến đơn vị số học |
 
 : **Tỷ lệ tham chiếu năng lượng**: Ba tỷ lệ đầu tiên sử dụng các đo đạc 45 nm của Horowitz; tỷ lệ L1/thanh ghi là một mốc tham chiếu minh họa cho hệ thống phân cấp trên chip. {#tbl-energy-ratios-ref tbl-colwidths="[35,10,55]"}
 
@@ -216,12 +216,12 @@ Các mối quan hệ này kết hợp các giới hạn vật lý hoặc số h�
 
 @Tbl-memory-ratios-ref cho thấy vì sao hệ thống phân cấp bộ nhớ không đồng đều: các chặng gần trên cùng gói có thể chỉ chênh nhau vài lần, trong khi các tầng ngoài chip, lưu trữ và mạng lại tạo ra các bước nhảy chênh lệch tới hàng bậc độ lớn.
 
-| **Relationship**                                                   |                            **Ratio**                             | **Why It Persists**               |
+| **Mối quan hệ** |                            **Tỷ lệ** | **Tại sao nó tồn tại** |
 |:-------------------------------------------------------------------|:----------------------------------------------------------------:|:----------------------------------|
-| **Accelerator high-bandwidth memory vs. register**                 | ~`{python} NumbersToKnow.hbm_vs_register_ratio_mult_str` slower  | On-chip vs. off-chip              |
-| **SSD vs. register**                                               | ~`{python} NumbersToKnow.ssd_vs_register_ratio_mult_str` slower  | Electrical vs. mechanical/flash   |
-| **Network vs. local memory**                                       | ~`{python} NumbersToKnow.network_vs_local_ratio_mult_str` slower | Speed of light + switching        |
-| **Accelerator memory BW vs. CPU$\leftrightarrow$Accelerator link** |  ~`{python} NumbersToKnow.gpu_bw_vs_pcie_ratio_mult_str` faster  | Architectural investment priority |
+| **Bộ nhớ băng thông cao của bộ tăng tốc so với register** | ~`{python} NumbersToKnow.hbm_vs_register_ratio_mult_str` chậm hơn | Trên chip so với ngoài chip |
+| **SSD so với register** | ~`{python} NumbersToKnow.ssd_vs_register_ratio_mult_str` chậm hơn | Điện tử so với cơ khí/flash |
+| **Mạng so với bộ nhớ cục bộ** | ~`{python} NumbersToKnow.network_vs_local_ratio_mult_str` chậm hơn | Tốc độ ánh sáng + chuyển mạch |
+| **Băng thông bộ nhớ của bộ tăng tốc so với liên kết CPU$\leftrightarrow$Bộ tăng tốc** |  ~`{python} NumbersToKnow.gpu_bw_vs_pcie_ratio_mult_str` nhanh hơn | Ưu tiên đầu tư kiến trúc |
 
 : **Hệ thống phân cấp độ trễ**: Các mối quan hệ độ trễ tiêu biểu trong hệ thống phân cấp bộ nhớ. Các khoảng cách lớn nhất xuất hiện khi vượt qua ranh giới vật lý: bộ nhớ ngoài chip, liên kết ngoại vi, lưu trữ và cấu trúc mạng. {#tbl-memory-ratios-ref tbl-colwidths="[47,23,30]"}
 
@@ -229,13 +229,13 @@ Các mối quan hệ này kết hợp các giới hạn vật lý hoặc số h�
 
 @Tbl-scaling-rules-ref tổng hợp các mối quan hệ số học quy định yêu cầu bộ nhớ và tính toán cho huấn luyện và suy luận.[^fn-training-memory-footprint]
 
-| **Rule**                          |             **Formula**              |                **Example**                 |
+| **Quy tắc** |             **Công thức** |                **Ví dụ** |
 |:----------------------------------|:------------------------------------:|:------------------------------------------:|
-| **Inference memory (FP16)**       |      2 bytes$\times$ parameters      |             7B params → 14 GB              |
-| **Inference memory (INT8)**       |      1 byte$\times$ parameters       |              7B params → 7 GB              |
-| **Training memory (Adam)**        |     16 bytes$\times$ parameters      |             7B params → 112 GB             |
-| **Inference FLOPs (transformer)** |   ~2$\times$ parameters per token    |        7B model → ~14 GFLOPs/token         |
-| **Training FLOPs**                | ~6$\times$ parameters$\times$ tokens | 7B on 1T tokens → $4 \times 10^{22}$ FLOPs |
+| **Bộ nhớ suy luận (FP16)** |      2 bytes$\times$ tham số |             7B tham số → 14 GB |
+| **Bộ nhớ suy luận (INT8)** |      1 byte$\times$ tham số |              7B tham số → 7 GB |
+| **Bộ nhớ huấn luyện (Adam)** |     16 bytes$\times$ tham số |             7B tham số → 112 GB |
+| **FLOPs suy luận (transformer)** |   ~2$\times$ tham số trên mỗi token |        mô hình 7B → ~14 GFLOPs/token |
+| **FLOPs huấn luyện** | ~6$\times$ tham số$\times$ token | 7B trên 1T token → $4 \times 10^{22}$ FLOPs |
 
 : **Quy tắc mở rộng**: Đây là các quy tắc mang tính số học, không phụ thuộc vào phần cứng cụ thể. Bộ nhớ huấn luyện bao gồm trọng số FP16 (2 byte), gradient FP16 (2 byte), trọng số gốc FP32 (4 byte) và trạng thái optimizer Adam (8 byte cho động lượng + phương sai). {#tbl-scaling-rules-ref tbl-colwidths="[34,33,33]"}
 
@@ -245,13 +245,13 @@ Các mối quan hệ này kết hợp các giới hạn vật lý hoặc số h�
 
 Ngân sách độ trễ phụ thuộc vào các yêu cầu an toàn riêng của từng ứng dụng, kỳ vọng người dùng và mục tiêu mức dịch vụ. @Tbl-latency-targets-ref liệt kê các mục tiêu minh họa thay vì giới hạn phổ quát.
 
-| **Application**        | **Budget** | **Constraint**                       |
+| **Ứng dụng** | **Ngân sách** | **Ràng buộc** |
 |:-----------------------|:----------:|:-------------------------------------|
-| **Autonomous braking** |   <10 ms   | At 100 km/h, 10 ms = 28 cm of travel |
-| **Voice assistant**    |  <100 ms   | Human perception of "instant"        |
-| **Web search**         |  <200 ms   | User patience threshold              |
-| **Video streaming**    |    <1 s    | Buffer tolerance                     |
-| **Batch training**     | hours–days | Throughput dominates latency         |
+| **Phanh tự động** |   <10 ms | Ở tốc độ 100 km/h, 10 ms = 28 cm quãng đường di chuyển |
+| **Trợ lý giọng nói** |  <100 ms | Nhận thức của con người về "ngay lập tức" |
+| **Tìm kiếm web** |  <200 ms | Ngưỡng kiên nhẫn của người dùng |
+| **Truyền phát video** |    <1 s    | Khả năng chịu đựng bộ đệm |
+| **Huấn luyện theo batch** | hàng giờ–hàng ngày | Thông lượng chiếm ưu thế hơn độ trễ |
 
 : **Mục tiêu độ trễ minh họa**: Các yêu cầu trong môi trường sản phẩm phụ thuộc vào ứng dụng và các mục tiêu mức dịch vụ (SLO) của ứng dụng đó. {#tbl-latency-targets-ref tbl-colwidths="[34,33,33]"}
 
@@ -263,16 +263,16 @@ Những con số này phản ánh thế hệ phần cứng hiện tại. Hãy d�
 
 @Tbl-memory-current-ref trình bày các giá trị độ trễ và băng thông tiêu biểu ở các cấp khác nhau trong hệ thống phân cấp bộ nhớ.
 
-| **Level**                               |                **Latency**                |                   **Bandwidth**                   |
+| **Cấp độ** |                **Độ trễ** |                   **Băng thông** |
 |:----------------------------------------|:-----------------------------------------:|:-------------------------------------------------:|
-| **Register**                            |                  ~0.3 ns                  |                         —                         |
-| **L1 Cache**                            |  ~`{python} NumbersToKnow.lat_l1_ns_str`  |                         —                         |
-| **L2 Cache**                            |  ~`{python} NumbersToKnow.lat_l2_ns_str`  |                         —                         |
-| **GPU HBM3**                            |  ~`{python} NumbersToKnow.lat_hbm_ns_str` | `{python} NumbersToKnow.bw_hbm_h100_tb_per_s_str` |
+| **Thanh ghi** |                  ~0.3 ns |                         —                         |
+| **L1 Cache** |  ~`{python} NumbersToKnow.lat_l1_ns_str`  |                         —                         |
+| **L2 Cache** |  ~`{python} NumbersToKnow.lat_l2_ns_str`  |                         —                         |
+| **GPU HBM3** |  ~`{python} NumbersToKnow.lat_hbm_ns_str` | `{python} NumbersToKnow.bw_hbm_h100_tb_per_s_str` |
 | **PCIe Gen5 (CPU$\leftrightarrow$GPU)** | ~`{python} NumbersToKnow.lat_pcie_ns_str` |   `{python} NumbersToKnow.bw_pcie5_gb_per_s_str`  |
-| **CPU DRAM**                            |                  ~100 ns                  |   `{python} NumbersToKnow.bw_dram_gb_per_s_str`   |
-| **InfiniBand (network)**                |  ~`{python} NumbersToKnow.lat_ib_ns_str`  |    `{python} NumbersToKnow.bw_ib_gb_per_s_str`    |
-| **NVMe SSD**                            |  ~`{python} NumbersToKnow.lat_ssd_ns_str` |   `{python} NumbersToKnow.bw_nvme_gb_per_s_str`   |
+| **CPU DRAM** |                  ~100 ns |   `{python} NumbersToKnow.bw_dram_gb_per_s_str`   |
+| **InfiniBand (mạng)** |  ~`{python} NumbersToKnow.lat_ib_ns_str`  |    `{python} NumbersToKnow.bw_ib_gb_per_s_str`    |
+| **NVMe SSD** |  ~`{python} NumbersToKnow.lat_ssd_ns_str` |   `{python} NumbersToKnow.bw_nvme_gb_per_s_str`   |
 
 : **Hệ thống phân cấp bộ nhớ (khoảng năm 2024)**: Các giá trị độ trễ và băng thông tiêu biểu trải dài từ thanh ghi, cache, bộ nhớ, các kết nối, mạng cho đến bộ lưu trữ. Nhìn chung, chúng cho thấy vì sao tính cục bộ (locality) và việc di chuyển dữ liệu lại ảnh hưởng lớn đến hiệu suất. {#tbl-memory-current-ref tbl-colwidths="[34,33,33]"}
 
@@ -283,11 +283,11 @@ Những con số này phản ánh thế hệ phần cứng hiện tại. Hãy d�
 
 @Tbl-compute-current-ref so sánh thông lượng đỉnh và công suất tiêu biểu của GPU trung tâm dữ liệu và NPU di động.
 
-| **Platform**               |                   **FP16/BF16**                    |                      **INT8/FP8-class**                      | **Power** |
+| **Nền tảng** |                   **FP16/BF16** |                      **INT8/FP8-class** | **Công suất** |
 |:---------------------------|:--------------------------------------------------:|:------------------------------------------------------------:|:---------:|
-| **Data center GPU (H100)** | `{python} NumbersToKnow.h100_fp16_tflop_per_s_str` | `{python} NumbersToKnow.h100_fp8_tflop_per_s_str` (FP8 peak) |   700 W   |
-| **Data center GPU (A100)** | `{python} NumbersToKnow.a100_fp16_tflop_per_s_str` |                           624 TOPS                           |   400 W   |
-| **Mobile NPU**             |                         —                          |        `{python} NumbersToKnow.mobile_int8_tops_str`         |   3–5 W   |
+| **GPU trung tâm dữ liệu (H100)** | `{python} NumbersToKnow.h100_fp16_tflop_per_s_str` | `{python} NumbersToKnow.h100_fp8_tflop_per_s_str` (đỉnh FP8) |   700 W   |
+| **GPU trung tâm dữ liệu (A100)** | `{python} NumbersToKnow.a100_fp16_tflop_per_s_str` |                           624 TOPS |   400 W   |
+| **NPU di động** |                         —                          |        `{python} NumbersToKnow.mobile_int8_tops_str`         |   3–5 W   |
 
 : **Thông số tính toán tham khảo (khoảng năm 2024)**: Thông lượng đỉnh và công suất tiêu biểu của GPU trung tâm dữ liệu và NPU di động. Vì các dòng trong bảng dùng các chế độ độ chính xác và quy ước hoạt động khác nhau, bạn chỉ nên so sánh chúng trong cùng một ngữ cảnh về khối lượng công việc (workload) và độ chính xác. {#tbl-compute-current-ref tbl-colwidths="[33,20,32,15]"}
 
@@ -295,10 +295,10 @@ Những con số này phản ánh thế hệ phần cứng hiện tại. Hãy d�
 
 @Tbl-ridge-current-ref định nghĩa các ngưỡng cường độ số học, giúp xác định liệu một khối lượng công việc (workload) đang bị giới hạn bởi bộ nhớ hay bởi khả năng tính toán.
 
-| **Accelerator** |                  **Ridge Point**                  | **Implication**              |
+| **Bộ tăng tốc** |                  **Ridge Point** | **Ý nghĩa** |
 |:----------------|:-------------------------------------------------:|:-----------------------------|
-| **A100 (FP16)** | `{python} NumbersToKnow.ridge_a100_str` FLOP/byte | Below → memory-bound         |
-| **H100 (FP16)** | `{python} NumbersToKnow.ridge_h100_str` FLOP/byte | Higher bar for compute-bound |
+| **A100 (FP16)** | `{python} NumbersToKnow.ridge_a100_str` FLOP/byte | Dưới → giới hạn bộ nhớ (memory-bound) |
+| **H100 (FP16)** | `{python} NumbersToKnow.ridge_h100_str` FLOP/byte | Ngưỡng cao hơn cho giới hạn tính toán (compute-bound) |
 
 : **Ngưỡng cường độ số học (khoảng năm 2024)**: Suy luận truyền trọng số Batch-1 thường bị giới hạn bởi bộ nhớ; các batch lớn hơn có thể vượt qua điểm đỉnh. {#tbl-ridge-current-ref tbl-colwidths="[33,33,34]"}
 
@@ -877,16 +877,16 @@ class ArchReferenceTables:
 
 Bước đầu để có trực giác về hệ thống là hiểu chi phí của khoảng cách. @Tbl-latency-hierarchy cho biết bộ xử lý phải chờ dữ liệu từ các cấp khác nhau của hệ thống phân cấp bộ nhớ trong bao lâu. Nếu truy cập một thanh ghi giống như nhặt cây bút chì ngay bên cạnh, thì lấy dữ liệu từ bộ nhớ băng thông cao (HBM) là đi bộ qua văn phòng, còn lấy từ đĩa là như bay lên mặt trăng.
 
-| **Component**            |                **Latency (ns)**               | **Cycles (Approx)** |               **Relative "Distance"**                |
+| **Thành phần** |                **Độ trễ (ns)** | **Chu kỳ (Xấp xỉ)** |               **"Khoảng cách" tương đối** |
 |:-------------------------|:---------------------------------------------:|:-------------------:|:----------------------------------------------------:|
-| **Register**             |                    ~0.3 ns                    |       1 cycle       | `{python} ArchReferenceTables.register_distance_str` |
-| **L1 Cache**             |   ~`{python} ArchReferenceTables.l1_ns_str`   |      3–4 cycles     |    `{python} ArchReferenceTables.l1_distance_str`    |
-| **L2 Cache**             |   ~`{python} ArchReferenceTables.l2_ns_str`   |      12 cycles      |    `{python} ArchReferenceTables.l2_distance_str`    |
-| **HBM3 (GPU Memory)**    |   ~`{python} ArchReferenceTables.hbm_ns_str`  |     1,000 cycles    |   `{python} ArchReferenceTables.hbm_distance_str`    |
-| **NVLink (GPU-GPU)**     | ~`{python} ArchReferenceTables.nvlink_ns_str` |     1,500 cycles    |  `{python} ArchReferenceTables.nvlink_distance_str`  |
-| **PCIe (CPU-GPU)**       |  ~`{python} ArchReferenceTables.pcie_ns_str`  |     3,000 cycles    |   `{python} ArchReferenceTables.pcie_distance_str`   |
-| **InfiniBand (Network)** |   ~`{python} ArchReferenceTables.ib_ns_str`   |    15,000 cycles    |    `{python} ArchReferenceTables.ib_distance_str`    |
-| **SSD (NVMe)**           |   ~`{python} ArchReferenceTables.ssd_ns_str`  |    300,000 cycles   |   `{python} ArchReferenceTables.ssd_distance_str`    |
+| **Thanh ghi** |                    ~0.3 ns |       1 chu kỳ | `{python} ArchReferenceTables.register_distance_str` |
+| **L1 Cache** |   ~`{python} ArchReferenceTables.l1_ns_str`   |      3–4 chu kỳ |    `{python} ArchReferenceTables.l1_distance_str`    |
+| **L2 Cache** |   ~`{python} ArchReferenceTables.l2_ns_str`   |      12 chu kỳ |    `{python} ArchReferenceTables.l2_distance_str`    |
+| **HBM3 (Bộ nhớ GPU)** |   ~`{python} ArchReferenceTables.hbm_ns_str`  |     1.000 chu kỳ |   `{python} ArchReferenceTables.hbm_distance_str`    |
+| **NVLink (GPU-GPU)** | ~`{python} ArchReferenceTables.nvlink_ns_str` |     1.500 chu kỳ |  `{python} ArchReferenceTables.nvlink_distance_str`  |
+| **PCIe (CPU-GPU)** |  ~`{python} ArchReferenceTables.pcie_ns_str`  |     3.000 chu kỳ |   `{python} ArchReferenceTables.pcie_distance_str`   |
+| **InfiniBand (Mạng)** |   ~`{python} ArchReferenceTables.ib_ns_str`   |    15.000 chu kỳ |    `{python} ArchReferenceTables.ib_distance_str`    |
+| **SSD (NVMe)** |   ~`{python} ArchReferenceTables.ssd_ns_str`  |    300,000 cycles |   `{python} ArchReferenceTables.ssd_distance_str`    |
 
 : **Hệ thống phân cấp độ trễ**: Thời gian truy cập điển hình cho phần cứng AI hiện đại; số chu kỳ ước tính dựa trên xung nhịp tham chiếu 3 GHz. Khoảng cách lớn về độ trễ giữa cache SRAM và HBM khiến tính cục bộ của cache trở thành yếu tố then chốt quyết định hiệu năng. {#tbl-latency-hierarchy tbl-colwidths="[25,25,25,25]"}
 
@@ -894,13 +894,13 @@ Bước đầu để có trực giác về hệ thống là hiểu chi phí củ
 
 Độ trễ đo thời gian chờ byte *đầu tiên*; băng thông đo số lượng byte theo sau. @Tbl-hardware-cheatsheet cung cấp các hằng số cho các phép tính "Roofline" nhanh gọn. Đây là các "đơn vị tính toán tiêu chuẩn" cho kỷ nguyên machine learning hiện nay.
 
-| **Spec**             |                      **NVIDIA H100 (SXM)**                       |                                  **Google TPU v5p**                                  | **System Impact**                     |
+| **Thông số kỹ thuật** |                      **NVIDIA H100 (SXM)** |                                  **Google TPU v5p** | **Tác động hệ thống** |
 |:---------------------|:----------------------------------------------------------------:|:------------------------------------------------------------------------------------:|:--------------------------------------|
-| **BF16 Peak**        |    `{python} ArchReferenceTables.h100_flops_tflop_per_s_str`     |              `{python} ArchReferenceTables.tpuv5_flops_tflop_per_s_str`              | The "Speed Limit" ($R_{\text{peak}}$) |
-| **Memory Bandwidth** |       `{python} ArchReferenceTables.h100_bw_tb_per_s_str`        |                 `{python} ArchReferenceTables.tpuv5_bw_tb_per_s_str`                 | The "Width of the Pipe" ($\text{BW}$) |
-| **HBM Capacity**     |          `{python} ArchReferenceTables.h100_cap_gb_str`          |                   `{python} ArchReferenceTables.tpuv5_cap_gib_str`                   | Max Model Size ($P$)/Batch Size ($B$) |
-| **On-chip SRAM**     |         `{python} ArchReferenceTables.h100_l2_mb_str` L2         |             `{python} ArchReferenceTables.tpuv5_sram_mib_str` VMEM/chip              | Critical for Operator Fusion          |
-| **Interconnect**     | `{python} ArchReferenceTables.h100_nvlink_gb_per_s_str` (NVLink) | `{python} ArchReferenceTables.tpuv5_ici_gb_per_s_str` (Inter-Chip Interconnect, ICI) | Determines Model Parallelism Scaling  |
+| **BF16 Đỉnh** |    `{python} ArchReferenceTables.h100_flops_tflop_per_s_str`     |              `{python} ArchReferenceTables.tpuv5_flops_tflop_per_s_str`              | Giới hạn tốc độ ($R_{\text{peak}}$) |
+| **Băng thông bộ nhớ** |       `{python} ArchReferenceTables.h100_bw_tb_per_s_str`        |                 `{python} ArchReferenceTables.tpuv5_bw_tb_per_s_str`                 | Độ rộng của đường ống ($\text{BW}$) |
+| **Dung lượng HBM** |          `{python} ArchReferenceTables.h100_cap_gb_str`          |                   `{python} ArchReferenceTables.tpuv5_cap_gib_str`                   | Kích thước mô hình tối đa ($P$)/Kích thước batch ($B$) |
+| **SRAM trên chip** |         `{python} ArchReferenceTables.h100_l2_mb_str` L2         |             `{python} ArchReferenceTables.tpuv5_sram_mib_str` VMEM/chip | Quan trọng cho Operator Fusion |
+| **Kết nối liên chip** | `{python} ArchReferenceTables.h100_nvlink_gb_per_s_str` (NVLink) | `{python} ArchReferenceTables.tpuv5_ici_gb_per_s_str` (Kết nối liên chip, ICI) | Xác định khả năng mở rộng song song mô hình |
 
 : **Thông số tham chiếu**: Các hằng số chính để phân tích định lượng. Luôn kiểm tra các datasheet cụ thể; dung lượng HBM được tính theo đơn vị của nhà cung cấp, và băng thông liên kết là tổng băng thông hai chiều, nên cấu trúc liên kết và hướng truyền dữ liệu đều quan trọng. {#tbl-hardware-cheatsheet tbl-colwidths="[22,23,20,35]"}
 
@@ -971,17 +971,17 @@ node[align=center,left]{Larger Capacity\\ Lower Cost}(L);
 
 Hệ thống phân cấp bộ nhớ\index{Memory hierarchy!appendix refresher} là ràng buộc vật lý cơ bản của các hệ thống machine learning. @Tbl-physical-hierarchy-ref tổng hợp các thuộc tính vật lý—độ trễ, băng thông và năng lượng—trên toàn bộ ngăn xếp.
 
-| **Layer**            | **Technology** |                  **Latency**                  |                     **Bandwidth**                     |        **Energy Reference (per 32b)**        |
+| **Lớp** | **Công nghệ** |                  **Độ trễ** |                     **Băng thông** |        **Tham chiếu năng lượng (mỗi 32b)** |
 |:---------------------|:--------------:|:---------------------------------------------:|:-----------------------------------------------------:|:--------------------------------------------:|
-| **Registers**        |   Flip-Flops   |                    ~0.3 ns                    |                           —                           |                      —                       |
-| **L1 Cache**         |      SRAM      |   ~`{python} ArchReferenceTables.l1_ns_str`   |                           —                           |                      —                       |
-| **L2 Cache**         |      SRAM      |   ~`{python} ArchReferenceTables.l2_ns_str`   |                           —                           |                      —                       |
-| **Memory (Local)**   |      HBM3      |   ~`{python} ArchReferenceTables.hbm_ns_str`  |   `{python} ArchReferenceTables.bw_hbm_gb_per_s_str`  | `{python} ArchReferenceTables.e_dram_pj_str` |
-| **Interconnect**     |   NVLink 4.0   | ~`{python} ArchReferenceTables.nvlink_ns_str` | `{python} ArchReferenceTables.bw_nvlink_gb_per_s_str` |                      —                       |
-| **Host Link**        |   PCIe Gen5    |  ~`{python} ArchReferenceTables.pcie_ns_str`  |  `{python} ArchReferenceTables.bw_pcie_gb_per_s_str`  |                      —                       |
-| **System RAM**       |      DDR5      |                    ~100 ns                    |  `{python} ArchReferenceTables.bw_dram_gb_per_s_str`  |                      —                       |
-| **Network (Fabric)** | InfiniBand NDR |   ~`{python} ArchReferenceTables.ib_ns_str`   |   `{python} ArchReferenceTables.bw_net_gb_per_s_str`  |                      —                       |
-| **Storage (Local)**  |    NVMe SSD    |   ~`{python} ArchReferenceTables.ssd_ns_str`  |   `{python} ArchReferenceTables.bw_ssd_gb_per_s_str`  |                      —                       |
+| **Thanh ghi** |   Flip-Flop |                    ~0.3 ns |                           —                           |                      —                       |
+| **L1 Cache** |      SRAM |   ~`{python} ArchReferenceTables.l1_ns_str`   |                           —                           |                      —                       |
+| **L2 Cache** |      SRAM |   ~`{python} ArchReferenceTables.l2_ns_str`   |                           —                           |                      —                       |
+| **Bộ nhớ (Cục bộ)** |      HBM3 |   ~`{python} ArchReferenceTables.hbm_ns_str`  |   `{python} ArchReferenceTables.bw_hbm_gb_per_s_str`  | `{python} ArchReferenceTables.e_dram_pj_str` |
+| **Kết nối liên chip** |   NVLink 4.0 | ~`{python} ArchReferenceTables.nvlink_ns_str` | `{python} ArchReferenceTables.bw_nvlink_gb_per_s_str` |                      —                       |
+| **Liên kết máy chủ** |   PCIe Gen5 |  ~`{python} ArchReferenceTables.pcie_ns_str`  |  `{python} ArchReferenceTables.bw_pcie_gb_per_s_str`  |                      —                       |
+| **RAM hệ thống** |      DDR5 |                    ~100 ns |  `{python} ArchReferenceTables.bw_dram_gb_per_s_str`  |                      —                       |
+| **Mạng (Fabric)** | InfiniBand NDR |   ~`{python} ArchReferenceTables.ib_ns_str`   |   `{python} ArchReferenceTables.bw_net_gb_per_s_str`  |                      —                       |
+| **Lưu trữ (Cục bộ)** |    NVMe SSD |   ~`{python} ArchReferenceTables.ssd_ns_str`  |   `{python} ArchReferenceTables.bw_ssd_gb_per_s_str`  |                      —                       |
 
 : **Các thuộc tính vật lý của hệ thống phân cấp bộ nhớ (khoảng năm 2024)**: Các mốc độ trễ và băng thông tiêu biểu trong hệ thống phân cấp bộ nhớ. Hệ thống phân cấp này có độ trễ trải dài khoảng năm bậc độ lớn. NVLink là tổng băng thông hai chiều; chỉ hiển thị số liệu năng lượng DRAM 45 nm được trích dẫn vì các cấp khác phụ thuộc vào cách triển khai cụ thể. Do đó, giữ dữ liệu ở các cấp cao hơn trong hệ thống phân cấp có thể mang lại mức cải thiện hiệu suất rất lớn. {#tbl-physical-hierarchy-ref tbl-colwidths="[20,20,20,20,20]"}
 
@@ -1106,13 +1106,13 @@ Thống kê mô tả các phân phối dữ liệu; còn các biểu diễn số
 
 Các định dạng IEEE 754 như FP32 và FP16, cùng với các định dạng dành riêng cho AI như BF16 và FP8, đưa ra các đánh đổi khác nhau giữa dải động (phạm vi giá trị có thể biểu diễn) và độ chính xác (độ mịn của các giá trị trong dải đó). @Tbl-numerical-formats tóm tắt các định dạng chính và trường hợp sử dụng của chúng, còn @fig-float-formats minh họa cách phân bổ bit.
 
-| **Format** | **Bits** | **Exponent** | **Mantissa** |                  **Dynamic Range**                  | **Typical Use Case**                           |
+| **Định dạng** | **Bits** | **Số mũ** | **Phần định trị** |                  **Dải động** | **Trường hợp sử dụng điển hình** |
 |:-----------|:--------:|:------------:|:------------:|:---------------------------------------------------:|:-----------------------------------------------|
-| **FP32**   |    32    |      8       |      23      |             $\sim 10^{-38}$ to $10^{38}$            | Training (full precision), reference inference |
-| **FP16**   |    16    |      5       |      10      | Normal: $6.10 \times 10^{-5}$--$6.55 \times 10^{4}$ | Training often with loss scaling, inference    |
-| **BF16**   |    16    |      8       |      7       |              FP32 normal exponent range             | Training, usually without loss scaling         |
-| **FP8**    |    8     |    4 or 5    |    3 or 2    |                        Varies                       | Training/inference on supported hardware       |
-| **INT8**   |    8     |     N/A      |     N/A      |                     -128 to 127                     | Inference after quantization                   |
+| **FP32** |    32    |      8       |      23      |             $\sim 10^{-38}$ to $10^{38}$ | Huấn luyện (độ chính xác đầy đủ), suy luận tham chiếu |
+| **FP16** |    16    |      5       |      10      | Bình thường: $6.10 \times 10^{-5}$--$6.55 \times 10^{4}$ | Huấn luyện thường với loss scaling, suy luận |
+| **BF16** |    16    |      8       |      7       |              Phạm vi số mũ bình thường của FP32 | Huấn luyện, thường không có loss scaling |
+| **FP8** |    8     |    4 hoặc 5 |    3 hoặc 2 |                        Thay đổi | Huấn luyện/suy luận trên phần cứng được hỗ trợ |
+| **INT8** |    8     |     N/A      |     N/A      |                     -128 to 127 | Suy luận sau lượng tử hoá |
 
 : **So sánh các định dạng số**: Mỗi định dạng đều có sự đánh đổi giữa độ chính xác, dải động, dung lượng bộ nhớ và thông lượng tính toán. BF16 có cùng dải số mũ bình thường với FP32 nhưng chỉ sử dụng một nửa dung lượng lưu trữ. {#tbl-numerical-formats tbl-colwidths="[8,8,11,9,20,44]"}
 

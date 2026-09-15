@@ -117,13 +117,13 @@ Phần mềm 2.0 không loại bỏ code. Kỹ sư vẫn phải xây dựng các
 
 [^fn-karpathy-software-two]: **Andrej Karpathy**\index{Karpathy, Andrej!Software 2.0}: Một thành viên sáng lập của OpenAI và cựu Giám đốc AI tại Tesla, người tiên phong ứng dụng deep learning vào các đội xe tự hành. Luận điểm "Phần mềm 2.0" (2017) của ông đúc kết nhận định rằng các trọng số của mạng nơ-ron chính là "mã nguồn" mới, đặt ra một thực tế kỹ thuật: thay vì gỡ lỗi logic tường minh, kỹ sư phải quản lý và lập phiên bản dữ liệu—thứ định nghĩa hành vi chương trình—vì một mô hình với hàng triệu tham số không thể được vá hay phân tích trực tiếp như mã nguồn truyền thống.
 
-| **Feature**      | **Software 1.0 (Traditional)** | **Software 2.0 (Machine Learning)**         |
+| **Đặc trưng** | **Phần mềm 1.0 (Truyền thống)** | **Phần mềm 2.0 (Machine Learning)** |
 |:-----------------|:-------------------------------|:--------------------------------------------|
-| **Source Code**  | C++, Python, Java              | Training Data + Labels                      |
-| **Compiler**     | GCC, LLVM                      | Training loop (stochastic gradient descent) |
-| **Logic**        | Explicit (Hand-coded)          | Implicit (Learned)                          |
-| **Failure Mode** | Loud (Crash, Exception)        | Silent (Metric Degradation)                 |
-| **Debugging**    | Trace execution path           | Inspect data distribution                   |
+| **Mã nguồn** | C++, Python, Java | Dữ liệu huấn luyện + Nhãn |
+| **Trình biên dịch** | GCC, LLVM | Vòng lặp huấn luyện (stochastic gradient descent) |
+| **Logic** | Rõ ràng (Viết mã thủ công) | Ngầm định (Được học) |
+| **Chế độ lỗi** | Rõ ràng (Sập, Ngoại lệ) | Âm thầm (Suy giảm chỉ số) |
+| **Gỡ lỗi** | Theo dõi đường dẫn thực thi | Kiểm tra phân phối dữ liệu |
 
 : **Sự thay đổi mô hình từ Phần mềm 1.0 sang Phần mềm 2.0**: Trong Phần mềm 2.0, "lập trình viên" không trực tiếp viết logic; họ chọn lọc và biên tập tập dữ liệu mà quá trình tối ưu hóa dùng để viết ra logic đó. Do đó, việc gỡ lỗi dịch chuyển ngược dòng, từ mã nguồn sang dữ liệu. Phép so sánh với "trình biên dịch" chỉ mang tính gần đúng: khác với một trình biên dịch xác định, quá trình huấn luyện là ngẫu nhiên và có thể tạo ra các "tệp thực thi" khác nhau dù cùng một "mã nguồn." {#tbl-software-1-vs-2}
 
@@ -1096,11 +1096,11 @@ Mỗi bước chuyển mình lớn trong lịch sử AI đều bắt nguồn t�
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Aspect**        | **Symbolic AI**                                         | **Expert Systems**                   | **Statistical Learning**                   | **Deep Learning**                          |
+| **Khía cạnh** | **AI biểu tượng** | **Hệ thống chuyên gia** | **Học thống kê** | **Deep Learning** |
 |:------------------|:--------------------------------------------------------|:-------------------------------------|:-------------------------------------------|:-------------------------------------------|
-| **Key Strength**  | Logical reasoning                                       | Domain expertise                     | Versatility                                | Pattern recognition                        |
-| **Bottleneck**    | Brittleness\index{Brittleness!definition} (Rules break) | Knowledge Entry (Experts are scarce) | Feature Engineering (Manual preprocessing) | Compute & Data Scale (Infrastructure cost) |
-| **Data Handling** | Minimal data needed                                     | Domain knowledge-based               | Moderate data required                     | Massive data processing                    |
+| **Điểm mạnh chính** | Suy luận logic | Chuyên môn miền | Tính linh hoạt | Nhận dạng mẫu |
+| **Nút thắt cổ chai** | Tính dễ vỡ\index{Brittleness!definition} (Các quy tắc bị phá vỡ) | Nhập liệu kiến thức (Chuyên gia khan hiếm) | Kỹ thuật đặc trưng (Tiền xử lý thủ công) | Quy mô tính toán & dữ liệu (Chi phí hạ tầng) |
+| **Xử lý dữ liệu** | Cần ít dữ liệu | Dựa trên kiến thức miền | Yêu cầu lượng dữ liệu vừa phải | Xử lý dữ liệu lớn |
 
 : **Sự tiến hóa mô hình AI**: Mỗi kỷ nguyên được định hình bởi nút thắt hệ thống kìm hãm nó. deep learning (cột ngoài cùng bên phải) đã vượt qua nút thắt ở khâu thiết kế đặc trưng nhưng lại tạo ra những thách thức hạ tầng mới, đòi hỏi kỹ thuật hệ thống ML hiện đại. {#tbl-ai-evolution-strengths tbl-colwidths="[16,18,18,24,24]"}
 
@@ -1204,13 +1204,13 @@ class AlexNetEvolutionTable:
 \Needspace{24\baselineskip}
 ```
 
-| **Era**                          | **Approach**                   | **Representative Task**       | **Performance**                                                      | **Computational Resources**                                                                                                                                                                                                         |
+| **Kỷ nguyên** | **Phương pháp tiếp cận** | **Tác vụ đại diện** | **Hiệu suất** | **Tài nguyên tính toán** |
 |:---------------------------------|:-------------------------------|:------------------------------|:---------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Expert Systems (1980s)**       | Hand-crafted rules             | Chess (Elo rating)            | System-dependent                                                     | Minimal (rule evaluation)                                                                                                                                                                                                           |
-| **Statistical ML (1990s–2000s)** | Feature engineering + learning | Handwritten digit recognition | about 98–99% on MNIST-era benchmarks [@lecun1998]                    | CPU-era feature pipelines; resources varied by implementation                                                                                                                                                                       |
-| **Deep Learning (2012)**         | End-to-end neural networks     | ImageNet top-5 accuracy       | `{python} AlexNetEvolutionTable.alexnet_top5_accuracy_str` (AlexNet) | 6 days on 2 GPUs                                                                                                                                                                                                                    |
-| **Modern Deep Learning (2020+)** | Large-scale transformers       | ImageNet top-1 accuracy       | 88.55% (ViT-H/14) [@dosovitskiy2021image]                            | Large-scale Tensor Processing Unit (TPU) pretraining                                                                                                                                                                                |
-| **Modern Deep Learning (2023)**  | Foundation models              | MMLU benchmark                | 86.4% (GPT-4) [@openai2023gpt4]                                      | Estimated ~`{python} GPT4ScaleEstimate.a100_gpu_days_million_str` (on the order of `{python} GPT4ScaleEstimate.a100_class_gpu_count_str` reference GPUs run for `{python} GPT4ScaleEstimate.training_days_str`) [@semianalysisGPT4] |
+| **Hệ thống chuyên gia (những năm 1980)** | Các quy tắc được tạo thủ công | Cờ vua (hệ số Elo) | Phụ thuộc vào hệ thống | Tối thiểu (đánh giá quy tắc) |
+| **machine learning thống kê (những năm 1990–2000)** | Kỹ thuật đặc trưng + học | Nhận dạng chữ số viết tay | khoảng 98–99% trên các benchmark thời MNIST [@lecun1998] | các pipeline đặc trưng thời CPU; tài nguyên thay đổi tùy theo triển khai |
+| **deep learning (2012)** | mạng nơ-ron đầu cuối | Độ chính xác top-5 của ImageNet | `{python} AlexNetEvolutionTable.alexnet_top5_accuracy_str` (AlexNet) | 6 ngày trên 2 GPUs |
+| **deep learning hiện đại (2020+)** | Transformers quy mô lớn | Độ chính xác top-1 của ImageNet | 88.55% (ViT-H/14) [@dosovitskiy2021image] | Tiền huấn luyện Bộ xử lý Tensor (TPU) quy mô lớn |
+| **deep learning hiện đại (2023)** | Các mô hình nền tảng | benchmark MMLU | 86.4% (GPT-4) [@openai2023gpt4] | Ước tính ~`{python} GPT4ScaleEstimate.a100_gpu_days_million_str` (khoảng `{python} GPT4ScaleEstimate.a100_class_gpu_count_str` GPUs tham chiếu chạy trong `{python} GPT4ScaleEstimate.training_days_str`) [@semianalysisGPT4] |
 
 : **Sự phát triển hiệu suất AI qua các phương pháp tiếp cận**: Các hệ thống tiêu biểu minh họa sự tăng trưởng về quy mô tính toán qua các thời kỳ. Chi tiết về huấn luyện GPT-4 là những ước tính dùng làm mốc tham khảo, không phải thông tin công bố chính thức. {#tbl-ai-evolution-performance tbl-colwidths="[16,15,16,23,30]"}
 
@@ -1682,12 +1682,12 @@ class DeploymentSystems:
 
 Tổng quan về hệ thống machine learning bao quát khoảng `{python} DeploymentSystems.compute_span_math` về công suất tính toán và `{python} DeploymentSystems.mem_span_math` về dung lượng bộ nhớ. Bảng @Tbl-introduction-deployment-paradigms đối chiếu các giới hạn về bộ nhớ, tính toán và công suất trên bốn **mô hình triển khai**\index{Deployment paradigm!definition}, những yếu tố này sẽ định nghĩa các ràng buộc cho mọi chương tiếp theo.
 
-| **Paradigm** | **Representative System**        | **Memory Envelope**                                                               | **Compute Envelope**                                                                    | **Power Envelope**             |
+| **Mô hình** | **Hệ thống đại diện** | **Giới hạn bộ nhớ** | **Giới hạn tính toán** | **Giới hạn công suất** |
 |:-------------|:---------------------------------|:----------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------|:-------------------------------|
-| **Cloud**    | Data-center accelerator node     | Large device memory plus storage (`{python} DeploymentSystems.cloud_mem_math`)    | Highest-throughput tier (`{python} DeploymentSystems.cloud_ops_math`)                   | Facility-managed power         |
-| **Edge**     | Robotics or industrial gateway   | Local memory under deployment limits (`{python} DeploymentSystems.edge_mem_math`) | Local accelerator or CPU budget (`{python} DeploymentSystems.edge_ops_math`)            | Wall, vehicle, or site power   |
-| **Mobile**   | Smartphone or wearable-class SoC | Shared application memory (`{python} DeploymentSystems.mobile_mem_math`)          | Phone-class neural, GPU, and CPU engines (`{python} DeploymentSystems.mobile_ops_math`) | Battery and thermal cap        |
-| **TinyML**   | Microcontroller node             | Kilobyte-scale memory (`{python} DeploymentSystems.tiny_mem_math`)                | Always-on sensor compute (`{python} DeploymentSystems.tiny_ops_math`)                   | Milliwatt-class battery budget |
+| **Đám mây** | Nút bộ tăng tốc trung tâm dữ liệu | Bộ nhớ thiết bị lớn cộng với bộ lưu trữ (`{python} DeploymentSystems.cloud_mem_math`) | Cấp thông lượng cao nhất (`{python} DeploymentSystems.cloud_ops_math`) | Nguồn điện được quản lý bởi cơ sở |
+| **edge** | Robot học hoặc cổng công nghiệp | Bộ nhớ cục bộ dưới giới hạn triển khai (`{python} DeploymentSystems.edge_mem_math`) | Ngân sách bộ tăng tốc cục bộ hoặc CPU (`{python} DeploymentSystems.edge_ops_math`) | Nguồn điện tường, xe cộ hoặc tại chỗ |
+| **Di động** | SoC cấp điện thoại thông minh hoặc thiết bị đeo | Bộ nhớ ứng dụng dùng chung (`{python} DeploymentSystems.mobile_mem_math`) | Các engine nơ-ron, GPU và CPU cấp điện thoại (`{python} DeploymentSystems.mobile_ops_math`) | Giới hạn pin và nhiệt |
+| **TinyML** | Nút vi điều khiển | Bộ nhớ quy mô kilobyte (`{python} DeploymentSystems.tiny_mem_math`) | Tính toán cảm biến luôn bật (`{python} DeploymentSystems.tiny_ops_math`) | Ngân sách pin cấp milliwatt |
 
 : **Bốn mô hình triển khai**: Các giới hạn điển hình về bộ nhớ, tính toán và công suất cho hệ thống đám mây, edge, di động và TinyML, cho thấy khoảng chênh lệch hàng nhiều bậc độ lớn, khiến không thể đơn giản tái sử dụng mô hình giữa các tầng. Các bản sao phần cứng chính xác và các phép tính tốc độ đỉnh sẽ xuất hiện trong các chương về phần cứng. {#tbl-introduction-deployment-paradigms tbl-colwidths="[10,19,24,30,17]"}
 
@@ -1973,13 +1973,13 @@ Mỗi mô hình hải đăng đại diện cho một tình huống chịu tải 
 \renewcommand{\arraystretch}{1.3}
 ```
 
-| **Lighthouse Model**                                    | **System Bottleneck**          | **What It Reveals**                | **Key Engineering Questions**                         |
+| **Lighthouse Model** | **Nút thắt hệ thống** | **Điều nó tiết lộ** | **Các câu hỏi kỹ thuật chính** |
 |:--------------------------------------------------------|:-------------------------------|:-----------------------------------|:------------------------------------------------------|
-| **ResNet-50**                                           | Compute throughput under reuse | GPU utilization, batching          | Is the hardware doing math or waiting for data?       |
-| **GPT-2/Llama**                                         | Memory bandwidth               | Weight and sequence-state movement | How fast can model state move to compute?             |
-| **Deep Learning Recommendation Model (DLRM)**           | Memory capacity                | Embedding tables, scale-out        | How do terabyte-scale models fit in memory?           |
-| **MobileNetV2**\index{MobileNetV2!definition}           | Latency and power              | Efficient operator design          | Can the system meet real-time constraints on battery? |
-| **Keyword spotting**\index{Keyword spotting!definition} | Power envelope                 | Tiny memory and energy budgets     | Can the system run always-on inference on milliwatts? |
+| **ResNet-50** | Thông lượng tính toán dưới sự tái sử dụng | Mức sử dụng GPU, batching | Phần cứng đang thực hiện tính toán hay chờ dữ liệu? |
+| **GPT-2/Llama** | Băng thông bộ nhớ | Di chuyển trọng số và trạng thái chuỗi | Trạng thái mô hình có thể di chuyển đến tính toán nhanh đến mức nào? |
+| **Deep Learning Recommendation Model (DLRM)** | Dung lượng bộ nhớ | Bảng embedding, mở rộng theo chiều ngang | Các mô hình quy mô terabyte phù hợp với bộ nhớ như thế nào? |
+| **MobileNetV2**\index{MobileNetV2!definition} | Độ trễ và công suất | Thiết kế toán tử hiệu quả | Hệ thống có thể đáp ứng các ràng buộc thời gian thực về pin không? |
+| **Keyword spotting**\index{Keyword spotting!definition} | Giới hạn công suất | Ngân sách bộ nhớ và năng lượng nhỏ | Hệ thống có thể chạy suy luận luôn bật trên milliwatt không? |
 
 : **Mô hình Hải đăng – Các khối lượng công việc (workload) tham chiếu**: Mỗi khối lượng công việc (workload) này cô lập một nút thắt cổ chai riêng, cho phép nghiên cứu có hệ thống cách các ràng buộc của hệ thống ảnh hưởng đến những kiểu kiến trúc khác nhau. Các đặc tả định lượng và chi tiết kiến trúc sẽ được trình bày trong @sec-network-architectures. {#tbl-lighthouse-examples tbl-colwidths="[30,20,24,26]"}
 
@@ -2972,12 +2972,12 @@ Mỗi nhiệm vụ sẽ vận hành vòng đời này liên tục. Dữ liệu c
 \renewcommand{\arraystretch}{1.35}
 ```
 
-| **Mission**                                                       | **Deployment Paradigm**             | **Scenario Workload**                             | **Critical Constraint**                                                            |
+| **Nhiệm vụ** | **Mô hình triển khai** | **Khối lượng công việc kịch bản** | **Ràng buộc Quan trọng** |
 |:------------------------------------------------------------------|:------------------------------------|:--------------------------------------------------|:-----------------------------------------------------------------------------------|
-| **Frontier training**\index{Frontier training!definition}         | Cloud Cluster                       | GPT-4                                             | Target: `{python} ScenarioRegistry.frontier_limit_str`                             |
-| **Autonomous perception**\index{Autonomous perception!definition} | Edge Robotics                       | YOLOv8-nano                                       | SLA (Service-Level Agreement): `{python} ScenarioRegistry.drive_limit_str` latency |
-| **Mobile assistant**\index{Mobile assistant!definition}           | Smartphone                          | Mobile-optimized small LLM (Large Language Model) | RAM: $< 2\text{ GB}$ / Thermal: $< 3\text{ W}$                                     |
-| **Smart Doorbell**                                                | TinyML (MCU [Microcontroller Unit]) | Wake Vision                                       | Power: `{python} ScenarioRegistry.doorbell_power_str`                              |
+| Frontier training | Cụm đám mây | GPT-4 | Mục tiêu: `{python} ScenarioRegistry.frontier_limit_str` |
+| Nhận thức tự hành | Robot học edge | YOLOv8-nano | SLA (Service-Level Agreement): `{python} ScenarioRegistry.drive_limit_str` độ trễ |
+| Trợ lý di động | Smartphone | LLM (Mô hình ngôn ngữ lớn) nhỏ, tối ưu cho di động | RAM: $< 2\text{ GB}$ / Nhiệt: $< 3\text{ W}$ |
+| **Chuông cửa thông minh** | TinyML (MCU [Microcontroller Unit]) | Wake Vision | Công suất: `{python} ScenarioRegistry.doorbell_power_str` |
 
 : **Bốn Nhiệm vụ Kỹ thuật**: Mỗi mô hình triển khai sẽ đi kèm với một khối lượng công việc (workload) theo kịch bản thường gặp và các ràng buộc chính của nó. {#tbl-engineering-missions tbl-colwidths="[24,23,28,25]"}
 
@@ -3001,13 +3001,13 @@ Giữa hai cực này, việc đặt ở đâu trở thành bài toán phân b�
 
 Mỗi điểm trên phổ triển khai này tạo ra các nút thắt riêng, từ đó quyết định những khía cạnh hiệu quả nào quan trọng nhất, như tóm tắt trong @tbl-efficiency-priorities:
 
-| **Environment**     | **Primary Constraint**          | **Efficiency Focus**                           |
+| **Môi trường** | **Ràng buộc Chính** | **Trọng tâm Hiệu quả** |
 |:--------------------|:--------------------------------|:-----------------------------------------------|
-| **Cloud training**  | Cost, throughput                | Distributed efficiency, hardware utilization   |
-| **Cloud inference** | Latency, cost per query         | Batching, model serving optimization           |
-| **Edge devices**    | Memory, power                   | Smaller models and lower data movement         |
-| **Mobile**          | Battery, thermal                | Energy-efficient inference                     |
-| **TinyML**          | kilobyte-scale memory, mW power | Extreme compression, specialized architectures |
+| **Huấn luyện trên đám mây** | Chi phí, thông lượng | Hiệu quả phân tán, tận dụng phần cứng |
+| **Suy luận trên đám mây** | Độ trễ, chi phí trên mỗi truy vấn | Batching, tối ưu hóa phục vụ (serving) mô hình |
+| **Thiết bị edge** | Bộ nhớ, công suất | Mô hình nhỏ hơn và di chuyển dữ liệu ít hơn |
+| **Di động** | Pin, nhiệt | Suy luận tiết kiệm năng lượng |
+| **TinyML** | Bộ nhớ quy mô kilobyte, công suất mW | Nén cực độ, kiến trúc chuyên biệt |
 
 : **Ưu tiên hiệu quả theo ngữ cảnh triển khai**: Mỗi môi trường triển khai tạo ra các nút thắt riêng biệt, đòi hỏi các chiến lược tối ưu hóa phù hợp. Các hệ thống đám mây tối ưu hóa thông lượng và chi phí; các hệ thống edge tối ưu hóa bộ nhớ và công suất; các hệ thống TinyML yêu cầu hiệu quả cực cao trên mọi khía cạnh. {#tbl-efficiency-priorities}
 
@@ -3085,12 +3085,12 @@ Các trụ cột này cũng là xương sống tổ chức của cuốn sách gi
 
 Năm trụ cột mô tả những gì các kỹ sư hệ thống ML cần phải phối hợp; còn bốn phần của cuốn sách sẽ trình bày thứ tự để người đọc phát triển các năng lực đó. Nguyên tắc tổ chức ở đây là *ngữ cảnh trước lý thuyết*. Bối cảnh và từ vựng sẽ được thiết lập (Phần I) trước khi đi vào xây dựng mô hình (Phần II), tối ưu hóa các mô hình đó (Phần III) và triển khai chúng một cách đáng tin cậy (Phần IV). @Tbl-book-structure sẽ phác thảo tiến trình này.
 
-| **Part**           | **Theme**                      | **Key Chapters**                                                                             |
+| **Phần** | **Chủ đề** | **Các Chương Chính** |
 |:-------------------|:-------------------------------|:---------------------------------------------------------------------------------------------|
-| **I: Foundations** | Context: ML systems landscape  | This chapter, @sec-ml-systems, @sec-ml-workflow, @sec-data-engineering                       |
-| **II: Build**      | Theory: Model fundamentals     | @sec-neural-computation, @sec-network-architectures, @sec-ml-frameworks, @sec-model-training |
-| **III: Optimize**  | Efficiency: Performance tuning | @sec-data-selection, @sec-model-compression, @sec-hardware-acceleration, @sec-benchmarking   |
-| **IV: Deploy**     | Production: Real-world systems | @sec-model-serving, @sec-ml-operations, @sec-responsible-engineering, @sec-conclusion        |
+| **I: Nền tảng** | Bối cảnh: bức tranh tổng thể về hệ thống ML | Chương này, @sec-ml-systems, @sec-ml-workflow, @sec-data-engineering |
+| **II: Xây dựng** | Lý thuyết: Nguyên tắc cơ bản của mô hình | @sec-neural-computation, @sec-network-architectures, @sec-ml-frameworks, @sec-model-training |
+| **III: Tối ưu hóa** | Hiệu quả: Điều chỉnh hiệu suất | @sec-data-selection, @sec-model-compression, @sec-hardware-acceleration, @sec-benchmarking |
+| **IV: Triển khai** | Sản xuất: Hệ thống thực tế | @sec-model-serving, @sec-ml-operations, @sec-responsible-engineering, @sec-conclusion |
 
 : **Tổ chức Sách**: Bốn phần tuân theo một tiến trình sư phạm, từ ngữ cảnh (Nền tảng) qua lý thuyết (Xây dựng) đến thực hành (Tối ưu hóa, Triển khai). Mỗi phần đều xây dựng dựa trên các thuật ngữ và framework của các phần trước. Do đó, các kỹ thuật tối ưu hóa ở Phần III yêu cầu người đọc quen thuộc với kiến trúc mô hình của Phần II, và các phương pháp triển khai ở Phần IV yêu cầu nắm vững cả Phần II và III. {#tbl-book-structure tbl-colwidths="[18,30,52]"}
 

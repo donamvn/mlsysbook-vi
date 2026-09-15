@@ -30,20 +30,20 @@ Các hộp chú thích không phải là vật trang trí. Mỗi loại báo hi�
 
 ::: {tbl-colwidths="[17,85]"}
 
-| Callout                 | Contains                                                                                                                                                     |
+| Ghi chú đặc biệt | Nội dung |
 |:------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Definition**          | Formal definition of a key term, with its significance, distinction from the nearest neighbor concept, and a common pitfall                                  |
-| **Example**             | Historical case or concrete scenario, structured as context, insight, and systems lesson                                                                     |
-| **Systems Perspective** | Analytical observation or mathematical nuance that enriches the surrounding argument                                                                         |
-| **Napkin Math**         | Worked calculation walked through step by step, with values computed inline from the book's constants; intermediate tables and equations are the math itself |
-| **Checkpoint**          | Self-check questions to verify understanding of the preceding section                                                                                        |
-| **War Story**           | Documented engineering incident with a sourced failure mode, structured as context, failure, consequence, and lesson                                         |
-| **Lighthouse**          | Recurring workloads characterized by a profile (parameters, FLOPs, dominant constraint), used as anchored case studies across multiple chapters              |
-| **Principle**           | Canonical book principle or invariant referenced from later chapters                                                                                         |
-| **Theorem**             | Formal, equation-backed result or bound, stated with its conditions and applied in later quantitative analysis                                               |
-| **Key Takeaways**       | Four to seven most important results from a chapter, in summary form                                                                                         |
-| **Learning Objectives** | Skills and concepts that readers should be able to explain or apply after completing the chapter                                                             |
-| **What's Next**         | Bridge from the chapter just ended to the chapter beginning, naming the open question the next chapter addresses                                             |
+| **Định nghĩa** | Định nghĩa chính thức của một thuật ngữ chính, cùng với ý nghĩa, điểm khác biệt so với khái niệm gần nhất và một lỗi thường gặp. |
+| **Ví dụ** | Trường hợp lịch sử hoặc kịch bản cụ thể, được cấu trúc gồm ngữ cảnh, thông tin chi tiết và bài học về hệ thống. |
+| **Góc nhìn Hệ thống** | Quan sát phân tích hoặc sắc thái toán học làm phong phú thêm lập luận xung quanh. |
+| **Tính toán sơ bộ** | Tính toán chi tiết được trình bày từng bước, với các giá trị được tính toán trực tiếp từ các hằng số của sách; các bảng và phương trình trung gian chính là phần toán học. |
+| **Checkpoint** | Các câu hỏi tự kiểm tra để kiểm tra sự hiểu biết về phần trước đó. |
+| **Kinh nghiệm xương máu** | Sự cố kỹ thuật được ghi lại với chế độ lỗi có nguồn gốc, được cấu trúc gồm ngữ cảnh, lỗi, hậu quả và bài học. |
+| **Trường hợp điển hình** | Các khối lượng công việc (workload) lặp lại được đặc trưng bởi một hồ sơ (tham số, FLOPs, ràng buộc chi phối), được sử dụng làm các nghiên cứu điển hình cố định qua nhiều chương. |
+| **Nguyên tắc** | Nguyên tắc sách chuẩn hoặc bất biến được tham chiếu từ các chương sau. |
+| **Định lý** | Kết quả hoặc giới hạn chính thức, được hỗ trợ bằng phương trình, được nêu rõ với các điều kiện của nó và được áp dụng trong phân tích định lượng sau này. |
+| **Những điểm chính cần ghi nhớ** | Bốn đến bảy kết quả quan trọng nhất từ một chương, dưới dạng tóm tắt. |
+| **Mục tiêu học tập** | Các kỹ năng và khái niệm mà người đọc có thể giải thích hoặc áp dụng sau khi hoàn thành chương. |
+| **Tiếp theo là gì** | Cầu nối từ chương vừa kết thúc đến chương bắt đầu, nêu tên câu hỏi mở mà chương tiếp theo giải quyết. |
 
 :::
 

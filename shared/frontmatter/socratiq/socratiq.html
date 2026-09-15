@@ -1,0 +1,3049 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Machine Learning Systems</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../vol1/frontmatter/notation.html" rel="prev">
+<link href="../../../shared/assets/images/icons/favicon.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-6d8bf5f3a64ff1f58d6d467b13ee33b9.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6d8bf5f3a64ff1f58d6d467b13ee33b9.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-6d8bf5f3a64ff1f58d6d467b13ee33b9.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-abcbfb5d8c34f61f2ffcc35a75fff582.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-df9c8c29c089ddecc8419a26f62c901e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-abcbfb5d8c34f61f2ffcc35a75fff582.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/quarto-contrib/foldbox/foldbox.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "/"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-M21L0CBCVN"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-M21L0CBCVN', { 'anonymize_ip': true});
+</script>
+<script type="application/json" class="js-hypothesis-config">
+{
+  "theme": "clean",
+  "openSidebar": false
+}
+</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
+<!-- Shared head includes — MLSysBook ecosystem -->
+
+<!--
+  theme-persist (inline, sync) — applies stored color-scheme before first paint.
+  Inlined deliberately: runs before any other <script>, no extra round-trip,
+  and avoids per-subsite asset path differences. Canonical source:
+  shared/scripts/theme-persist.js (kept identical for documentation/testability).
+  If you change one, mirror the change to the other.
+-->
+<script>
+(function () {
+  'use strict';
+  var STORAGE_KEY = 'quarto-color-scheme';
+  // Quarto's toggle writes 'alternate'/'default' (alternate = dark, the
+  // layered sheet); sibling non-Quarto sites write 'dark'/'light'. Both
+  // hit the same key, so we accept either. Quarto's own startup still
+  // checks `=== 'alternate'`, so we mirror onto <html> rather than rewrite.
+  function normalize(v) {
+    if (v === 'dark' || v === 'alternate') return 'dark';
+    if (v === 'light' || v === 'default') return 'light';
+    return null;
+  }
+  function preferredScheme() {
+    try {
+      var n = normalize(window.localStorage.getItem(STORAGE_KEY));
+      if (n) return n;
+    } catch (e) {}
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  }
+  function apply(scheme) {
+    var html = document.documentElement;
+    if (!html) return;
+    html.setAttribute('data-bs-theme', scheme);
+    html.setAttribute('data-quarto-color-scheme', scheme);
+    html.style.colorScheme = scheme;
+    // Bridge to legacy `.quarto-dark` body class — about.css,
+    // community.css, and newsletter.css key their dark-mode CSS
+    // variables off `.quarto-dark { ... }`. Quarto's own toggle adds
+    // that class on click, but the OS-pref / first-paint path never
+    // does. Mirror the scheme onto body so those CSS variables fire
+    // on every dark path, not just toggle clicks. body may not exist
+    // yet on the first call (this script runs in <head>); a
+    // MutationObserver below catches it as soon as it parses.
+    var body = document.body;
+    if (body) body.classList.toggle('quarto-dark', scheme === 'dark');
+  }
+  apply(preferredScheme());
+  // Catch the FOUC window between <head> apply() and DOMContentLoaded:
+  // <body> may not exist yet at first apply(), but as soon as the
+  // parser appends it we want the legacy class bridge in place so any
+  // CSS keyed on `.quarto-dark` paints correctly on first render.
+  if (!document.body) {
+    var earlyObserver = new MutationObserver(function () {
+      if (document.body) {
+        apply(preferredScheme());
+        earlyObserver.disconnect();
+      }
+    });
+    earlyObserver.observe(document.documentElement, { childList: true });
+  }
+  // Quarto's toggle updates localStorage but not <html>, so wrap it to
+  // mirror the new value onto data-bs-theme; otherwise clicking the toggle
+  // leaves CSS keyed off [data-bs-theme="dark"] rendering against the wrong
+  // stylesheet until the next reload.
+  function syncFromStorage() {
+    try {
+      var n = normalize(window.localStorage.getItem(STORAGE_KEY));
+      if (n) apply(n);
+    } catch (e) {}
+  }
+  function wrapToggle() {
+    var orig = window.quartoToggleColorScheme;
+    if (typeof orig !== 'function' || orig.__mlsbWrapped) return;
+    var wrapped = function () { var r = orig.apply(this, arguments); syncFromStorage(); return r; };
+    wrapped.__mlsbWrapped = true;
+    window.quartoToggleColorScheme = wrapped;
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { wrapToggle(); syncFromStorage(); });
+  } else {
+    wrapToggle(); syncFromStorage();
+  }
+  // Defend the legacy `.quarto-dark` body class against Quarto's own
+  // `toggleBodyColor(mode)`, which runs *after* this script and re-asserts
+  // the body class based on `mode` — and `mode` defaults to 'light' when
+  // there's no stored quarto-color-scheme value, even when the OS / first
+  // paint already resolved to dark via `data-bs-theme`. Without this
+  // observer, on every fresh visit Quarto would clobber our bridge and
+  // restore `.quarto-light`, leaving `.quarto-dark`-keyed CSS variables
+  // (about/community/newsletter pages) at their light-mode defaults
+  // against the dark `data-bs-theme="dark"` background.
+  function bridgeBody() {
+    var body = document.body;
+    if (!body) return;
+    var wantDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+    if (wantDark && !body.classList.contains('quarto-dark')) {
+      body.classList.add('quarto-dark');
+      body.classList.remove('quarto-light');
+    } else if (!wantDark && body.classList.contains('quarto-dark')) {
+      body.classList.remove('quarto-dark');
+      body.classList.add('quarto-light');
+    }
+  }
+  function watchBody() {
+    if (!document.body) return;
+    bridgeBody();
+    var bodyObs = new MutationObserver(bridgeBody);
+    bodyObs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    var htmlObs = new MutationObserver(bridgeBody);
+    htmlObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', watchBody);
+  } else {
+    watchBody();
+  }
+  window.addEventListener('storage', function (ev) {
+    if (ev.key !== STORAGE_KEY) return;
+    var n = normalize(ev.newValue);
+    if (n) apply(n);
+  });
+  if (window.matchMedia) {
+    try {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (ev) {
+        try { if (window.localStorage.getItem(STORAGE_KEY)) return; } catch (e) {}
+        apply(ev.matches ? 'dark' : 'light');
+      });
+    } catch (e) {}
+  }
+})();
+</script>
+
+<!--
+  Build-stamp styling. Tiny, neutral, dark-mode aware. The actual stamp text
+  is injected by shared/scripts/inject-build-stamp.sh into footer markup
+  containing the literal MLSB_BUILD_STAMP HTML-comment token (see that
+  script for the exact pattern — we cannot write it here because HTML
+  comments cannot nest and the inner closer would terminate this block).
+-->
+<style>
+.mlsb-build-stamp {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  font-variant-numeric: tabular-nums;
+}
+[data-bs-theme="dark"] .mlsb-build-stamp { opacity: 0.5; }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link rel="icon" href="https://mlsysbook.ai/vol1/assets/images/icons/favicon.png" type="image/png">
+
+<!--
+  navbar-theme-toggle-relocate — moves the Quarto theme toggle into the
+  navbar's right-side .navbar-nav group at page load, so it collapses into
+  the hamburger menu alongside Subscribe/Star/Support/GitHub at narrow widths
+  instead of being stranded in the middle by Quarto's mx-auto brand layout.
+
+  Why JS: Quarto auto-injects the toggle into .quarto-navbar-tools (outside
+  .navbar-collapse). CSS can't move DOM nodes between containers, and CSS
+  positioning hacks (absolute/right: 50px) fight Bootstrap's responsive
+  layout below 992px. Moving the node once at startup is the standard
+  approach used across Quarto-based sites with the same problem.
+-->
+<script>
+(function () {
+  'use strict';
+  function relocateThemeToggle() {
+    var tools = document.querySelector('.quarto-navbar-tools');
+    if (!tools) return;
+    var toggle = tools.querySelector('.quarto-color-scheme-toggle');
+    if (!toggle) return;
+    var navRight = document.querySelector(
+      '.navbar .navbar-collapse .navbar-nav.ms-auto'
+    ) || document.querySelector(
+      '.navbar .navbar-collapse .navbar-nav:last-of-type'
+    );
+    if (!navRight) return;
+    var li = document.createElement('li');
+    li.className = 'nav-item navbar-theme-toggle-item';
+    toggle.classList.add('nav-link');
+    li.appendChild(toggle);
+    navRight.appendChild(li);
+    tools.style.display = 'none';
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', relocateThemeToggle);
+  } else {
+    relocateThemeToggle();
+  }
+})();
+</script>
+
+<!--
+  navbar-brand-href-fix — force the navbar brand link to the ecosystem root
+  (https://mlsysbook.ai/) on every subsite.
+
+  Quarto sets each subsite's `site-url` to `https://mlsysbook.ai/<subsite>/`
+  and then relativizes any navbar.href value that lives inside the
+  site-url's domain. The shared `href: https://mlsysbook.ai/` in
+  navbar-common.yml therefore gets emitted as `./index.html`, which on
+  vol1/vol2/tinytorch/etc. resolves to *that subsite's* root rather than
+  the ecosystem landing page. Override the brand link href in JS after
+  Quarto's render: this is a one-line user-experience fix that does not
+  fight Quarto's URL machinery.
+-->
+<script>
+(function () {
+  'use strict';
+  function fixBrandHref() {
+    var brand = document.querySelectorAll(
+      '.navbar .navbar-brand, .navbar .navbar-brand-logo'
+    );
+    for (var i = 0; i < brand.length; i++) {
+      brand[i].setAttribute('href', 'https://mlsysbook.ai/');
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixBrandHref);
+  } else {
+    fixBrandHref();
+  }
+})();
+</script>
+<link rel="manifest" href="../../../site.webmanifest">
+<link rel="apple-touch-icon" href="../../../shared/assets/images/icons/favicon.png">
+<meta name="theme-color" content="#A51C30">
+<!-- Release identity (rendered into the footer pill below).
+     The publish workflow drops release-manifest.json at
+     /vol1/release-manifest.json before deploy. -->
+<meta name="release-manifest" content="/vol1/release-manifest.json">
+<!-- SocratiQ bundle: -->
+<!-- <script type="module" src="/tools/scripts/socratiQ/bundle.js" defer></script> -->
+<script src="../../../shared/assets/scripts/sidebar-auto-collapse.js" defer=""></script>
+<script src="../../../shared/assets/scripts/version-link.js" defer=""></script>
+<script src="../../../shared/assets/scripts/subscribe-modal.js" defer=""></script>
+<style>
+.callout-learning-objectives {
+  --color1: #E8F2EA;
+  --color2: #4A7C59;
+  --border-color: #4A7C59;
+  --background-color: rgba(74, 124, 89, 0.04);
+  --title-background-color: rgba(74, 124, 89, 0.04);
+  --dark-background-color: rgba(74, 124, 89, 0.12);
+  --dark-title-background-color: rgba(74, 124, 89, 0.12);
+}
+.callout-quiz-question {
+  --color1: #F0F0F8;
+  --color2: #5B4B8A;
+  --border-color: #5B4B8A;
+  --background-color: rgba(91, 75, 138, 0.04);
+  --title-background-color: rgba(91, 75, 138, 0.04);
+  --dark-background-color: rgba(91, 75, 138, 0.12);
+  --dark-title-background-color: rgba(91, 75, 138, 0.12);
+}
+.callout-definition {
+  --color1: #F2F7FA;
+  --color2: #4F7396;
+  --border-color: #4F7396;
+  --background-color: rgba(79, 115, 150, 0.04);
+  --title-background-color: rgba(79, 115, 150, 0.04);
+  --dark-background-color: rgba(79, 115, 150, 0.12);
+  --dark-title-background-color: rgba(79, 115, 150, 0.12);
+}
+.callout-notebook {
+  --color1: #F4F7FA;
+  --color2: #3F6077;
+  --border-color: #3F6077;
+  --background-color: rgba(63, 96, 119, 0.04);
+  --title-background-color: rgba(63, 96, 119, 0.04);
+  --dark-background-color: rgba(63, 96, 119, 0.12);
+  --dark-title-background-color: rgba(63, 96, 119, 0.12);
+}
+.callout-chapter-connection {
+  --color1: #F1F5F9;
+  --color2: #64748B;
+  --border-color: #64748B;
+  --background-color: rgba(100, 116, 139, 0.04);
+  --title-background-color: rgba(100, 116, 139, 0.04);
+  --dark-background-color: rgba(100, 116, 139, 0.12);
+  --dark-title-background-color: rgba(100, 116, 139, 0.12);
+}
+.callout-colab {
+  --color1: #FFF5E6;
+  --color2: #FF6B35;
+  --border-color: #FF6B35;
+  --background-color: rgba(255, 107, 53, 0.04);
+  --title-background-color: rgba(255, 107, 53, 0.04);
+  --dark-background-color: rgba(255, 107, 53, 0.12);
+  --dark-title-background-color: rgba(255, 107, 53, 0.12);
+}
+.callout-checkpoint {
+  --color1: #F7FEE7;
+  --color2: #4D7C0F;
+  --border-color: #4D7C0F;
+  --background-color: rgba(77, 124, 15, 0.04);
+  --title-background-color: rgba(77, 124, 15, 0.04);
+  --dark-background-color: rgba(77, 124, 15, 0.12);
+  --dark-title-background-color: rgba(77, 124, 15, 0.12);
+}
+.callout-case-study {
+  --color1: #FEF2F2;
+  --color2: #C53030;
+  --border-color: #C53030;
+  --background-color: rgba(197, 48, 48, 0.04);
+  --title-background-color: rgba(197, 48, 48, 0.04);
+  --dark-background-color: rgba(197, 48, 48, 0.12);
+  --dark-title-background-color: rgba(197, 48, 48, 0.12);
+}
+.callout-research-questions {
+  --color1: #F0F0F8;
+  --color2: #5B4B8A;
+  --border-color: #5B4B8A;
+  --background-color: rgba(91, 75, 138, 0.04);
+  --title-background-color: rgba(91, 75, 138, 0.04);
+  --dark-background-color: rgba(91, 75, 138, 0.12);
+  --dark-title-background-color: rgba(91, 75, 138, 0.12);
+}
+.callout-lighthouse {
+  --color1: #FDF8E6;
+  --color2: #B8860B;
+  --border-color: #B8860B;
+  --background-color: rgba(184, 134, 11, 0.04);
+  --title-background-color: rgba(184, 134, 11, 0.04);
+  --dark-background-color: rgba(184, 134, 11, 0.12);
+  --dark-title-background-color: rgba(184, 134, 11, 0.12);
+}
+.callout-perspective {
+  --color1: #F7F8FA;
+  --color2: #4A5568;
+  --border-color: #4A5568;
+  --background-color: rgba(74, 85, 104, 0.04);
+  --title-background-color: rgba(74, 85, 104, 0.04);
+  --dark-background-color: rgba(74, 85, 104, 0.12);
+  --dark-title-background-color: rgba(74, 85, 104, 0.12);
+}
+.callout-resource-exercises {
+  --color1: #E0F2F1;
+  --color2: #20B2AA;
+  --border-color: #20B2AA;
+  --background-color: rgba(32, 178, 170, 0.04);
+  --title-background-color: rgba(32, 178, 170, 0.04);
+  --dark-background-color: rgba(32, 178, 170, 0.12);
+  --dark-title-background-color: rgba(32, 178, 170, 0.12);
+}
+.callout-theorem {
+  --color1: #F5F0FA;
+  --color2: #6B46C1;
+  --border-color: #6B46C1;
+  --background-color: rgba(107, 70, 193, 0.04);
+  --title-background-color: rgba(107, 70, 193, 0.04);
+  --dark-background-color: rgba(107, 70, 193, 0.12);
+  --dark-title-background-color: rgba(107, 70, 193, 0.12);
+}
+.callout-code {
+  --color1: #F2F4F8;
+  --color2: #3C4858;
+  --border-color: #3C4858;
+  --background-color: rgba(60, 72, 88, 0.04);
+  --title-background-color: rgba(60, 72, 88, 0.04);
+  --dark-background-color: rgba(60, 72, 88, 0.12);
+  --dark-title-background-color: rgba(60, 72, 88, 0.12);
+}
+.callout-quiz-answer {
+  --color1: #E8F2EA;
+  --color2: #4A7C59;
+  --border-color: #4A7C59;
+  --background-color: rgba(74, 124, 89, 0.04);
+  --title-background-color: rgba(74, 124, 89, 0.04);
+  --dark-background-color: rgba(74, 124, 89, 0.12);
+  --dark-title-background-color: rgba(74, 124, 89, 0.12);
+}
+.callout-example {
+  --color1: #F0F8F6;
+  --color2: #148F77;
+  --border-color: #148F77;
+  --background-color: rgba(20, 143, 119, 0.04);
+  --title-background-color: rgba(20, 143, 119, 0.04);
+  --dark-background-color: rgba(20, 143, 119, 0.12);
+  --dark-title-background-color: rgba(20, 143, 119, 0.12);
+}
+.callout-principle {
+  --color1: #F3F2FA;
+  --color2: #3D3B8E;
+  --border-color: #3D3B8E;
+  --background-color: rgba(61, 59, 142, 0.04);
+  --title-background-color: rgba(61, 59, 142, 0.04);
+  --dark-background-color: rgba(61, 59, 142, 0.12);
+  --dark-title-background-color: rgba(61, 59, 142, 0.12);
+}
+.callout-resource-slides {
+  --color1: #E0F2F1;
+  --color2: #20B2AA;
+  --border-color: #20B2AA;
+  --background-color: rgba(32, 178, 170, 0.04);
+  --title-background-color: rgba(32, 178, 170, 0.04);
+  --dark-background-color: rgba(32, 178, 170, 0.12);
+  --dark-title-background-color: rgba(32, 178, 170, 0.12);
+}
+.callout-resource-videos {
+  --color1: #E0F2F1;
+  --color2: #20B2AA;
+  --border-color: #20B2AA;
+  --background-color: rgba(32, 178, 170, 0.04);
+  --title-background-color: rgba(32, 178, 170, 0.04);
+  --dark-background-color: rgba(32, 178, 170, 0.12);
+  --dark-title-background-color: rgba(32, 178, 170, 0.12);
+}
+.callout-takeaways {
+  --color1: #FCF4F8;
+  --color2: #9D3C72;
+  --border-color: #9D3C72;
+  --background-color: rgba(157, 60, 114, 0.04);
+  --title-background-color: rgba(157, 60, 114, 0.04);
+  --dark-background-color: rgba(157, 60, 114, 0.12);
+  --dark-title-background-color: rgba(157, 60, 114, 0.12);
+}
+.callout-war-story {
+  --color1: #FEF2F2;
+  --color2: #C53030;
+  --border-color: #C53030;
+  --background-color: rgba(197, 48, 48, 0.04);
+  --title-background-color: rgba(197, 48, 48, 0.04);
+  --dark-background-color: rgba(197, 48, 48, 0.12);
+  --dark-title-background-color: rgba(197, 48, 48, 0.12);
+}
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  details.callout-learning-objectives {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+  details.callout-learning-objectives summary,
+  details.callout-learning-objectives summary strong,
+  details.callout-learning-objectives > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-learning-objectives code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-quiz-question {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+  details.callout-quiz-question summary,
+  details.callout-quiz-question summary strong,
+  details.callout-quiz-question > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-quiz-question code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-definition {
+    --text-color: #e6e6e6;
+    --background-color: rgba(79, 115, 150, 0.12);
+    --title-background-color: rgba(79, 115, 150, 0.12);
+    border-color: #4F7396;
+  }
+  details.callout-definition summary,
+  details.callout-definition summary strong,
+  details.callout-definition > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-definition code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-notebook {
+    --text-color: #e6e6e6;
+    --background-color: rgba(63, 96, 119, 0.12);
+    --title-background-color: rgba(63, 96, 119, 0.12);
+    border-color: #3F6077;
+  }
+  details.callout-notebook summary,
+  details.callout-notebook summary strong,
+  details.callout-notebook > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-notebook code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-chapter-connection {
+    --text-color: #e6e6e6;
+    --background-color: rgba(100, 116, 139, 0.12);
+    --title-background-color: rgba(100, 116, 139, 0.12);
+    border-color: #64748B;
+  }
+  details.callout-chapter-connection summary,
+  details.callout-chapter-connection summary strong,
+  details.callout-chapter-connection > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-chapter-connection code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-colab {
+    --text-color: #e6e6e6;
+    --background-color: rgba(255, 107, 53, 0.12);
+    --title-background-color: rgba(255, 107, 53, 0.12);
+    border-color: #FF6B35;
+  }
+  details.callout-colab summary,
+  details.callout-colab summary strong,
+  details.callout-colab > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-colab code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-checkpoint {
+    --text-color: #e6e6e6;
+    --background-color: rgba(77, 124, 15, 0.12);
+    --title-background-color: rgba(77, 124, 15, 0.12);
+    border-color: #4D7C0F;
+  }
+  details.callout-checkpoint summary,
+  details.callout-checkpoint summary strong,
+  details.callout-checkpoint > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-checkpoint code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-case-study {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+  details.callout-case-study summary,
+  details.callout-case-study summary strong,
+  details.callout-case-study > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-case-study code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-research-questions {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+  details.callout-research-questions summary,
+  details.callout-research-questions summary strong,
+  details.callout-research-questions > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-research-questions code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-lighthouse {
+    --text-color: #e6e6e6;
+    --background-color: rgba(184, 134, 11, 0.12);
+    --title-background-color: rgba(184, 134, 11, 0.12);
+    border-color: #B8860B;
+  }
+  details.callout-lighthouse summary,
+  details.callout-lighthouse summary strong,
+  details.callout-lighthouse > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-lighthouse code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-perspective {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 85, 104, 0.12);
+    --title-background-color: rgba(74, 85, 104, 0.12);
+    border-color: #4A5568;
+  }
+  details.callout-perspective summary,
+  details.callout-perspective summary strong,
+  details.callout-perspective > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-perspective code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-resource-exercises {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+  details.callout-resource-exercises summary,
+  details.callout-resource-exercises summary strong,
+  details.callout-resource-exercises > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-resource-exercises code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-theorem {
+    --text-color: #e6e6e6;
+    --background-color: rgba(107, 70, 193, 0.12);
+    --title-background-color: rgba(107, 70, 193, 0.12);
+    border-color: #6B46C1;
+  }
+  details.callout-theorem summary,
+  details.callout-theorem summary strong,
+  details.callout-theorem > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-theorem code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-code {
+    --text-color: #e6e6e6;
+    --background-color: rgba(60, 72, 88, 0.12);
+    --title-background-color: rgba(60, 72, 88, 0.12);
+    border-color: #3C4858;
+  }
+  details.callout-code summary,
+  details.callout-code summary strong,
+  details.callout-code > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-code code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-quiz-answer {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+  details.callout-quiz-answer summary,
+  details.callout-quiz-answer summary strong,
+  details.callout-quiz-answer > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-quiz-answer code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-example {
+    --text-color: #e6e6e6;
+    --background-color: rgba(20, 143, 119, 0.12);
+    --title-background-color: rgba(20, 143, 119, 0.12);
+    border-color: #148F77;
+  }
+  details.callout-example summary,
+  details.callout-example summary strong,
+  details.callout-example > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-example code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-principle {
+    --text-color: #e6e6e6;
+    --background-color: rgba(61, 59, 142, 0.12);
+    --title-background-color: rgba(61, 59, 142, 0.12);
+    border-color: #3D3B8E;
+  }
+  details.callout-principle summary,
+  details.callout-principle summary strong,
+  details.callout-principle > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-principle code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-resource-slides {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+  details.callout-resource-slides summary,
+  details.callout-resource-slides summary strong,
+  details.callout-resource-slides > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-resource-slides code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-resource-videos {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+  details.callout-resource-videos summary,
+  details.callout-resource-videos summary strong,
+  details.callout-resource-videos > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-resource-videos code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-takeaways {
+    --text-color: #e6e6e6;
+    --background-color: rgba(157, 60, 114, 0.12);
+    --title-background-color: rgba(157, 60, 114, 0.12);
+    border-color: #9D3C72;
+  }
+  details.callout-takeaways summary,
+  details.callout-takeaways summary strong,
+  details.callout-takeaways > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-takeaways code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-war-story {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+  details.callout-war-story summary,
+  details.callout-war-story summary strong,
+  details.callout-war-story > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-war-story code {
+    color: #e6e6e6 !important;
+  }
+}
+body.quarto-dark details.callout-learning-objectives {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+body.quarto-dark details.callout-learning-objectives summary,
+body.quarto-dark details.callout-learning-objectives summary strong,
+body.quarto-dark details.callout-learning-objectives > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-learning-objectives code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-quiz-question {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+body.quarto-dark details.callout-quiz-question summary,
+body.quarto-dark details.callout-quiz-question summary strong,
+body.quarto-dark details.callout-quiz-question > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-quiz-question code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-definition {
+    --text-color: #e6e6e6;
+    --background-color: rgba(79, 115, 150, 0.12);
+    --title-background-color: rgba(79, 115, 150, 0.12);
+    border-color: #4F7396;
+  }
+body.quarto-dark details.callout-definition summary,
+body.quarto-dark details.callout-definition summary strong,
+body.quarto-dark details.callout-definition > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-definition code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-notebook {
+    --text-color: #e6e6e6;
+    --background-color: rgba(63, 96, 119, 0.12);
+    --title-background-color: rgba(63, 96, 119, 0.12);
+    border-color: #3F6077;
+  }
+body.quarto-dark details.callout-notebook summary,
+body.quarto-dark details.callout-notebook summary strong,
+body.quarto-dark details.callout-notebook > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-notebook code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-chapter-connection {
+    --text-color: #e6e6e6;
+    --background-color: rgba(100, 116, 139, 0.12);
+    --title-background-color: rgba(100, 116, 139, 0.12);
+    border-color: #64748B;
+  }
+body.quarto-dark details.callout-chapter-connection summary,
+body.quarto-dark details.callout-chapter-connection summary strong,
+body.quarto-dark details.callout-chapter-connection > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-chapter-connection code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-colab {
+    --text-color: #e6e6e6;
+    --background-color: rgba(255, 107, 53, 0.12);
+    --title-background-color: rgba(255, 107, 53, 0.12);
+    border-color: #FF6B35;
+  }
+body.quarto-dark details.callout-colab summary,
+body.quarto-dark details.callout-colab summary strong,
+body.quarto-dark details.callout-colab > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-colab code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-checkpoint {
+    --text-color: #e6e6e6;
+    --background-color: rgba(77, 124, 15, 0.12);
+    --title-background-color: rgba(77, 124, 15, 0.12);
+    border-color: #4D7C0F;
+  }
+body.quarto-dark details.callout-checkpoint summary,
+body.quarto-dark details.callout-checkpoint summary strong,
+body.quarto-dark details.callout-checkpoint > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-checkpoint code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-case-study {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+body.quarto-dark details.callout-case-study summary,
+body.quarto-dark details.callout-case-study summary strong,
+body.quarto-dark details.callout-case-study > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-case-study code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-research-questions {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+body.quarto-dark details.callout-research-questions summary,
+body.quarto-dark details.callout-research-questions summary strong,
+body.quarto-dark details.callout-research-questions > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-research-questions code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-lighthouse {
+    --text-color: #e6e6e6;
+    --background-color: rgba(184, 134, 11, 0.12);
+    --title-background-color: rgba(184, 134, 11, 0.12);
+    border-color: #B8860B;
+  }
+body.quarto-dark details.callout-lighthouse summary,
+body.quarto-dark details.callout-lighthouse summary strong,
+body.quarto-dark details.callout-lighthouse > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-lighthouse code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-perspective {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 85, 104, 0.12);
+    --title-background-color: rgba(74, 85, 104, 0.12);
+    border-color: #4A5568;
+  }
+body.quarto-dark details.callout-perspective summary,
+body.quarto-dark details.callout-perspective summary strong,
+body.quarto-dark details.callout-perspective > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-perspective code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-resource-exercises {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+body.quarto-dark details.callout-resource-exercises summary,
+body.quarto-dark details.callout-resource-exercises summary strong,
+body.quarto-dark details.callout-resource-exercises > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-resource-exercises code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-theorem {
+    --text-color: #e6e6e6;
+    --background-color: rgba(107, 70, 193, 0.12);
+    --title-background-color: rgba(107, 70, 193, 0.12);
+    border-color: #6B46C1;
+  }
+body.quarto-dark details.callout-theorem summary,
+body.quarto-dark details.callout-theorem summary strong,
+body.quarto-dark details.callout-theorem > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-theorem code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-code {
+    --text-color: #e6e6e6;
+    --background-color: rgba(60, 72, 88, 0.12);
+    --title-background-color: rgba(60, 72, 88, 0.12);
+    border-color: #3C4858;
+  }
+body.quarto-dark details.callout-code summary,
+body.quarto-dark details.callout-code summary strong,
+body.quarto-dark details.callout-code > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-code code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-quiz-answer {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+body.quarto-dark details.callout-quiz-answer summary,
+body.quarto-dark details.callout-quiz-answer summary strong,
+body.quarto-dark details.callout-quiz-answer > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-quiz-answer code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-example {
+    --text-color: #e6e6e6;
+    --background-color: rgba(20, 143, 119, 0.12);
+    --title-background-color: rgba(20, 143, 119, 0.12);
+    border-color: #148F77;
+  }
+body.quarto-dark details.callout-example summary,
+body.quarto-dark details.callout-example summary strong,
+body.quarto-dark details.callout-example > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-example code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-principle {
+    --text-color: #e6e6e6;
+    --background-color: rgba(61, 59, 142, 0.12);
+    --title-background-color: rgba(61, 59, 142, 0.12);
+    border-color: #3D3B8E;
+  }
+body.quarto-dark details.callout-principle summary,
+body.quarto-dark details.callout-principle summary strong,
+body.quarto-dark details.callout-principle > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-principle code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-resource-slides {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+body.quarto-dark details.callout-resource-slides summary,
+body.quarto-dark details.callout-resource-slides summary strong,
+body.quarto-dark details.callout-resource-slides > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-resource-slides code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-resource-videos {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+body.quarto-dark details.callout-resource-videos summary,
+body.quarto-dark details.callout-resource-videos summary strong,
+body.quarto-dark details.callout-resource-videos > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-resource-videos code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-takeaways {
+    --text-color: #e6e6e6;
+    --background-color: rgba(157, 60, 114, 0.12);
+    --title-background-color: rgba(157, 60, 114, 0.12);
+    border-color: #9D3C72;
+  }
+body.quarto-dark details.callout-takeaways summary,
+body.quarto-dark details.callout-takeaways summary strong,
+body.quarto-dark details.callout-takeaways > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-takeaways code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-war-story {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+body.quarto-dark details.callout-war-story summary,
+body.quarto-dark details.callout-war-story summary strong,
+body.quarto-dark details.callout-war-story > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-war-story code {
+    color: #e6e6e6 !important;
+  }
+</style>
+<style>
+details.callout-learning-objectives > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_learning_objectives.png");
+}
+details.callout-quiz-question > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_quiz_question.png");
+}
+details.callout-definition > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_definition.png");
+}
+details.callout-notebook > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_notebook.png");
+}
+details.callout-chapter-connection > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_chapter_connection.png");
+}
+details.callout-colab > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_colab.png");
+}
+details.callout-checkpoint > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_checkpoint.png");
+}
+details.callout-case-study > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_case_study.png");
+}
+details.callout-research-questions > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_research_questions.png");
+}
+details.callout-lighthouse > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_lighthouse.png");
+}
+details.callout-perspective > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_perspective.png");
+}
+details.callout-resource-exercises > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_resource_exercises.png");
+}
+details.callout-theorem > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_theorem.png");
+}
+details.callout-code > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_code.png");
+}
+details.callout-quiz-answer > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_quiz_answer.png");
+}
+details.callout-example > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_example.png");
+}
+details.callout-principle > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_principle.png");
+}
+details.callout-resource-slides > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_resource_slides.png");
+}
+details.callout-resource-videos > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_resource_videos.png");
+}
+details.callout-takeaways > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_takeaways.png");
+}
+details.callout-war-story > summary::before {
+  background-image: url("../../../shared/assets/images/icons/callouts/icon_callout_case_study.png");
+}
+</style>
+    <style type="text/css">
+    .ps-root .ps-algorithm {
+      border-top: 2px solid;
+      border-bottom: 2px solid;
+    }
+    .pseudocode-container {
+      text-align: left;
+    }
+    </style>
+  
+      <style type="text/css">
+      .ps-algorithm > .ps-line {
+        text-align: left;
+      }
+      </style>
+    
+
+
+<meta property="og:title" content="Introduction to Machine Learning Systems">
+<meta property="og:image" content="https://mlsysbook.ai/vol1/shared/frontmatter/socratiq/shared/assets/images/covers/cover-hardcover-book-vol1.png">
+<meta property="og:site_name" content="Introduction to Machine Learning Systems">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:title" content="Introduction to Machine Learning Systems">
+<meta name="twitter:image" content="https://mlsysbook.ai/vol1/shared/frontmatter/socratiq/shared/assets/images/covers/cover-hardcover-book-vol1.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-xl " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../shared/assets/images/icons/logo-seas-shield.png" alt="" class="navbar-logo light-content">
+    <img src="../../../shared/assets/images/icons/logo-seas-shield.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Hệ thống Học máy</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-read" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Read</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-read">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol1/"><i class="bi bi-journal" role="img">
+</i> 
+ <span class="dropdown-text">Volume I: Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol2/"><i class="bi bi-journal" role="img">
+</i> 
+ <span class="dropdown-text">Volume II: Scaling</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/tinytorch/"><i class="bi bi-fire" role="img">
+</i> 
+ <span class="dropdown-text">TinyTorch (Standalone Book)</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol1/assets/downloads/Machine-Learning-Systems-Vol1.pdf" target="_blank"><i class="bi bi-file-pdf" role="img">
+</i> 
+ <span class="dropdown-text">Volume I PDF</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol2/assets/downloads/Machine-Learning-Systems-Vol2.pdf" target="_blank"><i class="bi bi-file-pdf" role="img">
+</i> 
+ <span class="dropdown-text">Volume II PDF</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-build" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Build</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-build">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/labs/"><i class="bi bi-sliders" role="img">
+</i> 
+ <span class="dropdown-text">Labs</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/tinytorch/"><i class="bi bi-fire" role="img">
+</i> 
+ <span class="dropdown-text">TinyTorch</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/kits/"><i class="bi bi-cpu" role="img">
+</i> 
+ <span class="dropdown-text">Hardware Kits</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/mlsysim/"><i class="bi bi-calculator" role="img">
+</i> 
+ <span class="dropdown-text">MLSys·im</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-teach" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Teach</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-teach">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/online/ai-engineering-for-leaders/"><i class="bi bi-person-badge" role="img">
+</i> 
+ <span class="dropdown-text">AI Engineering for Leaders (HarvardX)</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/instructors/course-map.html"><i class="bi bi-signpost-split" role="img">
+</i> 
+ <span class="dropdown-text">CS249r Course Map</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/slides/"><i class="bi bi-easel" role="img">
+</i> 
+ <span class="dropdown-text">Lecture Slides</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/instructors/"><i class="bi bi-person-video3" role="img">
+</i> 
+ <span class="dropdown-text">Instructor Hub</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-prepare" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Prepare</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-prepare">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/"><i class="bi bi-mortarboard" role="img">
+</i> 
+ <span class="dropdown-text">StaffML</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/plans"><i class="bi bi-map" role="img">
+</i> 
+ <span class="dropdown-text">Study Plans</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/gauntlet"><i class="bi bi-lightning" role="img">
+</i> 
+ <span class="dropdown-text">Gauntlet Mode</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/downloads/StaffML-Paper.pdf" target="_blank"><i class="bi bi-file-pdf" role="img">
+</i> 
+ <span class="dropdown-text">StaffML Paper</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-connect" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Connect</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-connect">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/newsletter/"><i class="bi bi-envelope" role="img">
+</i> 
+ <span class="dropdown-text">Newsletter</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/community/"><i class="bi bi-globe" role="img">
+</i> 
+ <span class="dropdown-text">Global Network</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/community/events.html"><i class="bi bi-calendar-event" role="img">
+</i> 
+ <span class="dropdown-text">Workshops &amp; Events</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/community/partners.html"><i class="bi bi-people" role="img">
+</i> 
+ <span class="dropdown-text">Partners &amp; Sponsors</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">About</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/"><i class="bi bi-bullseye" role="img">
+</i> 
+ <span class="dropdown-text">Mission</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/#story"><i class="bi bi-book" role="img">
+</i> 
+ <span class="dropdown-text">Our Story</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/people.html"><i class="bi bi-person-lines-fill" role="img">
+</i> 
+ <span class="dropdown-text">People</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/contributors.html"><i class="bi bi-people" role="img">
+</i> 
+ <span class="dropdown-text">Contributors</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/license.html"><i class="bi bi-cc-circle" role="img">
+</i> 
+ <span class="dropdown-text">License</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://mlsysbook.ai/newsletter/"> <i class="bi bi-envelope" role="img">
+</i> 
+<span class="menu-text">Subscribe</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/harvard-edge/cs249r_book" target="_blank"> <i class="bi bi-star" role="img">
+</i> 
+<span class="menu-text">Star</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://opencollective.com/mlsysbook" target="_blank"> <i class="bi bi-heart" role="img">
+</i> 
+<span class="menu-text">Support</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-github" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text">GitHub</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-github">    
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book/discussions" target="_blank"><i class="bi bi-chat" role="img">
+</i> 
+ <span class="dropdown-text">Discussions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book" target="_blank"><i class="bi bi-pencil" role="img">
+</i> 
+ <span class="dropdown-text">Edit this page</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book/issues/new" target="_blank"><i class="bi bi-bug" role="img">
+</i> 
+ <span class="dropdown-text">Report an issue</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book" target="_blank"><i class="bi bi-code" role="img">
+</i> 
+ <span class="dropdown-text">View source</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../shared/frontmatter/socratiq/socratiq.html">SocratiQ AI</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+  <div id="quarto-announcement" data-announcement-id="8875f30de4d9fcea8405677bb0da1ab3" class="alert alert-primary hidden"><i class="bi bi-megaphone quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p>📘 <strong>Tập I: Nền tảng.</strong> Hệ thống ML trên một máy — dữ liệu, thuật toán và phần cứng.<br> 🚀 <strong>Cần mở rộng quy mô?</strong> <a href="https://mlsysbook.ai/vol2/">Tập II: Scaling</a> — huấn luyện phân tán, vận hành đội máy, triển khai có trách nhiệm.<br> 🛠️ <strong>Song hành cùng sách:</strong> <a href="https://mlsysbook.ai/tinytorch/">TinyTorch</a> (xây dựng) · <a href="https://mlsysbook.ai/kits/">Hardware Kits</a> (triển khai) · <a href="https://mlsysbook.ai/mlsysim/">MLSys·im</a> (mô hình hóa) · <a href="https://mlsysbook.ai/labs/">Labs</a> (khám phá) · <a href="https://mlsysbook.ai/staffml/">StaffML</a> (thực hành)<br> 📬 <strong>Bản tin:</strong> Thông tin &amp; cập nhật về ML Systems — <a href="https://mlsysbook.ai/newsletter/">Đăng ký →</a></p>
+</div><i class="bi bi-x-lg quarto-announcement-action"></i></div>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Trang chủ</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/frontmatter/dedication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời đề tặng</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/frontmatter/foreword.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời nói đầu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/frontmatter/author_note.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời tác giả</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/frontmatter/about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời nói đầu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/frontmatter/acknowledgements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời cảm ơn</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/frontmatter/ai_use.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Một lưu ý về hỗ trợ AI</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/frontmatter/notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ký hiệu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../shared/frontmatter/socratiq/socratiq.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">SocratiQ AI</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/01_introduction/01_introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Giới thiệu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../../vol1/parts/foundations_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần I: Nền tảng</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/02_ml_systems/02_ml_systems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hệ thống ML</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/03_ml_workflow/03_ml_workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quy trình ML</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/04_data_engineering/04_data_engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kỹ thuật dữ liệu</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../../vol1/parts/build_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần II: Phát triển</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/05_nn_computation/05_nn_computation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tính toán nơ-ron</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/06_nn_architectures/06_nn_architectures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kiến trúc mạng</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/07_frameworks/07_frameworks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Các Framework ML</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/08_training/08_training.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Huấn luyện mô hình</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../../vol1/parts/optimize_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần III: Tối ưu</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/09_data_selection/09_data_selection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lựa chọn dữ liệu</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/10_model_compression/10_model_compression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nén mô hình</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/11_hw_acceleration/11_hw_acceleration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tăng tốc phần cứng</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/12_benchmarking/12_benchmarking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Benchmarking</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../../vol1/parts/deploy_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần IV: Triển khai</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/13_model_serving/13_model_serving.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phục vụ mô hình</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/14_ml_ops/14_ml_ops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vận hành machine learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/15_responsible_engr/15_responsible_engr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kỹ thuật có trách nhiệm</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/16_conclusion/16_conclusion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kết luận</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/backmatter/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tài liệu tham khảo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Phụ lục</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/backmatter/appendix_dam.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phân loại D·A·M</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/backmatter/appendix_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng dữ liệu</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/backmatter/appendix_algorithm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng thuật toán</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/backmatter/appendix_machine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng máy tính</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/backmatter/appendix_assumptions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Giả định hệ thống</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../vol1/backmatter/glossary/glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bảng thuật ngữ</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Trên trang này</h2>
+   
+  <ul>
+  <li><a href="#socratiq-ai" id="toc-socratiq-ai" class="nav-link active" data-scroll-target="#socratiq-ai">SocratiQ AI</a>
+  <ul>
+  <li><a href="#sec-socratiq-ai-ai-learning-companion-bc63" id="toc-sec-socratiq-ai-ai-learning-companion-bc63" class="nav-link" data-scroll-target="#sec-socratiq-ai-ai-learning-companion-bc63">Trợ lý học tập AI</a></li>
+  <li><a href="#sec-socratiq-ai-quick-start-guide-986f" id="toc-sec-socratiq-ai-quick-start-guide-986f" class="nav-link" data-scroll-target="#sec-socratiq-ai-quick-start-guide-986f">Hướng dẫn Bắt đầu Nhanh</a></li>
+  <li><a href="#sec-socratiq-ai-button-overview-c175" id="toc-sec-socratiq-ai-button-overview-c175" class="nav-link" data-scroll-target="#sec-socratiq-ai-button-overview-c175">Tổng quan về nút</a></li>
+  <li><a href="#sec-socratiq-ai-personalize-learning-1d9c" id="toc-sec-socratiq-ai-personalize-learning-1d9c" class="nav-link" data-scroll-target="#sec-socratiq-ai-personalize-learning-1d9c">Cá nhân hóa việc học của bạn</a></li>
+  <li><a href="#sec-socratiq-ai-learning-socratiq-d17d" id="toc-sec-socratiq-ai-learning-socratiq-d17d" class="nav-link" data-scroll-target="#sec-socratiq-ai-learning-socratiq-d17d">Học tập với SocratiQ</a>
+  <ul class="collapse">
+  <li><a href="#sec-socratiq-ai-quizzes-fa20" id="toc-sec-socratiq-ai-quizzes-fa20" class="nav-link" data-scroll-target="#sec-socratiq-ai-quizzes-fa20">Câu đố</a></li>
+  <li><a href="#sec-socratiq-ai-example-learning-flow-d861" id="toc-sec-socratiq-ai-example-learning-flow-d861" class="nav-link" data-scroll-target="#sec-socratiq-ai-example-learning-flow-d861">Luồng học tập ví dụ</a></li>
+  <li><a href="#sec-socratiq-ai-getting-help-concepts-c968" id="toc-sec-socratiq-ai-getting-help-concepts-c968" class="nav-link" data-scroll-target="#sec-socratiq-ai-getting-help-concepts-c968">Nhận trợ giúp về các khái niệm</a></li>
+  </ul></li>
+  <li><a href="#sec-socratiq-ai-tracking-progress-d563" id="toc-sec-socratiq-ai-tracking-progress-d563" class="nav-link" data-scroll-target="#sec-socratiq-ai-tracking-progress-d563">Theo dõi tiến độ của bạn</a>
+  <ul class="collapse">
+  <li><a href="#sec-socratiq-ai-performance-dashboard-ac3e" id="toc-sec-socratiq-ai-performance-dashboard-ac3e" class="nav-link" data-scroll-target="#sec-socratiq-ai-performance-dashboard-ac3e">Bảng điều khiển hiệu suất</a></li>
+  <li><a href="#sec-socratiq-ai-achievement-badges-63fc" id="toc-sec-socratiq-ai-achievement-badges-63fc" class="nav-link" data-scroll-target="#sec-socratiq-ai-achievement-badges-63fc">Huy hiệu thành tích</a></li>
+  </ul></li>
+  <li><a href="#sec-socratiq-ai-data-storage-5ea5" id="toc-sec-socratiq-ai-data-storage-5ea5" class="nav-link" data-scroll-target="#sec-socratiq-ai-data-storage-5ea5">Lưu trữ dữ liệu</a></li>
+  <li><a href="#sec-socratiq-ai-technical-requirements-d774" id="toc-sec-socratiq-ai-technical-requirements-d774" class="nav-link" data-scroll-target="#sec-socratiq-ai-technical-requirements-d774">Yêu cầu kỹ thuật</a></li>
+  <li><a href="#sec-socratiq-ai-common-issues-troubleshooting-cba6" id="toc-sec-socratiq-ai-common-issues-troubleshooting-cba6" class="nav-link" data-scroll-target="#sec-socratiq-ai-common-issues-troubleshooting-cba6">Các vấn đề thường gặp và khắc phục sự cố</a></li>
+  <li><a href="#sec-socratiq-ai-providing-feedback-873e" id="toc-sec-socratiq-ai-providing-feedback-873e" class="nav-link" data-scroll-target="#sec-socratiq-ai-providing-feedback-873e">Gửi phản hồi</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+
+<section id="socratiq-ai" class="level1 unnumbered">
+<h1 class="unnumbered">SocratiQ AI</h1>
+<section id="sec-socratiq-ai-ai-learning-companion-bc63" class="level2">
+<h2 class="anchored" data-anchor-id="sec-socratiq-ai-ai-learning-companion-bc63">Trợ lý học tập AI</h2>
+<p>Chào mừng bạn đến với SocratiQ (phát âm là ``Socratic’’), một trợ lý học tập AI được tích hợp liền mạch trong toàn bộ tài liệu này. Lấy cảm hứng từ phương pháp giảng dạy Socratic—nhấn mạnh các câu hỏi và câu trả lời sâu sắc để kích thích tư duy phản biện—SocratiQ là một phần trong thử nghiệm của chúng tôi với cái mà chúng tôi gọi là <em>Học tập Sinh tạo</em>. Bằng cách kết hợp các câu đố tương tác, hỗ trợ cá nhân hóa và phản hồi theo thời gian thực, SocratiQ nhằm mục đích củng cố sự hiểu biết của bạn và giúp bạn tạo ra những kết nối mới. <em>SocratiQ vẫn đang trong quá trình phát triển và chúng tôi hoan nghênh phản hồi của bạn.</em></p>
+<p>Tìm hiểu thêm: Đọc bài nghiên cứu của chúng tôi <a href="https://arxiv.org/abs/2502.00341">SocratiQ: A Generative AI-Powered Learning Companion for Personalized Education and Broader Accessibility</a>.</p>
+Listen to this AI-generated podcast about SocratiQ. <br><br>
+
+    <audio controls="">
+    <source src="./audio/socratiq_ai_podcast.mp3" type="audio/mpeg">
+    </audio>
+    <p></p>
+<p>Bạn có thể bật SocratiQ bằng cách nhấp vào nút bên dưới:</p>
+<!-- Add this to your Quarto document -->
+<div style="display: flex; align-items: center; gap: 10px;">
+<p><label for="socratiq-toggle" style="margin: 0; font-weight: bold;">SocratiQ:</label> <button id="socratiq-toggle" class="toggle-btn" onclick="toggleSocratiQ()">TẮT</button></p>
+</div>
+<style>
+  /* Toggle button styles */
+  .toggle-btn {
+    background-color: #ccc; /* Default (OFF) background */
+    color: black;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .toggle-btn.on {
+    background-color: green; /* ON background color */
+    color: white; /* Text color for ON */
+  }
+</style>
+<script>
+  // Function to get the value of a specific cookie
+  function getCookie(name) {
+    const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+    for (const cookie of cookies) {
+      const [key, value] = cookie.split('=');
+      if (key === name) return value;
+    }
+    return null;
+  }
+
+  // Function to set a cookie
+  function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+  }
+
+  // Initialize the button state based on the "socratiq" cookie
+  const toggleButton = document.getElementById('socratiq-toggle');
+  const isSocratiQActive = getCookie('socratiq') === 'true';
+  if (isSocratiQActive) {
+    toggleButton.classList.add('on');
+    toggleButton.textContent = 'ON';
+  }
+
+  // Function to handle the toggle button click
+  function toggleSocratiQ() {
+    const isActive = toggleButton.classList.toggle('on');
+    toggleButton.textContent = isActive ? 'ON' : 'OFF';
+    setCookie('socratiq', isActive, 7); // Save the state in a cookie for 7 days
+  }
+</script>
+<div class="callout callout-style-default callout-tip callout-titled" title="Truy cập URL trực tiếp">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Truy cập URL trực tiếp
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Bạn có thể điều khiển SocratiQ trực tiếp bằng cách thêm các tham số <code>?socratiq=</code> vào URL của mình:</p>
+<ul>
+<li>Để kích hoạt: <a href="https://mlsysbook.ai/?socratiq=true">mlsysbook.ai/?socratiq=true</a></li>
+<li>Để hủy kích hoạt: <a href="https://mlsysbook.ai/?socratiq=false">mlsysbook.ai/?socratiq=false</a></li>
+</ul>
+<p>Điều này giúp bạn truy cập nhanh để bật/tắt chức năng của SocratiQ trực tiếp từ thanh địa chỉ của trình duyệt, mà không cần quay lại đây.</p>
+</div>
+</div>
+<p>Mục tiêu của SocratiQ là thích ứng với nhu cầu của bạn trong khi tạo ra các câu hỏi có mục tiêu và tham gia vào đối thoại có ý nghĩa về tài liệu. Không giống như việc học sách giáo khoa truyền thống, SocratiQ mang đến trải nghiệm học tập tương tác, cá nhân hóa có thể giúp bạn hiểu rõ hơn và ghi nhớ các khái niệm phức tạp. Nó chỉ có sẵn dưới dạng một tính năng trực tuyến.</p>
+</section>
+<section id="sec-socratiq-ai-quick-start-guide-986f" class="level2">
+<h2 class="anchored" data-anchor-id="sec-socratiq-ai-quick-start-guide-986f">Hướng dẫn Bắt đầu Nhanh</h2>
+<ol type="1">
+<li>Bật SocratiQ bằng nút bên dưới hoặc tham số URL</li>
+<li>Sử dụng phím tắt (<code>Cmd/Ctrl + /</code>) để mở SocratiQ bất cứ lúc nào</li>
+<li>Đặt trình độ học vấn của bạn trong Cài đặt</li>
+<li>Bắt đầu học! Tìm các nút câu đố ở cuối các phần</li>
+</ol>
+<p>Xin lưu ý rằng đây là một tính năng thử nghiệm. Chúng tôi đang thử nghiệm ý tưởng tạo ra trải nghiệm học tập năng động và cá nhân hóa bằng cách khai thác sức mạnh của AI sinh tạo. Chúng tôi hy vọng rằng cách tiếp cận này sẽ thay đổi cách bạn tương tác và tiếp thu các khái niệm phức tạp.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Về phản hồi của AI">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Về phản hồi của AI
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Về Phản hồi của AI</strong>: Mặc dù SocratiQ sử dụng AI tiên tiến để tạo câu đố và cung cấp hỗ trợ, nhưng giống như tất cả các hệ thống AI, đôi khi nó có thể cung cấp các câu trả lời không hoàn hảo hoặc không đầy đủ. Tuy nhiên, chúng tôi đã thiết kế và thử nghiệm nó để đảm bảo nó hiệu quả trong việc hỗ trợ hành trình học tập của bạn. Nếu bạn không chắc chắn về bất kỳ phản hồi nào, hãy tham khảo nội dung sách giáo khoa hoặc hỏi giảng viên của bạn.</p>
+</div>
+</div>
+<p>Khi bạn đã bật SocratiQ, nó sẽ luôn có sẵn khi bạn truy cập trang web này.</p>
+<p>Bạn có thể truy cập SocratiQ bất cứ lúc nào bằng phím tắt hiển thị trong <a href="#fig-main-shortcut" class="quarto-xref">figure&nbsp;1</a>, phím tắt này sẽ hiển thị giao diện được minh họa trong <a href="#fig-main-interface" class="quarto-xref">figure&nbsp;2</a>.</p>
+<div id="fig-main-shortcut" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Trợ lý học tập AI SocratiQ: Hình ảnh hiển thị phím tắt (Ctrl + /) được cung cấp để dễ dàng truy cập SocratiQ, thể hiện sự tích hợp của nó với môi trường người dùng." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-main-shortcut-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/shortcut.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Trợ lý học tập AI SocratiQ: Hình ảnh hiển thị phím tắt (Ctrl + /) được cung cấp để dễ dàng truy cập SocratiQ, thể hiện sự tích hợp của nó với môi trường người dùng."><img src="images/png/shortcut.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-main-shortcut-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: <strong>Trợ lý học tập AI SocratiQ</strong>: Hình ảnh hiển thị phím tắt (Ctrl + /) được cung cấp để dễ dàng truy cập SocratiQ, thể hiện sự tích hợp của nó với môi trường người dùng.
+</figcaption>
+</figure>
+</div>
+<div id="fig-main-interface" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Trợ lý học tập AI: Hình ảnh này giới thiệu SocratiQ, một công cụ học tập được hỗ trợ bởi AI được thiết kế để nâng cao sự hiểu biết về các khái niệm hệ thống ML. Giao diện có phần cài đặt cho trình độ học vấn và các nút câu đố ở cuối các phần gợi ý các cơ hội học tập tương tác. SocratiQ đóng vai trò là một công cụ thiết yếu cho sinh viên khoa học máy tính quan tâm đến việc nắm bắt các khái niệm hệ thống ML." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-main-interface-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/interface.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Trợ lý học tập AI: Hình ảnh này giới thiệu SocratiQ, một công cụ học tập được hỗ trợ bởi AI được thiết kế để nâng cao sự hiểu biết về các khái niệm hệ thống ML. Giao diện có phần cài đặt cho trình độ học vấn và các nút câu đố ở cuối các phần gợi ý các cơ hội học tập tương tác. SocratiQ đóng vai trò là một công cụ thiết yếu cho sinh viên khoa học máy tính quan tâm đến việc nắm bắt các khái niệm hệ thống ML."><img src="images/png/interface.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-main-interface-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: <strong>Trợ lý học tập AI</strong>: Hình ảnh này giới thiệu SocratiQ, một công cụ học tập được hỗ trợ bởi AI được thiết kế để nâng cao sự hiểu biết về các khái niệm hệ thống ML. Giao diện có phần cài đặt cho trình độ học vấn và các nút câu đố ở cuối các phần gợi ý các cơ hội học tập tương tác. SocratiQ đóng vai trò là một công cụ thiết yếu cho sinh viên khoa học máy tính quan tâm đến việc nắm bắt các khái niệm hệ thống ML.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-socratiq-ai-button-overview-c175" class="level2">
+<h2 class="anchored" data-anchor-id="sec-socratiq-ai-button-overview-c175">Tổng quan về nút</h2>
+<p>Thanh điều hướng trên cùng (<a href="#fig-top-menu" class="quarto-xref">figure&nbsp;3</a>) cung cấp quyền truy cập nhanh vào các tính năng sau:</p>
+<ol type="1">
+<li>Điều chỉnh <a href="#sec-socratiq-ai-personalize-learning-1d9c">cài đặt</a> của bạn bất cứ lúc nào.</li>
+<li>Theo dõi <a href="#sec-socratiq-ai-tracking-progress-d563">tiến độ</a> của bạn bằng cách xem bảng điều khiển.</li>
+<li>Bắt đầu mới hoặc lưu <a href="#sec-socratiq-ai-learning-socratiq-d17d">cuộc trò chuyện</a> của bạn với SocratiQ.</li>
+</ol>
+<div id="fig-top-menu" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Chế độ xem menu điều hướng trên cùng." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-top-menu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/top_menu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Menu Điều hướng trên cùng: Chế độ xem menu điều hướng trên cùng."><img src="images/png/top_menu.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-top-menu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: <strong>Menu Điều hướng trên cùng</strong>: Chế độ xem menu điều hướng trên cùng.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-socratiq-ai-personalize-learning-1d9c" class="level2">
+<h2 class="anchored" data-anchor-id="sec-socratiq-ai-personalize-learning-1d9c">Cá nhân hóa việc học của bạn</h2>
+<p>Trước khi đi sâu vào việc học, hãy dành chút thời gian để cấu hình SocratiQ cho trình độ học vấn của bạn. Thiết lập ban đầu này đảm bảo rằng tất cả các tương tác, từ câu hỏi đố vui đến giải thích, đều được điều chỉnh phù hợp với kiến thức nền tảng của bạn. <a href="#fig-settings-panel" class="quarto-xref">Figure&nbsp;4</a> cho thấy nơi bạn có thể điều chỉnh các tùy chọn này.</p>
+<p>Bạn có thể bổ trợ bất kỳ phản hồi nào của AI SocratiQ bằng cách sử dụng menu thả xuống ở đầu mỗi tin nhắn, cho phép bạn điều chỉnh mức độ khó như thể hiện trong <a href="#fig-adjust_message_difficulty" class="quarto-xref">figure&nbsp;5</a>.</p>
+<div id="fig-settings-panel" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Tùy chỉnh Ưu tiên Học tập: Hình ảnh hiển thị giao diện người dùng cho phép cá nhân hóa một công cụ học tập dựa trên AI, chẳng hạn như SocratiQ, để điều chỉnh tương tác phù hợp với trình độ học vấn của người học. Bảng cài đặt ở phía bên phải màn hình hiển thị các tùy chọn để điều chỉnh ưu tiên liên quan đến câu hỏi trắc nghiệm và giải thích. Việc tùy chỉnh này đảm bảo rằng thông tin được trình bày phù hợp với kiến thức nền của người học, từ đó nâng cao sự hiểu biết về các khái niệm hệ thống ML." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-settings-panel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/settings.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: Tùy chỉnh Ưu tiên Học tập: Hình ảnh hiển thị giao diện người dùng cho phép cá nhân hóa một công cụ học tập dựa trên AI, chẳng hạn như SocratiQ, để điều chỉnh tương tác phù hợp với trình độ học vấn của người học. Bảng cài đặt ở phía bên phải màn hình hiển thị các tùy chọn để điều chỉnh ưu tiên liên quan đến câu hỏi trắc nghiệm và giải thích. Việc tùy chỉnh này đảm bảo rằng thông tin được trình bày phù hợp với kiến thức nền của người học, từ đó nâng cao sự hiểu biết về các khái niệm hệ thống ML."><img src="images/png/settings.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-settings-panel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: <strong>Tùy chỉnh Ưu tiên Học tập</strong>: Hình ảnh hiển thị giao diện người dùng cho phép cá nhân hóa một công cụ học tập dựa trên AI, chẳng hạn như SocratiQ, để điều chỉnh tương tác phù hợp với trình độ học vấn của người học. Bảng cài đặt ở phía bên phải màn hình hiển thị các tùy chọn để điều chỉnh ưu tiên liên quan đến câu hỏi trắc nghiệm và giải thích. Việc tùy chỉnh này đảm bảo rằng thông tin được trình bày phù hợp với kiến thức nền của người học, từ đó nâng cao sự hiểu biết về các khái niệm hệ thống ML.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-socratiq-ai-learning-socratiq-d17d" class="level2">
+<h2 class="anchored" data-anchor-id="sec-socratiq-ai-learning-socratiq-d17d">Học tập với SocratiQ</h2>
+<p>SocratiQ cung cấp một số tính năng tương tác để hỗ trợ hành trình học tập của bạn: hệ thống câu đố để củng cố kiến thức, cách nhận trợ giúp với các khái niệm khó, và các cách để đào sâu hiểu biết của bạn thông qua các gợi ý nội dung liên quan.</p>
+<section id="sec-socratiq-ai-quizzes-fa20" class="level3">
+<h3 class="anchored" data-anchor-id="sec-socratiq-ai-quizzes-fa20">Câu đố</h3>
+<p>Khi bạn tiến bộ qua mỗi phần của sách giáo khoa, bạn có tùy chọn yêu cầu SocratiQ tự động tạo các câu đố được điều chỉnh để củng cố các khái niệm chính. Các câu đố này được chèn thuận tiện vào cuối mỗi tiểu mục chính (ví dụ: 1.1, 1.2, 1.3, v.v.), như minh họa trong <a href="#fig-quiz-interface" class="quarto-xref">figure&nbsp;6</a>. Trải nghiệm câu đố hoàn chỉnh, bao gồm cả câu hỏi và câu trả lời, được hiển thị trong <a href="#fig-quizzes" class="quarto-xref">figure&nbsp;7</a>.</p>
+<div id="fig-adjust_message_difficulty" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Tùy chỉnh Phản hồi AI: Làm lại một tin nhắn AI bằng cách chọn một cấp độ trải nghiệm mới." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-adjust_message_difficulty-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/gif/adjust_message_difficulty.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: Tùy chỉnh Phản hồi AI: Làm lại một tin nhắn AI bằng cách chọn một cấp độ trải nghiệm mới."><img src="images/gif/adjust_message_difficulty.gif" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-adjust_message_difficulty-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: <strong>Tùy chỉnh Phản hồi AI</strong>: Làm lại một tin nhắn AI bằng cách chọn một cấp độ trải nghiệm mới.
+</figcaption>
+</figure>
+</div>
+<div id="fig-quiz-interface" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Câu đố do AI tạo: Hình ảnh này giới thiệu SocratiQ, một công cụ học tập dựa trên AI được tích hợp vào sách giáo khoa để cung cấp trải nghiệm giáo dục cá nhân hóa cho sinh viên khoa học máy tính cấp đại học. Bằng cách tạo ra các câu đố tùy chỉnh với câu hỏi trắc nghiệm và giải thích chi tiết, SocratiQ tạo điều kiện cho sự hiểu biết sâu sắc hơn về các khái niệm hệ thống ML thông qua phản hồi tức thì và đánh giá thích ứng. Các câu đố này được chèn vào cuối các tiểu mục chính trong tài liệu sách giáo khoa, cho phép sinh viên đánh giá mức độ hiểu của họ về các phần trước đó đồng thời củng cố các khái niệm chính. Mô hình LLM được SocratiQ sử dụng giúp tăng cường việc học và hiểu các hệ thống ML của sinh viên." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-quiz-interface-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/quiz_button2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: Câu đố do AI tạo: Hình ảnh này giới thiệu SocratiQ, một công cụ học tập dựa trên AI được tích hợp vào sách giáo khoa để cung cấp trải nghiệm giáo dục cá nhân hóa cho sinh viên khoa học máy tính cấp đại học. Bằng cách tạo ra các câu đố tùy chỉnh với câu hỏi trắc nghiệm và giải thích chi tiết, SocratiQ tạo điều kiện cho sự hiểu biết sâu sắc hơn về các khái niệm hệ thống ML thông qua phản hồi tức thì và đánh giá thích ứng. Các câu đố này được chèn vào cuối các tiểu mục chính trong tài liệu sách giáo khoa, cho phép sinh viên đánh giá mức độ hiểu của họ về các phần trước đó đồng thời củng cố các khái niệm chính. Mô hình LLM được SocratiQ sử dụng giúp tăng cường việc học và hiểu các hệ thống ML của sinh viên."><img src="images/png/quiz_button2.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-quiz-interface-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: <strong>Câu đố do AI tạo</strong>: Hình ảnh này giới thiệu SocratiQ, một công cụ học tập dựa trên AI được tích hợp vào sách giáo khoa để cung cấp trải nghiệm giáo dục cá nhân hóa cho sinh viên khoa học máy tính cấp đại học. Bằng cách tạo ra các câu đố tùy chỉnh với câu hỏi trắc nghiệm và giải thích chi tiết, SocratiQ tạo điều kiện cho sự hiểu biết sâu sắc hơn về các khái niệm hệ thống ML thông qua phản hồi tức thì và đánh giá thích ứng. Các câu đố này được chèn vào cuối các tiểu mục chính trong tài liệu sách giáo khoa, cho phép sinh viên đánh giá mức độ hiểu của họ về các phần trước đó đồng thời củng cố các khái niệm chính. Mô hình LLM được SocratiQ sử dụng giúp tăng cường việc học và hiểu các hệ thống ML của sinh viên.
+</figcaption>
+</figure>
+</div>
+<p>Mỗi câu đố thường bao gồm 3-5 câu hỏi trắc nghiệm và chỉ mất 1-2 phút để hoàn thành. Các câu hỏi này được thiết kế để đánh giá sự hiểu biết của bạn về tài liệu đã được đề cập trong phần trước, như thể hiện trong <a href="#fig-quiz-questions" class="quarto-xref">figure&nbsp;7 (a)</a>.</p>
+<p>Sau khi bạn gửi câu trả lời, SocratiQ cung cấp phản hồi tức thì cùng với giải thích chi tiết cho mỗi câu hỏi, như được minh họa trong <a href="#fig-quiz-answers" class="quarto-xref">figure&nbsp;7 (b)</a>.</p>
+<div id="fig-quizzes" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-quizzes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-quizzes" style="flex-basis: 43.0%;justify-content: flex-start;">
+<div id="fig-quiz-questions" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Câu đố cá nhân hóa do AI tạo: Hình ảnh này giới thiệu một công cụ học tập dựa trên AI có tên SocratiQ, cung cấp cho sinh viên khoa học máy tính cấp đại học trải nghiệm giáo dục tùy chỉnh để tạo điều kiện hiểu sâu hơn về các khái niệm hệ thống ML thông qua các câu đố tương tác, cá nhân hóa. Được tích hợp vào tài liệu sách giáo khoa, các câu đố này bao gồm các câu hỏi trắc nghiệm và giải thích chi tiết cho mỗi câu trả lời, được thiết kế để đánh giá mức độ hiểu các phần trước đó và củng cố các khái niệm chính bằng cách sử dụng phản hồi tức thì. SocratiQ sử dụng một mô hình ngôn ngữ lớn (LLM) để tự động tạo và chấm điểm các câu đố thích ứng này, mang đến cho sinh viên trải nghiệm giáo dục giúp nâng cao khả năng học tập và hiểu biết của họ về các hệ thống ML.">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-quiz-questions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/quiz_questions.png" class="lightbox" data-gallery="fig-quizzes" title="Figure&nbsp;7&nbsp;(a): Câu đố cá nhân hóa do AI tạo: Hình ảnh này giới thiệu một công cụ học tập dựa trên AI có tên SocratiQ, cung cấp cho sinh viên khoa học máy tính cấp đại học trải nghiệm giáo dục tùy chỉnh để tạo điều kiện hiểu sâu hơn về các khái niệm hệ thống ML thông qua các câu đố tương tác, cá nhân hóa. Được tích hợp vào tài liệu sách giáo khoa, các câu đố này bao gồm các câu hỏi trắc nghiệm và giải thích chi tiết cho mỗi câu trả lời, được thiết kế để đánh giá mức độ hiểu các phần trước đó và củng cố các khái niệm chính bằng cách sử dụng phản hồi tức thì. SocratiQ sử dụng một mô hình ngôn ngữ lớn (LLM) để tự động tạo và chấm điểm các câu đố thích ứng này, mang đến cho sinh viên trải nghiệm giáo dục giúp nâng cao khả năng học tập và hiểu biết của họ về các hệ thống ML."><img src="images/png/quiz_questions.png" class="img-fluid figure-img" data-ref-parent="fig-quizzes"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-quiz-questions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) <strong>Câu đố cá nhân hóa do AI tạo</strong>: Hình ảnh này giới thiệu một công cụ học tập dựa trên AI có tên SocratiQ, cung cấp cho sinh viên khoa học máy tính cấp đại học trải nghiệm giáo dục tùy chỉnh để tạo điều kiện hiểu sâu hơn về các khái niệm hệ thống ML thông qua các câu đố tương tác, cá nhân hóa. Được tích hợp vào tài liệu sách giáo khoa, các câu đố này bao gồm các câu hỏi trắc nghiệm và giải thích chi tiết cho mỗi câu trả lời, được thiết kế để đánh giá mức độ hiểu các phần trước đó và củng cố các khái niệm chính bằng cách sử dụng phản hồi tức thì. SocratiQ sử dụng một mô hình ngôn ngữ lớn (LLM) để tự động tạo và chấm điểm các câu đố thích ứng này, mang đến cho sinh viên trải nghiệm giáo dục giúp nâng cao khả năng học tập và hiểu biết của họ về các hệ thống ML.
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 14.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-quizzes" style="flex-basis: 43.0%;justify-content: flex-start;">
+<div id="fig-quiz-answers" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bài kiểm tra cá nhân hóa do AI tạo: Hình ảnh này giới thiệu một công cụ học tập do AI điều khiển có tên SocratiQ, cung cấp cho sinh viên khoa học máy tính cấp đại học những trải nghiệm giáo dục tùy chỉnh thông qua các bài kiểm tra tương tác, cá nhân hóa. Được tích hợp vào tài liệu giáo trình, các bài kiểm tra này tạo điều kiện hiểu sâu hơn về các khái niệm hệ thống ML bằng cách củng cố các khái niệm chính thông qua phản hồi tức thì và đánh giá thích ứng. Mỗi bài kiểm tra thường bao gồm 3-5 câu hỏi trắc nghiệm và chỉ mất 1-2 phút để hoàn thành.">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-quiz-answers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/quiz_answers.png" class="lightbox" data-gallery="fig-quizzes" title="Figure&nbsp;7&nbsp;(b): Bài kiểm tra cá nhân hóa do AI tạo: Hình ảnh này giới thiệu một công cụ học tập do AI điều khiển có tên SocratiQ, cung cấp cho sinh viên khoa học máy tính cấp đại học những trải nghiệm giáo dục tùy chỉnh thông qua các bài kiểm tra tương tác, cá nhân hóa. Được tích hợp vào tài liệu giáo trình, các bài kiểm tra này tạo điều kiện hiểu sâu hơn về các khái niệm hệ thống ML bằng cách củng cố các khái niệm chính thông qua phản hồi tức thì và đánh giá thích ứng. Mỗi bài kiểm tra thường bao gồm 3-5 câu hỏi trắc nghiệm và chỉ mất 1-2 phút để hoàn thành."><img src="images/png/quiz_answers.png" class="img-fluid figure-img" data-ref-parent="fig-quizzes"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-quiz-answers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) <strong>Bài kiểm tra cá nhân hóa do AI tạo</strong>: Hình ảnh này giới thiệu một công cụ học tập do AI điều khiển có tên SocratiQ, cung cấp cho sinh viên khoa học máy tính cấp đại học những trải nghiệm giáo dục tùy chỉnh thông qua các bài kiểm tra tương tác, cá nhân hóa. Được tích hợp vào tài liệu giáo trình, các bài kiểm tra này tạo điều kiện hiểu sâu hơn về các khái niệm hệ thống ML bằng cách củng cố các khái niệm chính thông qua phản hồi tức thì và đánh giá thích ứng. Mỗi bài kiểm tra thường bao gồm 3-5 câu hỏi trắc nghiệm và chỉ mất 1-2 phút để hoàn thành.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-quizzes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: SocratiQ sử dụng một mô hình ngôn ngữ lớn (LLM) để tự động tạo và chấm điểm các bài kiểm tra.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-socratiq-ai-example-learning-flow-d861" class="level3">
+<h3 class="anchored" data-anchor-id="sec-socratiq-ai-example-learning-flow-d861">Luồng học tập ví dụ</h3>
+<ol type="1">
+<li>Đọc một phần</li>
+<li>Chọn văn bản khó → Hỏi SocratiQ để được giải thích</li>
+<li>Làm bài kiểm tra của phần</li>
+<li>Xem lại các gợi ý nội dung liên quan</li>
+<li>Theo dõi tiến độ trong bảng điều khiển</li>
+</ol>
+</section>
+<section id="sec-socratiq-ai-getting-help-concepts-c968" class="level3">
+<h3 class="anchored" data-anchor-id="sec-socratiq-ai-getting-help-concepts-c968">Nhận trợ giúp về các khái niệm</h3>
+<p>Khi bạn gặp phải các khái niệm khó, SocratiQ cung cấp hai cách mạnh mẽ để nhận trợ giúp. Đầu tiên, bạn có thể chọn bất kỳ văn bản nào từ giáo trình và yêu cầu giải thích chi tiết, như được minh họa trong <a href="#fig-text-selection" class="quarto-xref">figure&nbsp;8</a>.</p>
+<div id="fig-text-selection" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Công cụ học tập hỗ trợ AI: SocratiQ: Hình ảnh giới thiệu một công cụ học tập được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học làm sâu sắc thêm sự hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ, thúc đẩy kỹ năng tự học và tư duy phản biện. SocratiQ cung cấp gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-text-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/chat_context.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;8: Công cụ học tập hỗ trợ AI: SocratiQ: Hình ảnh giới thiệu một công cụ học tập được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học làm sâu sắc thêm sự hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ, thúc đẩy kỹ năng tự học và tư duy phản biện. SocratiQ cung cấp gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng."><img src="images/png/chat_context.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-text-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: <strong>Công cụ học tập hỗ trợ AI: SocratiQ</strong>: Hình ảnh giới thiệu một công cụ học tập được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học làm sâu sắc thêm sự hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ, thúc đẩy kỹ năng tự học và tư duy phản biện. SocratiQ cung cấp gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng.
+</figcaption>
+</figure>
+</div>
+<p>Sau khi bạn đã chọn văn bản, bạn có thể đặt câu hỏi về nó, và SocratiQ sẽ cung cấp giải thích chi tiết dựa trên ngữ cảnh đó, như được minh họa trong <a href="#fig-context-explanation" class="quarto-xref">figure&nbsp;9</a>.</p>
+<div id="fig-context-explanation" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Công cụ học tập hỗ trợ AI: SocratiQ: Hình ảnh giới thiệu một công cụ học tập được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học làm sâu sắc thêm sự hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ, thúc đẩy kỹ năng tự học và tư duy phản biện. SocratiQ cung cấp gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-context-explanation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/chat_ask.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;9: Công cụ học tập hỗ trợ AI: SocratiQ: Hình ảnh giới thiệu một công cụ học tập được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học làm sâu sắc thêm sự hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ, thúc đẩy kỹ năng tự học và tư duy phản biện. SocratiQ cung cấp gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng."><img src="images/png/chat_ask.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-context-explanation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: <strong>Công cụ học tập hỗ trợ AI: SocratiQ</strong>: Hình ảnh giới thiệu một công cụ học tập được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học làm sâu sắc thêm sự hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ, thúc đẩy kỹ năng tự học và tư duy phản biện. SocratiQ cung cấp gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng.
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-interactive-chat" class="quarto-xref">Figure&nbsp;10</a> hiển thị phản hồi cho yêu cầu trong <a href="#fig-context-explanation" class="quarto-xref">figure&nbsp;9</a>.</p>
+<p>Ngoài ra, bạn cũng có thể tham chiếu trực tiếp các phần, như được hiển thị trong <a href="#fig-reference-sections" class="quarto-xref">figure&nbsp;11</a>, tiểu mục và từ khóa khi bạn trò chuyện với SocratiQ. Sử dụng ký hiệu <code>@</code> để tham chiếu một phần, tiểu mục hoặc từ khóa. Bạn cũng có thể nhấp vào nút <code>+ Context</code> ngay phía trên ô nhập liệu.</p>
+<div id="fig-interactive-chat" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Công cụ học tập hỗ trợ AI: Hình ảnh minh họa một công cụ học tập sáng tạo được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học nâng cao hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ. Điều này thúc đẩy kỹ năng tự học và tư duy phản biện bằng cách đưa ra gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng. SocratiQ thúc đẩy sự hiểu biết sâu sắc về các hệ thống ML bằng cách cung cấp các giải thích chi tiết dựa trên ngữ cảnh đã chọn." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-interactive-chat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/chat_explanation.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;10: Công cụ học tập hỗ trợ AI: Hình ảnh minh họa một công cụ học tập sáng tạo được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học nâng cao hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ. Điều này thúc đẩy kỹ năng tự học và tư duy phản biện bằng cách đưa ra gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng. SocratiQ thúc đẩy sự hiểu biết sâu sắc về các hệ thống ML bằng cách cung cấp các giải thích chi tiết dựa trên ngữ cảnh đã chọn."><img src="images/png/chat_explanation.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-interactive-chat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: <strong>Công cụ học tập hỗ trợ AI</strong>: Hình ảnh minh họa một công cụ học tập sáng tạo được hỗ trợ bởi AI có tên SocratiQ, giúp sinh viên khoa học máy tính cấp đại học nâng cao hiểu biết của họ về các khái niệm machine learning (ML) khó. Bằng cách chọn bất kỳ phần nào của giáo trình và yêu cầu giải thích chi tiết, sinh viên có thể truy cập hỗ trợ tương tác, cá nhân hóa phù hợp với mục tiêu học tập của họ. Điều này thúc đẩy kỹ năng tự học và tư duy phản biện bằng cách đưa ra gợi ý về nội dung liên quan từ giáo trình và hướng dẫn người dùng qua các chủ đề ML phức tạp một cách dễ dàng. SocratiQ thúc đẩy sự hiểu biết sâu sắc về các hệ thống ML bằng cách cung cấp các giải thích chi tiết dựa trên ngữ cảnh đã chọn.
+</figcaption>
+</figure>
+</div>
+<div id="fig-reference-sections" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Tham chiếu các phần khác nhau từ sách giáo khoa." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-reference-sections-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/gif/reference.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;11: Tham chiếu phần: Tham chiếu các phần khác nhau từ giáo trình."><img src="images/gif/reference.gif" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-reference-sections-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: <strong>Tham chiếu phần</strong>: Tham chiếu các phần khác nhau từ giáo trình.
+</figcaption>
+</figure>
+</div>
+<p>Để nâng cao trải nghiệm học tập của bạn, SocratiQ không chỉ trả lời câu hỏi mà còn đề xuất nội dung liên quan từ sách giáo khoa có thể hữu ích cho việc hiểu sâu hơn, như minh họa trong <a href="#fig-related-content" class="quarto-xref">figure&nbsp;12</a>.</p>
+<div id="fig-related-content" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Công cụ học tập hỗ trợ AI SocratiQ: Một công cụ học tập được hỗ trợ bởi AI, được thiết kế dành cho sinh viên khoa học máy tính cấp đại học nhằm nâng cao hiểu biết về các khái niệm machine learning (ML) đầy thách thức. Bằng cách chọn bất kỳ phần nào của sách giáo khoa và yêu cầu giải thích chi tiết, sinh viên có thể tiếp cận hỗ trợ cá nhân hóa, tương tác phù hợp với mục tiêu học tập của mình, từ đó thúc đẩy kỹ năng tự học và tư duy phản biện. Công cụ AI này tăng cường học tập bằng cách cung cấp các gợi ý về nội dung liên quan từ sách giáo khoa và hướng dẫn người dùng thông qua các chủ đề ML phức tạp một cách dễ dàng." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-related-content-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/chat_related.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;12: Công cụ học tập hỗ trợ AI SocratiQ: Một công cụ học tập được hỗ trợ bởi AI, được thiết kế dành cho sinh viên khoa học máy tính cấp đại học nhằm nâng cao hiểu biết về các khái niệm machine learning (ML) đầy thách thức. Bằng cách chọn bất kỳ phần nào của sách giáo khoa và yêu cầu giải thích chi tiết, sinh viên có thể tiếp cận hỗ trợ cá nhân hóa, tương tác phù hợp với mục tiêu học tập của mình, từ đó thúc đẩy kỹ năng tự học và tư duy phản biện. Công cụ AI này tăng cường học tập bằng cách cung cấp các gợi ý về nội dung liên quan từ sách giáo khoa và hướng dẫn người dùng thông qua các chủ đề ML phức tạp một cách dễ dàng."><img src="images/png/chat_related.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-related-content-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12: <strong>Công cụ học tập hỗ trợ AI SocratiQ</strong>: Một công cụ học tập được hỗ trợ bởi AI, được thiết kế dành cho sinh viên khoa học máy tính cấp đại học nhằm nâng cao hiểu biết về các khái niệm machine learning (ML) đầy thách thức. Bằng cách chọn bất kỳ phần nào của sách giáo khoa và yêu cầu giải thích chi tiết, sinh viên có thể tiếp cận hỗ trợ cá nhân hóa, tương tác phù hợp với mục tiêu học tập của mình, từ đó thúc đẩy kỹ năng tự học và tư duy phản biện. Công cụ AI này tăng cường học tập bằng cách cung cấp các gợi ý về nội dung liên quan từ sách giáo khoa và hướng dẫn người dùng thông qua các chủ đề ML phức tạp một cách dễ dàng.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="sec-socratiq-ai-tracking-progress-d563" class="level2">
+<h2 class="anchored" data-anchor-id="sec-socratiq-ai-tracking-progress-d563">Theo dõi tiến độ của bạn</h2>
+<p>SocratiQ giúp bạn theo dõi hành trình học tập của mình thông qua các bảng điều khiển trực quan và thành tích được trò chơi hóa. Các tính năng này cung cấp động lực và cái nhìn sâu sắc về khả năng nắm vững các khái niệm hệ thống ML của bạn.</p>
+<section id="sec-socratiq-ai-performance-dashboard-ac3e" class="level3">
+<h3 class="anchored" data-anchor-id="sec-socratiq-ai-performance-dashboard-ac3e">Bảng điều khiển hiệu suất</h3>
+<p>SocratiQ duy trì một hồ sơ toàn diện về hành trình học tập của bạn. Bảng điều khiển tiến độ (<a href="#fig-progress-dashboard" class="quarto-xref">figure&nbsp;13</a>) hiển thị số liệu thống kê hiệu suất bài kiểm tra, chuỗi học tập và huy hiệu thành tích của bạn. Bảng điều khiển này cập nhật theo thời gian thực.</p>
+<div id="fig-progress-dashboard" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Bảng điều khiển học tập hỗ trợ AI: Hình ảnh mô tả bảng điều khiển hiệu suất của SocratiQ, một nền tảng học tập hỗ trợ AI cho phép sinh viên theo dõi tiến độ nắm vững các khái niệm hệ thống ML. Bảng điều khiển hiển thị các số liệu thống kê chính như hiệu suất bài kiểm tra, chuỗi học tập và huy hiệu thành tích. Bằng cách tương tác nhất quán với tài liệu, sinh viên có thể kiếm được nhiều huy hiệu khác nhau để công nhận tiến độ và củng cố sự hiểu biết của họ về các khái niệm ML thiết yếu. Các tính năng này giúp sinh viên theo dõi hành trình học tập, hình dung sự phát triển và tạo động lực cho bản thân để cải thiện liên tục." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-progress-dashboard-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/dashboard.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;13: Bảng điều khiển học tập hỗ trợ AI: Hình ảnh mô tả bảng điều khiển hiệu suất của SocratiQ, một nền tảng học tập hỗ trợ AI cho phép sinh viên theo dõi tiến độ nắm vững các khái niệm hệ thống ML. Bảng điều khiển hiển thị các số liệu thống kê chính như hiệu suất bài kiểm tra, chuỗi học tập và huy hiệu thành tích. Bằng cách tương tác nhất quán với tài liệu, sinh viên có thể kiếm được nhiều huy hiệu khác nhau để công nhận tiến độ và củng cố sự hiểu biết của họ về các khái niệm ML thiết yếu. Các tính năng này giúp sinh viên theo dõi hành trình học tập, hình dung sự phát triển và tạo động lực cho bản thân để cải thiện liên tục."><img src="images/png/dashboard.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-progress-dashboard-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13: <strong>Bảng điều khiển học tập hỗ trợ AI</strong>: Hình ảnh mô tả bảng điều khiển hiệu suất của SocratiQ, một nền tảng học tập hỗ trợ AI cho phép sinh viên theo dõi tiến độ nắm vững các khái niệm hệ thống ML. Bảng điều khiển hiển thị các số liệu thống kê chính như hiệu suất bài kiểm tra, chuỗi học tập và huy hiệu thành tích. Bằng cách tương tác nhất quán với tài liệu, sinh viên có thể kiếm được nhiều huy hiệu khác nhau để công nhận tiến độ và củng cố sự hiểu biết của họ về các khái niệm ML thiết yếu. Các tính năng này giúp sinh viên theo dõi hành trình học tập, hình dung sự phát triển và tạo động lực cho bản thân để cải thiện liên tục.
+</figcaption>
+</figure>
+</div>
+<p>Khi bạn tiếp tục tương tác với tài liệu và hoàn thành các bài kiểm tra, bạn sẽ kiếm được nhiều huy hiệu khác nhau để công nhận tiến độ của mình, như minh họa trong <a href="#fig-achievement-badges" class="quarto-xref">figure&nbsp;14</a>.</p>
+<div id="fig-achievement-badges" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Bảng điều khiển học tập hỗ trợ AI: Bảng điều khiển hiệu suất của SocratiQ là một nền tảng học tập hỗ trợ AI cho phép sinh viên theo dõi tiến độ nắm vững các khái niệm hệ thống ML. Bằng cách tương tác nhất quán với tài liệu, sinh viên có thể kiếm được nhiều huy hiệu thành tích khác nhau để công nhận tiến độ và củng cố sự hiểu biết của họ về các khái niệm ML thiết yếu. Bảng điều khiển hiển thị các số liệu thống kê chính như hiệu suất bài kiểm tra, chuỗi học tập và huy hiệu thành tích." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-achievement-badges-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/badges.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Figure&nbsp;14: Bảng điều khiển học tập hỗ trợ AI: Bảng điều khiển hiệu suất của SocratiQ là một nền tảng học tập hỗ trợ AI cho phép sinh viên theo dõi tiến độ nắm vững các khái niệm hệ thống ML. Bằng cách tương tác nhất quán với tài liệu, sinh viên có thể kiếm được nhiều huy hiệu thành tích khác nhau để công nhận tiến độ và củng cố sự hiểu biết của họ về các khái niệm ML thiết yếu. Bảng điều khiển hiển thị các số liệu thống kê chính như hiệu suất bài kiểm tra, chuỗi học tập và huy hiệu thành tích."><img src="images/png/badges.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-achievement-badges-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14: <strong>Bảng điều khiển học tập hỗ trợ AI</strong>: Bảng điều khiển hiệu suất của SocratiQ là một nền tảng học tập hỗ trợ AI cho phép sinh viên theo dõi tiến độ nắm vững các khái niệm hệ thống ML. Bằng cách tương tác nhất quán với tài liệu, sinh viên có thể kiếm được nhiều huy hiệu thành tích khác nhau để công nhận tiến độ và củng cố sự hiểu biết của họ về các khái niệm ML thiết yếu. Bảng điều khiển hiển thị các số liệu thống kê chính như hiệu suất bài kiểm tra, chuỗi học tập và huy hiệu thành tích.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-socratiq-ai-achievement-badges-63fc" class="level3">
+<h3 class="anchored" data-anchor-id="sec-socratiq-ai-achievement-badges-63fc">Huy hiệu thành tích</h3>
+<p>Khi bạn hoàn thành các bài kiểm tra, bạn sẽ kiếm được các huy hiệu đặc biệt để đánh dấu thành tích của mình! Dưới đây là những gì bạn có thể kiếm được:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 73%">
+<col style="width: 9%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Huy hiệu</strong></th>
+<th style="text-align: left;"><strong>Tên</strong></th>
+<th style="text-align: left;"><strong>Cách kiếm được</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong><img src="images/png/dart.png" class="img-fluid" width="20" alt="🎯"></strong></td>
+<td style="text-align: left;">Những bước đầu tiên</td>
+<td style="text-align: left;">Hoàn thành bài kiểm tra đầu tiên của bạn</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong><img src="images/png/1234.png" class="img-fluid" width="20" alt="🔢"></strong></td>
+<td style="text-align: left;">Đang có chuỗi thành tích</td>
+<td style="text-align: left;">Duy trì chuỗi điểm tuyệt đối</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong><img src="images/png/trophy.png" class="img-fluid" width="20" alt="🏆"></strong></td>
+<td style="text-align: left;">Người đạt huy chương Quiz</td>
+<td style="text-align: left;">Hoàn thành 10 bài kiểm tra</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong><img src="images/png/trophy.png" class="img-fluid" width="20" alt="🏆"><img src="images/png/trophy.png" class="img-fluid" width="20" alt="🏆"></strong></td>
+<td style="text-align: left;">Nhà vô địch Quiz</td>
+<td style="text-align: left;">Hoàn thành 20 bài kiểm tra</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong><img src="images/png/trophy.png" class="img-fluid" width="20" alt="🏆"><img src="images/png/trophy.png" class="img-fluid" width="20" alt="🏆"><img src="images/png/trophy.png" class="img-fluid" width="20" alt="🏆"></strong></td>
+<td style="text-align: left;">Huyền thoại Quiz</td>
+<td style="text-align: left;">Hoàn thành 30 bài kiểm tra</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong><img src="images/png/trophy.png" class="img-fluid" width="20" alt="🏆"><img src="images/png/trophy.png" class="img-fluid" width="20" alt="🏆"><img src="images/png/trophy.png" class="img-fluid" width="20" alt="🏆"><img src="images/png/trophy.png" class="img-fluid" width="20" alt="🏆"> x n</strong></td>
+<td style="text-align: left;">Siêu nhân AGI Quiz</td>
+<td style="text-align: left;">Hoàn thành 40 bài kiểm tra trở lên</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-tip callout-titled" title="Thu thập huy hiệu thành tích">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Thu thập huy hiệu thành tích
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Hãy tiếp tục làm bài kiểm tra để thu thập tất cả các huy hiệu và cải thiện hành trình học tập của bạn! Các huy hiệu hiện tại của bạn sẽ xuất hiện trong bảng điều khiển thống kê bài kiểm tra.</p>
+</div>
+</div>
+<p>Nếu bạn muốn có hồ sơ về tiến độ của mình, bạn có thể tạo một báo cáo PDF (<a href="#fig-download-report" class="quarto-xref">figure&nbsp;15</a>). Báo cáo này sẽ hiển thị tiến độ, hiệu suất trung bình và tất cả các câu hỏi bạn đã thử. Tệp PDF được tạo với một mã băm duy nhất và có thể được xác thực duy nhất.</p>
+</section>
+</section>
+<section id="sec-socratiq-ai-data-storage-5ea5" class="level2">
+<h2 class="anchored" data-anchor-id="sec-socratiq-ai-data-storage-5ea5">Lưu trữ dữ liệu</h2>
+<p>Nền tảng đồng hành lưu trữ dữ liệu học tập của bạn cục bộ, điều này có ý nghĩa quan trọng đối với tính bền vững của dữ liệu.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Bộ nhớ trình duyệt cục bộ">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Bộ nhớ trình duyệt cục bộ
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Lưu ý quan trọng</strong>: Tất cả dữ liệu tiến độ được lưu trữ cục bộ trong trình duyệt của bạn. Xóa lịch sử trình duyệt hoặc cache sẽ xóa toàn bộ lịch sử học tập của bạn, bao gồm điểm bài kiểm tra, chuỗi học tập và huy hiệu thành tích.</p>
+</div>
+</div>
+<p>Bạn cũng có thể xóa tất cả các cuộc trò chuyện đã lưu của mình bằng cách nhấp vào nút New Chat (Trò chuyện mới) trên thanh điều hướng, như minh họa trong <a href="#fig-previous-conversations" class="quarto-xref">figure&nbsp;16</a>.</p>
+</section>
+<section id="sec-socratiq-ai-technical-requirements-d774" class="level2">
+<h2 class="anchored" data-anchor-id="sec-socratiq-ai-technical-requirements-d774">Yêu cầu kỹ thuật</h2>
+<p>Để sử dụng SocratiQ hiệu quả, bạn sẽ cần:</p>
+<ul>
+<li>Trình duyệt Chrome hoặc Safari</li>
+<li>Đã bật JavaScript</li>
+<li>Kết nối internet ổn định</li>
+</ul>
+<div id="fig-download-report" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Bạn có thể nhấp vào nút Download Report (Tải báo cáo) để xem báo cáo của mình. Bạn có thể xác minh rằng tệp PDF của mình đã được SocratiQ tạo bằng cách nhấp vào nút verify (xác minh) và tải lên tệp PDF đã tạo của bạn." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-download-report-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/download_report.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" title="Figure&nbsp;15: Quy trình tải báo cáo: Bạn có thể nhấp vào nút Download Report (Tải báo cáo) để xem báo cáo của mình. Bạn có thể xác minh rằng tệp PDF của mình đã được SocratiQ tạo bằng cách nhấp vào nút verify (xác minh) và tải lên tệp PDF đã tạo của bạn."><img src="images/png/download_report.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-download-report-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;15: <strong>Quy trình tải báo cáo</strong>: Bạn có thể nhấp vào nút Download Report (Tải báo cáo) để xem báo cáo của mình. Bạn có thể xác minh rằng tệp PDF của mình đã được SocratiQ tạo bằng cách nhấp vào nút verify (xác minh) và tải lên tệp PDF đã tạo của bạn.
+</figcaption>
+</figure>
+</div>
+<div id="fig-previous-conversations" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-env="figure" alt="Tải hoặc xóa các cuộc trò chuyện trước đó hoặc bắt đầu một cuộc trò chuyện mới." data-fig-pos="htb">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-previous-conversations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/png/prev_conversations.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="Figure&nbsp;16: Menu các cuộc trò chuyện trước: Tải hoặc xóa các cuộc trò chuyện trước đó hoặc bắt đầu một cuộc trò chuyện mới."><img src="images/png/prev_conversations.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-previous-conversations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16: <strong>Menu các cuộc trò chuyện trước</strong>: Tải hoặc xóa các cuộc trò chuyện trước đó hoặc bắt đầu một cuộc trò chuyện mới.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-socratiq-ai-common-issues-troubleshooting-cba6" class="level2">
+<h2 class="anchored" data-anchor-id="sec-socratiq-ai-common-issues-troubleshooting-cba6">Các vấn đề thường gặp và khắc phục sự cố</h2>
+<ul>
+<li>Nếu SocratiQ không phản hồi: Làm mới trang</li>
+<li>Nếu bài kiểm tra không tải: Kiểm tra kết nối internet của bạn</li>
+<li>Nếu tiến độ không được lưu: Đảm bảo cookie đã được bật</li>
+</ul>
+<p>Đối với các vấn đề dai dẳng, vui lòng liên hệ với chúng tôi tại vj[@]eecs.harvard.edu.</p>
+</section>
+<section id="sec-socratiq-ai-providing-feedback-873e" class="level2">
+<h2 class="anchored" data-anchor-id="sec-socratiq-ai-providing-feedback-873e">Gửi phản hồi</h2>
+<p>Phản hồi của bạn giúp chúng tôi cải thiện SocratiQ.</p>
+<p>Bạn có thể báo cáo các vấn đề kỹ thuật, đề xuất cải tiến câu hỏi bài kiểm tra hoặc chia sẻ suy nghĩ về phản hồi của AI bằng cách sử dụng các nút phản hồi nằm rải rác trong giao diện. Bạn có thể gửi một <a href="https://github.com/harvard-edge/cs249r_book/issues">GitHub issue</a>.</p>
+<!-- If you prefer leaving feedback via Google Form, you are welcome to do so via this link:
+
+<div class="btn btn-primary"
+     style="display: flex; align-items: center; justify-content: center; width: 200px; height: 50px; margin: 10px auto; text-align: center; font-size: 16px; padding-top: 4 percent"
+     onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSeK8RXgc6kbT1lbWljyUhwowp3x1ySbAjUQQqztdDs5ccmnQ/viewform?embedded=true', '_blank')">
+  Share Your Feedback
+</div> -->
+
+
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mlsysbook\.ai\/vol1\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../../vol1/frontmatter/notation.html" class="pagination-link" aria-label="Ký hiệu">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Ký hiệu</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2024-2026 Harvard University. Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA 4.0</a><br> <!-- MLSB_BUILD_STAMP --></p>
+</div>   
+    <div class="nav-footer-center">
+<p><a href="../vol2/">Next to Volume II →</a></p>
+</div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+ <span class="release-pill" data-release-pill=""></span>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/harvard-edge/cs249r_book">
+      <i class="bi bi-github" role="img" aria-label="View source on GitHub">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/harvard-edge/cs249r_book">
+      <i class="bi bi-star" role="img" aria-label="Star this repository">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+<!--
+  MLSysBook release-pill — shared footer version chip for Quarto + static sites.
+
+  Renders a small "v0.1.0 · Apr 26, 2026" chip from a deployed
+  release-manifest.json. Best-effort chrome: silent on any fetch failure
+  (manifest missing, offline, CORS). Use at any site that emits a manifest
+  via scripts/version/release.py emit-manifest.
+
+  ── Standardized placement (all MLSysBook sites) ──
+
+  The chip lives in the page-footer, right slot, so it reads as an
+  intentional part of the footer bar (not dangling below the page). Two
+  pieces per site:
+
+  1. This file loads the style + populator script site-wide:
+
+       format:
+         html:
+           include-in-header:
+             - text: |
+                 <meta name="release-manifest" content="/<project-base>/release-manifest.json">
+           include-after-body:
+             - file: ../shared/release/release-pill.html
+
+  2. Each page-footer places the chip span where it should render:
+
+       website:
+         page-footer:
+           right:
+             - text: |
+                 <span class="release-pill" data-release-pill></span>
+             - icon: github
+               href: ...
+
+  The meta tag tells the script where to find the manifest. The script
+  populates every span carrying data-release-pill, so the chip can sit in
+  the footer (canonical), an about page, or anywhere else.
+
+  ── Manifest contract ──
+
+  The manifest is the JSON written by scripts/version/release.py
+  emit-manifest. Required keys: releaseId, releaseHash. Optional but
+  recommended: buildDate, project. Anything else is ignored.
+
+  ── Why runtime fetch instead of build-time templating ──
+
+  Build-time templating would be deterministic but requires per-project
+  Lua/template machinery. Runtime fetch is project-agnostic and works
+  identically across Quarto, Next.js, and plain HTML. The one fetch per
+  page-load is cheap and the chip degrades to nothing on failure.
+-->
+
+<style>
+  /* Fixed muted gray on every site — the chip must look identical regardless of
+     each Quarto theme's accent colors (do NOT inherit --bs-secondary / link color). */
+  .release-pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 0.75rem;
+    line-height: 1;
+    color: var(--release-pill-color, #6c757d);
+  }
+  .release-pill a,
+  .release-pill a:visited,
+  .release-pill-version,
+  .release-pill-date {
+    color: var(--release-pill-color, #6c757d);
+    text-decoration: none;
+  }
+  .release-pill a:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .release-pill-date {
+    opacity: 0.75;
+  }
+</style>
+
+<script>
+  (function () {
+    var pills = document.querySelectorAll('[data-release-pill]');
+    if (!pills.length) return;
+
+    // Manifest URL resolution order:
+    //   1. data-manifest attribute on the pill (per-page override)
+    //   2. <meta name="release-manifest" content="..."> in <head>
+    //   3. './release-manifest.json' relative to current page (fallback)
+    var meta = document.querySelector('meta[name="release-manifest"]');
+    var metaPath = meta && meta.getAttribute('content');
+
+    fetch(metaPath || './release-manifest.json', { cache: 'no-store' })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (m) {
+        if (!m || !m.releaseId || !m.releaseHash) return;
+        var date = m.buildDate
+          ? new Date(m.buildDate).toLocaleDateString('en-US',
+              { year: 'numeric', month: 'short', day: 'numeric' })
+          : '';
+        var shortHash = String(m.releaseHash).slice(0, 7);
+        var title =
+          (m.project ? m.project + ' ' : '') +
+          'v' + m.releaseId +
+          (date ? ' · built ' + date : '') +
+          ' · hash ' + shortHash;
+
+        pills.forEach(function (el) {
+          var rawLink = el.getAttribute('data-link') || '#release';
+          // XSS hardening: allow only anchor, relative, or http(s) links; reject javascript:/data: URLs.
+          var linkHref = /^(?:#|\/|\.{1,2}\/|https?:\/\/)/i.test(rawLink) ? rawLink : '#release';
+          var a = document.createElement('a');
+          a.href = linkHref;
+          a.title = title;
+          a.setAttribute('aria-label',
+            'Release v' + m.releaseId + (date ? ', built ' + date : ''));
+          var v = document.createElement('span');
+          v.className = 'release-pill-version';
+          v.textContent = 'v' + m.releaseId;
+          a.appendChild(v);
+          if (date) {
+            var d = document.createElement('span');
+            d.className = 'release-pill-date';
+            d.textContent = ' · ' + date;
+            a.appendChild(d);
+          }
+          el.innerHTML = '';
+          el.appendChild(a);
+        });
+      })
+      .catch(function () { /* silent: best-effort chrome */ });
+  })();
+</script>
+    <script type="text/javascript">
+    (function(d) {
+      function renderPseudocode() {
+        d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+          let pseudocodeOptions = {
+            indentSize: el.dataset.indentSize,
+            commentDelimiter: " " + el.dataset.commentDelimiter + " ",
+            lineNumber: el.dataset.lineNumber.toLowerCase() === "true",
+            lineNumberPunc: el.dataset.lineNumberPunc,
+            noEnd: el.dataset.noEnd.toLowerCase() === "true",
+            scopeLines: el.dataset.indentLines.toLowerCase() === "true",
+            titlePrefix: el.dataset.captionPrefix,
+          };
+          pseudocode.renderElement(el.querySelector(".pseudocode"), pseudocodeOptions);
+        });
+        d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+          let captionSpan = el.querySelector(".ps-root > .ps-algorithm > .ps-line > .ps-keyword")
+          if (captionSpan !== null) {
+            let captionPrefix = el.dataset.captionPrefix + " ";
+            let captionNumber = "";
+            if (el.dataset.pseudocodeNumber) {
+              captionNumber = el.dataset.pseudocodeNumber + " ";
+              if (el.dataset.chapterLevel) {
+                captionNumber = el.dataset.chapterLevel + "." + captionNumber;
+              }
+            }
+            captionSpan.innerHTML = captionPrefix + captionNumber;
+          }
+        });
+      }
+      // pseudocode.js needs a math backend (KaTeX or MathJax) present *at the
+      // moment* renderElement runs. This book renders math with MathJax loaded
+      // via `defer`, so window.MathJax does not exist yet when this after-body
+      // script executes at parse time — calling renderElement now throws
+      // "No math backend found" and the raw LaTeX source stays on the page.
+      // Wait for the math backend to be ready before rendering: KaTeX if it is
+      // present synchronously, otherwise MathJax's startup promise (available
+      // after the deferred MathJax script has run, by window 'load').
+      function whenMathReady(cb) {
+        if (window.katex) { cb(); return; }
+        var mj = window.MathJax;
+        if (mj && mj.startup && mj.startup.promise) { mj.startup.promise.then(cb); return; }
+        window.addEventListener("load", function() {
+          var m = window.MathJax;
+          if (m && m.startup && m.startup.promise) { m.startup.promise.then(cb); }
+          else { cb(); }
+        });
+      }
+      whenMathReady(renderPseudocode);
+    })(document);
+    </script>
+  
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>

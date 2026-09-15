@@ -1,0 +1,3186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Machine Learning Systems</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../vol1/backmatter/appendix_data.html" rel="next">
+<link href="../../vol1/backmatter/references.html" rel="prev">
+<link href="../../shared/assets/images/icons/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-6d8bf5f3a64ff1f58d6d467b13ee33b9.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6d8bf5f3a64ff1f58d6d467b13ee33b9.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-6d8bf5f3a64ff1f58d6d467b13ee33b9.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-abcbfb5d8c34f61f2ffcc35a75fff582.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-df9c8c29c089ddecc8419a26f62c901e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-abcbfb5d8c34f61f2ffcc35a75fff582.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/quarto-contrib/foldbox/foldbox.css" rel="stylesheet">
+<script src="../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "/"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-M21L0CBCVN"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-M21L0CBCVN', { 'anonymize_ip': true});
+</script>
+<script type="application/json" class="js-hypothesis-config">
+{
+  "theme": "clean",
+  "openSidebar": false
+}
+</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
+<!-- Shared head includes — MLSysBook ecosystem -->
+
+<!--
+  theme-persist (inline, sync) — applies stored color-scheme before first paint.
+  Inlined deliberately: runs before any other <script>, no extra round-trip,
+  and avoids per-subsite asset path differences. Canonical source:
+  shared/scripts/theme-persist.js (kept identical for documentation/testability).
+  If you change one, mirror the change to the other.
+-->
+<script>
+(function () {
+  'use strict';
+  var STORAGE_KEY = 'quarto-color-scheme';
+  // Quarto's toggle writes 'alternate'/'default' (alternate = dark, the
+  // layered sheet); sibling non-Quarto sites write 'dark'/'light'. Both
+  // hit the same key, so we accept either. Quarto's own startup still
+  // checks `=== 'alternate'`, so we mirror onto <html> rather than rewrite.
+  function normalize(v) {
+    if (v === 'dark' || v === 'alternate') return 'dark';
+    if (v === 'light' || v === 'default') return 'light';
+    return null;
+  }
+  function preferredScheme() {
+    try {
+      var n = normalize(window.localStorage.getItem(STORAGE_KEY));
+      if (n) return n;
+    } catch (e) {}
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  }
+  function apply(scheme) {
+    var html = document.documentElement;
+    if (!html) return;
+    html.setAttribute('data-bs-theme', scheme);
+    html.setAttribute('data-quarto-color-scheme', scheme);
+    html.style.colorScheme = scheme;
+    // Bridge to legacy `.quarto-dark` body class — about.css,
+    // community.css, and newsletter.css key their dark-mode CSS
+    // variables off `.quarto-dark { ... }`. Quarto's own toggle adds
+    // that class on click, but the OS-pref / first-paint path never
+    // does. Mirror the scheme onto body so those CSS variables fire
+    // on every dark path, not just toggle clicks. body may not exist
+    // yet on the first call (this script runs in <head>); a
+    // MutationObserver below catches it as soon as it parses.
+    var body = document.body;
+    if (body) body.classList.toggle('quarto-dark', scheme === 'dark');
+  }
+  apply(preferredScheme());
+  // Catch the FOUC window between <head> apply() and DOMContentLoaded:
+  // <body> may not exist yet at first apply(), but as soon as the
+  // parser appends it we want the legacy class bridge in place so any
+  // CSS keyed on `.quarto-dark` paints correctly on first render.
+  if (!document.body) {
+    var earlyObserver = new MutationObserver(function () {
+      if (document.body) {
+        apply(preferredScheme());
+        earlyObserver.disconnect();
+      }
+    });
+    earlyObserver.observe(document.documentElement, { childList: true });
+  }
+  // Quarto's toggle updates localStorage but not <html>, so wrap it to
+  // mirror the new value onto data-bs-theme; otherwise clicking the toggle
+  // leaves CSS keyed off [data-bs-theme="dark"] rendering against the wrong
+  // stylesheet until the next reload.
+  function syncFromStorage() {
+    try {
+      var n = normalize(window.localStorage.getItem(STORAGE_KEY));
+      if (n) apply(n);
+    } catch (e) {}
+  }
+  function wrapToggle() {
+    var orig = window.quartoToggleColorScheme;
+    if (typeof orig !== 'function' || orig.__mlsbWrapped) return;
+    var wrapped = function () { var r = orig.apply(this, arguments); syncFromStorage(); return r; };
+    wrapped.__mlsbWrapped = true;
+    window.quartoToggleColorScheme = wrapped;
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { wrapToggle(); syncFromStorage(); });
+  } else {
+    wrapToggle(); syncFromStorage();
+  }
+  // Defend the legacy `.quarto-dark` body class against Quarto's own
+  // `toggleBodyColor(mode)`, which runs *after* this script and re-asserts
+  // the body class based on `mode` — and `mode` defaults to 'light' when
+  // there's no stored quarto-color-scheme value, even when the OS / first
+  // paint already resolved to dark via `data-bs-theme`. Without this
+  // observer, on every fresh visit Quarto would clobber our bridge and
+  // restore `.quarto-light`, leaving `.quarto-dark`-keyed CSS variables
+  // (about/community/newsletter pages) at their light-mode defaults
+  // against the dark `data-bs-theme="dark"` background.
+  function bridgeBody() {
+    var body = document.body;
+    if (!body) return;
+    var wantDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+    if (wantDark && !body.classList.contains('quarto-dark')) {
+      body.classList.add('quarto-dark');
+      body.classList.remove('quarto-light');
+    } else if (!wantDark && body.classList.contains('quarto-dark')) {
+      body.classList.remove('quarto-dark');
+      body.classList.add('quarto-light');
+    }
+  }
+  function watchBody() {
+    if (!document.body) return;
+    bridgeBody();
+    var bodyObs = new MutationObserver(bridgeBody);
+    bodyObs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    var htmlObs = new MutationObserver(bridgeBody);
+    htmlObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', watchBody);
+  } else {
+    watchBody();
+  }
+  window.addEventListener('storage', function (ev) {
+    if (ev.key !== STORAGE_KEY) return;
+    var n = normalize(ev.newValue);
+    if (n) apply(n);
+  });
+  if (window.matchMedia) {
+    try {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (ev) {
+        try { if (window.localStorage.getItem(STORAGE_KEY)) return; } catch (e) {}
+        apply(ev.matches ? 'dark' : 'light');
+      });
+    } catch (e) {}
+  }
+})();
+</script>
+
+<!--
+  Build-stamp styling. Tiny, neutral, dark-mode aware. The actual stamp text
+  is injected by shared/scripts/inject-build-stamp.sh into footer markup
+  containing the literal MLSB_BUILD_STAMP HTML-comment token (see that
+  script for the exact pattern — we cannot write it here because HTML
+  comments cannot nest and the inner closer would terminate this block).
+-->
+<style>
+.mlsb-build-stamp {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  font-variant-numeric: tabular-nums;
+}
+[data-bs-theme="dark"] .mlsb-build-stamp { opacity: 0.5; }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link rel="icon" href="https://mlsysbook.ai/vol1/assets/images/icons/favicon.png" type="image/png">
+
+<!--
+  navbar-theme-toggle-relocate — moves the Quarto theme toggle into the
+  navbar's right-side .navbar-nav group at page load, so it collapses into
+  the hamburger menu alongside Subscribe/Star/Support/GitHub at narrow widths
+  instead of being stranded in the middle by Quarto's mx-auto brand layout.
+
+  Why JS: Quarto auto-injects the toggle into .quarto-navbar-tools (outside
+  .navbar-collapse). CSS can't move DOM nodes between containers, and CSS
+  positioning hacks (absolute/right: 50px) fight Bootstrap's responsive
+  layout below 992px. Moving the node once at startup is the standard
+  approach used across Quarto-based sites with the same problem.
+-->
+<script>
+(function () {
+  'use strict';
+  function relocateThemeToggle() {
+    var tools = document.querySelector('.quarto-navbar-tools');
+    if (!tools) return;
+    var toggle = tools.querySelector('.quarto-color-scheme-toggle');
+    if (!toggle) return;
+    var navRight = document.querySelector(
+      '.navbar .navbar-collapse .navbar-nav.ms-auto'
+    ) || document.querySelector(
+      '.navbar .navbar-collapse .navbar-nav:last-of-type'
+    );
+    if (!navRight) return;
+    var li = document.createElement('li');
+    li.className = 'nav-item navbar-theme-toggle-item';
+    toggle.classList.add('nav-link');
+    li.appendChild(toggle);
+    navRight.appendChild(li);
+    tools.style.display = 'none';
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', relocateThemeToggle);
+  } else {
+    relocateThemeToggle();
+  }
+})();
+</script>
+
+<!--
+  navbar-brand-href-fix — force the navbar brand link to the ecosystem root
+  (https://mlsysbook.ai/) on every subsite.
+
+  Quarto sets each subsite's `site-url` to `https://mlsysbook.ai/<subsite>/`
+  and then relativizes any navbar.href value that lives inside the
+  site-url's domain. The shared `href: https://mlsysbook.ai/` in
+  navbar-common.yml therefore gets emitted as `./index.html`, which on
+  vol1/vol2/tinytorch/etc. resolves to *that subsite's* root rather than
+  the ecosystem landing page. Override the brand link href in JS after
+  Quarto's render: this is a one-line user-experience fix that does not
+  fight Quarto's URL machinery.
+-->
+<script>
+(function () {
+  'use strict';
+  function fixBrandHref() {
+    var brand = document.querySelectorAll(
+      '.navbar .navbar-brand, .navbar .navbar-brand-logo'
+    );
+    for (var i = 0; i < brand.length; i++) {
+      brand[i].setAttribute('href', 'https://mlsysbook.ai/');
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixBrandHref);
+  } else {
+    fixBrandHref();
+  }
+})();
+</script>
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="apple-touch-icon" href="../../shared/assets/images/icons/favicon.png">
+<meta name="theme-color" content="#A51C30">
+<!-- Release identity (rendered into the footer pill below).
+     The publish workflow drops release-manifest.json at
+     /vol1/release-manifest.json before deploy. -->
+<meta name="release-manifest" content="/vol1/release-manifest.json">
+<!-- SocratiQ bundle: -->
+<!-- <script type="module" src="/tools/scripts/socratiQ/bundle.js" defer></script> -->
+<script src="../../shared/assets/scripts/sidebar-auto-collapse.js" defer=""></script>
+<script src="../../shared/assets/scripts/version-link.js" defer=""></script>
+<script src="../../shared/assets/scripts/subscribe-modal.js" defer=""></script>
+<style>
+.callout-learning-objectives {
+  --color1: #E8F2EA;
+  --color2: #4A7C59;
+  --border-color: #4A7C59;
+  --background-color: rgba(74, 124, 89, 0.04);
+  --title-background-color: rgba(74, 124, 89, 0.04);
+  --dark-background-color: rgba(74, 124, 89, 0.12);
+  --dark-title-background-color: rgba(74, 124, 89, 0.12);
+}
+.callout-quiz-question {
+  --color1: #F0F0F8;
+  --color2: #5B4B8A;
+  --border-color: #5B4B8A;
+  --background-color: rgba(91, 75, 138, 0.04);
+  --title-background-color: rgba(91, 75, 138, 0.04);
+  --dark-background-color: rgba(91, 75, 138, 0.12);
+  --dark-title-background-color: rgba(91, 75, 138, 0.12);
+}
+.callout-quiz-answer {
+  --color1: #E8F2EA;
+  --color2: #4A7C59;
+  --border-color: #4A7C59;
+  --background-color: rgba(74, 124, 89, 0.04);
+  --title-background-color: rgba(74, 124, 89, 0.04);
+  --dark-background-color: rgba(74, 124, 89, 0.12);
+  --dark-title-background-color: rgba(74, 124, 89, 0.12);
+}
+.callout-case-study {
+  --color1: #FEF2F2;
+  --color2: #C53030;
+  --border-color: #C53030;
+  --background-color: rgba(197, 48, 48, 0.04);
+  --title-background-color: rgba(197, 48, 48, 0.04);
+  --dark-background-color: rgba(197, 48, 48, 0.12);
+  --dark-title-background-color: rgba(197, 48, 48, 0.12);
+}
+.callout-chapter-connection {
+  --color1: #F1F5F9;
+  --color2: #64748B;
+  --border-color: #64748B;
+  --background-color: rgba(100, 116, 139, 0.04);
+  --title-background-color: rgba(100, 116, 139, 0.04);
+  --dark-background-color: rgba(100, 116, 139, 0.12);
+  --dark-title-background-color: rgba(100, 116, 139, 0.12);
+}
+.callout-notebook {
+  --color1: #F4F7FA;
+  --color2: #3F6077;
+  --border-color: #3F6077;
+  --background-color: rgba(63, 96, 119, 0.04);
+  --title-background-color: rgba(63, 96, 119, 0.04);
+  --dark-background-color: rgba(63, 96, 119, 0.12);
+  --dark-title-background-color: rgba(63, 96, 119, 0.12);
+}
+.callout-checkpoint {
+  --color1: #F7FEE7;
+  --color2: #4D7C0F;
+  --border-color: #4D7C0F;
+  --background-color: rgba(77, 124, 15, 0.04);
+  --title-background-color: rgba(77, 124, 15, 0.04);
+  --dark-background-color: rgba(77, 124, 15, 0.12);
+  --dark-title-background-color: rgba(77, 124, 15, 0.12);
+}
+.callout-definition {
+  --color1: #F2F7FA;
+  --color2: #4F7396;
+  --border-color: #4F7396;
+  --background-color: rgba(79, 115, 150, 0.04);
+  --title-background-color: rgba(79, 115, 150, 0.04);
+  --dark-background-color: rgba(79, 115, 150, 0.12);
+  --dark-title-background-color: rgba(79, 115, 150, 0.12);
+}
+.callout-resource-slides {
+  --color1: #E0F2F1;
+  --color2: #20B2AA;
+  --border-color: #20B2AA;
+  --background-color: rgba(32, 178, 170, 0.04);
+  --title-background-color: rgba(32, 178, 170, 0.04);
+  --dark-background-color: rgba(32, 178, 170, 0.12);
+  --dark-title-background-color: rgba(32, 178, 170, 0.12);
+}
+.callout-resource-videos {
+  --color1: #E0F2F1;
+  --color2: #20B2AA;
+  --border-color: #20B2AA;
+  --background-color: rgba(32, 178, 170, 0.04);
+  --title-background-color: rgba(32, 178, 170, 0.04);
+  --dark-background-color: rgba(32, 178, 170, 0.12);
+  --dark-title-background-color: rgba(32, 178, 170, 0.12);
+}
+.callout-takeaways {
+  --color1: #FCF4F8;
+  --color2: #9D3C72;
+  --border-color: #9D3C72;
+  --background-color: rgba(157, 60, 114, 0.04);
+  --title-background-color: rgba(157, 60, 114, 0.04);
+  --dark-background-color: rgba(157, 60, 114, 0.12);
+  --dark-title-background-color: rgba(157, 60, 114, 0.12);
+}
+.callout-code {
+  --color1: #F2F4F8;
+  --color2: #3C4858;
+  --border-color: #3C4858;
+  --background-color: rgba(60, 72, 88, 0.04);
+  --title-background-color: rgba(60, 72, 88, 0.04);
+  --dark-background-color: rgba(60, 72, 88, 0.12);
+  --dark-title-background-color: rgba(60, 72, 88, 0.12);
+}
+.callout-resource-exercises {
+  --color1: #E0F2F1;
+  --color2: #20B2AA;
+  --border-color: #20B2AA;
+  --background-color: rgba(32, 178, 170, 0.04);
+  --title-background-color: rgba(32, 178, 170, 0.04);
+  --dark-background-color: rgba(32, 178, 170, 0.12);
+  --dark-title-background-color: rgba(32, 178, 170, 0.12);
+}
+.callout-theorem {
+  --color1: #F5F0FA;
+  --color2: #6B46C1;
+  --border-color: #6B46C1;
+  --background-color: rgba(107, 70, 193, 0.04);
+  --title-background-color: rgba(107, 70, 193, 0.04);
+  --dark-background-color: rgba(107, 70, 193, 0.12);
+  --dark-title-background-color: rgba(107, 70, 193, 0.12);
+}
+.callout-war-story {
+  --color1: #FEF2F2;
+  --color2: #C53030;
+  --border-color: #C53030;
+  --background-color: rgba(197, 48, 48, 0.04);
+  --title-background-color: rgba(197, 48, 48, 0.04);
+  --dark-background-color: rgba(197, 48, 48, 0.12);
+  --dark-title-background-color: rgba(197, 48, 48, 0.12);
+}
+.callout-research-questions {
+  --color1: #F0F0F8;
+  --color2: #5B4B8A;
+  --border-color: #5B4B8A;
+  --background-color: rgba(91, 75, 138, 0.04);
+  --title-background-color: rgba(91, 75, 138, 0.04);
+  --dark-background-color: rgba(91, 75, 138, 0.12);
+  --dark-title-background-color: rgba(91, 75, 138, 0.12);
+}
+.callout-lighthouse {
+  --color1: #FDF8E6;
+  --color2: #B8860B;
+  --border-color: #B8860B;
+  --background-color: rgba(184, 134, 11, 0.04);
+  --title-background-color: rgba(184, 134, 11, 0.04);
+  --dark-background-color: rgba(184, 134, 11, 0.12);
+  --dark-title-background-color: rgba(184, 134, 11, 0.12);
+}
+.callout-perspective {
+  --color1: #F7F8FA;
+  --color2: #4A5568;
+  --border-color: #4A5568;
+  --background-color: rgba(74, 85, 104, 0.04);
+  --title-background-color: rgba(74, 85, 104, 0.04);
+  --dark-background-color: rgba(74, 85, 104, 0.12);
+  --dark-title-background-color: rgba(74, 85, 104, 0.12);
+}
+.callout-colab {
+  --color1: #FFF5E6;
+  --color2: #FF6B35;
+  --border-color: #FF6B35;
+  --background-color: rgba(255, 107, 53, 0.04);
+  --title-background-color: rgba(255, 107, 53, 0.04);
+  --dark-background-color: rgba(255, 107, 53, 0.12);
+  --dark-title-background-color: rgba(255, 107, 53, 0.12);
+}
+.callout-example {
+  --color1: #F0F8F6;
+  --color2: #148F77;
+  --border-color: #148F77;
+  --background-color: rgba(20, 143, 119, 0.04);
+  --title-background-color: rgba(20, 143, 119, 0.04);
+  --dark-background-color: rgba(20, 143, 119, 0.12);
+  --dark-title-background-color: rgba(20, 143, 119, 0.12);
+}
+.callout-principle {
+  --color1: #F3F2FA;
+  --color2: #3D3B8E;
+  --border-color: #3D3B8E;
+  --background-color: rgba(61, 59, 142, 0.04);
+  --title-background-color: rgba(61, 59, 142, 0.04);
+  --dark-background-color: rgba(61, 59, 142, 0.12);
+  --dark-title-background-color: rgba(61, 59, 142, 0.12);
+}
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  details.callout-learning-objectives {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+  details.callout-learning-objectives summary,
+  details.callout-learning-objectives summary strong,
+  details.callout-learning-objectives > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-learning-objectives code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-quiz-question {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+  details.callout-quiz-question summary,
+  details.callout-quiz-question summary strong,
+  details.callout-quiz-question > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-quiz-question code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-quiz-answer {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+  details.callout-quiz-answer summary,
+  details.callout-quiz-answer summary strong,
+  details.callout-quiz-answer > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-quiz-answer code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-case-study {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+  details.callout-case-study summary,
+  details.callout-case-study summary strong,
+  details.callout-case-study > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-case-study code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-chapter-connection {
+    --text-color: #e6e6e6;
+    --background-color: rgba(100, 116, 139, 0.12);
+    --title-background-color: rgba(100, 116, 139, 0.12);
+    border-color: #64748B;
+  }
+  details.callout-chapter-connection summary,
+  details.callout-chapter-connection summary strong,
+  details.callout-chapter-connection > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-chapter-connection code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-notebook {
+    --text-color: #e6e6e6;
+    --background-color: rgba(63, 96, 119, 0.12);
+    --title-background-color: rgba(63, 96, 119, 0.12);
+    border-color: #3F6077;
+  }
+  details.callout-notebook summary,
+  details.callout-notebook summary strong,
+  details.callout-notebook > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-notebook code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-checkpoint {
+    --text-color: #e6e6e6;
+    --background-color: rgba(77, 124, 15, 0.12);
+    --title-background-color: rgba(77, 124, 15, 0.12);
+    border-color: #4D7C0F;
+  }
+  details.callout-checkpoint summary,
+  details.callout-checkpoint summary strong,
+  details.callout-checkpoint > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-checkpoint code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-definition {
+    --text-color: #e6e6e6;
+    --background-color: rgba(79, 115, 150, 0.12);
+    --title-background-color: rgba(79, 115, 150, 0.12);
+    border-color: #4F7396;
+  }
+  details.callout-definition summary,
+  details.callout-definition summary strong,
+  details.callout-definition > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-definition code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-resource-slides {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+  details.callout-resource-slides summary,
+  details.callout-resource-slides summary strong,
+  details.callout-resource-slides > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-resource-slides code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-resource-videos {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+  details.callout-resource-videos summary,
+  details.callout-resource-videos summary strong,
+  details.callout-resource-videos > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-resource-videos code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-takeaways {
+    --text-color: #e6e6e6;
+    --background-color: rgba(157, 60, 114, 0.12);
+    --title-background-color: rgba(157, 60, 114, 0.12);
+    border-color: #9D3C72;
+  }
+  details.callout-takeaways summary,
+  details.callout-takeaways summary strong,
+  details.callout-takeaways > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-takeaways code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-code {
+    --text-color: #e6e6e6;
+    --background-color: rgba(60, 72, 88, 0.12);
+    --title-background-color: rgba(60, 72, 88, 0.12);
+    border-color: #3C4858;
+  }
+  details.callout-code summary,
+  details.callout-code summary strong,
+  details.callout-code > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-code code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-resource-exercises {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+  details.callout-resource-exercises summary,
+  details.callout-resource-exercises summary strong,
+  details.callout-resource-exercises > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-resource-exercises code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-theorem {
+    --text-color: #e6e6e6;
+    --background-color: rgba(107, 70, 193, 0.12);
+    --title-background-color: rgba(107, 70, 193, 0.12);
+    border-color: #6B46C1;
+  }
+  details.callout-theorem summary,
+  details.callout-theorem summary strong,
+  details.callout-theorem > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-theorem code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-war-story {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+  details.callout-war-story summary,
+  details.callout-war-story summary strong,
+  details.callout-war-story > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-war-story code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-research-questions {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+  details.callout-research-questions summary,
+  details.callout-research-questions summary strong,
+  details.callout-research-questions > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-research-questions code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-lighthouse {
+    --text-color: #e6e6e6;
+    --background-color: rgba(184, 134, 11, 0.12);
+    --title-background-color: rgba(184, 134, 11, 0.12);
+    border-color: #B8860B;
+  }
+  details.callout-lighthouse summary,
+  details.callout-lighthouse summary strong,
+  details.callout-lighthouse > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-lighthouse code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-perspective {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 85, 104, 0.12);
+    --title-background-color: rgba(74, 85, 104, 0.12);
+    border-color: #4A5568;
+  }
+  details.callout-perspective summary,
+  details.callout-perspective summary strong,
+  details.callout-perspective > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-perspective code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-colab {
+    --text-color: #e6e6e6;
+    --background-color: rgba(255, 107, 53, 0.12);
+    --title-background-color: rgba(255, 107, 53, 0.12);
+    border-color: #FF6B35;
+  }
+  details.callout-colab summary,
+  details.callout-colab summary strong,
+  details.callout-colab > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-colab code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-example {
+    --text-color: #e6e6e6;
+    --background-color: rgba(20, 143, 119, 0.12);
+    --title-background-color: rgba(20, 143, 119, 0.12);
+    border-color: #148F77;
+  }
+  details.callout-example summary,
+  details.callout-example summary strong,
+  details.callout-example > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-example code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-principle {
+    --text-color: #e6e6e6;
+    --background-color: rgba(61, 59, 142, 0.12);
+    --title-background-color: rgba(61, 59, 142, 0.12);
+    border-color: #3D3B8E;
+  }
+  details.callout-principle summary,
+  details.callout-principle summary strong,
+  details.callout-principle > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-principle code {
+    color: #e6e6e6 !important;
+  }
+}
+body.quarto-dark details.callout-learning-objectives {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+body.quarto-dark details.callout-learning-objectives summary,
+body.quarto-dark details.callout-learning-objectives summary strong,
+body.quarto-dark details.callout-learning-objectives > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-learning-objectives code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-quiz-question {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+body.quarto-dark details.callout-quiz-question summary,
+body.quarto-dark details.callout-quiz-question summary strong,
+body.quarto-dark details.callout-quiz-question > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-quiz-question code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-quiz-answer {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+body.quarto-dark details.callout-quiz-answer summary,
+body.quarto-dark details.callout-quiz-answer summary strong,
+body.quarto-dark details.callout-quiz-answer > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-quiz-answer code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-case-study {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+body.quarto-dark details.callout-case-study summary,
+body.quarto-dark details.callout-case-study summary strong,
+body.quarto-dark details.callout-case-study > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-case-study code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-chapter-connection {
+    --text-color: #e6e6e6;
+    --background-color: rgba(100, 116, 139, 0.12);
+    --title-background-color: rgba(100, 116, 139, 0.12);
+    border-color: #64748B;
+  }
+body.quarto-dark details.callout-chapter-connection summary,
+body.quarto-dark details.callout-chapter-connection summary strong,
+body.quarto-dark details.callout-chapter-connection > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-chapter-connection code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-notebook {
+    --text-color: #e6e6e6;
+    --background-color: rgba(63, 96, 119, 0.12);
+    --title-background-color: rgba(63, 96, 119, 0.12);
+    border-color: #3F6077;
+  }
+body.quarto-dark details.callout-notebook summary,
+body.quarto-dark details.callout-notebook summary strong,
+body.quarto-dark details.callout-notebook > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-notebook code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-checkpoint {
+    --text-color: #e6e6e6;
+    --background-color: rgba(77, 124, 15, 0.12);
+    --title-background-color: rgba(77, 124, 15, 0.12);
+    border-color: #4D7C0F;
+  }
+body.quarto-dark details.callout-checkpoint summary,
+body.quarto-dark details.callout-checkpoint summary strong,
+body.quarto-dark details.callout-checkpoint > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-checkpoint code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-definition {
+    --text-color: #e6e6e6;
+    --background-color: rgba(79, 115, 150, 0.12);
+    --title-background-color: rgba(79, 115, 150, 0.12);
+    border-color: #4F7396;
+  }
+body.quarto-dark details.callout-definition summary,
+body.quarto-dark details.callout-definition summary strong,
+body.quarto-dark details.callout-definition > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-definition code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-resource-slides {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+body.quarto-dark details.callout-resource-slides summary,
+body.quarto-dark details.callout-resource-slides summary strong,
+body.quarto-dark details.callout-resource-slides > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-resource-slides code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-resource-videos {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+body.quarto-dark details.callout-resource-videos summary,
+body.quarto-dark details.callout-resource-videos summary strong,
+body.quarto-dark details.callout-resource-videos > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-resource-videos code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-takeaways {
+    --text-color: #e6e6e6;
+    --background-color: rgba(157, 60, 114, 0.12);
+    --title-background-color: rgba(157, 60, 114, 0.12);
+    border-color: #9D3C72;
+  }
+body.quarto-dark details.callout-takeaways summary,
+body.quarto-dark details.callout-takeaways summary strong,
+body.quarto-dark details.callout-takeaways > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-takeaways code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-code {
+    --text-color: #e6e6e6;
+    --background-color: rgba(60, 72, 88, 0.12);
+    --title-background-color: rgba(60, 72, 88, 0.12);
+    border-color: #3C4858;
+  }
+body.quarto-dark details.callout-code summary,
+body.quarto-dark details.callout-code summary strong,
+body.quarto-dark details.callout-code > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-code code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-resource-exercises {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+body.quarto-dark details.callout-resource-exercises summary,
+body.quarto-dark details.callout-resource-exercises summary strong,
+body.quarto-dark details.callout-resource-exercises > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-resource-exercises code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-theorem {
+    --text-color: #e6e6e6;
+    --background-color: rgba(107, 70, 193, 0.12);
+    --title-background-color: rgba(107, 70, 193, 0.12);
+    border-color: #6B46C1;
+  }
+body.quarto-dark details.callout-theorem summary,
+body.quarto-dark details.callout-theorem summary strong,
+body.quarto-dark details.callout-theorem > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-theorem code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-war-story {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+body.quarto-dark details.callout-war-story summary,
+body.quarto-dark details.callout-war-story summary strong,
+body.quarto-dark details.callout-war-story > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-war-story code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-research-questions {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+body.quarto-dark details.callout-research-questions summary,
+body.quarto-dark details.callout-research-questions summary strong,
+body.quarto-dark details.callout-research-questions > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-research-questions code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-lighthouse {
+    --text-color: #e6e6e6;
+    --background-color: rgba(184, 134, 11, 0.12);
+    --title-background-color: rgba(184, 134, 11, 0.12);
+    border-color: #B8860B;
+  }
+body.quarto-dark details.callout-lighthouse summary,
+body.quarto-dark details.callout-lighthouse summary strong,
+body.quarto-dark details.callout-lighthouse > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-lighthouse code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-perspective {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 85, 104, 0.12);
+    --title-background-color: rgba(74, 85, 104, 0.12);
+    border-color: #4A5568;
+  }
+body.quarto-dark details.callout-perspective summary,
+body.quarto-dark details.callout-perspective summary strong,
+body.quarto-dark details.callout-perspective > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-perspective code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-colab {
+    --text-color: #e6e6e6;
+    --background-color: rgba(255, 107, 53, 0.12);
+    --title-background-color: rgba(255, 107, 53, 0.12);
+    border-color: #FF6B35;
+  }
+body.quarto-dark details.callout-colab summary,
+body.quarto-dark details.callout-colab summary strong,
+body.quarto-dark details.callout-colab > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-colab code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-example {
+    --text-color: #e6e6e6;
+    --background-color: rgba(20, 143, 119, 0.12);
+    --title-background-color: rgba(20, 143, 119, 0.12);
+    border-color: #148F77;
+  }
+body.quarto-dark details.callout-example summary,
+body.quarto-dark details.callout-example summary strong,
+body.quarto-dark details.callout-example > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-example code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-principle {
+    --text-color: #e6e6e6;
+    --background-color: rgba(61, 59, 142, 0.12);
+    --title-background-color: rgba(61, 59, 142, 0.12);
+    border-color: #3D3B8E;
+  }
+body.quarto-dark details.callout-principle summary,
+body.quarto-dark details.callout-principle summary strong,
+body.quarto-dark details.callout-principle > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-principle code {
+    color: #e6e6e6 !important;
+  }
+</style>
+<style>
+details.callout-learning-objectives > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_learning_objectives.png");
+}
+details.callout-quiz-question > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_quiz_question.png");
+}
+details.callout-quiz-answer > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_quiz_answer.png");
+}
+details.callout-case-study > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_case_study.png");
+}
+details.callout-chapter-connection > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_chapter_connection.png");
+}
+details.callout-notebook > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_notebook.png");
+}
+details.callout-checkpoint > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_checkpoint.png");
+}
+details.callout-definition > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_definition.png");
+}
+details.callout-resource-slides > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_resource_slides.png");
+}
+details.callout-resource-videos > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_resource_videos.png");
+}
+details.callout-takeaways > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_takeaways.png");
+}
+details.callout-code > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_code.png");
+}
+details.callout-resource-exercises > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_resource_exercises.png");
+}
+details.callout-theorem > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_theorem.png");
+}
+details.callout-war-story > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_case_study.png");
+}
+details.callout-research-questions > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_research_questions.png");
+}
+details.callout-lighthouse > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_lighthouse.png");
+}
+details.callout-perspective > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_perspective.png");
+}
+details.callout-colab > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_colab.png");
+}
+details.callout-example > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_example.png");
+}
+details.callout-principle > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_principle.png");
+}
+</style>
+    <style type="text/css">
+    .ps-root .ps-algorithm {
+      border-top: 2px solid;
+      border-bottom: 2px solid;
+    }
+    .pseudocode-container {
+      text-align: left;
+    }
+    </style>
+  
+      <style type="text/css">
+      .ps-algorithm > .ps-line {
+        text-align: left;
+      }
+      </style>
+    
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="Introduction to Machine Learning Systems">
+<meta property="og:description" content="Volume I: Introduction to Machine Learning Systems. Foundations, development, optimization, and deployment.">
+<meta property="og:image" content="https://mlsysbook.ai/vol1/vol1/backmatter/shared/assets/images/covers/cover-hardcover-book-vol1.png">
+<meta property="og:site_name" content="Introduction to Machine Learning Systems">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:title" content="Introduction to Machine Learning Systems">
+<meta name="twitter:description" content="Volume I: Introduction to Machine Learning Systems. Foundations, development, optimization, and deployment.">
+<meta name="twitter:image" content="https://mlsysbook.ai/vol1/vol1/backmatter/shared/assets/images/covers/cover-hardcover-book-vol1.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed slimcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-xl " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../shared/assets/images/icons/logo-seas-shield.png" alt="" class="navbar-logo light-content">
+    <img src="../../shared/assets/images/icons/logo-seas-shield.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Hệ thống Học máy</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-read" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Read</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-read">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol1/"><i class="bi bi-journal" role="img">
+</i> 
+ <span class="dropdown-text">Volume I: Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol2/"><i class="bi bi-journal" role="img">
+</i> 
+ <span class="dropdown-text">Volume II: Scaling</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/tinytorch/"><i class="bi bi-fire" role="img">
+</i> 
+ <span class="dropdown-text">TinyTorch (Standalone Book)</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol1/assets/downloads/Machine-Learning-Systems-Vol1.pdf" target="_blank"><i class="bi bi-file-pdf" role="img">
+</i> 
+ <span class="dropdown-text">Volume I PDF</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol2/assets/downloads/Machine-Learning-Systems-Vol2.pdf" target="_blank"><i class="bi bi-file-pdf" role="img">
+</i> 
+ <span class="dropdown-text">Volume II PDF</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-build" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Build</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-build">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/labs/"><i class="bi bi-sliders" role="img">
+</i> 
+ <span class="dropdown-text">Labs</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/tinytorch/"><i class="bi bi-fire" role="img">
+</i> 
+ <span class="dropdown-text">TinyTorch</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/kits/"><i class="bi bi-cpu" role="img">
+</i> 
+ <span class="dropdown-text">Hardware Kits</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/mlsysim/"><i class="bi bi-calculator" role="img">
+</i> 
+ <span class="dropdown-text">MLSys·im</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-teach" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Teach</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-teach">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/online/ai-engineering-for-leaders/"><i class="bi bi-person-badge" role="img">
+</i> 
+ <span class="dropdown-text">AI Engineering for Leaders (HarvardX)</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/instructors/course-map.html"><i class="bi bi-signpost-split" role="img">
+</i> 
+ <span class="dropdown-text">CS249r Course Map</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/slides/"><i class="bi bi-easel" role="img">
+</i> 
+ <span class="dropdown-text">Lecture Slides</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/instructors/"><i class="bi bi-person-video3" role="img">
+</i> 
+ <span class="dropdown-text">Instructor Hub</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-prepare" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Prepare</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-prepare">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/"><i class="bi bi-mortarboard" role="img">
+</i> 
+ <span class="dropdown-text">StaffML</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/plans"><i class="bi bi-map" role="img">
+</i> 
+ <span class="dropdown-text">Study Plans</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/gauntlet"><i class="bi bi-lightning" role="img">
+</i> 
+ <span class="dropdown-text">Gauntlet Mode</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/downloads/StaffML-Paper.pdf" target="_blank"><i class="bi bi-file-pdf" role="img">
+</i> 
+ <span class="dropdown-text">StaffML Paper</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-connect" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Connect</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-connect">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/newsletter/"><i class="bi bi-envelope" role="img">
+</i> 
+ <span class="dropdown-text">Newsletter</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/community/"><i class="bi bi-globe" role="img">
+</i> 
+ <span class="dropdown-text">Global Network</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/community/events.html"><i class="bi bi-calendar-event" role="img">
+</i> 
+ <span class="dropdown-text">Workshops &amp; Events</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/community/partners.html"><i class="bi bi-people" role="img">
+</i> 
+ <span class="dropdown-text">Partners &amp; Sponsors</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">About</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/"><i class="bi bi-bullseye" role="img">
+</i> 
+ <span class="dropdown-text">Mission</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/#story"><i class="bi bi-book" role="img">
+</i> 
+ <span class="dropdown-text">Our Story</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/people.html"><i class="bi bi-person-lines-fill" role="img">
+</i> 
+ <span class="dropdown-text">People</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/contributors.html"><i class="bi bi-people" role="img">
+</i> 
+ <span class="dropdown-text">Contributors</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/license.html"><i class="bi bi-cc-circle" role="img">
+</i> 
+ <span class="dropdown-text">License</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://mlsysbook.ai/newsletter/"> <i class="bi bi-envelope" role="img">
+</i> 
+<span class="menu-text">Subscribe</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/harvard-edge/cs249r_book" target="_blank"> <i class="bi bi-star" role="img">
+</i> 
+<span class="menu-text">Star</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://opencollective.com/mlsysbook" target="_blank"> <i class="bi bi-heart" role="img">
+</i> 
+<span class="menu-text">Support</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-github" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text">GitHub</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-github">    
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book/discussions" target="_blank"><i class="bi bi-chat" role="img">
+</i> 
+ <span class="dropdown-text">Discussions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book" target="_blank"><i class="bi bi-pencil" role="img">
+</i> 
+ <span class="dropdown-text">Edit this page</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book/issues/new" target="_blank"><i class="bi bi-bug" role="img">
+</i> 
+ <span class="dropdown-text">Report an issue</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book" target="_blank"><i class="bi bi-code" role="img">
+</i> 
+ <span class="dropdown-text">View source</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../vol1/backmatter/appendix_dam.html">Phụ lục</a></li><li class="breadcrumb-item"><a href="../../vol1/backmatter/appendix_dam.html">Phân loại D·A·M</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+  <div id="quarto-announcement" data-announcement-id="8875f30de4d9fcea8405677bb0da1ab3" class="alert alert-primary hidden"><i class="bi bi-megaphone quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p>📘 <strong>Tập I: Nền tảng.</strong> Hệ thống ML trên một máy — dữ liệu, thuật toán và phần cứng.<br> 🚀 <strong>Cần mở rộng quy mô?</strong> <a href="https://mlsysbook.ai/vol2/">Tập II: Scaling</a> — huấn luyện phân tán, vận hành đội máy, triển khai có trách nhiệm.<br> 🛠️ <strong>Song hành cùng sách:</strong> <a href="https://mlsysbook.ai/tinytorch/">TinyTorch</a> (xây dựng) · <a href="https://mlsysbook.ai/kits/">Hardware Kits</a> (triển khai) · <a href="https://mlsysbook.ai/mlsysim/">MLSys·im</a> (mô hình hóa) · <a href="https://mlsysbook.ai/labs/">Labs</a> (khám phá) · <a href="https://mlsysbook.ai/staffml/">StaffML</a> (thực hành)<br> 📬 <strong>Bản tin:</strong> Thông tin &amp; cập nhật về ML Systems — <a href="https://mlsysbook.ai/newsletter/">Đăng ký →</a></p>
+</div><i class="bi bi-x-lg quarto-announcement-action"></i></div>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Trang chủ</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/frontmatter/dedication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời đề tặng</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/frontmatter/foreword.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời nói đầu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/frontmatter/author_note.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời tác giả</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/frontmatter/about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời nói đầu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/frontmatter/acknowledgements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời cảm ơn</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/frontmatter/ai_use.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Một lưu ý về hỗ trợ AI</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/frontmatter/notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ký hiệu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/frontmatter/socratiq/socratiq.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SocratiQ AI</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/01_introduction/01_introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Giới thiệu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../vol1/parts/foundations_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần I: Nền tảng</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/02_ml_systems/02_ml_systems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hệ thống ML</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/03_ml_workflow/03_ml_workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quy trình ML</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/04_data_engineering/04_data_engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kỹ thuật dữ liệu</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../vol1/parts/build_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần II: Phát triển</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/05_nn_computation/05_nn_computation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tính toán nơ-ron</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/06_nn_architectures/06_nn_architectures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kiến trúc mạng</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/07_frameworks/07_frameworks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Các Framework ML</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/08_training/08_training.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Huấn luyện mô hình</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../vol1/parts/optimize_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần III: Tối ưu</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/09_data_selection/09_data_selection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lựa chọn dữ liệu</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/10_model_compression/10_model_compression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nén mô hình</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/11_hw_acceleration/11_hw_acceleration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tăng tốc phần cứng</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/12_benchmarking/12_benchmarking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Benchmarking</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../vol1/parts/deploy_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần IV: Triển khai</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/13_model_serving/13_model_serving.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phục vụ mô hình</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/14_ml_ops/14_ml_ops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vận hành machine learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/15_responsible_engr/15_responsible_engr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kỹ thuật có trách nhiệm</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/16_conclusion/16_conclusion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kết luận</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/backmatter/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tài liệu tham khảo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Phụ lục</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/backmatter/appendix_dam.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Phân loại D·A·M</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/backmatter/appendix_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng dữ liệu</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/backmatter/appendix_algorithm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng thuật toán</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/backmatter/appendix_machine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng máy tính</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/backmatter/appendix_assumptions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Giả định hệ thống</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol1/backmatter/glossary/glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bảng thuật ngữ</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Trên trang này</h2>
+   
+  <ul>
+  <li><a href="#sec-appdx-dam-taxonomy" id="toc-sec-appdx-dam-taxonomy" class="nav-link active" data-scroll-target="#sec-appdx-dam-taxonomy">Khung phân loại D·A·M</a>
+  <ul>
+  <li><a href="#cách-sử-dụng-phụ-lục-này" id="toc-cách-sử-dụng-phụ-lục-này" class="nav-link" data-scroll-target="#cách-sử-dụng-phụ-lục-này">Cách sử dụng Phụ lục này</a></li>
+  <li><a href="#sec-appdx-dam-taxonomy-diagnostic-summary-9f73" id="toc-sec-appdx-dam-taxonomy-diagnostic-summary-9f73" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-diagnostic-summary-9f73">Tóm tắt chẩn đoán</a></li>
+  <li><a href="#sec-appdx-dam-taxonomy-intersection-landscape-0d6e" id="toc-sec-appdx-dam-taxonomy-intersection-landscape-0d6e" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-intersection-landscape-0d6e">Toàn cảnh các giao điểm</a></li>
+  <li><a href="#sec-appdx-dam-taxonomy-iron-law-mapping-05db" id="toc-sec-appdx-dam-taxonomy-iron-law-mapping-05db" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-iron-law-mapping-05db">Ánh xạ Định luật Sắt</a>
+  <ul class="collapse">
+  <li><a href="#sec-appdx-dam-taxonomy-component-levers-d441" id="toc-sec-appdx-dam-taxonomy-component-levers-d441" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-component-levers-d441">Các đòn bẩy thành phần</a></li>
+  <li><a href="#sec-appdx-dam-taxonomy-dam-coordination-sum-max-92bb" id="toc-sec-appdx-dam-taxonomy-dam-coordination-sum-max-92bb" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-dam-coordination-sum-max-92bb">Phối hợp D·A·M: Từ tổng đến tối đa</a></li>
+  </ul></li>
+  <li><a href="#sec-appdx-dam-taxonomy-arithmetic-intensity-boundary-7f5e" id="toc-sec-appdx-dam-taxonomy-arithmetic-intensity-boundary-7f5e" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-arithmetic-intensity-boundary-7f5e">Ranh giới cường độ số học</a></li>
+  <li><a href="#sec-appdx-dam-taxonomy-rules-thumb-f94f" id="toc-sec-appdx-dam-taxonomy-rules-thumb-f94f" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-rules-thumb-f94f">Nguyên tắc kinh nghiệm</a>
+  <ul class="collapse">
+  <li><a href="#sec-appdx-dam-taxonomy-bottleneck-diagnostic-3fc9" id="toc-sec-appdx-dam-taxonomy-bottleneck-diagnostic-3fc9" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-bottleneck-diagnostic-3fc9">Chẩn đoán nút thắt cổ chai</a></li>
+  </ul></li>
+  <li><a href="#sec-appdx-dam-taxonomy-antipatterns-72e1" id="toc-sec-appdx-dam-taxonomy-antipatterns-72e1" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-antipatterns-72e1">Phản mẫu</a></li>
+  <li><a href="#sec-appdx-dam-taxonomy-dam-case-studies-593f" id="toc-sec-appdx-dam-taxonomy-dam-case-studies-593f" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-dam-case-studies-593f">Các nghiên cứu điển hình D·A·M</a>
+  <ul class="collapse">
+  <li><a href="#sec-appdx-dam-taxonomy-case-1-starving-accelerator-data-9a56" id="toc-sec-appdx-dam-taxonomy-case-1-starving-accelerator-data-9a56" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-case-1-starving-accelerator-data-9a56">Trường hợp 1: Bộ tăng tốc bị đói (Dữ liệu)</a></li>
+  <li><a href="#sec-appdx-dam-taxonomy-case-2-latency-cliff-algorithm-8ee2" id="toc-sec-appdx-dam-taxonomy-case-2-latency-cliff-algorithm-8ee2" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-case-2-latency-cliff-algorithm-8ee2">Trường hợp 2: Vách đá độ trễ (đa trục)</a></li>
+  <li><a href="#sec-appdx-dam-taxonomy-case-3-compute-wall-machine-3a0a" id="toc-sec-appdx-dam-taxonomy-case-3-compute-wall-machine-3a0a" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-case-3-compute-wall-machine-3a0a">Trường hợp 3: Bức tường tính toán (Máy)</a></li>
+  </ul></li>
+  <li><a href="#sec-appdx-dam-taxonomy-production-troubleshooting-02fb" id="toc-sec-appdx-dam-taxonomy-production-troubleshooting-02fb" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-production-troubleshooting-02fb">Khắc phục sự cố sản xuất</a></li>
+  <li><a href="#sec-appdx-dam-taxonomy-tooling-map-e09b" id="toc-sec-appdx-dam-taxonomy-tooling-map-e09b" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-tooling-map-e09b">Bản đồ công cụ</a></li>
+  <li><a href="#sec-appdx-dam-taxonomy-dam-scorecard-94e9" id="toc-sec-appdx-dam-taxonomy-dam-scorecard-94e9" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-dam-scorecard-94e9">Thẻ điểm D·A·M</a></li>
+  <li><a href="#sec-appdx-dam-taxonomy-scaling-laws-vs-roofline-b290" id="toc-sec-appdx-dam-taxonomy-scaling-laws-vs-roofline-b290" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-scaling-laws-vs-roofline-b290">Các quy luật mở rộng so với Roofline</a>
+  <ul class="collapse">
+  <li><a href="#sec-appdx-dam-taxonomy-scaling-laws-journey-4085" id="toc-sec-appdx-dam-taxonomy-scaling-laws-journey-4085" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-scaling-laws-journey-4085">Các quy luật mở rộng (hành trình)</a></li>
+  <li><a href="#sec-appdx-dam-taxonomy-information-roofline-destination-6426" id="toc-sec-appdx-dam-taxonomy-information-roofline-destination-6426" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-information-roofline-destination-6426">Đường mái thông tin (điểm đến)</a></li>
+  </ul></li>
+  <li><a href="#sec-appdx-dam-taxonomy-summary-1521" id="toc-sec-appdx-dam-taxonomy-summary-1521" class="nav-link" data-scroll-target="#sec-appdx-dam-taxonomy-summary-1521">Tóm tắt</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../vol1/backmatter/appendix_dam.html">Phụ lục</a></li><li class="breadcrumb-item"><a href="../../vol1/backmatter/appendix_dam.html">Phân loại D·A·M</a></li></ol></nav></header>
+
+
+
+
+
+<section id="sec-appdx-dam-taxonomy" class="level1 page-columns page-full" data-dropcap="chapter-opening">
+<h1 data-dropcap="chapter-opening">Khung phân loại D·A·M</h1>
+<p>Một hệ thống chạy chậm hiếm khi tự nói vì sao. Một bộ tăng tốc nhàn rỗi có thể bắt nguồn từ pipeline đầu vào thiếu dữ liệu (Data), một thuật toán có cường độ số học quá thấp (Algorithm), hoặc bus bộ nhớ bị bão hòa (Machine). Phụ lục này hệ thống hóa khung phân loại chẩn đoán cho nút đơn của cuốn sách, ánh xạ trực tiếp các triệu chứng và phép đo từ profiler vào trục thật sự đang kìm hãm việc thực thi trước khi bắt đầu tối ưu hóa. Độc giả nên mang theo ba trục từ các chương mở đầu và định luật sắt dùng để định lượng chúng.</p>
+<section id="cách-sử-dụng-phụ-lục-này" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="cách-sử-dụng-phụ-lục-này">Cách sử dụng Phụ lục này</h2>
+<p>Hãy sử dụng khung phân loại D·A·M khi một hệ thống không đạt được mục tiêu về hiệu suất, chi phí hoặc chất lượng mà nguyên nhân chưa rõ ràng. Hãy áp dụng framework này theo bốn bước sau:</p>
+<ol type="1">
+<li><strong>Nêu triệu chứng và ngân sách vận hành</strong>: Ghi lại mục tiêu end-to-end bị lỡ, khối lượng công việc (workload) và ngữ cảnh triển khai.</li>
+<li><strong>Xác định trục hoặc ranh giới tiềm năng</strong>: Sử dụng <a href="#tbl-dam-components-ref" class="quarto-xref">table&nbsp;1</a> cho bước phân tích ban đầu và <a href="#tbl-dam-intersections" class="quarto-xref">table&nbsp;2</a> khi bằng chứng cắt qua nhiều trục.</li>
+<li><strong>Kiểm tra giả thuyết</strong>: Ánh xạ các bằng chứng vào định luật sắt và cường độ số học, sau đó thu thập các phép đo xác nhận với <a href="#tbl-dam-tooling" class="quarto-xref">table&nbsp;6</a> và <a href="#tbl-dam-scorecard" class="quarto-xref">table&nbsp;7</a>.</li>
+<li><strong>Can thiệp và đo lường lại</strong>: Chọn một giải pháp từ <a href="#tbl-bottleneck-actions" class="quarto-xref">table&nbsp;4</a> và lặp lại phép đo tổng thể. Nếu mục tiêu không cải thiện, hãy điều chỉnh giả thuyết.</li>
+</ol>
+<p>Triệu chứng sẽ xác định điểm khởi đầu hữu ích nhất. Mức sử dụng bộ tăng tốc thấp hoặc giao batch chậm nên bắt đầu với <a href="#sec-appdx-dam-taxonomy-rules-thumb-f94f" class="quarto-xref">section&nbsp;1.5</a> và <a href="#sec-appdx-dam-taxonomy-production-troubleshooting-02fb" class="quarto-xref">section&nbsp;1.8</a>. Một mục tiêu mức dịch vụ (SLO) bị lỡ nên chuyển từ thời gian các pha và độ sâu hàng đợi trong <a href="#tbl-dam-troubleshooting" class="quarto-xref">table&nbsp;5</a> sang hạng mục tương ứng trong định luật sắt. Khi chất lượng chững lại, hãy kiểm tra ranh giới Data/Algorithm và <a href="#sec-appdx-dam-taxonomy-scaling-laws-vs-roofline-b290" class="quarto-xref">section&nbsp;1.11</a> trước khi cấp thêm tài nguyên tính toán. Trong mọi trường hợp, nhãn trục là một giả thuyết, không phải kết luận: các trục chồng lấn, và một chẩn đoán hữu ích có thể nêu cả trục chi phối lẫn hiệu ứng ở ranh giới.</p>
+</section>
+<section id="sec-appdx-dam-taxonomy-diagnostic-summary-9f73" class="level2">
+<h2 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-diagnostic-summary-9f73">Tóm tắt chẩn đoán</h2>
+<p>Khung phân loại này ánh xạ trực tiếp đến định luật sắt của các hệ thống ML đã được thiết lập trong <strong><a href="../01_introduction/01_introduction.html#sec-introduction-iron-law-ml-systems-c32a">Định luật sắt của hệ thống ML</a></strong>. <a href="#tbl-dam-components-ref" class="quarto-xref">Table&nbsp;1</a> tóm tắt vai trò, ràng buộc vật lý chính và lộ trình tối ưu hóa cốt lõi cho mỗi trục.</p>
+<div id="tbl-dam-components-ref" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[13,23,30,34]">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-dam-components-ref-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: <strong>Tham khảo Trục D·A·M</strong>: Mỗi trục tương ứng với một loại ràng buộc và một chiến lược tối ưu hóa. Bạn hãy đưa ra giả thuyết, kiểm chứng bằng các phép đo, rồi xem chương tương ứng.
+</figcaption>
+<div aria-describedby="tbl-dam-components-ref-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 23%">
+<col style="width: 30%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Trục</strong></th>
+<th style="text-align: center;"><strong>Vai trò</strong></th>
+<th style="text-align: center;"><strong>Ràng buộc vật lý</strong></th>
+<th style="text-align: left;"><strong>Tối ưu hóa đòn bẩy cao</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Dữ liệu (D)</strong></td>
+<td style="text-align: center;">Thông tin (Nhiên liệu)</td>
+<td style="text-align: center;">Khối lượng, chất lượng, tốc độ đến</td>
+<td style="text-align: left;">Lựa chọn dữ liệu (<strong><a href="../09_data_selection/09_data_selection.html#sec-data-selection">Lựa chọn dữ liệu</a></strong>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Thuật toán (A)</strong></td>
+<td style="text-align: center;">Logic (Bản thiết kế)</td>
+<td style="text-align: center;">Các hoạt động và sự phụ thuộc</td>
+<td style="text-align: left;">Nén mô hình (<strong><a href="../10_model_compression/10_model_compression.html#sec-model-compression">Nén mô hình</a></strong>)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Máy (M)</strong></td>
+<td style="text-align: center;">Vật lý (Động cơ)</td>
+<td style="text-align: center;">Tính toán, bộ nhớ, I/O</td>
+<td style="text-align: left;">Tăng tốc phần cứng (<strong><a href="../11_hw_acceleration/11_hw_acceleration.html#sec-hardware-acceleration">Tăng tốc phần cứng</a></strong>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Việc phân tách ban đầu này rất hữu ích, nhưng các hệ thống sản xuất hiếm khi gặp nút thắt cổ chai chỉ do một trục gây ra. Thường thì, vấn đề nằm ở <em>ranh giới</em> giữa hai trục—chẳng hạn như lựa chọn định dạng dữ liệu quyết định liệu GPU có thể được sử dụng hết công suất hay không, hoặc một chiến lược tỉa (pruning) làm thay đổi cách truy cập bộ nhớ. Để xử lý các trường hợp này, chúng ta cần ánh xạ các giao điểm.</p>
+</section>
+<section id="sec-appdx-dam-taxonomy-intersection-landscape-0d6e" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-intersection-landscape-0d6e">Toàn cảnh các giao điểm</h2>
+<p>Chương mở đầu sử dụng <strong><a href="../01_introduction/01_introduction.html#fig-ai-triad">Bức tranh giao thoa D·A·M</a></strong> để phác thảo bức tranh khái niệm. Ở đây, <a href="#fig-dam-axis-triad" class="quarto-xref">figure&nbsp;1</a> biến bản đồ đó thành một quy trình chẩn đoán. Đầu tiên, hãy xác định trục gây ràng buộc, sau đó xem xét một sự can thiệp vào trục đó sẽ làm thay đổi hai trục còn lại như thế nào.</p>
+<div id="fig-dam-axis-triad" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="htb" alt="Hình tam giác với các vòng tròn tại các đỉnh được dán nhãn Thuật toán ở trên cùng, Dữ liệu ở phía dưới bên trái và Máy móc ở phía dưới bên phải. Các mũi tên màu tím hai đầu nối cả ba, thể hiện sự phụ thuộc hai chiều. Các biểu tượng mô tả một mạng nơ-ron, các hình trụ cơ sở dữ liệu và một máy chủ đám mây." data-fig-env="figure">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dam-axis-triad-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="7507e3393c80210e76a90f5a17845152cae0c40c.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Bộ ba Trục D·A·M: Một góc nhìn chẩn đoán súc tích về Dữ liệu, Thuật toán và Máy móc dưới dạng ba trục phụ thuộc lẫn nhau. Các liên kết hai chiều nhấn mạnh rằng một sự can thiệp vào một trục sẽ thay đổi các ràng buộc trên hai trục còn lại."><img src="appendix_dam_files/mediabag/7507e3393c80210e76a90f5a17845152cae0c40c.svg" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dam-axis-triad-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: <strong>Bộ ba Trục D·A·M</strong>: Một góc nhìn chẩn đoán súc tích về Dữ liệu, Thuật toán và Máy móc dưới dạng ba trục phụ thuộc lẫn nhau. Các liên kết hai chiều nhấn mạnh rằng một sự can thiệp vào một trục sẽ thay đổi các ràng buộc trên hai trục còn lại.
+</figcaption>
+</figure>
+</div>
+<p>Sau khi đã xác định được trục chính ban đầu, <a href="#tbl-dam-intersections" class="quarto-xref">table&nbsp;2</a> mở rộng các giao điểm từng cặp và giao điểm ba chiều thành các kỹ thuật cụ thể cùng các chương sách liên quan.</p>
+<div id="tbl-dam-intersections" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[17,25,37,21]">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-dam-intersections-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: <strong>Tham chiếu Giao điểm D·A·M</strong>: Mỗi vùng ánh xạ các kỹ thuật cụ thể đến các trục mà chúng bao phủ và các chương đề cập đến chúng. Các giao điểm từng cặp đòi hỏi phải suy luận về hai miền đồng thời; phần trung tâm đòi hỏi cả ba.
+</figcaption>
+<div aria-describedby="tbl-dam-intersections-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 25%">
+<col style="width: 37%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Vùng</strong></th>
+<th style="text-align: left;"><strong>Tên</strong></th>
+<th style="text-align: left;"><strong>Các kỹ thuật chính</strong></th>
+<th style="text-align: left;"><strong>Nội dung sách</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Dữ liệu</strong></td>
+<td style="text-align: left;">Thông tin</td>
+<td style="text-align: left;">Định dạng lưu trữ, chất lượng dữ liệu, phân phối</td>
+<td style="text-align: left;"><strong><a href="../04_data_engineering/04_data_engineering.html#sec-data-engineering">Kỹ thuật dữ liệu</a></strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Thuật toán</strong></td>
+<td style="text-align: left;">Logic</td>
+<td style="text-align: left;">Các hàm mất mát, kiến trúc, gradient</td>
+<td style="text-align: left;"><strong><a href="../05_nn_computation/05_nn_computation.html#sec-neural-computation">Tính toán nơ-ron</a></strong>, <strong><a href="../06_nn_architectures/06_nn_architectures.html#sec-network-architectures">Kiến trúc mạng</a></strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Dữ liệu <span class="math inline">\(\cap\)</span> Thuật toán</strong></td>
+<td style="text-align: left;">Học từ đâu</td>
+<td style="text-align: left;">Lựa chọn dữ liệu, học tập theo chương trình, mở rộng tối ưu tính toán</td>
+<td style="text-align: left;"><strong><a href="../09_data_selection/09_data_selection.html#sec-data-selection">Lựa chọn dữ liệu</a></strong>, <strong><a href="../08_training/08_training.html#sec-model-training">Huấn luyện mô hình</a></strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Dữ liệu <span class="math inline">\(\cap\)</span> Máy</strong></td>
+<td style="text-align: left;">Cách di chuyển thông tin</td>
+<td style="text-align: left;">Băng thông I/O, tìm nạp trước, định dạng dữ liệu</td>
+<td style="text-align: left;"><strong><a href="../04_data_engineering/04_data_engineering.html#sec-data-engineering">Kỹ thuật dữ liệu</a></strong>, <strong><a href="../11_hw_acceleration/11_hw_acceleration.html#sec-hardware-acceleration">Tăng tốc phần cứng</a></strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Thuật toán <span class="math inline">\(\cap\)</span> Máy</strong></td>
+<td style="text-align: left;">Cách thực thi hiệu quả</td>
+<td style="text-align: left;">Lượng tử hoá, tỉa (pruning), hợp nhất kernel, độ chính xác hỗn hợp</td>
+<td style="text-align: left;"><strong><a href="../07_frameworks/07_frameworks.html#sec-ml-frameworks">Các Framework ML</a></strong>, <strong><a href="../10_model_compression/10_model_compression.html#sec-model-compression">Nén mô hình</a></strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Máy</strong></td>
+<td style="text-align: left;">Vật lý</td>
+<td style="text-align: left;">Silicon, hệ thống phân cấp bộ nhớ, FLOP/s đỉnh</td>
+<td style="text-align: left;"><strong><a href="../11_hw_acceleration/11_hw_acceleration.html#sec-hardware-acceleration">Tăng tốc phần cứng</a></strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Dữ liệu <span class="math inline">\(\cap\)</span> Thuật toán <span class="math inline">\(\cap\)</span> Máy</strong></td>
+<td style="text-align: left;">Kỹ thuật Hệ thống ML</td>
+<td style="text-align: left;">Iron law, Roofline, các vòng lặp huấn luyện, phục vụ (serving)</td>
+<td style="text-align: left;"><strong><a href="../08_training/08_training.html#sec-model-training">Huấn luyện mô hình</a></strong>, <strong><a href="../13_model_serving/13_model_serving.html#sec-model-serving">Phục vụ mô hình</a></strong>, <strong><a href="../12_benchmarking/12_benchmarking.html#sec-benchmarking">Benchmarking</a></strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Trong từ viết tắt D·A·M, Dữ liệu, Thuật toán và Máy móc là các trục phân loại. Chúng không phải là các biến toán học; các đại lượng hình thức vẫn tuân theo chương ký hiệu, trong đó <span class="math inline">\(D\)</span> biểu thị kích thước tập dữ liệu hoặc các token huấn luyện.</p>
+<p>Các vùng tập trung vào trục chứa các khái niệm chủ yếu thuộc về một trục: ví dụ, định dạng lưu trữ và phân phối nhấn mạnh Dữ liệu; các hàm mất mát và gradient nhấn mạnh Thuật toán; còn vật lý silicon và FLOP/s đỉnh nhấn mạnh Máy móc. Chuyên môn một miền có thể giới thiệu chúng, nhưng hành vi khi triển khai vẫn có thể phụ thuộc vào các trục khác.</p>
+<p>Các giao điểm đôi một là nơi tư duy hệ thống bắt đầu. <span class="math inline">\(\mathsf{Data} \cap \mathsf{Algorithm}\)</span> (<em>Học từ gì</em>) bao gồm việc chọn dữ liệu, học theo chương trình (curriculum learning), học tích cực (active learning) và các quy luật mở rộng quy mô như Chinchilla (<span class="math inline">\(D \approx 20P\)</span> cho chế độ mô hình ngôn ngữ tự hồi quy dày đặc được nghiên cứu) <span class="citation" data-cites="hoffmann2022chinchilla">(<a href="#ref-hoffmann2022chinchilla" role="doc-biblioref">Hoffmann et al. 2022</a>)</span>. Tất cả những điều này đều đòi hỏi suy luận đồng thời về nội dung thông tin và năng lực thuật toán. Thêm dữ liệu mà không xét xem mô hình có học được từ đó hay không sẽ lãng phí tài nguyên tính toán; chọn kiến trúc mà không tính đến dữ liệu sẵn có sẽ lãng phí thời gian kỹ thuật. <span class="math inline">\(\mathsf{Data} \cap \mathsf{Machine}\)</span> (<em>Cách di chuyển thông tin</em>) bao quát băng thông I/O, các chiến lược tìm nạp trước (prefetching), định dạng dữ liệu và bất biến di chuyển năng lượng. Ở giao điểm này, “trọng lực dữ liệu” bộc lộ rõ: chi phí vật lý để di chuyển các byte qua hệ thống phân cấp bộ nhớ quyết định liệu máy có được cấp dữ liệu đủ nhanh hay không. <span class="math inline">\(\mathsf{Algorithm} \cap \mathsf{Machine}\)</span> (<em>Cách thực thi hiệu quả</em>) trải từ lượng tử hoá, tỉa (pruning), hợp nhất kernel, độ chính xác hỗn hợp đến tối ưu hóa đồ thị tính toán. Một chiến lược tỉa (pruning) làm giảm FLOPs nhưng phá vỡ mẫu truy cập bộ nhớ có thể <em>làm chậm</em> việc thực thi trên phần cứng thực.</p>
+<div class="no-row-height column-margin column-container"></div><p>Trung tâm—<span class="math inline">\(\mathsf{Data} \cap \mathsf{Algorithm} \cap \mathsf{Machine}\)</span>—là điểm hội tụ của cả ba trục. Định luật sắt, Mô hình Roofline, các vòng lặp huấn luyện end-to-end, các pipeline phục vụ (serving) và benchmark toàn diện đều đòi hỏi suy luận đồng thời về luồng dữ liệu, độ phức tạp thuật toán và mức độ sử dụng phần cứng. Trung tâm này không phải là một kỹ thuật đơn lẻ; nó chính là bản thân lĩnh vực này.</p>
+<p>Hiểu bức tranh tổng thể cho thấy <em>một kỹ thuật nằm ở đâu</em>. Bước tiếp theo là định lượng xem <em>trục nào chiếm ưu thế</em> với một khối lượng công việc (workload) cụ thể—và điều đó đòi hỏi định luật sắt.</p>
+</section>
+<section id="sec-appdx-dam-taxonomy-iron-law-mapping-05db" class="level2">
+<h2 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-iron-law-mapping-05db">Ánh xạ Định luật Sắt</h2>
+<p>Với các pha tuần tự, định luật sắt ánh xạ khối lượng công việc trên các trục D·A·M sang thời gian thực thi. Ở đây, <span class="math inline">\(T\)</span> và <span class="math inline">\(L_{\text{lat}}\)</span> là thời gian (tính bằng giây); <span class="math inline">\(D_{\text{vol}}\)</span> là số byte đã di chuyển và <span class="math inline">\(\text{BW}\)</span> là băng thông (số byte mỗi giây); <span class="math inline">\(O\)</span> là khối lượng công việc tính bằng FLOPs, <span class="math inline">\(R_{\text{peak}}\)</span> là FLOP/s, và <span class="math inline">\(\eta_{\text{hw}}\)</span> là hiệu suất phần cứng không thứ nguyên. Các đại lượng này được ánh xạ tới các trục như sau: <span class="math display">\[ T = \underbrace{ \frac{D_{\text{vol}}}{\text{BW}} }_{\text{Data/Machine}} + \underbrace{ \frac{O}{R_{\text{peak}} \cdot \eta_{\text{hw}}} }_{\text{Algorithm/Machine}} + \underbrace{ L_{\text{lat}} }_{\text{Cross-axis overhead}} \]</span></p>
+<p>Thuật toán và Máy đều liên quan đến khía cạnh tính toán, nhưng khác nhau ở biến số mà kỹ sư có thể kiểm soát. Giảm tổng số phép toán (<span class="math inline">\(O\)</span>) là đòn bẩy thuộc về Thuật toán, còn cải thiện thông lượng đỉnh của phần cứng (<span class="math inline">\(R_{\text{peak}}\)</span>) hoặc hệ số sử dụng (<span class="math inline">\(\eta_{\text{hw}}\)</span>) là đòn bẩy thuộc về Máy.</p>
+<p>Phương trình này biến việc gỡ lỗi hiệu suất từ một trò đoán mò định tính thành một bài toán kỹ thuật định lượng. Khoản chi phí lớn nhất đo được sẽ xuất hiện trong một trong các hạng mục này. Một hệ thống chậm có thể do di chuyển quá nhiều dữ liệu (<span class="math inline">\(D_{\text{vol}}\)</span>), thiếu băng thông (<span class="math inline">\(\text{BW}\)</span>), thực hiện quá nhiều phép toán (<span class="math inline">\(O\)</span>), không tận dụng được khả năng đỉnh của phần cứng (<span class="math inline">\(\eta_{\text{hw}}\)</span>), hoặc chịu chi phí chéo trục (<span class="math inline">\(L_{\text{lat}}\)</span>). Các đòn bẩy dưới đây liên hệ những tối ưu hoá cụ thể với các biến số mà chúng cải thiện.</p>
+<section id="sec-appdx-dam-taxonomy-component-levers-d441" class="level3">
+<h3 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-component-levers-d441">Các đòn bẩy thành phần</h3>
+<ul>
+<li>Đòn bẩy Dữ liệu: Giảm số byte được di chuyển (<span class="math inline">\(D_{\text{vol}}\)</span>) thông qua loại bỏ trùng lặp, lựa chọn, hoặc dùng biểu diễn độ chính xác thấp hơn, hoặc tăng băng thông I/O (<span class="math inline">\(\text{BW}\)</span>).</li>
+<li>Đòn bẩy Thuật toán: Giảm số phép toán (<span class="math inline">\(O\)</span>) thông qua tỉa (pruning) hoặc tinh chỉnh kiến trúc. Lượng tử hoá thu hẹp biểu diễn và có thể tăng thông lượng phần cứng; nói chung nó không làm giảm số lượng phép toán.</li>
+<li>Đòn bẩy Máy: Tăng mẫu số của thành phần tính toán bằng cách cải thiện thông lượng đỉnh (<span class="math inline">\(R_{\text{peak}}\)</span>) hoặc tăng hệ số sử dụng (<span class="math inline">\(\eta_{\text{hw}}\)</span>) thông qua hợp nhất kernel.</li>
+</ul>
+</section>
+<section id="sec-appdx-dam-taxonomy-dam-coordination-sum-max-92bb" class="level3">
+<h3 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-dam-coordination-sum-max-92bb">Phối hợp D·A·M: Từ tổng đến tối đa</h3>
+<p>Định luật sắt cộng tính biểu diễn thực thi tuần tự. Gọi <span class="math inline">\(T_{\text{sequential}}\)</span> là thời gian không có chồng chéo và <span class="math inline">\(T_{\text{pipelined}}\)</span> là thời gian đo được có chồng chéo. Sự chồng chéo có thể đưa tổng thời gian tiến gần đến giá trị lớn nhất, nhưng các phụ thuộc, tranh chấp và chồng chéo không hoàn chỉnh khiến thời gian đo được vẫn cao hơn giới hạn dưới lý tưởng này: <span class="math display">\[ T_{\text{sequential}} = \frac{D_{\text{vol}}}{\text{BW}} + \frac{O}{R_{\text{peak}} \cdot \eta_{\text{hw}}} + L_{\text{lat}} \quad \xrightarrow{\text{overlap}} \quad T_{\text{pipelined}} \geq \max\left(\frac{D_{\text{vol}}}{\text{BW}}, \frac{O}{R_{\text{peak}} \cdot \eta_{\text{hw}}}\right) + L_{\text{lat}} \]</span></p>
+<p>Nhiệm vụ của kỹ sư hệ thống là làm cho các thành phần này chạy song song, không phải nối tiếp. <a href="#tbl-dam-overlap" class="quarto-xref">Table&nbsp;3</a> tóm tắt các kỹ thuật phối hợp D·A·M chính giúp chồng chéo công việc trên các trục:</p>
+<div id="tbl-dam-overlap" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[19,27,54]">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-dam-overlap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: <strong>Các Kỹ thuật Chồng chéo D·A·M</strong>: Mỗi kỹ thuật giúp chồng chéo công việc trên các trục, đưa thời gian Dữ liệu/Máy và Thuật toán/Máy (vốn được cộng tuần tự) tiến gần hơn đến giới hạn dưới lý tưởng của chúng: tức là giá trị lớn hơn trong hai hạng mục. Các phụ thuộc và tranh chấp sẽ giới hạn mức độ chồng chéo thực tế đạt được.
+</figcaption>
+<div aria-describedby="tbl-dam-overlap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 27%">
+<col style="width: 54%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Kỹ thuật</strong></th>
+<th style="text-align: left;"><strong>Các Trục D·A·M Chồng Chéo</strong></th>
+<th style="text-align: left;"><strong>Triển khai</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Tìm nạp trước</strong></td>
+<td style="text-align: left;">D chồng chéo M</td>
+<td style="text-align: left;">DataLoader với <code>prefetch_factor</code>, <code>pin_memory=True</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>CUDA Streams</strong></td>
+<td style="text-align: left;">D chồng chéo M</td>
+<td style="text-align: left;">Tách biệt các luồng cho truyền H2D và tính toán</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Đồng bộ Gradient Bất đồng bộ</strong></td>
+<td style="text-align: left;">M (truyền thông) chồng chéo A</td>
+<td style="text-align: left;">Chồng chéo AllReduce theo nhóm với tính toán lan truyền ngược còn lại</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Double Buffering</strong></td>
+<td style="text-align: left;">D chồng chéo M</td>
+<td style="text-align: left;">Điền bộ đệm N+1 trong khi tính toán trên bộ đệm N</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Việc chồng chéo mang lại tăng tốc lớn nhất khi các thành phần thời gian D·A·M tương đối cân bằng. Nếu một thành phần lấn át (ví dụ bị giới hạn nặng bởi bộ nhớ), chồng chéo phần nhỏ hơn với phần lớn hơn hầu như không giúp gì—giới hạn tối đa vẫn bị chi phối bởi đúng nút thắt cổ chai đó. Sự cân bằng này xuất hiện khi <span class="math inline">\(D_{\text{vol}}/\text{BW} \approx O/(R_{\text{peak}} \cdot \eta_{\text{hw}})\)</span>. Thành phần độ trễ cần được xử lý riêng.</p>
+<div id="psp-appendix-dam-overhead-cannot-hide" class="callout callout-perspective" title="Overhead không thể ẩn">
+<p></p><details class="callout-perspective fbx-simplebox fbx-default" open=""><summary><strong>Systems Perspective 1.1: Overhead không thể ẩn</strong></summary><div>Thành phần độ trễ không thể ẩn <span class="math inline">\(L_{\text{lat}}\)</span> (khởi chạy kernel, rào cản đồng bộ, điều phối Python) chứa các điểm tuần tự hóa không thể chồng chéo hoàn toàn. Hợp nhất kernel có thể giảm thành phần này bằng cách gộp các phép toán, nhưng không thể loại bỏ hết overhead khởi chạy, lập lịch hay đồng bộ.<p></p>
+</div></details>
+</div>
+<p>Định luật sắt cho kỹ sư biết <em>mỗi thành phần mất bao nhiêu</em> thời gian. Còn một câu hỏi then chốt: trần hiệu năng do di chuyển dữ liệu hay do thông lượng tính toán quyết định? Câu trả lời nằm ở một tỉ lệ duy nhất.</p>
+</section>
+</section>
+<section id="sec-appdx-dam-taxonomy-arithmetic-intensity-boundary-7f5e" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-arithmetic-intensity-boundary-7f5e">Ranh giới cường độ số học</h2>
+<p>Ranh giới giữa thành phần bộ nhớ <em>Dữ liệu/Máy</em> và thành phần tính toán <em>Thuật toán/Máy</em> không phải tùy tiện; nó được xác định một cách toán học bởi cường độ số học<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> (<span class="math inline">\(I\)</span>) của khối lượng công việc (workload).</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;<strong>Cường độ số học</strong>: Trong cuốn sách này, thuật ngữ này được dùng để chỉ số phép toán dấu phẩy động trên mỗi byte dữ liệu truyền đi. <span class="citation" data-cites="williams2009">Williams et al. (<a href="#ref-williams2009" role="doc-biblioref">2009</a>)</span> gọi đại lượng DRAM đo được là <em>cường độ hoạt động</em> trong Mô hình Roofline. So sánh tỉ lệ của khối lượng công việc với điểm đỉnh phần cứng (<span class="math inline">\(R_{\text{peak}}/\text{BW}\)</span>) cho phép chẩn đoán ở mức giới hạn trên việc thực thi đang bị giới hạn bởi bộ nhớ hay bởi tính toán.</p><div id="ref-williams2009" class="csl-entry" role="listitem">
+Williams, Samuel, Andrew Waterman, and David Patterson. 2009. <span>“Roofline: An Insightful Visual Performance Model for Multicore Architectures.”</span> <em>Communications of the ACM</em> 52 (4): 65–76. https://doi.org/10.1145/1498765.1498785.
+</div></div></div><p>Mô hình Roofline cung cấp một giới hạn hiệu suất tối đa khi lưu lượng và tốc độ đạt được được đo nhất quán. Trong lúc xử lý sự cố sản xuất, các heuristic sàng lọc nhanh có thể chỉ ra những phép đo cần thu thập tiếp theo.</p>
+</section>
+<section id="sec-appdx-dam-taxonomy-rules-thumb-f94f" class="level2">
+<h2 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-rules-thumb-f94f">Nguyên tắc kinh nghiệm</h2>
+<p>Giữa một sự cố sản xuất, hiếm khi có thời gian để giải trọn vẹn phương trình định luật sắt. Các kỹ sư hệ thống dày dạn thường dựa vào các heuristic định lượng để nhanh chóng thu hẹp không gian tìm kiếm; các ngưỡng dưới đây là tín hiệu sàng lọc cần được đối chiếu với dấu vết từ profiler và bộ đếm phần cứng.</p>
+<ul>
+<li>Mức sử dụng bộ tăng tốc thấp (&lt; 80%): Rà soát nguy cơ thiếu dữ liệu, thiếu CPU hoặc thiếu nguồn cho khởi chạy. Xác nhận bằng các chỉ số: thời gian chờ của pipeline đầu vào, mức bão hòa CPU máy chủ, bộ đếm băng thông bộ nhớ, và các khoảng trống trong trace.</li>
+<li>Mức sử dụng bộ tăng tốc cao (&gt; 95%): Chỉ coi đây là bị giới hạn bởi Máy (machine bound) khi các đơn vị tính toán luôn bận và băng thông bộ nhớ chưa bão hòa. Nếu băng thông bộ nhớ đã bão hòa, nút thắt vẫn ở ranh giới Dữ liệu/Máy.</li>
+<li>Nếu kích thước batch là 1: Xem đây là cảnh báo rằng độ trễ hoặc chi phí khởi chạy có thể quan trọng; hãy xác nhận bằng trace trước khi gán nhãn bản thân thuật toán là nút thắt cổ chai.</li>
+<li>Cường độ tính toán thấp (dưới ngưỡng ridge của phần cứng): Khối lượng công việc (workload) nhiều khả năng bị giới hạn bởi bộ nhớ (ranh giới Dữ liệu/Máy). Ranh giới chính xác là <span class="math inline">\(R_{\text{peak}}/\text{BW}\)</span> và phụ thuộc vào phần cứng và độ chính xác.</li>
+<li>Nếu hệ thống chạy ổn ở dev nhưng hỏng ở prod: Xem trôi dữ liệu (data drift) là một giả thuyết, bên cạnh khác biệt về cấu hình, tải, phụ thuộc và runtime.</li>
+</ul>
+<p>Các nhãn phổ biến trong ngành có thể cắt ngang các trục. Thực thi bị giới hạn bởi bộ nhớ (memory-bound execution) nằm trên ranh giới Dữ liệu/Máy vì cả số byte di chuyển và băng thông khả dụng đều quan trọng. Thực thi bị giới hạn bởi tính toán (compute-bound execution) gắn công việc của Thuật toán với thông lượng của Máy. Thực thi bị giới hạn bởi độ trễ (latency-bound execution) có thể phản ánh độ sâu tuần tự của thuật toán, điều phối runtime, đồng bộ hóa, hoặc xếp hàng.</p>
+<section id="sec-appdx-dam-taxonomy-bottleneck-diagnostic-3fc9" class="level3">
+<h3 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-bottleneck-diagnostic-3fc9">Chẩn đoán nút thắt cổ chai</h3>
+<p>Khi profiling đã xác định được thành phần chi phối trong “định luật sắt”, các tối ưu hóa phải nhắm đúng vào trục đó. <a href="#tbl-bottleneck-actions" class="quarto-xref">Table&nbsp;4</a> đối chiếu các can thiệp đem lại tăng tốc end-to-end với những tối ưu hóa không ràng buộc, gây lãng phí công sức kỹ thuật:</p>
+<div id="tbl-bottleneck-actions" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[19,17,32,32]">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-bottleneck-actions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4: <strong>Điều gì hiệu quả và Điều gì lãng phí</strong>: Tối ưu hóa một yếu tố không phải nút thắt cổ chai sẽ đem lại rất ít hoặc không cải thiện được end-to-end. Ví dụ, một mô hình ngôn ngữ lớn bị giới hạn bởi bộ nhớ sẽ không được lợi nhiều chỉ từ việc tăng thêm FLOP/s đỉnh, dù một bộ tăng tốc có băng thông bộ nhớ lớn hơn có thể giúp.
+</figcaption>
+<div aria-describedby="tbl-bottleneck-actions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 17%">
+<col style="width: 32%">
+<col style="width: 32%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Nếu khối lượng công việc (workload) là…</strong></th>
+<th style="text-align: center;"><strong>Thành phần Chi phối</strong></th>
+<th style="text-align: left;"><strong>Tối ưu hóa Hiệu quả</strong></th>
+<th style="text-align: left;"><strong>Tối ưu hóa Lãng phí</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Giới hạn bởi Bộ nhớ</strong></td>
+<td style="text-align: center;"><span class="math inline">\(D_{\text{vol}}/\text{BW}\)</span></td>
+<td style="text-align: left;">Lượng tử hoá; tỉa (pruning) có cấu trúc; gom batch để tái sử dụng trọng số; hợp nhất loại bỏ lưu lượng trung gian</td>
+<td style="text-align: left;">Bộ tăng tốc nhanh hơn (nhiều FLOP/s hơn sẽ không giúp ích)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Giới hạn bởi Tính toán</strong></td>
+<td style="text-align: center;"><span class="math inline">\(O/(R_{\text{peak}} \cdot \eta_{\text{hw}})\)</span></td>
+<td style="text-align: left;">Kernel tốt hơn, Tensor Cores, bộ tăng tốc nhanh hơn, độ chính xác thấp hơn</td>
+<td style="text-align: left;">Băng thông bộ nhớ nhiều hơn (không phải thành phần ràng buộc)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Giới hạn bởi Độ trễ</strong></td>
+<td style="text-align: center;"><span class="math inline">\(L_{\text{lat}}\)</span></td>
+<td style="text-align: left;">Giảm độ sâu tuần tự; hợp nhất hoặc điều phối bất đồng bộ; gom batch trong giới hạn ngân sách</td>
+<td style="text-align: left;">Tính toán hoặc băng thông nhiều hơn trừ khi dấu vết cho thấy nó là ràng buộc</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Biết điều gì hiệu quả cũng đồng nghĩa với việc nhận ra điều gì không hiệu quả. Trên thực tế, các nhóm làm việc dưới áp lực thời hạn thường lặp lại cùng một cái bẫy—tự tin tối ưu hóa nhầm trục. Những kiểu lỗi này phổ biến đến mức xứng đáng có tên gọi riêng.</p>
+</section>
+</section>
+<section id="sec-appdx-dam-taxonomy-antipatterns-72e1" class="level2">
+<h2 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-antipatterns-72e1">Phản mẫu</h2>
+<p>Chẩn đoán hệ thống thường là một quá trình loại trừ. Trước khi lao vào các tối ưu hóa kernel phức tạp, hãy để ý những cái bẫy phổ biến sau có thể khiến công sức kỹ thuật bị lãng phí.</p>
+<ul>
+<li>Cậy phần cứng: Mua bộ tăng tốc (<em>Machine</em>) nhanh hơn để chữa trình tải dữ liệu Python (<em>Data</em>) chậm. Phần cứng mới sẽ chỉ… nhàn rỗi nhanh hơn.</li>
+<li>Điều chỉnh mô hình vô tội vạ: Thay đổi kiến trúc mạng nơ-ron (<em>Algorithm</em>) trong khi nút thắt cổ chai thực sự là băng thông mạng hoặc I/O đĩa.</li>
+<li>Tối ưu sớm: Viết các kernel CUDA tùy chỉnh (<em>Machine</em>) trước khi kiểm chứng xem Algorithm có đang làm quá nhiều phép toán không cần thiết hay không.</li>
+</ul>
+<p>Mỗi phản mẫu đều có cùng một nguyên nhân gốc: hành động trước khi chẩn đoán. Các nghiên cứu điển hình sau đây cho thấy chẩn đoán đúng nên như thế nào—bắt đầu từ một triệu chứng khó hiểu và lần lượt thu hẹp có hệ thống về trục D·A·M chi phối.</p>
+</section>
+<section id="sec-appdx-dam-taxonomy-dam-case-studies-593f" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-dam-case-studies-593f">Các nghiên cứu điển hình D·A·M</h2>
+<p>Những ràng buộc lý thuyết thường hiện ra thành các triệu chứng khó hiểu trong môi trường sản xuất. Các kịch bản đại diện dưới đây minh họa cách áp dụng hệ thống phân loại. Mỗi ca đều theo cùng ba bước chẩn đoán: triệu chứng, chẩn đoán và khắc phục.</p>
+<section id="sec-appdx-dam-taxonomy-case-1-starving-accelerator-data-9a56" class="level3">
+<h3 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-case-1-starving-accelerator-data-9a56">Trường hợp 1: Bộ tăng tốc bị đói (Dữ liệu)</h3>
+<p>Một nhóm cấp phát một phiên bản GPU A100 lớn để tăng tốc huấn luyện, nhưng thời gian huấn luyện hầu như không cải thiện và <code>nvidia-smi</code> cho thấy mức sử dụng GPU dao động từ 10 đến 40 phần trăm. Mẫu này gợi ý bộ tăng tốc đang bị đói nhưng chưa rõ nguyên nhân. Nếu các trace cho thấy có khoảng chờ đầu vào kèm bão hòa ở lưu trữ hoặc CPU do giải mã, thì đường dẫn dữ liệu đang ràng buộc. Khi đó cần can thiệp ở phía trước mô hình. Hãy tối ưu quy trình trích xuất, chuyển đổi, tải (ETL) bằng cách chuyển từ JPEG thô tốn CPU giải mã sang các định dạng tuần tự như TFRecords hoặc WebDataset, tăng mức song song của data loader, và prefetch các batch vào bộ nhớ của bộ tăng tốc.</p>
+</section>
+<section id="sec-appdx-dam-taxonomy-case-2-latency-cliff-algorithm-8ee2" class="level3">
+<h3 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-case-2-latency-cliff-algorithm-8ee2">Trường hợp 2: Vách đá độ trễ (đa trục)</h3>
+<p>Một dịch vụ đề xuất thời gian thực không đạt SLA về độ trễ 20 ms, trong khi mức sử dụng bộ tăng tốc thấp và kích thước batch là một. Sự kết hợp này gợi ý vấn đề nằm ở chi phí khởi chạy, lưu lượng bộ nhớ hoặc độ sâu tuần tự của mô hình, chứ không phải do chip bị bão hòa. Nếu dấu vết (trace) xác nhận đường dẫn các lớp tuần tự chiếm ưu thế, thêm phần cứng cũng không loại bỏ được nút thắt này; khi đó, tỉa (pruning) hoặc chưng cất tri thức có thể giảm khối lượng công việc cho mô hình. Ngược lại, nếu lưu lượng trọng số chiếm ưu thế, lượng tử hoá có thể giảm số byte phải di chuyển bằng cách dùng INT8, miễn là độ chính xác cho phép. Các phép đo sẽ quyết định cách xử lý.</p>
+</section>
+<section id="sec-appdx-dam-taxonomy-case-3-compute-wall-machine-3a0a" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-case-3-compute-wall-machine-3a0a">Trường hợp 3: Bức tường tính toán (Máy)</h3>
+<p>Bộ tăng tốc được sử dụng tới 99%, băng thông bộ nhớ chưa bão hòa, và quá trình huấn luyện ổn định nhưng kéo dài ba tuần. Nếu các bộ đếm của profiler cũng cho thấy mức chiếm dụng pipeline tính toán cao và Model FLOPs Utilization (MFU) cao, thì khối lượng công việc (workload) bị giới hạn bởi tính toán (compute bound). Đường dữ liệu đang nuôi đủ cho bộ tăng tốc, nên bước tiếp theo phải thay đổi hạng mục tính toán trong “định luật sắt”. Nhóm có thể nâng cấp từ A100 lên bộ tăng tốc lớp H100, mở rộng theo hướng song song dữ liệu, hoặc hạ độ chính xác từ FP32/TF32 xuống BF16 khi an toàn về số học. Trên các đường NVIDIA Tensor Core, thông lượng đỉnh của BF16 thường khoảng 2<span class="math inline">\(\times\)</span> TF32, còn mức tăng tốc thực tế phụ thuộc vào các kernel và nút thắt cổ chai <span class="citation" data-cites="choquette2023">(<a href="#ref-choquette2023" role="doc-biblioref">Choquette 2023</a>)</span>. Tổng lại, ba trường hợp cho thấy cùng một con số sử dụng có thể dẫn đến các bước tiếp theo khác nhau, tùy thuộc vào hành vi hàm mất mát, kích thước batch và áp lực bộ nhớ.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-choquette2023" class="csl-entry" role="listitem">
+Choquette, Jack. 2023. <span>“<span>NVIDIA</span> Hopper <span>H100</span> <span>GPU</span>: Scaling Performance.”</span> <em>IEEE Micro</em> 43 (3): 9–17. https://doi.org/10.1109/mm.2023.3256796.
+</div></div><div id="chk-appendix-dam-diagnosis-check" class="callout callout-checkpoint" title="Kiểm tra chẩn đoán D·A·M">
+<details class="callout-checkpoint fbx-simplebox fbx-default" open=""><summary><strong>Checkpoint 1.1: Kiểm tra chẩn đoán D·A·M</strong></summary><div>
+<ol type="1">
+<li>Một tác vụ huấn luyện cho thấy bộ tăng tốc được sử dụng 95% nhưng hàm mất mát đã chững lại trong hai epoch. Những trục D·A·M nào có thể là nguyên nhân, và tại sao chỉ riêng mức độ sử dụng lại không đủ để phân biệt các nguyên nhân này?</li>
+<li>Đồng nghiệp của bạn đề xuất thêm worker cho bộ tải dữ liệu (data loader) vào một tác vụ mà <code>nvidia-smi</code> báo cáo GPU đang được sử dụng 98%. Cần những bằng chứng theo dõi (trace evidence) nào trước khi quyết định liệu việc này có hiệu quả hay không?</li>
+<li>Một máy chủ suy luận đáp ứng được mục tiêu mức độ dịch vụ (SLO) về độ trễ khi kích thước batch là 1, nhưng lại thất bại khi kích thước batch là 16. Những yếu tố nào trong “định luật sắt” và những hiệu ứng xếp hàng nào có thể đã thay đổi, và những phép đo nào sẽ giúp xác định yếu tố gây tắc nghẽn?</li>
+</ol>
+</div></details>
+</div>
+<p>Ba trường hợp này cho thấy các nút thắt cổ chai có thể vượt qua ranh giới giữa các trục. Sự cố sản xuất hiếm khi gọn gàng như vậy—các triệu chứng thường chồng chéo, và trục chi phối có thể thay đổi trong lúc gỡ lỗi. Phần tiếp theo cung cấp một ma trận khắc phục sự cố có hệ thống cho những kịch bản thực tế phức tạp hơn.</p>
+</section>
+</section>
+<section id="sec-appdx-dam-taxonomy-production-troubleshooting-02fb" class="level2">
+<h2 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-production-troubleshooting-02fb">Khắc phục sự cố sản xuất</h2>
+<p>Để xác định nguyên nhân gốc của các nút thắt cổ chai về hiệu suất, cần loại trừ một cách có hệ thống. <a href="#tbl-dam-troubleshooting" class="quarto-xref">Table&nbsp;5</a> cung cấp một ma trận chẩn đoán cho các kiểu lỗi phổ biến thường thấy trong quá trình triển khai sản xuất.</p>
+<p>Ma trận chẩn đoán gợi ý <em>nghi ngờ điều gì</em>. Câu hỏi tiếp theo là <em>làm sao</em> xác nhận nghi ngờ đó bằng bằng chứng—điều này đòi hỏi các công cụ phân tích hiệu năng (profiling tools) phù hợp.</p>
+<div id="tbl-dam-troubleshooting" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[25,21,29,25]">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-dam-troubleshooting-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5: <strong>Ma trận chẩn đoán D·A·M</strong>: Các giả thuyết và phép đo ban đầu cho những lỗi thường gặp. Hãy xác nhận yếu tố gây tắc nghẽn trước khi can thiệp.
+</figcaption>
+<div aria-describedby="tbl-dam-troubleshooting-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Triệu chứng</strong></th>
+<th style="text-align: left;"><strong>Giả thuyết</strong></th>
+<th style="text-align: left;"><strong>Xác nhận bằng</strong></th>
+<th style="text-align: left;"><strong>Hành động sau Xác nhận</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Mức sử dụng Bộ tăng tốc Thấp</strong></td>
+<td style="text-align: left;">Thiếu hụt dữ liệu/tài nguyên host</td>
+<td style="text-align: left;">Khoảng trống theo dõi; trình tải, CPU, bộ nhớ, bộ đếm khởi chạy</td>
+<td style="text-align: left;">Tải trước, song song hóa hoặc cắt giảm khởi chạy.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Độ trễ cao (P99)</strong></td>
+<td style="text-align: left;">Thuật toán/runtime/hàng đợi</td>
+<td style="text-align: left;">Giai đoạn p99 và độ sâu hàng đợi</td>
+<td style="text-align: left;">Tối ưu hóa giai đoạn chiếm ưu thế.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Chi phí huấn luyện cao</strong></td>
+<td style="text-align: left;">Hiệu quả công việc hữu ích thấp</td>
+<td style="text-align: left;">MFU, giao tiếp, thời gian nhàn rỗi</td>
+<td style="text-align: left;">Giảm tổn thất lớn nhất hoặc thay đổi kích thước.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Chi phí chung giữa các GPU cao</strong></td>
+<td style="text-align: left;">Giới hạn bởi giao tiếp</td>
+<td style="text-align: left;">Dấu vết thiết bị; khoảng trống tập thể</td>
+<td style="text-align: left;">Bucket AllReduce; điều chỉnh sự chồng chéo song song dữ liệu.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Hết bộ nhớ (OOM)</strong></td>
+<td style="text-align: left;">Thuật toán/Khớp máy</td>
+<td style="text-align: left;">Trọng số đỉnh, trạng thái, activation</td>
+<td style="text-align: left;">Checkpoint, phân đoạn, lượng tử hoá hoặc thu nhỏ batch.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="sec-appdx-dam-taxonomy-tooling-map-e09b" class="level2">
+<h2 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-tooling-map-e09b">Bản đồ công cụ</h2>
+<p>Khi đã có giả thuyết (ví dụ: “khối lượng công việc (workload) có vẻ bị ràng buộc bởi ‘Machine’”), chúng ta cần bằng chứng để xác nhận. Các khái niệm trừu tượng phải được đo lường bằng những tiện ích cụ thể. <a href="#tbl-dam-tooling" class="quarto-xref">Table&nbsp;6</a> kết nối các thành phần lý thuyết với các công cụ phân tích hiệu năng cụ thể của Linux và Python để kiểm chứng chúng.</p>
+<div id="tbl-dam-tooling" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[12,37,20,31]">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-dam-tooling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6: <strong>Bản đồ công cụ D·A·M</strong>: Các tiện ích phân tích hiệu năng dùng để chẩn đoán các nút thắt cổ chai theo từng trục D·A·M. Hãy bắt đầu với công cụ chính để phân loại nhanh; dùng các công cụ phụ để phân tích chuyên sâu khi kết quả từ công cụ chính chưa đủ thuyết phục.
+</figcaption>
+<div aria-describedby="tbl-dam-tooling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 37%">
+<col style="width: 20%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Trục</strong></th>
+<th style="text-align: left;"><strong>Chỉ số chính</strong></th>
+<th style="text-align: left;"><strong>Công cụ chính</strong></th>
+<th style="text-align: left;"><strong>Công cụ phụ</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Dữ liệu</strong></td>
+<td style="text-align: left;">Tải batch và Thời gian chờ</td>
+<td style="text-align: left;">Dấu vết profiler của framework</td>
+<td style="text-align: left;"><code>iostat</code>, <code>pidstat</code> (I/O/CPU)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Thuật toán</strong></td>
+<td style="text-align: left;">FLOPs, Độ sâu mô hình</td>
+<td style="text-align: left;">PyTorch Profiler</td>
+<td style="text-align: left;">DeepSpeed Flops Profiler</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Máy</strong></td>
+<td style="text-align: left;">Mức sử dụng bộ tăng tốc, Mức chiếm dụng SM</td>
+<td style="text-align: left;">Nsight Compute</td>
+<td style="text-align: left;"><code>nvidia-smi</code>, Nsight Systems</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Các công cụ phân tích hiệu năng tạo ra những con số thô—tỷ lệ sử dụng, số lượng FLOP và các phép đo băng thông. Chúng chỉ hữu ích khi đặt trong ngữ cảnh của khối lượng công việc (workload) và phần cứng. Thẻ điểm D·A·M cung cấp các tín hiệu sàng lọc chứ không phải tiêu chuẩn chung, giúp thu hẹp những phép đo và biện pháp can thiệp đáng chú ý.</p>
+</section>
+<section id="sec-appdx-dam-taxonomy-dam-scorecard-94e9" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-dam-scorecard-94e9">Thẻ điểm D·A·M</h2>
+<p>Để vượt khỏi việc phỏng đoán định tính, các chỉ số hiệu quả trong <a href="#tbl-dam-scorecard" class="quarto-xref">table&nbsp;7</a> giúp quyết định bước điều tra tiếp theo. Cách trình bày dạng thẻ báo cáo này hỗ trợ so sánh ban đầu, nhưng không có hàng nào đưa ra điểm số chung cho mọi trường hợp. MFU<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> đặc biệt hữu ích cho việc huấn luyện các mô hình lớn.</p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;<strong>MFU (mức sử dụng FLOPs của mô hình)</strong>: Tỷ lệ giữa FLOP/s mà mô hình thực sự đạt được so với FLOP/s đỉnh lý thuyết của phần cứng, được giới thiệu trong bài báo PaLM <span class="citation" data-cites="chowdhery2022palm">(<a href="#ref-chowdhery2022palm" role="doc-biblioref">Chowdhery et al. 2022</a>)</span>. Khác với mức sử dụng bộ tăng tốc ở dạng thô (tính mọi công việc mà bộ tăng tốc thực hiện), MFU đo tốc độ tính toán của mô hình so với thông lượng đỉnh của phần cứng, nên các công việc không thuộc mô hình và chi phí hệ thống không được tính vào FLOPs mô hình đạt được. <strong><a href="../08_training/08_training.html#sec-model-training-identifying-bottlenecks-f57f">Xác định nút thắt cổ chai</a></strong> trình bày MFU như một công cụ chẩn đoán trong huấn luyện.</p><div id="ref-chowdhery2022palm" class="csl-entry" role="listitem">
+Chowdhery, Aakanksha, Sharan Narang, Jacob Devlin, Maarten Bosma, Gaurav Mishra, Adam Roberts, Paul Barham, et al. 2022. <span>“PaLM: Scaling Language Modeling with Pathways.”</span> <em>arXiv Preprint arXiv:2204.02311</em>.
+</div></div></div><div id="tbl-dam-scorecard" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[25,25,25,25]">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-dam-scorecard-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7: <strong>Các chỉ số sàng lọc D·A·M</strong>: Đây là những tín hiệu phụ thuộc ngữ cảnh để phục vụ điều tra, không phải điểm số mang tính phổ quát.
+</figcaption>
+<div aria-describedby="tbl-dam-scorecard-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Trục</strong></th>
+<th style="text-align: left;"><strong>Chỉ số</strong></th>
+<th style="text-align: center;"><strong>Định nghĩa</strong></th>
+<th style="text-align: center;"><strong>Điều tra</strong></th>
+<th style="text-align: center;"><strong>Tín hiệu mạnh</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Dữ liệu</strong></td>
+<td style="text-align: left;">Chi phí chung I/O</td>
+<td style="text-align: center;"><span class="math inline">\(\dfrac{\text{Data Wait Time}}{\text{Total Step Time}}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(&gt;\)</span> 10% (screen)</td>
+<td style="text-align: center;"><span class="math inline">\(&lt;\)</span> 1% (strong)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Thuật toán</strong></td>
+<td style="text-align: left;">Công việc có thể tránh được</td>
+<td style="text-align: center;">Profiler hoặc ablation tìm thấy các hoạt động dư thừa</td>
+<td style="text-align: center;">Tìm thấy công việc dư thừa</td>
+<td style="text-align: center;">Khối lượng công việc đầu cuối giảm</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Máy</strong></td>
+<td style="text-align: left;">MFU</td>
+<td style="text-align: center;"><span class="math inline">\(\dfrac{\text{Achieved model FLOP/s}}{\text{Peak FLOP/s}}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(&lt;\)</span> 30% (mô hình lớn)</td>
+<td style="text-align: center;"><span class="math inline">\(&gt;\)</span> 50% (cùng chế độ)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Thẻ điểm và Mô hình Roofline đều trả lời các câu hỏi về hiệu quả, nhưng ở các thang khác nhau. Thẻ điểm sàng lọc hệ thống hiện tại bằng các chỉ số tùy ngữ cảnh. Còn các quy luật mở rộng và ẩn dụ roofline về thông tin đặt câu hỏi về những gì có thể xảy ra khi hệ thống mở rộng <em>vượt ra ngoài</em> kích thước hiện tại.</p>
+</section>
+<section id="sec-appdx-dam-taxonomy-scaling-laws-vs-roofline-b290" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-scaling-laws-vs-roofline-b290">Các quy luật mở rộng so với Roofline</h2>
+<p>Trong kỹ thuật hệ thống, cần phân biệt giữa <em>quỹ đạo tăng trưởng</em> và <em>giới hạn cơ bản</em>.</p>
+<section id="sec-appdx-dam-taxonomy-scaling-laws-journey-4085" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-scaling-laws-journey-4085">Các quy luật mở rộng (hành trình)</h3>
+<p>Các quy luật mở rộng<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> là những quy luật lũy thừa thực nghiệm, dự đoán độ lỗi trên tập giữ lại thay đổi ra sao khi tăng tài nguyên trong phạm vi đã được khớp. Hai kết quả tiêu biểu là quy luật mở rộng của Kaplan <span class="citation" data-cites="kaplan2020scaling">(<a href="#ref-kaplan2020scaling" role="doc-biblioref">Kaplan et al. 2020</a>)</span>, nghiên cứu độ lỗi theo số lượng tham số (<span class="math inline">\(P\)</span>), dữ liệu (<span class="math inline">\(D\)</span>), và tổng số phép toán (<span class="math inline">\(O\)</span>); và quy luật mở rộng của Chinchilla <span class="citation" data-cites="hoffmann2022chinchilla">(<a href="#ref-hoffmann2022chinchilla" role="doc-biblioref">Hoffmann et al. 2022</a>)</span>, ước tính điểm cân bằng tối ưu về tính toán cho miền mô hình ngôn ngữ tự hồi quy dày đặc được nghiên cứu, thường được tóm tắt là khoảng 20 token huấn luyện cho mỗi tham số (<span class="math inline">\(D \approx 20P\)</span>).</p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;<strong>Các quy luật mở rộng</strong>: Đây là các mối quan hệ thực nghiệm, thường là các quy luật lũy thừa với số mũ âm đã được khớp, dùng để dự đoán loss của mô hình dựa trên kích thước tập dữ liệu, số lượng tham số hoặc ngân sách tính toán. <span class="citation" data-cites="kaplan2020scaling">Kaplan et al. (<a href="#ref-kaplan2020scaling" role="doc-biblioref">2020</a>)</span> đã nghiên cứu các mối quan hệ này cho các mô hình ngôn ngữ thần kinh tại OpenAI; sau đó, <span class="citation" data-cites="hoffmann2022chinchilla">Hoffmann et al. (<a href="#ref-hoffmann2022chinchilla" role="doc-biblioref">2022</a>)</span> ước tính sự đánh đổi huấn luyện tối ưu về mặt tính toán cho miền mô hình ngôn ngữ dày đặc mà họ khảo sát. <strong><a href="../09_data_selection/09_data_selection.html#sec-data-selection-computeoptimal-frontier-24ba">Biên tối ưu tính toán</a></strong> phát triển chi tiết biên tối ưu theo tính toán và phép chẩn đoán thiếu dữ liệu đi kèm.</p><div id="ref-kaplan2020scaling" class="csl-entry" role="listitem">
+Kaplan, J., S. McCandlish, T. Henighan, T. B. Brown, B. Chess, R. Child, S. Gray, A. Radford, J. Wu, and D. Amodei. 2020. <span>“Scaling Laws for Neural Language Models.”</span> <em>ArXiv Preprint</em> abs/2001.08361.
+</div><div id="ref-hoffmann2022chinchilla" class="csl-entry" role="listitem">
+Hoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, Elena Buchatskaya, Trevor Cai, Eliza Rutherford, Diego de Las Casas, et al. 2022. <span>“Training Compute-Optimal Large Language Models.”</span> <em>Advances in Neural Information Processing Systems (NeurIPS)</em> 35: 30016–30. https://doi.org/10.52202/068431-2176.
+</div></div></div><p>Ở góc độ kinh tế, các mô hình khớp này ước tính loss trên tập giữ lại thay đổi theo mức compute như thế nào trong phạm vi đã quan sát. Chúng không đảm bảo giảm tỷ lệ lỗi của tác vụ, và cũng không thể ngoại suy nguyên xi sang các kiến trúc và phân phối dữ liệu khác.</p>
+</section>
+<section id="sec-appdx-dam-taxonomy-information-roofline-destination-6426" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-information-roofline-destination-6426">Đường mái thông tin (điểm đến)</h3>
+<p><em>Đường mái thông tin</em> ở đây được dùng như một ẩn dụ mang tính chẩn đoán, chứ không phải một quy luật định lượng tiêu chuẩn. Hình ảnh “điểm đến” của nó gợi ý những giới hạn về những gì có thể học được từ dữ liệu sẵn có. Trong bài toán phân loại, với một phân phối dữ liệu và hàm lỗi cố định, tỷ lệ lỗi Bayes<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> là một <em>ngưỡng</em> lỗi tối thiểu không thể giảm được (error <em>floor</em>), chứ không phải là một giới hạn trên (ceiling). Nhiễu, nhãn mơ hồ, lỗ hổng độ bao phủ, và dịch chuyển phân phối có thể tạo ra các giới hạn về chất lượng dữ liệu, nhưng chúng không xác định một độ dốc hay điểm gãy phổ quát nào.</p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;<strong>Tỷ lệ lỗi Bayes</strong>: Tỷ lệ lỗi thấp nhất có thể đạt được với hàm mất mát 0–1 cho bất kỳ bộ phân loại nào trên một phân phối dữ liệu nhất định, được xác định bởi xác suất tiên nghiệm của các lớp và mức độ chồng lấn giữa các phân phối điều kiện theo lớp <span class="citation" data-cites="goodfellow2016deep">(<a href="#ref-goodfellow2016deep" role="doc-biblioref">Goodfellow et al. 2016</a>)</span>. Dù có bao nhiêu dữ liệu, tham số hay tài nguyên tính toán cũng không thể giảm lỗi xuống dưới mức sàn lý thuyết này.</p><div id="ref-goodfellow2016deep" class="csl-entry" role="listitem">
+Goodfellow, Ian, Yoshua Bengio, and Aaron Courville. 2016. <em>Deep Learning</em>. MIT Press.
+</div></div></div><p>Bài học chẩn đoán ở đây hẹp hơn. Các định luật mở rộng mô tả một quỹ đạo cải thiện đã được khớp, trong khi ẩn dụ ‘đường mái thông tin’ gợi ý ta tìm các giới hạn do chất lượng dữ liệu đặt ra. Nếu đường cong hàm mất mát chững lại so với xu hướng đã khớp, hãy kiểm tra tối ưu hóa, năng lực mô hình, nhiễu trong đánh giá và chất lượng dữ liệu; bản thân việc đường cong chững lại không cho biết nguyên nhân nào là chủ đạo. Mức sàn Bayes mô tả bộ phân loại tốt nhất có thể đạt được cho phân bố đã chỉ định. Việc thêm bộ tăng tốc hay tham số chỉ vô ích sau khi các phép đo xác nhận rằng chất lượng dữ liệu đang là yếu tố giới hạn. Dù bạn đang gỡ lỗi một bước huấn luyện, đánh giá mức sử dụng phần cứng, hay lập kế hoạch mở rộng, hãy đo xem trục nào đang là giới hạn trước khi chọn đòn bẩy.</p>
+</section>
+</section>
+<section id="sec-appdx-dam-taxonomy-summary-1521" class="level2">
+<h2 class="anchored" data-anchor-id="sec-appdx-dam-taxonomy-summary-1521">Tóm tắt</h2>
+<p>Các công cụ này tạo thành một quy trình chẩn đoán thống nhất. D·A·M giúp xác định các nguyên nhân tiềm năng trên ba khía cạnh: Dữ liệu, Thuật toán và Máy. Định luật sắt và cường độ số học chuyển các nguyên nhân đó thành thời gian, phép toán và byte, trong khi các nghiên cứu điển hình, các anti-pattern, bản đồ công cụ và bảng điểm cho thấy cách kiểm tra chúng trong môi trường sản xuất. Các định luật mở rộng và ‘đường mái thông tin’ sau đó giúp tách quỹ đạo cải thiện quan sát được khỏi các giới hạn do chất lượng dữ liệu. Hãy dùng framework này như một vòng lặp, không phải như một cái nhãn.</p>
+<div id="callout-takeaways*-1.1" class="callout callout-takeaways" title="Nên bắt đầu từ đâu">
+<details class="callout-takeaways fbx-simplebox fbx-default" open=""><summary><strong>Key Takeaways: Nên bắt đầu từ đâu</strong></summary><div>
+<ul>
+<li>Hãy bắt đầu với các giả thuyết cắt ngang các khía cạnh; một triệu chứng hiếm khi tự chỉ ra nguyên nhân.</li>
+<li>Chuyển mỗi giả thuyết thành thuật ngữ tương ứng trong định luật sắt và một phép đo có thể bác bỏ nó.</li>
+<li>Sử dụng cường độ số học và bảng điểm để xác định yếu tố đang giới hạn, chứ không phải để chấm điểm chung chung.</li>
+<li>Áp dụng đòn bẩy tương ứng và đo lường lại từ đầu đến cuối; một lợi ích cục bộ mà không làm thay đổi yếu tố đang giới hạn thì không phải là cải tiến ở cấp hệ thống.</li>
+</ul>
+</div></details>
+</div>
+
+
+
+</section>
+</section>
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mlsysbook\.ai\/vol1\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../vol1/backmatter/references.html" class="pagination-link" aria-label="Tài liệu tham khảo">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Tài liệu tham khảo</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../vol1/backmatter/appendix_data.html" class="pagination-link" aria-label="Nền tảng dữ liệu">
+        <span class="nav-page-text">Nền tảng dữ liệu</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2024-2026 Harvard University. Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA 4.0</a><br> <!-- MLSB_BUILD_STAMP --></p>
+</div>   
+    <div class="nav-footer-center">
+<p><a href="../vol2/">Next to Volume II →</a></p>
+</div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+ <span class="release-pill" data-release-pill=""></span>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/harvard-edge/cs249r_book">
+      <i class="bi bi-github" role="img" aria-label="View source on GitHub">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/harvard-edge/cs249r_book">
+      <i class="bi bi-star" role="img" aria-label="Star this repository">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+<!--
+  MLSysBook release-pill — shared footer version chip for Quarto + static sites.
+
+  Renders a small "v0.1.0 · Apr 26, 2026" chip from a deployed
+  release-manifest.json. Best-effort chrome: silent on any fetch failure
+  (manifest missing, offline, CORS). Use at any site that emits a manifest
+  via scripts/version/release.py emit-manifest.
+
+  ── Standardized placement (all MLSysBook sites) ──
+
+  The chip lives in the page-footer, right slot, so it reads as an
+  intentional part of the footer bar (not dangling below the page). Two
+  pieces per site:
+
+  1. This file loads the style + populator script site-wide:
+
+       format:
+         html:
+           include-in-header:
+             - text: |
+                 <meta name="release-manifest" content="/<project-base>/release-manifest.json">
+           include-after-body:
+             - file: ../shared/release/release-pill.html
+
+  2. Each page-footer places the chip span where it should render:
+
+       website:
+         page-footer:
+           right:
+             - text: |
+                 <span class="release-pill" data-release-pill></span>
+             - icon: github
+               href: ...
+
+  The meta tag tells the script where to find the manifest. The script
+  populates every span carrying data-release-pill, so the chip can sit in
+  the footer (canonical), an about page, or anywhere else.
+
+  ── Manifest contract ──
+
+  The manifest is the JSON written by scripts/version/release.py
+  emit-manifest. Required keys: releaseId, releaseHash. Optional but
+  recommended: buildDate, project. Anything else is ignored.
+
+  ── Why runtime fetch instead of build-time templating ──
+
+  Build-time templating would be deterministic but requires per-project
+  Lua/template machinery. Runtime fetch is project-agnostic and works
+  identically across Quarto, Next.js, and plain HTML. The one fetch per
+  page-load is cheap and the chip degrades to nothing on failure.
+-->
+
+<style>
+  /* Fixed muted gray on every site — the chip must look identical regardless of
+     each Quarto theme's accent colors (do NOT inherit --bs-secondary / link color). */
+  .release-pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 0.75rem;
+    line-height: 1;
+    color: var(--release-pill-color, #6c757d);
+  }
+  .release-pill a,
+  .release-pill a:visited,
+  .release-pill-version,
+  .release-pill-date {
+    color: var(--release-pill-color, #6c757d);
+    text-decoration: none;
+  }
+  .release-pill a:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .release-pill-date {
+    opacity: 0.75;
+  }
+</style>
+
+<script>
+  (function () {
+    var pills = document.querySelectorAll('[data-release-pill]');
+    if (!pills.length) return;
+
+    // Manifest URL resolution order:
+    //   1. data-manifest attribute on the pill (per-page override)
+    //   2. <meta name="release-manifest" content="..."> in <head>
+    //   3. './release-manifest.json' relative to current page (fallback)
+    var meta = document.querySelector('meta[name="release-manifest"]');
+    var metaPath = meta && meta.getAttribute('content');
+
+    fetch(metaPath || './release-manifest.json', { cache: 'no-store' })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (m) {
+        if (!m || !m.releaseId || !m.releaseHash) return;
+        var date = m.buildDate
+          ? new Date(m.buildDate).toLocaleDateString('en-US',
+              { year: 'numeric', month: 'short', day: 'numeric' })
+          : '';
+        var shortHash = String(m.releaseHash).slice(0, 7);
+        var title =
+          (m.project ? m.project + ' ' : '') +
+          'v' + m.releaseId +
+          (date ? ' · built ' + date : '') +
+          ' · hash ' + shortHash;
+
+        pills.forEach(function (el) {
+          var rawLink = el.getAttribute('data-link') || '#release';
+          // XSS hardening: allow only anchor, relative, or http(s) links; reject javascript:/data: URLs.
+          var linkHref = /^(?:#|\/|\.{1,2}\/|https?:\/\/)/i.test(rawLink) ? rawLink : '#release';
+          var a = document.createElement('a');
+          a.href = linkHref;
+          a.title = title;
+          a.setAttribute('aria-label',
+            'Release v' + m.releaseId + (date ? ', built ' + date : ''));
+          var v = document.createElement('span');
+          v.className = 'release-pill-version';
+          v.textContent = 'v' + m.releaseId;
+          a.appendChild(v);
+          if (date) {
+            var d = document.createElement('span');
+            d.className = 'release-pill-date';
+            d.textContent = ' · ' + date;
+            a.appendChild(d);
+          }
+          el.innerHTML = '';
+          el.appendChild(a);
+        });
+      })
+      .catch(function () { /* silent: best-effort chrome */ });
+  })();
+</script>
+    <script type="text/javascript">
+    (function(d) {
+      function renderPseudocode() {
+        d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+          let pseudocodeOptions = {
+            indentSize: el.dataset.indentSize,
+            commentDelimiter: " " + el.dataset.commentDelimiter + " ",
+            lineNumber: el.dataset.lineNumber.toLowerCase() === "true",
+            lineNumberPunc: el.dataset.lineNumberPunc,
+            noEnd: el.dataset.noEnd.toLowerCase() === "true",
+            scopeLines: el.dataset.indentLines.toLowerCase() === "true",
+            titlePrefix: el.dataset.captionPrefix,
+          };
+          pseudocode.renderElement(el.querySelector(".pseudocode"), pseudocodeOptions);
+        });
+        d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+          let captionSpan = el.querySelector(".ps-root > .ps-algorithm > .ps-line > .ps-keyword")
+          if (captionSpan !== null) {
+            let captionPrefix = el.dataset.captionPrefix + " ";
+            let captionNumber = "";
+            if (el.dataset.pseudocodeNumber) {
+              captionNumber = el.dataset.pseudocodeNumber + " ";
+              if (el.dataset.chapterLevel) {
+                captionNumber = el.dataset.chapterLevel + "." + captionNumber;
+              }
+            }
+            captionSpan.innerHTML = captionPrefix + captionNumber;
+          }
+        });
+      }
+      // pseudocode.js needs a math backend (KaTeX or MathJax) present *at the
+      // moment* renderElement runs. This book renders math with MathJax loaded
+      // via `defer`, so window.MathJax does not exist yet when this after-body
+      // script executes at parse time — calling renderElement now throws
+      // "No math backend found" and the raw LaTeX source stays on the page.
+      // Wait for the math backend to be ready before rendering: KaTeX if it is
+      // present synchronously, otherwise MathJax's startup promise (available
+      // after the deferred MathJax script has run, by window 'load').
+      function whenMathReady(cb) {
+        if (window.katex) { cb(); return; }
+        var mj = window.MathJax;
+        if (mj && mj.startup && mj.startup.promise) { mj.startup.promise.then(cb); return; }
+        window.addEventListener("load", function() {
+          var m = window.MathJax;
+          if (m && m.startup && m.startup.promise) { m.startup.promise.then(cb); }
+          else { cb(); }
+        });
+      }
+      whenMathReady(renderPseudocode);
+    })(document);
+    </script>
+  
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>

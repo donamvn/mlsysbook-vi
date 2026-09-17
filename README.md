@@ -11,6 +11,8 @@ thực hiện với sự đồng ý của tác giả, nhằm **đóng góp cho c
 
 **Website đầy đủ (điều hướng, tìm kiếm, sơ đồ, callout):** https://donamvn.github.io/mlsysbook-vi/
 
+**Tập II — Quy mô lớn (mới):** https://donamvn.github.io/mlsysbook-vi/vol2/
+
 ## 📥 Bản tải offline
 
 > Bản tải **PDF / EPUB / DOCX** đang **tạm dừng** trong khi chờ tác giả rà soát. Trong thời gian này, mời bạn **đọc trực tuyến** tại website ở trên. Cảm ơn bạn đã quan tâm!

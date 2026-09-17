@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" viewBox="0 0 680 460">
+  <rect width="680" height="460" fill="#fff"/><defs>
+    <marker id="arrow-cl" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- Three-phase headers -->
+  <!-- Phase 1: Manufacturing x=30..215 -->
+  <rect x="30" y="22" width="185" height="52" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+  <text x="122.5" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Sản xuất</text>
+  <text x="122.5" y="58" text-anchor="middle" font-size="9.5" fill="#555">Carbon ẩn chứa</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="215" y1="48" x2="247" y2="48" stroke="#555" stroke-width="1.5" marker-end="url(#arrow-cl)"/>
+
+  <!-- Phase 2: Training x=248..433 -->
+  <rect x="248" y="22" width="185" height="52" fill="#f9d6d5" stroke="#c44" stroke-width="1.5"/>
+  <text x="340.5" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Huấn luyện</text>
+  <text x="340.5" y="58" text-anchor="middle" font-size="9.5" fill="#555">Carbon vận hành</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="433" y1="48" x2="465" y2="48" stroke="#555" stroke-width="1.5" marker-end="url(#arrow-cl)"/>
+
+  <!-- Phase 3: Inference x=466..651 -->
+  <rect x="466" y="22" width="185" height="52" fill="#cfe2f3" stroke="#4a90c4" stroke-width="1.5"/>
+  <text x="558.5" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Suy luận</text>
+  <text x="558.5" y="58" text-anchor="middle" font-size="9.5" fill="#555">Carbon vận hành</text>
+
+  <!-- Proportional bars — y range 95..325, total height 230px -->
+  <!-- Manufacturing: 30% → 69px, Training: 50% → 115px, Inference: 20% → 46px -->
+
+  <!-- Manufacturing bar -->
+  <rect x="50" y="100" width="125" height="210" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="112.5" y="170" text-anchor="middle" font-size="12" font-weight="700" fill="#c87b2a">30%</text>
+
+  <!-- Manufacturing sub-components -->
+  <rect x="62" y="195" width="102" height="20" fill="#fff" stroke="#c87b2a" stroke-width="0.8"/>
+  <text x="112.5" y="209" text-anchor="middle" font-size="8.5" font-weight="600" fill="#555">Chế tạo chip</text>
+
+  <rect x="62" y="221" width="102" height="20" fill="#fff" stroke="#c87b2a" stroke-width="0.8"/>
+  <text x="112.5" y="235" text-anchor="middle" font-size="8.5" font-weight="600" fill="#555">Lắp ráp máy chủ</text>
+
+  <rect x="62" y="247" width="102" height="20" fill="#fff" stroke="#c87b2a" stroke-width="0.8"/>
+  <text x="112.5" y="261" text-anchor="middle" font-size="8.5" font-weight="600" fill="#555">Khai thác đất hiếm</text>
+
+  <rect x="62" y="273" width="102" height="20" fill="#fff" stroke="#c87b2a" stroke-width="0.8"/>
+  <text x="112.5" y="287" text-anchor="middle" font-size="8.5" font-weight="600" fill="#555">Chuỗi cung ứng</text>
+
+  <text x="112" y="90" text-anchor="middle" font-size="8.5" fill="#c87b2a" font-style="italic">150-200 kg CO₂/GPU</text>
+
+  <!-- Training bar (tallest) -->
+  <rect x="225" y="88" width="175" height="222" fill="#f9d6d5" stroke="#c44" stroke-width="1.2"/>
+  <text x="312.5" y="165" text-anchor="middle" font-size="12" font-weight="700" fill="#c44">50%</text>
+
+  <!-- Training sub-components -->
+  <rect x="240" y="195" width="140" height="20" fill="#fff" stroke="#c44" stroke-width="0.8"/>
+  <text x="312.5" y="209" text-anchor="middle" font-size="8.5" font-weight="600" fill="#555">Tính toán x PUE x Thời gian</text>
+
+  <rect x="240" y="221" width="140" height="20" fill="#fff" stroke="#c44" stroke-width="0.8"/>
+  <text x="312.5" y="235" text-anchor="middle" font-size="8.5" font-weight="600" fill="#555">Cường độ carbon lưới điện</text>
+
+  <rect x="240" y="247" width="140" height="20" fill="#fff" stroke="#c44" stroke-width="0.8"/>
+  <text x="312.5" y="261" text-anchor="middle" font-size="8.5" font-weight="600" fill="#555">Chi phí đồng bộ Gradient</text>
+
+  <rect x="240" y="273" width="140" height="20" fill="#fff" stroke="#c44" stroke-width="0.8"/>
+  <text x="312.5" y="287" text-anchor="middle" font-size="8.5" font-weight="600" fill="#555">Checkpoint I/O</text>
+
+  <rect x="241" y="96" width="143" height="18" fill="#fff" stroke="#c44" stroke-width="0.8"/>
+  <text x="312.5" y="108" text-anchor="middle" font-size="8.2" fill="#c44" font-style="italic">GPT-3: 1,287 MWh = 552 t CO₂</text>
+
+  <!-- Inference bar -->
+  <rect x="460" y="130" width="160" height="180" fill="#cfe2f3" stroke="#4a90c4" stroke-width="1.2"/>
+  <text x="540" y="200" text-anchor="middle" font-size="12" font-weight="700" fill="#4a90c4">20%</text>
+
+  <!-- Inference sub-components -->
+  <rect x="475" y="225" width="130" height="20" fill="#fff" stroke="#4a90c4" stroke-width="0.8"/>
+  <text x="540" y="239" text-anchor="middle" font-size="8.5" font-weight="600" fill="#555">Yêu cầu x Năng lượng/yêu cầu</text>
+
+  <rect x="475" y="251" width="130" height="20" fill="#fff" stroke="#4a90c4" stroke-width="0.8"/>
+  <text x="540" y="265" text-anchor="middle" font-size="8.5" font-weight="600" fill="#555">Cường độ carbon lưới điện</text>
+
+  <rect x="475" y="277" width="130" height="20" fill="#fff" stroke="#4a90c4" stroke-width="0.8"/>
+  <text x="540" y="291" text-anchor="middle" font-size="8.5" font-weight="600" fill="#555">Bộ nhớ KV Cache</text>
+
+  <text x="540" y="120" text-anchor="middle" font-size="8.5" fill="#4a90c4" font-style="italic">Tăng theo triển khai</text>
+
+  <!-- Equation box -->
+  <rect x="30" y="330" width="620" height="52" fill="#fff" stroke="#bbb" stroke-width="1.2"/>
+  <text x="340" y="350" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Phương trình carbon vòng đời</text>
+  <text x="340" y="364" text-anchor="middle" font-size="9.5" fill="#555">Tổng CO₂ = CO₂ ẩn chứa + năng lượng huấn luyện × PUE × CI lưới điện</text>
+  <text x="340" y="376" text-anchor="middle" font-size="9.5" fill="#555">+ số yêu cầu × năng lượng/yêu cầu × CI lưới điện</text>
+
+  <!-- Key insight -->
+  <rect x="30" y="392" width="620" height="48" fill="#fff" stroke="#a31f34" stroke-width="1.2"/>
+  <text x="44" y="412" font-size="10" font-weight="700" fill="#a31f34">Điểm mấu chốt:</text>
+  <text x="126" y="412" font-size="9.5" fill="#333">Ở vùng lưới điện sạch (thủy điện, hạt nhân), carbon ẩn chứa có thể vượt carbon vận hành trong</text>
+  <text x="44" y="428" font-size="9.5" fill="#333">vòng đời phần cứng. Tuổi thọ phần cứng và tỷ lệ sử dụng là đòn bẩy bền vững hàng đầu cùng nguồn năng lượng.</text>
+</svg>

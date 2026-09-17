@@ -1,0 +1,3575 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Machine Learning Systems at Scale</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../vol2/backmatter/appendix_communication.html" rel="next">
+<link href="../../vol2/backmatter/appendix_c3.html" rel="prev">
+<link href="../../shared/assets/images/icons/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-6d8bf5f3a64ff1f58d6d467b13ee33b9.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6d8bf5f3a64ff1f58d6d467b13ee33b9.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-6d8bf5f3a64ff1f58d6d467b13ee33b9.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-f62e4beb15657c5d46d3d9f401234464.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-5d6ec600491f594e73da55aff70b019a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-f62e4beb15657c5d46d3d9f401234464.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/quarto-contrib/foldbox/foldbox.css" rel="stylesheet">
+<script src="../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "/"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-M21L0CBCVN"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-M21L0CBCVN', { 'anonymize_ip': true});
+</script>
+<script type="application/json" class="js-hypothesis-config">
+{
+  "theme": "clean",
+  "openSidebar": false
+}
+</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
+<!-- Shared head includes — MLSysBook ecosystem -->
+
+<!--
+  theme-persist (inline, sync) — applies stored color-scheme before first paint.
+  Inlined deliberately: runs before any other <script>, no extra round-trip,
+  and avoids per-subsite asset path differences. Canonical source:
+  shared/scripts/theme-persist.js (kept identical for documentation/testability).
+  If you change one, mirror the change to the other.
+-->
+<script>
+(function () {
+  'use strict';
+  var STORAGE_KEY = 'quarto-color-scheme';
+  // Quarto's toggle writes 'alternate'/'default' (alternate = dark, the
+  // layered sheet); sibling non-Quarto sites write 'dark'/'light'. Both
+  // hit the same key, so we accept either. Quarto's own startup still
+  // checks `=== 'alternate'`, so we mirror onto <html> rather than rewrite.
+  function normalize(v) {
+    if (v === 'dark' || v === 'alternate') return 'dark';
+    if (v === 'light' || v === 'default') return 'light';
+    return null;
+  }
+  function preferredScheme() {
+    try {
+      var n = normalize(window.localStorage.getItem(STORAGE_KEY));
+      if (n) return n;
+    } catch (e) {}
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  }
+  function apply(scheme) {
+    var html = document.documentElement;
+    if (!html) return;
+    html.setAttribute('data-bs-theme', scheme);
+    html.setAttribute('data-quarto-color-scheme', scheme);
+    html.style.colorScheme = scheme;
+    // Bridge to legacy `.quarto-dark` body class — about.css,
+    // community.css, and newsletter.css key their dark-mode CSS
+    // variables off `.quarto-dark { ... }`. Quarto's own toggle adds
+    // that class on click, but the OS-pref / first-paint path never
+    // does. Mirror the scheme onto body so those CSS variables fire
+    // on every dark path, not just toggle clicks. body may not exist
+    // yet on the first call (this script runs in <head>); a
+    // MutationObserver below catches it as soon as it parses.
+    var body = document.body;
+    if (body) body.classList.toggle('quarto-dark', scheme === 'dark');
+  }
+  apply(preferredScheme());
+  // Catch the FOUC window between <head> apply() and DOMContentLoaded:
+  // <body> may not exist yet at first apply(), but as soon as the
+  // parser appends it we want the legacy class bridge in place so any
+  // CSS keyed on `.quarto-dark` paints correctly on first render.
+  if (!document.body) {
+    var earlyObserver = new MutationObserver(function () {
+      if (document.body) {
+        apply(preferredScheme());
+        earlyObserver.disconnect();
+      }
+    });
+    earlyObserver.observe(document.documentElement, { childList: true });
+  }
+  // Quarto's toggle updates localStorage but not <html>, so wrap it to
+  // mirror the new value onto data-bs-theme; otherwise clicking the toggle
+  // leaves CSS keyed off [data-bs-theme="dark"] rendering against the wrong
+  // stylesheet until the next reload.
+  function syncFromStorage() {
+    try {
+      var n = normalize(window.localStorage.getItem(STORAGE_KEY));
+      if (n) apply(n);
+    } catch (e) {}
+  }
+  function wrapToggle() {
+    var orig = window.quartoToggleColorScheme;
+    if (typeof orig !== 'function' || orig.__mlsbWrapped) return;
+    var wrapped = function () { var r = orig.apply(this, arguments); syncFromStorage(); return r; };
+    wrapped.__mlsbWrapped = true;
+    window.quartoToggleColorScheme = wrapped;
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { wrapToggle(); syncFromStorage(); });
+  } else {
+    wrapToggle(); syncFromStorage();
+  }
+  // Defend the legacy `.quarto-dark` body class against Quarto's own
+  // `toggleBodyColor(mode)`, which runs *after* this script and re-asserts
+  // the body class based on `mode` — and `mode` defaults to 'light' when
+  // there's no stored quarto-color-scheme value, even when the OS / first
+  // paint already resolved to dark via `data-bs-theme`. Without this
+  // observer, on every fresh visit Quarto would clobber our bridge and
+  // restore `.quarto-light`, leaving `.quarto-dark`-keyed CSS variables
+  // (about/community/newsletter pages) at their light-mode defaults
+  // against the dark `data-bs-theme="dark"` background.
+  function bridgeBody() {
+    var body = document.body;
+    if (!body) return;
+    var wantDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+    if (wantDark && !body.classList.contains('quarto-dark')) {
+      body.classList.add('quarto-dark');
+      body.classList.remove('quarto-light');
+    } else if (!wantDark && body.classList.contains('quarto-dark')) {
+      body.classList.remove('quarto-dark');
+      body.classList.add('quarto-light');
+    }
+  }
+  function watchBody() {
+    if (!document.body) return;
+    bridgeBody();
+    var bodyObs = new MutationObserver(bridgeBody);
+    bodyObs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    var htmlObs = new MutationObserver(bridgeBody);
+    htmlObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', watchBody);
+  } else {
+    watchBody();
+  }
+  window.addEventListener('storage', function (ev) {
+    if (ev.key !== STORAGE_KEY) return;
+    var n = normalize(ev.newValue);
+    if (n) apply(n);
+  });
+  if (window.matchMedia) {
+    try {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (ev) {
+        try { if (window.localStorage.getItem(STORAGE_KEY)) return; } catch (e) {}
+        apply(ev.matches ? 'dark' : 'light');
+      });
+    } catch (e) {}
+  }
+})();
+</script>
+
+<!--
+  Build-stamp styling. Tiny, neutral, dark-mode aware. The actual stamp text
+  is injected by shared/scripts/inject-build-stamp.sh into footer markup
+  containing the literal MLSB_BUILD_STAMP HTML-comment token (see that
+  script for the exact pattern — we cannot write it here because HTML
+  comments cannot nest and the inner closer would terminate this block).
+-->
+<style>
+.mlsb-build-stamp {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  font-variant-numeric: tabular-nums;
+}
+[data-bs-theme="dark"] .mlsb-build-stamp { opacity: 0.5; }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link rel="icon" href="https://mlsysbook.ai/vol1/assets/images/icons/favicon.png" type="image/png">
+
+<!--
+  navbar-theme-toggle-relocate — moves the Quarto theme toggle into the
+  navbar's right-side .navbar-nav group at page load, so it collapses into
+  the hamburger menu alongside Subscribe/Star/Support/GitHub at narrow widths
+  instead of being stranded in the middle by Quarto's mx-auto brand layout.
+
+  Why JS: Quarto auto-injects the toggle into .quarto-navbar-tools (outside
+  .navbar-collapse). CSS can't move DOM nodes between containers, and CSS
+  positioning hacks (absolute/right: 50px) fight Bootstrap's responsive
+  layout below 992px. Moving the node once at startup is the standard
+  approach used across Quarto-based sites with the same problem.
+-->
+<script>
+(function () {
+  'use strict';
+  function relocateThemeToggle() {
+    var tools = document.querySelector('.quarto-navbar-tools');
+    if (!tools) return;
+    var toggle = tools.querySelector('.quarto-color-scheme-toggle');
+    if (!toggle) return;
+    var navRight = document.querySelector(
+      '.navbar .navbar-collapse .navbar-nav.ms-auto'
+    ) || document.querySelector(
+      '.navbar .navbar-collapse .navbar-nav:last-of-type'
+    );
+    if (!navRight) return;
+    var li = document.createElement('li');
+    li.className = 'nav-item navbar-theme-toggle-item';
+    toggle.classList.add('nav-link');
+    li.appendChild(toggle);
+    navRight.appendChild(li);
+    tools.style.display = 'none';
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', relocateThemeToggle);
+  } else {
+    relocateThemeToggle();
+  }
+})();
+</script>
+
+<!--
+  navbar-brand-href-fix — force the navbar brand link to the ecosystem root
+  (https://mlsysbook.ai/) on every subsite.
+
+  Quarto sets each subsite's `site-url` to `https://mlsysbook.ai/<subsite>/`
+  and then relativizes any navbar.href value that lives inside the
+  site-url's domain. The shared `href: https://mlsysbook.ai/` in
+  navbar-common.yml therefore gets emitted as `./index.html`, which on
+  vol1/vol2/tinytorch/etc. resolves to *that subsite's* root rather than
+  the ecosystem landing page. Override the brand link href in JS after
+  Quarto's render: this is a one-line user-experience fix that does not
+  fight Quarto's URL machinery.
+-->
+<script>
+(function () {
+  'use strict';
+  function fixBrandHref() {
+    var brand = document.querySelectorAll(
+      '.navbar .navbar-brand, .navbar .navbar-brand-logo'
+    );
+    for (var i = 0; i < brand.length; i++) {
+      brand[i].setAttribute('href', 'https://mlsysbook.ai/');
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixBrandHref);
+  } else {
+    fixBrandHref();
+  }
+})();
+</script>
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="apple-touch-icon" href="../../shared/assets/images/icons/favicon.png">
+<meta name="theme-color" content="#1F407A">
+<!-- Release identity (rendered into the footer pill below).
+     The publish workflow drops release-manifest.json at
+     /vol2/release-manifest.json before deploy. -->
+<meta name="release-manifest" content="/vol2/release-manifest.json">
+<!-- SocratiQ bundle: -->
+<!-- <script type="module" src="/tools/scripts/socratiQ/bundle.js" defer></script> -->
+<script src="../../shared/assets/scripts/sidebar-auto-collapse.js" defer=""></script>
+<script src="../../shared/assets/scripts/version-link.js" defer=""></script>
+<script src="../../shared/assets/scripts/subscribe-modal.js" defer=""></script>
+<style>
+.callout-chapter-connection {
+  --color1: #F1F5F9;
+  --color2: #64748B;
+  --border-color: #64748B;
+  --background-color: rgba(100, 116, 139, 0.04);
+  --title-background-color: rgba(100, 116, 139, 0.04);
+  --dark-background-color: rgba(100, 116, 139, 0.12);
+  --dark-title-background-color: rgba(100, 116, 139, 0.12);
+}
+.callout-resource-slides {
+  --color1: #E0F2F1;
+  --color2: #20B2AA;
+  --border-color: #20B2AA;
+  --background-color: rgba(32, 178, 170, 0.04);
+  --title-background-color: rgba(32, 178, 170, 0.04);
+  --dark-background-color: rgba(32, 178, 170, 0.12);
+  --dark-title-background-color: rgba(32, 178, 170, 0.12);
+}
+.callout-resource-exercises {
+  --color1: #E0F2F1;
+  --color2: #20B2AA;
+  --border-color: #20B2AA;
+  --background-color: rgba(32, 178, 170, 0.04);
+  --title-background-color: rgba(32, 178, 170, 0.04);
+  --dark-background-color: rgba(32, 178, 170, 0.12);
+  --dark-title-background-color: rgba(32, 178, 170, 0.12);
+}
+.callout-research-questions {
+  --color1: #F0F0F8;
+  --color2: #5B4B8A;
+  --border-color: #5B4B8A;
+  --background-color: rgba(91, 75, 138, 0.04);
+  --title-background-color: rgba(91, 75, 138, 0.04);
+  --dark-background-color: rgba(91, 75, 138, 0.12);
+  --dark-title-background-color: rgba(91, 75, 138, 0.12);
+}
+.callout-war-story {
+  --color1: #FEF2F2;
+  --color2: #C53030;
+  --border-color: #C53030;
+  --background-color: rgba(197, 48, 48, 0.04);
+  --title-background-color: rgba(197, 48, 48, 0.04);
+  --dark-background-color: rgba(197, 48, 48, 0.12);
+  --dark-title-background-color: rgba(197, 48, 48, 0.12);
+}
+.callout-learning-objectives {
+  --color1: #E8F2EA;
+  --color2: #4A7C59;
+  --border-color: #4A7C59;
+  --background-color: rgba(74, 124, 89, 0.04);
+  --title-background-color: rgba(74, 124, 89, 0.04);
+  --dark-background-color: rgba(74, 124, 89, 0.12);
+  --dark-title-background-color: rgba(74, 124, 89, 0.12);
+}
+.callout-takeaways {
+  --color1: #FCF4F8;
+  --color2: #9D3C72;
+  --border-color: #9D3C72;
+  --background-color: rgba(157, 60, 114, 0.04);
+  --title-background-color: rgba(157, 60, 114, 0.04);
+  --dark-background-color: rgba(157, 60, 114, 0.12);
+  --dark-title-background-color: rgba(157, 60, 114, 0.12);
+}
+.callout-quiz-question {
+  --color1: #F0F0F8;
+  --color2: #5B4B8A;
+  --border-color: #5B4B8A;
+  --background-color: rgba(91, 75, 138, 0.04);
+  --title-background-color: rgba(91, 75, 138, 0.04);
+  --dark-background-color: rgba(91, 75, 138, 0.12);
+  --dark-title-background-color: rgba(91, 75, 138, 0.12);
+}
+.callout-quiz-answer {
+  --color1: #E8F2EA;
+  --color2: #4A7C59;
+  --border-color: #4A7C59;
+  --background-color: rgba(74, 124, 89, 0.04);
+  --title-background-color: rgba(74, 124, 89, 0.04);
+  --dark-background-color: rgba(74, 124, 89, 0.12);
+  --dark-title-background-color: rgba(74, 124, 89, 0.12);
+}
+.callout-checkpoint {
+  --color1: #F7FEE7;
+  --color2: #4D7C0F;
+  --border-color: #4D7C0F;
+  --background-color: rgba(77, 124, 15, 0.04);
+  --title-background-color: rgba(77, 124, 15, 0.04);
+  --dark-background-color: rgba(77, 124, 15, 0.12);
+  --dark-title-background-color: rgba(77, 124, 15, 0.12);
+}
+.callout-lighthouse {
+  --color1: #FDF8E6;
+  --color2: #B8860B;
+  --border-color: #B8860B;
+  --background-color: rgba(184, 134, 11, 0.04);
+  --title-background-color: rgba(184, 134, 11, 0.04);
+  --dark-background-color: rgba(184, 134, 11, 0.12);
+  --dark-title-background-color: rgba(184, 134, 11, 0.12);
+}
+.callout-code {
+  --color1: #F2F4F8;
+  --color2: #3C4858;
+  --border-color: #3C4858;
+  --background-color: rgba(60, 72, 88, 0.04);
+  --title-background-color: rgba(60, 72, 88, 0.04);
+  --dark-background-color: rgba(60, 72, 88, 0.12);
+  --dark-title-background-color: rgba(60, 72, 88, 0.12);
+}
+.callout-colab {
+  --color1: #FFF5E6;
+  --color2: #FF6B35;
+  --border-color: #FF6B35;
+  --background-color: rgba(255, 107, 53, 0.04);
+  --title-background-color: rgba(255, 107, 53, 0.04);
+  --dark-background-color: rgba(255, 107, 53, 0.12);
+  --dark-title-background-color: rgba(255, 107, 53, 0.12);
+}
+.callout-notebook {
+  --color1: #F4F7FA;
+  --color2: #3F6077;
+  --border-color: #3F6077;
+  --background-color: rgba(63, 96, 119, 0.04);
+  --title-background-color: rgba(63, 96, 119, 0.04);
+  --dark-background-color: rgba(63, 96, 119, 0.12);
+  --dark-title-background-color: rgba(63, 96, 119, 0.12);
+}
+.callout-resource-videos {
+  --color1: #E0F2F1;
+  --color2: #20B2AA;
+  --border-color: #20B2AA;
+  --background-color: rgba(32, 178, 170, 0.04);
+  --title-background-color: rgba(32, 178, 170, 0.04);
+  --dark-background-color: rgba(32, 178, 170, 0.12);
+  --dark-title-background-color: rgba(32, 178, 170, 0.12);
+}
+.callout-principle {
+  --color1: #F3F2FA;
+  --color2: #3D3B8E;
+  --border-color: #3D3B8E;
+  --background-color: rgba(61, 59, 142, 0.04);
+  --title-background-color: rgba(61, 59, 142, 0.04);
+  --dark-background-color: rgba(61, 59, 142, 0.12);
+  --dark-title-background-color: rgba(61, 59, 142, 0.12);
+}
+.callout-case-study {
+  --color1: #FEF2F2;
+  --color2: #C53030;
+  --border-color: #C53030;
+  --background-color: rgba(197, 48, 48, 0.04);
+  --title-background-color: rgba(197, 48, 48, 0.04);
+  --dark-background-color: rgba(197, 48, 48, 0.12);
+  --dark-title-background-color: rgba(197, 48, 48, 0.12);
+}
+.callout-theorem {
+  --color1: #F5F0FA;
+  --color2: #6B46C1;
+  --border-color: #6B46C1;
+  --background-color: rgba(107, 70, 193, 0.04);
+  --title-background-color: rgba(107, 70, 193, 0.04);
+  --dark-background-color: rgba(107, 70, 193, 0.12);
+  --dark-title-background-color: rgba(107, 70, 193, 0.12);
+}
+.callout-perspective {
+  --color1: #F7F8FA;
+  --color2: #4A5568;
+  --border-color: #4A5568;
+  --background-color: rgba(74, 85, 104, 0.04);
+  --title-background-color: rgba(74, 85, 104, 0.04);
+  --dark-background-color: rgba(74, 85, 104, 0.12);
+  --dark-title-background-color: rgba(74, 85, 104, 0.12);
+}
+.callout-definition {
+  --color1: #F2F7FA;
+  --color2: #4F7396;
+  --border-color: #4F7396;
+  --background-color: rgba(79, 115, 150, 0.04);
+  --title-background-color: rgba(79, 115, 150, 0.04);
+  --dark-background-color: rgba(79, 115, 150, 0.12);
+  --dark-title-background-color: rgba(79, 115, 150, 0.12);
+}
+.callout-example {
+  --color1: #F0F8F6;
+  --color2: #148F77;
+  --border-color: #148F77;
+  --background-color: rgba(20, 143, 119, 0.04);
+  --title-background-color: rgba(20, 143, 119, 0.04);
+  --dark-background-color: rgba(20, 143, 119, 0.12);
+  --dark-title-background-color: rgba(20, 143, 119, 0.12);
+}
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  details.callout-chapter-connection {
+    --text-color: #e6e6e6;
+    --background-color: rgba(100, 116, 139, 0.12);
+    --title-background-color: rgba(100, 116, 139, 0.12);
+    border-color: #64748B;
+  }
+  details.callout-chapter-connection summary,
+  details.callout-chapter-connection summary strong,
+  details.callout-chapter-connection > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-chapter-connection code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-resource-slides {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+  details.callout-resource-slides summary,
+  details.callout-resource-slides summary strong,
+  details.callout-resource-slides > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-resource-slides code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-resource-exercises {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+  details.callout-resource-exercises summary,
+  details.callout-resource-exercises summary strong,
+  details.callout-resource-exercises > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-resource-exercises code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-research-questions {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+  details.callout-research-questions summary,
+  details.callout-research-questions summary strong,
+  details.callout-research-questions > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-research-questions code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-war-story {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+  details.callout-war-story summary,
+  details.callout-war-story summary strong,
+  details.callout-war-story > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-war-story code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-learning-objectives {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+  details.callout-learning-objectives summary,
+  details.callout-learning-objectives summary strong,
+  details.callout-learning-objectives > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-learning-objectives code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-takeaways {
+    --text-color: #e6e6e6;
+    --background-color: rgba(157, 60, 114, 0.12);
+    --title-background-color: rgba(157, 60, 114, 0.12);
+    border-color: #9D3C72;
+  }
+  details.callout-takeaways summary,
+  details.callout-takeaways summary strong,
+  details.callout-takeaways > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-takeaways code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-quiz-question {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+  details.callout-quiz-question summary,
+  details.callout-quiz-question summary strong,
+  details.callout-quiz-question > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-quiz-question code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-quiz-answer {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+  details.callout-quiz-answer summary,
+  details.callout-quiz-answer summary strong,
+  details.callout-quiz-answer > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-quiz-answer code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-checkpoint {
+    --text-color: #e6e6e6;
+    --background-color: rgba(77, 124, 15, 0.12);
+    --title-background-color: rgba(77, 124, 15, 0.12);
+    border-color: #4D7C0F;
+  }
+  details.callout-checkpoint summary,
+  details.callout-checkpoint summary strong,
+  details.callout-checkpoint > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-checkpoint code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-lighthouse {
+    --text-color: #e6e6e6;
+    --background-color: rgba(184, 134, 11, 0.12);
+    --title-background-color: rgba(184, 134, 11, 0.12);
+    border-color: #B8860B;
+  }
+  details.callout-lighthouse summary,
+  details.callout-lighthouse summary strong,
+  details.callout-lighthouse > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-lighthouse code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-code {
+    --text-color: #e6e6e6;
+    --background-color: rgba(60, 72, 88, 0.12);
+    --title-background-color: rgba(60, 72, 88, 0.12);
+    border-color: #3C4858;
+  }
+  details.callout-code summary,
+  details.callout-code summary strong,
+  details.callout-code > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-code code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-colab {
+    --text-color: #e6e6e6;
+    --background-color: rgba(255, 107, 53, 0.12);
+    --title-background-color: rgba(255, 107, 53, 0.12);
+    border-color: #FF6B35;
+  }
+  details.callout-colab summary,
+  details.callout-colab summary strong,
+  details.callout-colab > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-colab code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-notebook {
+    --text-color: #e6e6e6;
+    --background-color: rgba(63, 96, 119, 0.12);
+    --title-background-color: rgba(63, 96, 119, 0.12);
+    border-color: #3F6077;
+  }
+  details.callout-notebook summary,
+  details.callout-notebook summary strong,
+  details.callout-notebook > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-notebook code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-resource-videos {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+  details.callout-resource-videos summary,
+  details.callout-resource-videos summary strong,
+  details.callout-resource-videos > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-resource-videos code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-principle {
+    --text-color: #e6e6e6;
+    --background-color: rgba(61, 59, 142, 0.12);
+    --title-background-color: rgba(61, 59, 142, 0.12);
+    border-color: #3D3B8E;
+  }
+  details.callout-principle summary,
+  details.callout-principle summary strong,
+  details.callout-principle > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-principle code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-case-study {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+  details.callout-case-study summary,
+  details.callout-case-study summary strong,
+  details.callout-case-study > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-case-study code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-theorem {
+    --text-color: #e6e6e6;
+    --background-color: rgba(107, 70, 193, 0.12);
+    --title-background-color: rgba(107, 70, 193, 0.12);
+    border-color: #6B46C1;
+  }
+  details.callout-theorem summary,
+  details.callout-theorem summary strong,
+  details.callout-theorem > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-theorem code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-perspective {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 85, 104, 0.12);
+    --title-background-color: rgba(74, 85, 104, 0.12);
+    border-color: #4A5568;
+  }
+  details.callout-perspective summary,
+  details.callout-perspective summary strong,
+  details.callout-perspective > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-perspective code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-definition {
+    --text-color: #e6e6e6;
+    --background-color: rgba(79, 115, 150, 0.12);
+    --title-background-color: rgba(79, 115, 150, 0.12);
+    border-color: #4F7396;
+  }
+  details.callout-definition summary,
+  details.callout-definition summary strong,
+  details.callout-definition > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-definition code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-example {
+    --text-color: #e6e6e6;
+    --background-color: rgba(20, 143, 119, 0.12);
+    --title-background-color: rgba(20, 143, 119, 0.12);
+    border-color: #148F77;
+  }
+  details.callout-example summary,
+  details.callout-example summary strong,
+  details.callout-example > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-example code {
+    color: #e6e6e6 !important;
+  }
+}
+body.quarto-dark details.callout-chapter-connection {
+    --text-color: #e6e6e6;
+    --background-color: rgba(100, 116, 139, 0.12);
+    --title-background-color: rgba(100, 116, 139, 0.12);
+    border-color: #64748B;
+  }
+body.quarto-dark details.callout-chapter-connection summary,
+body.quarto-dark details.callout-chapter-connection summary strong,
+body.quarto-dark details.callout-chapter-connection > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-chapter-connection code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-resource-slides {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+body.quarto-dark details.callout-resource-slides summary,
+body.quarto-dark details.callout-resource-slides summary strong,
+body.quarto-dark details.callout-resource-slides > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-resource-slides code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-resource-exercises {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+body.quarto-dark details.callout-resource-exercises summary,
+body.quarto-dark details.callout-resource-exercises summary strong,
+body.quarto-dark details.callout-resource-exercises > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-resource-exercises code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-research-questions {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+body.quarto-dark details.callout-research-questions summary,
+body.quarto-dark details.callout-research-questions summary strong,
+body.quarto-dark details.callout-research-questions > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-research-questions code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-war-story {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+body.quarto-dark details.callout-war-story summary,
+body.quarto-dark details.callout-war-story summary strong,
+body.quarto-dark details.callout-war-story > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-war-story code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-learning-objectives {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+body.quarto-dark details.callout-learning-objectives summary,
+body.quarto-dark details.callout-learning-objectives summary strong,
+body.quarto-dark details.callout-learning-objectives > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-learning-objectives code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-takeaways {
+    --text-color: #e6e6e6;
+    --background-color: rgba(157, 60, 114, 0.12);
+    --title-background-color: rgba(157, 60, 114, 0.12);
+    border-color: #9D3C72;
+  }
+body.quarto-dark details.callout-takeaways summary,
+body.quarto-dark details.callout-takeaways summary strong,
+body.quarto-dark details.callout-takeaways > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-takeaways code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-quiz-question {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+body.quarto-dark details.callout-quiz-question summary,
+body.quarto-dark details.callout-quiz-question summary strong,
+body.quarto-dark details.callout-quiz-question > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-quiz-question code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-quiz-answer {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+body.quarto-dark details.callout-quiz-answer summary,
+body.quarto-dark details.callout-quiz-answer summary strong,
+body.quarto-dark details.callout-quiz-answer > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-quiz-answer code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-checkpoint {
+    --text-color: #e6e6e6;
+    --background-color: rgba(77, 124, 15, 0.12);
+    --title-background-color: rgba(77, 124, 15, 0.12);
+    border-color: #4D7C0F;
+  }
+body.quarto-dark details.callout-checkpoint summary,
+body.quarto-dark details.callout-checkpoint summary strong,
+body.quarto-dark details.callout-checkpoint > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-checkpoint code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-lighthouse {
+    --text-color: #e6e6e6;
+    --background-color: rgba(184, 134, 11, 0.12);
+    --title-background-color: rgba(184, 134, 11, 0.12);
+    border-color: #B8860B;
+  }
+body.quarto-dark details.callout-lighthouse summary,
+body.quarto-dark details.callout-lighthouse summary strong,
+body.quarto-dark details.callout-lighthouse > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-lighthouse code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-code {
+    --text-color: #e6e6e6;
+    --background-color: rgba(60, 72, 88, 0.12);
+    --title-background-color: rgba(60, 72, 88, 0.12);
+    border-color: #3C4858;
+  }
+body.quarto-dark details.callout-code summary,
+body.quarto-dark details.callout-code summary strong,
+body.quarto-dark details.callout-code > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-code code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-colab {
+    --text-color: #e6e6e6;
+    --background-color: rgba(255, 107, 53, 0.12);
+    --title-background-color: rgba(255, 107, 53, 0.12);
+    border-color: #FF6B35;
+  }
+body.quarto-dark details.callout-colab summary,
+body.quarto-dark details.callout-colab summary strong,
+body.quarto-dark details.callout-colab > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-colab code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-notebook {
+    --text-color: #e6e6e6;
+    --background-color: rgba(63, 96, 119, 0.12);
+    --title-background-color: rgba(63, 96, 119, 0.12);
+    border-color: #3F6077;
+  }
+body.quarto-dark details.callout-notebook summary,
+body.quarto-dark details.callout-notebook summary strong,
+body.quarto-dark details.callout-notebook > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-notebook code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-resource-videos {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+body.quarto-dark details.callout-resource-videos summary,
+body.quarto-dark details.callout-resource-videos summary strong,
+body.quarto-dark details.callout-resource-videos > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-resource-videos code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-principle {
+    --text-color: #e6e6e6;
+    --background-color: rgba(61, 59, 142, 0.12);
+    --title-background-color: rgba(61, 59, 142, 0.12);
+    border-color: #3D3B8E;
+  }
+body.quarto-dark details.callout-principle summary,
+body.quarto-dark details.callout-principle summary strong,
+body.quarto-dark details.callout-principle > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-principle code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-case-study {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+body.quarto-dark details.callout-case-study summary,
+body.quarto-dark details.callout-case-study summary strong,
+body.quarto-dark details.callout-case-study > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-case-study code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-theorem {
+    --text-color: #e6e6e6;
+    --background-color: rgba(107, 70, 193, 0.12);
+    --title-background-color: rgba(107, 70, 193, 0.12);
+    border-color: #6B46C1;
+  }
+body.quarto-dark details.callout-theorem summary,
+body.quarto-dark details.callout-theorem summary strong,
+body.quarto-dark details.callout-theorem > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-theorem code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-perspective {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 85, 104, 0.12);
+    --title-background-color: rgba(74, 85, 104, 0.12);
+    border-color: #4A5568;
+  }
+body.quarto-dark details.callout-perspective summary,
+body.quarto-dark details.callout-perspective summary strong,
+body.quarto-dark details.callout-perspective > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-perspective code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-definition {
+    --text-color: #e6e6e6;
+    --background-color: rgba(79, 115, 150, 0.12);
+    --title-background-color: rgba(79, 115, 150, 0.12);
+    border-color: #4F7396;
+  }
+body.quarto-dark details.callout-definition summary,
+body.quarto-dark details.callout-definition summary strong,
+body.quarto-dark details.callout-definition > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-definition code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-example {
+    --text-color: #e6e6e6;
+    --background-color: rgba(20, 143, 119, 0.12);
+    --title-background-color: rgba(20, 143, 119, 0.12);
+    border-color: #148F77;
+  }
+body.quarto-dark details.callout-example summary,
+body.quarto-dark details.callout-example summary strong,
+body.quarto-dark details.callout-example > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-example code {
+    color: #e6e6e6 !important;
+  }
+</style>
+<style>
+details.callout-chapter-connection > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_chapter_connection.png");
+}
+details.callout-resource-slides > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_resource_slides.png");
+}
+details.callout-resource-exercises > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_resource_exercises.png");
+}
+details.callout-research-questions > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_research_questions.png");
+}
+details.callout-war-story > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_case_study.png");
+}
+details.callout-learning-objectives > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_learning_objectives.png");
+}
+details.callout-takeaways > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_takeaways.png");
+}
+details.callout-quiz-question > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_quiz_question.png");
+}
+details.callout-quiz-answer > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_quiz_answer.png");
+}
+details.callout-checkpoint > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_checkpoint.png");
+}
+details.callout-lighthouse > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_lighthouse.png");
+}
+details.callout-code > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_code.png");
+}
+details.callout-colab > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_colab.png");
+}
+details.callout-notebook > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_notebook.png");
+}
+details.callout-resource-videos > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_resource_videos.png");
+}
+details.callout-principle > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_principle.png");
+}
+details.callout-case-study > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_case_study.png");
+}
+details.callout-theorem > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_theorem.png");
+}
+details.callout-perspective > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_perspective.png");
+}
+details.callout-definition > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_definition.png");
+}
+details.callout-example > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_example.png");
+}
+</style>
+    <style type="text/css">
+    .ps-root .ps-algorithm {
+      border-top: 2px solid;
+      border-bottom: 2px solid;
+    }
+    .pseudocode-container {
+      text-align: left;
+    }
+    </style>
+  
+      <style type="text/css">
+      .ps-algorithm > .ps-line {
+        text-align: left;
+      }
+      </style>
+    
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="Machine Learning Systems at Scale">
+<meta property="og:description" content="Volume II: Scaling Machine Learning Systems. Scale, distribute, and govern machine learning systems in production.">
+<meta property="og:image" content="https://mlsysbook.ai/vol2/vol2/backmatter/shared/assets/images/covers/cover-hardcover-book-vol2.png">
+<meta property="og:site_name" content="Scaling Machine Learning Systems">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:title" content="Machine Learning Systems at Scale">
+<meta name="twitter:description" content="Volume II: Scaling Machine Learning Systems. Scale, distribute, and govern machine learning systems in production.">
+<meta name="twitter:image" content="https://mlsysbook.ai/vol2/vol2/backmatter/shared/assets/images/covers/cover-hardcover-book-vol2.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed slimcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-xl " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../shared/assets/images/icons/logo-seas-shield.png" alt="" class="navbar-logo light-content">
+    <img src="../../shared/assets/images/icons/logo-seas-shield.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Hệ thống Học máy</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-read" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Read</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-read">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol1/"><i class="bi bi-journal" role="img">
+</i> 
+ <span class="dropdown-text">Volume I: Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol2/"><i class="bi bi-journal" role="img">
+</i> 
+ <span class="dropdown-text">Volume II: Scaling</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/tinytorch/"><i class="bi bi-fire" role="img">
+</i> 
+ <span class="dropdown-text">TinyTorch (Standalone Book)</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol1/assets/downloads/Machine-Learning-Systems-Vol1.pdf" target="_blank"><i class="bi bi-file-pdf" role="img">
+</i> 
+ <span class="dropdown-text">Volume I PDF</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol2/assets/downloads/Machine-Learning-Systems-Vol2.pdf" target="_blank"><i class="bi bi-file-pdf" role="img">
+</i> 
+ <span class="dropdown-text">Volume II PDF</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-build" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Build</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-build">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/labs/"><i class="bi bi-sliders" role="img">
+</i> 
+ <span class="dropdown-text">Labs</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/tinytorch/"><i class="bi bi-fire" role="img">
+</i> 
+ <span class="dropdown-text">TinyTorch</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/kits/"><i class="bi bi-cpu" role="img">
+</i> 
+ <span class="dropdown-text">Hardware Kits</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/mlsysim/"><i class="bi bi-calculator" role="img">
+</i> 
+ <span class="dropdown-text">MLSys·im</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-teach" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Teach</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-teach">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/online/ai-engineering-for-leaders/"><i class="bi bi-person-badge" role="img">
+</i> 
+ <span class="dropdown-text">AI Engineering for Leaders (HarvardX)</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/instructors/course-map.html"><i class="bi bi-signpost-split" role="img">
+</i> 
+ <span class="dropdown-text">CS249r Course Map</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/slides/"><i class="bi bi-easel" role="img">
+</i> 
+ <span class="dropdown-text">Lecture Slides</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/instructors/"><i class="bi bi-person-video3" role="img">
+</i> 
+ <span class="dropdown-text">Instructor Hub</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-prepare" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Prepare</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-prepare">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/"><i class="bi bi-mortarboard" role="img">
+</i> 
+ <span class="dropdown-text">StaffML</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/plans"><i class="bi bi-map" role="img">
+</i> 
+ <span class="dropdown-text">Study Plans</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/gauntlet"><i class="bi bi-lightning" role="img">
+</i> 
+ <span class="dropdown-text">Gauntlet Mode</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/downloads/StaffML-Paper.pdf" target="_blank"><i class="bi bi-file-pdf" role="img">
+</i> 
+ <span class="dropdown-text">StaffML Paper</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-connect" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Connect</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-connect">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/newsletter/"><i class="bi bi-envelope" role="img">
+</i> 
+ <span class="dropdown-text">Newsletter</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/community/"><i class="bi bi-globe" role="img">
+</i> 
+ <span class="dropdown-text">Global Network</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/community/events.html"><i class="bi bi-calendar-event" role="img">
+</i> 
+ <span class="dropdown-text">Workshops &amp; Events</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/community/partners.html"><i class="bi bi-people" role="img">
+</i> 
+ <span class="dropdown-text">Partners &amp; Sponsors</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">About</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/"><i class="bi bi-bullseye" role="img">
+</i> 
+ <span class="dropdown-text">Mission</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/#story"><i class="bi bi-book" role="img">
+</i> 
+ <span class="dropdown-text">Our Story</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/people.html"><i class="bi bi-person-lines-fill" role="img">
+</i> 
+ <span class="dropdown-text">People</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/contributors.html"><i class="bi bi-people" role="img">
+</i> 
+ <span class="dropdown-text">Contributors</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/license.html"><i class="bi bi-cc-circle" role="img">
+</i> 
+ <span class="dropdown-text">License</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://mlsysbook.ai/newsletter/"> <i class="bi bi-envelope" role="img">
+</i> 
+<span class="menu-text">Subscribe</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/harvard-edge/cs249r_book" target="_blank"> <i class="bi bi-star" role="img">
+</i> 
+<span class="menu-text">Star</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://opencollective.com/mlsysbook" target="_blank"> <i class="bi bi-heart" role="img">
+</i> 
+<span class="menu-text">Support</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-github" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text">GitHub</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-github">    
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book/discussions" target="_blank"><i class="bi bi-chat" role="img">
+</i> 
+ <span class="dropdown-text">Discussions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book" target="_blank"><i class="bi bi-pencil" role="img">
+</i> 
+ <span class="dropdown-text">Edit this page</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book/issues/new" target="_blank"><i class="bi bi-bug" role="img">
+</i> 
+ <span class="dropdown-text">Report an issue</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book" target="_blank"><i class="bi bi-code" role="img">
+</i> 
+ <span class="dropdown-text">View source</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../vol2/backmatter/appendix_dam.html">Phụ lục</a></li><li class="breadcrumb-item"><a href="../../vol2/backmatter/appendix_fleet.html">Nền tảng Đội máy</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+  <div id="quarto-announcement" data-announcement-id="9162214c8cd5a767bcf26eee1acfa73d" class="alert alert-primary hidden"><i class="bi bi-megaphone quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p>🚀 <strong>Tập II: Quy mô lớn.</strong> Huấn luyện phân tán, vận hành đội máy, và triển khai có trách nhiệm.<br> 📘 <strong>Lần đầu ghé thăm?</strong> Bắt đầu với <a href="https://mlsysbook.ai/vol1/">Tập I: Nền tảng</a> — truy cập mở, miễn phí mãi mãi.<br> 🛠️ <strong>Song hành cùng sách:</strong> <a href="https://mlsysbook.ai/tinytorch/">TinyTorch</a> (xây dựng) · <a href="https://mlsysbook.ai/kits/">Hardware Kits</a> (triển khai) · <a href="https://mlsysbook.ai/mlsysim/">MLSys·im</a> (mô hình hóa) · <a href="https://mlsysbook.ai/labs/">Labs</a> (khám phá) · <a href="https://mlsysbook.ai/staffml/">StaffML</a> (thực hành)<br> 📬 <strong>Bản tin:</strong> Thông tin &amp; cập nhật về ML Systems — <a href="https://mlsysbook.ai/newsletter/">Đăng ký →</a></p>
+</div><i class="bi bi-x-lg quarto-announcement-action"></i></div>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Trang chủ</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/frontmatter/dedication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời đề tặng</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/frontmatter/author_note.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời tác giả</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/frontmatter/about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời nói đầu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/frontmatter/acknowledgements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời cảm ơn</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/frontmatter/ai_use.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Một lưu ý về hỗ trợ AI</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/frontmatter/notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ký hiệu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/frontmatter/socratiq/socratiq.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SocratiQ AI</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/01_introduction/01_introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Giới thiệu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../vol2/parts/fleet_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần I: Đội máy (Fleet)</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/02_compute_infrastructure/02_compute_infrastructure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cơ sở hạ tầng tính toán</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/03_network_fabrics/03_network_fabrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cấu trúc mạng</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/04_data_storage/04_data_storage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lưu trữ dữ liệu</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../vol2/parts/distributed_ml_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần II: ML Phân tán</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/05_distributed_training/05_distributed_training.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Huấn luyện phân tán</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/06_collective_communication/06_collective_communication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Truyền thông tập thể</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/07_fault_tolerance/07_fault_tolerance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Khả năng chịu lỗi</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/08_fleet_orchestration/08_fleet_orchestration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Điều phối cụm máy</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../vol2/parts/deployment_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần III: Triển khai ở Quy mô lớn</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/09_performance_engineering/09_performance_engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kỹ thuật hiệu năng</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/10_inference/10_inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Suy luận ở quy mô lớn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/11_edge_intelligence/11_edge_intelligence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Trí tuệ Edge</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/12_ops_scale/12_ops_scale.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vận hành ML ở quy mô lớn</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../vol2/parts/responsible_fleet_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần IV: Đội máy Có trách nhiệm</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/13_security_privacy/13_security_privacy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bảo mật &amp; Quyền riêng tư</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/14_robust_ai/14_robust_ai.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI Mạnh Mẽ</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/15_sustainable_ai/15_sustainable_ai.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI bền vững</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/16_responsible_ai/16_responsible_ai.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI có trách nhiệm</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/17_conclusion/17_conclusion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kết luận</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tài liệu tham khảo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Phụ lục</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_dam.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng Một máy (D·A·M)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_c3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phân loại C³</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_fleet.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Nền tảng Đội máy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_communication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng Truyền thông</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_reliability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng Độ tin cậy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng Suy luận</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_assumptions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">System Assumptions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/glossary/glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Trên trang này</h2>
+   
+  <ul>
+  <li><a href="#sec-appdx-fleet-foundations" id="toc-sec-appdx-fleet-foundations" class="nav-link active" data-scroll-target="#sec-appdx-fleet-foundations">Nền tảng cụm</a>
+  <ul>
+  <li><a href="#cách-sử-dụng-phụ-lục-này" id="toc-cách-sử-dụng-phụ-lục-này" class="nav-link" data-scroll-target="#cách-sử-dụng-phụ-lục-này">Cách sử dụng phụ lục này</a></li>
+  <li><a href="#sec-appdx-fleet-foundations-system-paradigms" id="toc-sec-appdx-fleet-foundations-system-paradigms" class="nav-link" data-scroll-target="#sec-appdx-fleet-foundations-system-paradigms">Ba mô hình hệ thống</a>
+  <ul class="collapse">
+  <li><a href="#điện-toán-hiệu-năng-cao" id="toc-điện-toán-hiệu-năng-cao" class="nav-link" data-scroll-target="#điện-toán-hiệu-năng-cao">Điện toán hiệu năng cao</a></li>
+  <li><a href="#điện-toán-quy-mô-kho" id="toc-điện-toán-quy-mô-kho" class="nav-link" data-scroll-target="#điện-toán-quy-mô-kho">Điện toán quy mô kho</a></li>
+  <li><a href="#cụm-ml-kiến-trúc-lai" id="toc-cụm-ml-kiến-trúc-lai" class="nav-link" data-scroll-target="#cụm-ml-kiến-trúc-lai">Cụm ML: Kiến trúc lai</a></li>
+  <li><a href="#tóm-tắt-kiến-thức-nền-tảng" id="toc-tóm-tắt-kiến-thức-nền-tảng" class="nav-link" data-scroll-target="#tóm-tắt-kiến-thức-nền-tảng">Tóm tắt kiến thức nền tảng</a></li>
+  </ul></li>
+  <li><a href="#sec-appdx-fleet-foundations-numbers-to-know" id="toc-sec-appdx-fleet-foundations-numbers-to-know" class="nav-link" data-scroll-target="#sec-appdx-fleet-foundations-numbers-to-know">Những con số mọi kỹ sư fleet nên biết</a>
+  <ul class="collapse">
+  <li><a href="#các-bất-biến-những-tỷ-lệ-không-đổi" id="toc-các-bất-biến-những-tỷ-lệ-không-đổi" class="nav-link" data-scroll-target="#các-bất-biến-những-tỷ-lệ-không-đổi">Các bất biến: những tỷ lệ không đổi</a>
+  <ul class="collapse">
+  <li><a href="#tỷ-lệ-phân-cấp-mạng" id="toc-tỷ-lệ-phân-cấp-mạng" class="nav-link" data-scroll-target="#tỷ-lệ-phân-cấp-mạng">Tỷ lệ phân cấp mạng</a></li>
+  <li><a href="#luật-tỷ-lệ-lỗi" id="toc-luật-tỷ-lệ-lỗi" class="nav-link" data-scroll-target="#luật-tỷ-lệ-lỗi">Luật tỷ lệ lỗi</a></li>
+  <li><a href="#độ-đội-chi-phí-allreduce" id="toc-độ-đội-chi-phí-allreduce" class="nav-link" data-scroll-target="#độ-đội-chi-phí-allreduce">Độ đội chi phí AllReduce</a></li>
+  </ul></li>
+  <li><a href="#các-thông-số-về-giao-tiếp" id="toc-các-thông-số-về-giao-tiếp" class="nav-link" data-scroll-target="#các-thông-số-về-giao-tiếp">Các thông số về giao tiếp</a></li>
+  <li><a href="#các-chỉ-số-tính-toán" id="toc-các-chỉ-số-tính-toán" class="nav-link" data-scroll-target="#các-chỉ-số-tính-toán">Các chỉ số tính toán</a></li>
+  <li><a href="#các-chỉ-số-về-điều-phối" id="toc-các-chỉ-số-về-điều-phối" class="nav-link" data-scroll-target="#các-chỉ-số-về-điều-phối">Các chỉ số về điều phối</a>
+  <ul class="collapse">
+  <li><a href="#tỷ-lệ-lỗi-theo-kích-thước-cụm" id="toc-tỷ-lệ-lỗi-theo-kích-thước-cụm" class="nav-link" data-scroll-target="#tỷ-lệ-lỗi-theo-kích-thước-cụm">Tỷ lệ lỗi theo kích thước cụm</a></li>
+  <li><a href="#kích-thước-checkpoint" id="toc-kích-thước-checkpoint" class="nav-link" data-scroll-target="#kích-thước-checkpoint">Kích thước checkpoint</a></li>
+  <li><a href="#ngân-sách-chi-phí-phụ-trội" id="toc-ngân-sách-chi-phí-phụ-trội" class="nav-link" data-scroll-target="#ngân-sách-chi-phí-phụ-trội">Ngân sách chi phí phụ trội</a></li>
+  <li><a href="#các-chỉ-số-về-công-suất-và-tính-bền-vững" id="toc-các-chỉ-số-về-công-suất-và-tính-bền-vững" class="nav-link" data-scroll-target="#các-chỉ-số-về-công-suất-và-tính-bền-vững">Các chỉ số về công suất và tính bền vững</a></li>
+  </ul></li>
+  <li><a href="#tham-chiếu-phần-cứng-hiện-tại-khoảng-20252026" id="toc-tham-chiếu-phần-cứng-hiện-tại-khoảng-20252026" class="nav-link" data-scroll-target="#tham-chiếu-phần-cứng-hiện-tại-khoảng-20252026">Tham chiếu phần cứng hiện tại (khoảng 2025–2026)</a></li>
+  </ul></li>
+  <li><a href="#sec-appdx-fleet-foundations-scaling-physics" id="toc-sec-appdx-fleet-foundations-scaling-physics" class="nav-link" data-scroll-target="#sec-appdx-fleet-foundations-scaling-physics">Vật lý mở rộng quy mô</a>
+  <ul class="collapse">
+  <li><a href="#sec-appdx-fleet-foundations-roofline" id="toc-sec-appdx-fleet-foundations-roofline" class="nav-link" data-scroll-target="#sec-appdx-fleet-foundations-roofline">Đường mái của một bộ tăng tốc đơn</a></li>
+  <li><a href="#sec-appdx-fleet-foundations-amdahls-fleet" id="toc-sec-appdx-fleet-foundations-amdahls-fleet" class="nav-link" data-scroll-target="#sec-appdx-fleet-foundations-amdahls-fleet">Định luật Amdahl ở quy mô đội máy</a></li>
+  <li><a href="#sec-appdx-fleet-foundations-comm-compute-ratio" id="toc-sec-appdx-fleet-foundations-comm-compute-ratio" class="nav-link" data-scroll-target="#sec-appdx-fleet-foundations-comm-compute-ratio">Tỷ lệ giao tiếp-tính toán</a></li>
+  <li><a href="#sec-appdx-fleet-foundations-weak-scaling-fleet" id="toc-sec-appdx-fleet-foundations-weak-scaling-fleet" class="nav-link" data-scroll-target="#sec-appdx-fleet-foundations-weak-scaling-fleet">Mở rộng yếu ở quy mô đội máy</a></li>
+  </ul></li>
+  <li><a href="#sec-appdx-fleet-foundations-thermal-power" id="toc-sec-appdx-fleet-foundations-thermal-power" class="nav-link" data-scroll-target="#sec-appdx-fleet-foundations-thermal-power">Vật lý Nhiệt và Công suất</a>
+  <ul class="collapse">
+  <li><a href="#sec-appdx-fleet-foundations-power-density" id="toc-sec-appdx-fleet-foundations-power-density" class="nav-link" data-scroll-target="#sec-appdx-fleet-foundations-power-density">Giới hạn mật độ công suất</a></li>
+  <li><a href="#sec-appdx-fleet-foundations-energy-hierarchy" id="toc-sec-appdx-fleet-foundations-energy-hierarchy" class="nav-link" data-scroll-target="#sec-appdx-fleet-foundations-energy-hierarchy">Phân cấp năng lượng ở quy mô lớn</a></li>
+  </ul></li>
+  <li><a href="#tóm-tắt" id="toc-tóm-tắt" class="nav-link" data-scroll-target="#tóm-tắt">Tóm tắt</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../vol2/backmatter/appendix_dam.html">Phụ lục</a></li><li class="breadcrumb-item"><a href="../../vol2/backmatter/appendix_fleet.html">Nền tảng Đội máy</a></li></ol></nav></header>
+
+
+
+
+
+<section id="sec-appdx-fleet-foundations" class="level1 page-columns page-full">
+<h1>Nền tảng cụm</h1>
+<p>Kỹ thuật hiệu năng trên một nút tập trung vào độ trễ trong hệ thống phân cấp bộ nhớ và các điểm gờ của roofline. Ngay khi một tác vụ chạy trên nhiều máy, độ trễ mạng thay thế độ trễ cache, hỏng hóc thành phần trở thành điều gần như chắc chắn về mặt thống kê, và băng thông liên kết quyết định hiệu quả mở rộng. Phụ lục này tập hợp các hằng số ở quy mô cụm, các định luật mở rộng và các giới hạn nhiệt làm nền tảng cho các chương đa nút của sách, giúp người đọc có các mốc vật lý cần thiết để suy luận về cơ sở hạ tầng ở quy mô cụm. Theo thuật ngữ C³, những con số này xác định quy mô vật lý mà tại đó năng lực tính toán, băng thông truyền thông và chi phí phối hợp có thể đo lường được.</p>
+<section id="cách-sử-dụng-phụ-lục-này" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="cách-sử-dụng-phụ-lục-này">Cách sử dụng phụ lục này</h2>
+<p>Phụ lục này được dùng như tài liệu tham khảo khi chuyển các câu hỏi thiết kế ở quy mô cụm thành các ràng buộc vật lý cụ thể và xác định các đòn bẩy tối ưu hóa hiện có.</p>
+<ul>
+<li><strong>Khi đánh giá giao tiếp giữa các nút</strong>: Tham khảo <a href="#sec-appdx-fleet-foundations-numbers-to-know" class="quarto-xref">section&nbsp;1.2</a> để biết hệ thống phân cấp băng thông và độ trễ.</li>
+<li><strong>Khi xác định kích thước phân bổ GPU</strong>: Tham khảo <a href="#sec-appdx-fleet-foundations-scaling-physics" class="quarto-xref">section&nbsp;1.3</a> để phân tích lý do tại sao việc tăng gấp đôi số lượng bộ tăng tốc không làm giảm một nửa thời gian huấn luyện.</li>
+<li><strong>Khi tính toán độ tin cậy của cụm</strong>: Kiểm tra <a href="#sec-appdx-fleet-foundations-numbers-to-know" class="quarto-xref">section&nbsp;1.2</a> để biết các bảng thời gian trung bình giữa các lần hỏng hóc (MTBF) và các mô hình xác suất hỏng hóc.</li>
+<li><strong>Khi đánh giá giới hạn công suất và làm mát</strong>: Tham khảo <a href="#sec-appdx-fleet-foundations-thermal-power" class="quarto-xref">section&nbsp;1.4</a> để biết giới hạn mật độ công suất và các ràng buộc làm mát.</li>
+<li><strong>Khi lập ngân sách cho overhead trong runtime</strong>: Sử dụng <a href="#sec-appdx-fleet-foundations-numbers-to-know" class="quarto-xref">section&nbsp;1.2</a> cho bốn loại overhead làm giảm thông lượng hữu ích.</li>
+</ul>
+</section>
+<section id="sec-appdx-fleet-foundations-system-paradigms" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="sec-appdx-fleet-foundations-system-paradigms">Ba mô hình hệ thống</h2>
+<p>Cơ sở hạ tầng machine learning ở quy mô lớn kế thừa DNA thiết kế từ hai dòng máy tính riêng biệt—và rồi phá vỡ các giả định của cả hai. Hiểu rõ hệ thống ML vay mượn gì từ điện toán hiệu năng cao (HPC) và vay mượn gì từ điện toán quy mô kho (WSC) là điều thiết yếu để chọn các đánh đổi thiết kế đúng đắn. Một kiến trúc sư hệ thống coi huấn luyện ML là “chỉ là HPC” sẽ xây dựng cơ sở hạ tầng không chịu được lỗi. Còn ai coi nó là “chỉ là các dịch vụ web” sẽ xây dựng cơ sở hạ tầng không thể duy trì mức liên kết chặt mà huấn luyện đồng bộ đòi hỏi.</p>
+<section id="điện-toán-hiệu-năng-cao" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="điện-toán-hiệu-năng-cao">Điện toán hiệu năng cao</h3>
+<p>Các hệ thống HPC bắt nguồn từ truyền thống siêu máy tính. Triết lý thiết kế của chúng là tối đa hóa FLOP/s cho các mô phỏng ghép nối chặt—như mô hình thời tiết, động lực học phân tử, vật lý hạt nhân. Mọi nút đều quan trọng: chúng dùng liên kết chuyên dụng (InfiniBand), hạ tầng mạng độ trễ thấp và phần cứng đồng nhất. Khả năng chịu lỗi tuân theo mô hình <strong>Checkpoint/Restart</strong>: nếu một nút bị lỗi, toàn bộ tác vụ dừng lại, quay về checkpoint cuối cùng và khởi động lại từ đầu. Lập lịch theo kiểu batch (Slurm), với các tác vụ yêu cầu cấu hình tài nguyên cố định (“512 nút trong 24 giờ”). Các nút được coi như “thú cưng” – mỗi nút đều quan trọng và được theo dõi riêng.</p>
+</section>
+<section id="điện-toán-quy-mô-kho" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="điện-toán-quy-mô-kho">Điện toán quy mô kho</h3>
+<p>Các hệ thống WSC bắt nguồn từ truyền thống dịch vụ web. Triết lý thiết kế của chúng là tối đa hóa số truy vấn mỗi giây trên các dịch vụ ghép nối lỏng—như tìm kiếm, email, mạng xã hội. Phần cứng là Ethernet phổ thông, các thế hệ khác nhau có thể cùng tồn tại, và các nút thì không đồng nhất. Khả năng chịu lỗi tuân theo mô hình <strong>Dự phòng</strong>: nếu một nút bị lỗi, bộ cân bằng tải sẽ chuyển hướng lưu lượng truy cập đến một bản sao khác. Người dùng không hề nhận ra. Lập lịch là động (Kubernetes, Borg), với đóng gói bin linh hoạt. Các nút này được coi như “gia súc” – có thể thay thế và loại bỏ dễ dàng.</p>
+</section>
+<section id="cụm-ml-kiến-trúc-lai" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="cụm-ml-kiến-trúc-lai">Cụm ML: Kiến trúc lai</h3>
+<p>Các hệ thống ML cần thông lượng tính toán kiểu HPC (để huấn luyện các mô hình lớn với cập nhật gradient đồng bộ) nhưng phải vận hành ở quy mô và mức độ không ổn định kiểu WSC (hàng nghìn bộ tăng tốc chạy trong nhiều tuần). Điều này tạo ra một kiến trúc lai vay mượn có chọn lọc từ cả hai truyền thống.</p>
+<p>Các khối lượng công việc (workload) huấn luyện đồng bộ và ngốn băng thông như HPC, nhưng chạy lâu và chịu lỗi tốt như WSC. Các khối lượng công việc (workload) suy luận nhạy cảm với độ trễ như WSC, nhưng nặng về tính toán như HPC. Mạng là sự kết hợp: TCP/IP cho mặt phẳng điều khiển, và InfiniBand hoặc NVLink cho mặt phẳng dữ liệu. Khả năng chịu lỗi sử dụng các chiến lược <strong>Huấn luyện Đàn hồi</strong>: các tác vụ huấn luyện có thể thu nhỏ, mở rộng, tạm dừng hoặc tiếp tục mà không cần phải khởi động lại hoàn toàn. Việc lập lịch kết hợp phân bổ theo nhóm (tất cả hoặc không có gì đối với huấn luyện) với khả năng thu hồi động và thay thế.</p>
+<p><a href="#tbl-fleet-paradigm-comparison" class="quarto-xref">Table&nbsp;1</a> tóm tắt các đánh đổi thiết kế giữa ba mô hình. Điểm mấu chốt là các cụm ML không thể đơn giản áp dụng nguyên xi các kiểu mẫu của HPC hay WSC; thay vào đó, chúng phải kết hợp có chọn lọc các yếu tố từ mỗi mô hình tùy theo giai đoạn của khối lượng công việc (workload).</p>
+<div id="tbl-fleet-paradigm-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fleet-paradigm-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: <strong>Ba Mô hình Hệ thống</strong>: Các cụm ML thừa hưởng đặc điểm thiết kế từ cả HPC và WSC, nhưng cũng phá vỡ các giả định của từng loại. Cụ thể, huấn luyện giống HPC (liên kết chặt chẽ), suy luận giống WSC (phục vụ linh hoạt), còn khả năng chịu lỗi là dạng lai của cả hai.
+</figcaption>
+<div aria-describedby="tbl-fleet-paradigm-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 26%">
+<col style="width: 21%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Kích thước</strong></th>
+<th style="text-align: center;"><strong>HPC (Siêu máy tính)</strong></th>
+<th style="text-align: center;"><strong>WSC (Đám mây Web)</strong></th>
+<th style="text-align: left;"><strong>ML Fleet (Cụm AI)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Triết lý</strong></td>
+<td style="text-align: center;">Tối đa hóa FLOP/s</td>
+<td style="text-align: center;">Tối đa hóa QPS</td>
+<td style="text-align: left;">Tối đa hóa Chất lượng mô hình trên mỗi Đô la/Watt</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Ghép nối</strong></td>
+<td style="text-align: center;">Chặt chẽ (MPI)</td>
+<td style="text-align: center;">Lỏng lẻo (RPC/HTTP)</td>
+<td style="text-align: left;">Lai (NCCL + RPC)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Trạng thái</strong></td>
+<td style="text-align: center;">Có trạng thái (RAM)</td>
+<td style="text-align: center;">Không trạng thái (được hỗ trợ bởi DB)</td>
+<td style="text-align: left;">Bán trạng thái (Checkpoint + KV Cache)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Mạng</strong></td>
+<td style="text-align: center;">Tối ưu hóa độ trễ</td>
+<td style="text-align: center;">Tối ưu hóa băng thông</td>
+<td style="text-align: left;">Quan trọng đối với băng thông bisection</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Nút thắt cổ chai</strong></td>
+<td style="text-align: center;">Thông lượng tính toán (FLOP/s)</td>
+<td style="text-align: center;">I/O (Đĩa/Mạng)</td>
+<td style="text-align: left;">Băng thông bộ nhớ (HBM)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Mô hình lỗi</strong></td>
+<td style="text-align: center;">Checkpoint/Khởi động lại</td>
+<td style="text-align: center;">Dự phòng/Bản sao</td>
+<td style="text-align: left;">Co/giãn linh hoạt</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Lập lịch</strong></td>
+<td style="text-align: center;">Batch (Slurm)</td>
+<td style="text-align: center;">Điều phối (K8s)</td>
+<td style="text-align: left;">Gang + ưu tiên</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Mô hình nút</strong></td>
+<td style="text-align: center;">Pets (được theo dõi)</td>
+<td style="text-align: center;">Cattle (có thể bỏ qua)</td>
+<td style="text-align: left;">Pets trong khi thực hiện công việc, cattle giữa các công việc</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="tóm-tắt-kiến-thức-nền-tảng" class="level3 unnumbered page-columns page-full">
+<h3 class="unnumbered anchored" data-anchor-id="tóm-tắt-kiến-thức-nền-tảng">Tóm tắt kiến thức nền tảng</h3>
+<p>Phần sau tóm tắt ngắn gọn những ý tưởng nền tảng quan trọng sẽ xuất hiện xuyên suốt các chương về hệ thống phân tán.</p>
+<ul>
+<li><strong>Định luật sắt</strong> (<span class="math inline">\(T \approx D_{\text{vol}}/\text{BW} + O/(R_{\text{peak}} \cdot \eta_{\text{hw}}) + L_{\text{lat}}\)</span>): Hiệu năng bị giới hạn bởi di chuyển dữ liệu hoặc tính toán. Ở quy mô cụm, thành phần di chuyển dữ liệu mở rộng để bao gồm cả giao tiếp giữa các nút, không chỉ riêng băng thông bộ nhớ.</li>
+<li><strong>Mô hình Roofline</strong>: Phân biệt các khối lượng công việc (workload) bị giới hạn bởi tính toán với các khối lượng công việc bị giới hạn bởi bộ nhớ thông qua cường độ số học. Ở quy mô cụm, xuất hiện thêm một trần thứ ba: <strong>Network-Bound</strong> các khối lượng công việc có hiệu năng bị giới hạn bởi băng thông giữa các nút.</li>
+<li><strong>Định luật Amdahl</strong>: Giới hạn tốc độ tăng tốc khi mở rộng mạnh ở mức <span class="math inline">\(1/s\)</span> <span class="citation" data-cites="amdahl1967">(<a href="#ref-amdahl1967" role="doc-biblioref">Amdahl 1967</a>)</span>. Ở quy mô cụm, “phần tuần tự” không chỉ là mã tuần tự mà còn gồm các rào cản đồng bộ, truyền thông tập thể và bong bóng trong pipeline.</li>
+<li><strong>Quy tắc trạng thái huấn luyện</strong>: Khoảng 14 byte trên mỗi tham số cho trạng thái checkpoint của thuật toán Adaptive Moment Estimation (Adam) phổ biến với độ chính xác hỗn hợp (trọng số BF16, trọng số chính FP32 và các moment của Adam), chưa tính siêu dữ liệu của framework và các phần bổ sung đặc thù triển khai. Ở quy mô cụm, điều này quyết định cách trạng thái mô hình được phân vùng trên các nút (ZeRO, song song tensor, song song pipeline).</li>
+<li><strong>Định luật Little</strong> (<span class="math inline">\(Q_{\text{req}} = \lambda_{\text{arr}} T_{\text{lat}}\)</span>): Dùng để xác định quy mô hạ tầng suy luận, trong đó <span class="math inline">\(\lambda_{\text{arr}}\)</span> là tốc độ yêu cầu đến và <span class="math inline">\(Q_{\text{req}}\)</span> là số lượng yêu cầu đồng thời kỳ vọng <span class="citation" data-cites="little1961">(<a href="#ref-little1961" role="doc-biblioref">Little 1961</a>)</span>. Ở quy mô cụm, nó cho biết cần bao nhiêu bản sao phục vụ (serving) phía sau bộ cân bằng tải.</li>
+</ul>
+<div class="no-row-height column-margin column-container"><div id="ref-amdahl1967" class="csl-entry" role="listitem">
+Amdahl, Gene M. 1967. <span>“Validity of the Single Processor Approach to Achieving Large Scale Computing Capabilities.”</span> <em>Proceedings of the April 18-20, 1967, Spring Joint Computer Conference on - <span>AFIPS</span> ’67 (Spring)</em>, AFIPS ’67 (spring), 483–85. https://doi.org/10.1145/1465482.1465560.
+</div><div id="ref-little1961" class="csl-entry" role="listitem">
+Little, John D. C. 1961. <span>“A Proof for the Queuing Formula: <span><span class="math inline">\(L = \lambda W\)</span></span>.”</span> <em>Operations Research</em> 9 (3): 383–87. https://doi.org/10.1287/opre.9.3.383.
+</div></div><p>Để chuyển từ một máy đơn sang lập luận ở quy mô fleet, chúng ta cần mở rộng các mô hình này theo những chiều mới: cấu trúc liên kết mạng, xác suất lỗi và chi phí phối hợp. Các con số trong phần tiếp theo sẽ là nền tảng định lượng cho phần mở rộng đó.</p>
+<hr>
+</section>
+</section>
+<section id="sec-appdx-fleet-foundations-numbers-to-know" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="sec-appdx-fleet-foundations-numbers-to-know">Những con số mọi kỹ sư fleet nên biết</h2>
+<p>Cũng như phân tích trên một máy dựa vào một nhóm con số cốt lõi, kỹ thuật ở quy mô fleet được chi phối bởi các tỷ lệ và hành vi mở rộng có thể dự đoán. Các con số cho một máy vẫn đúng trong từng node, nhưng khoảng giữa các node lại do một bộ con số khác quyết định. Dù giá trị tuyệt đối thay đổi theo thế hệ phần cứng, tỷ lệ giữa các tầng giao tiếp và hành vi mở rộng của tỷ lệ lỗi lại ổn định đáng kể. Các tỷ lệ và xu hướng mở rộng đóng vai trò như những bất biến cấu trúc, còn các giá trị cụ thể giúp kiểm tra tính hợp lý về mặt số liệu.</p>
+<div id="psp-appendix-fleet-node-level-numbers" class="callout callout-perspective" title="Các chỉ số cấp node cho phân tích ở quy mô fleet">
+<p></p><details class="callout-perspective fbx-simplebox fbx-default" open=""><summary><strong>Systems Perspective 1.1: Các chỉ số cấp node cho phân tích ở quy mô fleet</strong></summary><div>Phân tích ở quy mô fleet dựa vào vài con số cấp node ảnh hưởng trực tiếp đến thiết kế: quy tắc về trạng thái huấn luyện khoảng 14 byte/tham số cho trạng thái checkpoint Adam phổ biến, và sẽ lớn hơn nếu tính cả gradient, activation, metadata hoặc các bộ đệm optimizer bổ sung; so sánh băng thông NVLink với bộ nhớ băng thông cao (HBM) để bố trí song song trong nội bộ node; cùng với FLOP/s cực đại và dung lượng HBM để tính mức sử dụng FLOPs của mô hình (MFU), FLOP/s hiệu dụng, kích thước batch và cách chia nhỏ mô hình. <a href="#tbl-fleet-numbers-quick-ref" class="quarto-xref">Table&nbsp;2</a> và các con số về giao tiếp bên dưới cung cấp giá trị liên-node và của thế hệ hiện tại; hệ thống phân cấp bộ nhớ và các điểm đỉnh roofline trong một node cung cấp đường chuẩn cần thiết. Các đường chuẩn cấp node đó giúp việc diễn giải các tỷ lệ ở cấp fleet dễ hơn.<p></p>
+</div></details>
+</div>
+<div id="psp-appendix-fleet-three-numbers" class="callout callout-perspective" title="Ba con số quan trọng nhất ở quy mô fleet">
+<details class="callout-perspective fbx-simplebox fbx-default" open=""><summary><strong>Systems Perspective 1.2: Ba con số quan trọng nhất ở quy mô fleet</strong></summary><div>
+<ul>
+<li><strong>Chênh lệch băng thông</strong>: Băng thông theo mỗi chiều của NVLink trong một node nhanh hơn khoảng ~9× lần so với một cổng InfiniBand NDR giữa các node. Tỷ lệ này quyết định nơi đặt ranh giới song song hóa—song song mô hình nên nằm trong một node, còn song song dữ liệu thì trải qua các node.</li>
+<li><strong>Quy luật tỷ lệ MTBF</strong>: Thời gian trung bình giữa các lần hỏng (MTBF) của cả cụm bằng MTBF của một thành phần đơn lẻ chia cho số lượng thành phần (tỷ lệ <span class="math inline">\(1/N\)</span>). Với 100,000 GPU, kỳ vọng sẽ có một lần hỏng xảy ra khoảng mỗi 30 minutes.</li>
+<li><strong>Mức độ sử dụng hiệu quả</strong>: Khi tính cả MFU, hiệu quả mở rộng và các tổn thất do overhead cộng dồn, một cụm 1,024 GPUs GPU chỉ đạt khoảng 20.5 percent công suất FLOP/s đỉnh dưới dạng công việc huấn luyện thực sự hữu ích.</li>
+</ul>
+</div></details>
+</div>
+<p><a href="#tbl-fleet-numbers-quick-ref" class="quarto-xref">Table&nbsp;2</a> tổng hợp các số liệu quan trọng về quy mô fleet vào một chỗ. Bạn có thể dùng nó để kiểm tra nhanh các ước tính; còn khi thiết kế hoặc gỡ lỗi, hãy tham khảo các bảng chi tiết hơn trong từng phần nhỏ.</p>
+<div id="tbl-fleet-numbers-quick-ref" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fleet-numbers-quick-ref-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: <strong>Các Số Liệu Quan Trọng Mà Mọi Kỹ Sư Fleet Cần Nắm (Tham Khảo Nhanh)</strong>: Đây là bản tóm tắt một trang các số liệu tham chiếu quy mô fleet trong phần này. Để biết về giao tiếp, hãy xem <a href="#tbl-fleet-bandwidth-hierarchy" class="quarto-xref">table&nbsp;3</a> và <a href="#tbl-fleet-latency-hierarchy" class="quarto-xref">table&nbsp;4</a>; về tính toán, xem <a href="#tbl-fleet-scaling-efficiency" class="quarto-xref">table&nbsp;5</a>; và về phối hợp, xem <a href="#tbl-fleet-mtbf" class="quarto-xref">table&nbsp;6</a>.
+</figcaption>
+<div aria-describedby="tbl-fleet-numbers-quick-ref-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 70%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Danh mục</strong></th>
+<th style="text-align: left;"><strong>Số</strong></th>
+<th style="text-align: left;"><strong>Sử dụng</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Giao tiếp</strong></td>
+<td style="text-align: left;">Băng thông NVLink mỗi chiều ~9× IB NDR</td>
+<td style="text-align: left;">Ranh giới song song (trong nút so với giữa các nút)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Giao tiếp</strong></td>
+<td style="text-align: left;">IB NDR ~50 GB/s, ~5 μs một chiều</td>
+<td style="text-align: left;">Băng thông và độ trễ giữa các nút</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Tính toán</strong></td>
+<td style="text-align: left;">MFU 30–50%, <span class="math inline">\(\eta_{\text{scaling}}\)</span> ~50% @ 1K, ~35% @ 8K</td>
+<td style="text-align: left;">FLOP/s hiệu quả và kiểm tra tính hợp lệ của scaling</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Phối hợp</strong></td>
+<td style="text-align: left;">MTBF 8K: ~366.2 min; 100K: ~30 min</td>
+<td style="text-align: left;">Kỳ vọng lỗi và tần suất checkpoint</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Phối hợp</strong></td>
+<td style="text-align: left;">checkpoint 175B ~2450 GB (14 B/tham số trạng thái Adam chung)</td>
+<td style="text-align: left;">Phục hồi và định cỡ lưu trữ</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Phối hợp</strong></td>
+<td style="text-align: left;">Goodput ~77% sau chi phí phát sinh</td>
+<td style="text-align: left;">Tỷ lệ sử dụng thời gian thực</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Công suất &amp; bền vững</strong></td>
+<td style="text-align: left;">Giá đỡ AI ~70 kW; giới hạn không khí ~30 kW</td>
+<td style="text-align: left;">Khả năng làm mát (yêu cầu chất lỏng khi vượt quá giới hạn không khí)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Công suất &amp; bền vững</strong></td>
+<td style="text-align: left;">PUE chất lỏng ~1.06, điển hình ~1.40; H100 700 W -&gt; 10,000 ≈ 7 MW IT <span class="math inline">\(\times\)</span> PUE</td>
+<td style="text-align: left;">Facility load and carbon (see <a href="#sec-appdx-fleet-foundations-thermal-power" class="quarto-xref">section&nbsp;1.4</a>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<section id="các-bất-biến-những-tỷ-lệ-không-đổi" class="level3 unnumbered page-columns page-full">
+<h3 class="unnumbered anchored" data-anchor-id="các-bất-biến-những-tỷ-lệ-không-đổi">Các bất biến: những tỷ lệ không đổi</h3>
+<p>Những mối quan hệ này do vật lý hoặc kiến trúc chi phối—chúng sẽ vẫn đúng ngay cả vào năm 2035.</p>
+<section id="tỷ-lệ-phân-cấp-mạng" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="tỷ-lệ-phân-cấp-mạng">Tỷ lệ phân cấp mạng</h4>
+<p>Sự chênh lệch về băng thông giữa giao tiếp trong một node và giao tiếp giữa các node là một bất biến kiến trúc. Các liên kết chip-to-chip (như NVLink, ICI) kết nối qua các đường dẫn ngắn, rộng và chuyên dụng trên một nền tảng chung. Trong khi đó, các liên kết giữa các node (như InfiniBand, Ethernet) phải đi qua cáp, bộ chuyển mạch và các chồng giao thức. Chính sự khác biệt về cấu trúc này đảm bảo rằng băng thông trong nội bộ node sẽ luôn cao hơn băng thông giữa các node một bậc độ lớn.</p>
+<p>Hiện tại, NVLink 4.0 cung cấp băng thông mỗi chiều cao hơn 9× lần so với một cổng InfiniBand NDR. Dù cả hai công nghệ đều tiến bộ, tỷ lệ này vẫn giữ nguyên vì chúng đều bị giới hạn bởi cùng các yếu tố vật lý: tốc độ tín hiệu, số làn và mật độ đầu nối. Đây là con số quan trọng nhất cho chiến lược song song hóa: bất kỳ hoạt động nào đòi hỏi băng thông lớn hơn khả năng của liên kết liên-node đều phải được giữ trong một node.</p>
+</section>
+<section id="luật-tỷ-lệ-lỗi" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="luật-tỷ-lệ-lỗi">Luật tỷ lệ lỗi</h4>
+<p>Với <span class="math inline">\(N\)</span> thành phần độc lập và giả định tỷ lệ hỏng hóc không đổi, thời gian trung bình giữa các lần hỏng hóc (MTBF) của hệ thống (<a href="#eq-fleet-mtbf-system" class="quarto-xref">equation&nbsp;1</a>) sẽ tỷ lệ nghịch với số lượng thành phần:</p>
+<p><span id="eq-fleet-mtbf-system"><span class="math display">\[ \text{MTBF}_{\text{system}} = \frac{\text{MTBF}_{\text{component}}}{N}  \tag{1}\]</span></span></p>
+<p>Đây là phép tính thuần túy, không phải ước lượng gần đúng. Tăng gấp đôi kích thước cụm thì thời gian giữa các lần hỏng hóc giảm một nửa. Với 100,000 GPU và thời gian trung bình đến khi hỏng (MTTF) của mỗi GPU là 50,000 hours, cụm sẽ gặp lỗi GPU mỗi 30 minutes. Không chiến lược chịu lỗi nào tránh được điều này—vấn đề là hệ thống phục hồi nhanh đến mức nào.</p>
+</section>
+<section id="độ-đội-chi-phí-allreduce" class="level4 unnumbered page-columns page-full">
+<h4 class="unnumbered anchored" data-anchor-id="độ-đội-chi-phí-allreduce">Độ đội chi phí AllReduce</h4>
+<p>Thuật toán Ring AllReduce tối ưu băng thông truyền <span class="math inline">\(2(N-1)M/N\)</span> byte cho mỗi thành phần tham gia, trong đó <span class="math inline">\(M\)</span> là kích thước thông điệp và <span class="math inline">\(N\)</span> là số thành phần <span class="citation" data-cites="patarasuk2009">(<a href="#ref-patarasuk2009" role="doc-biblioref">Patarasuk and Yuan 2009</a>)</span>. Khi <span class="math inline">\(N\)</span> rất lớn, giá trị này tiến gần <span class="math inline">\(2M\)</span> trên mỗi GPU, nên thành phần băng thông trên mỗi GPU gần như không phụ thuộc vào số lượng GPU; tuy vậy, tổng lưu lượng của cụm vẫn tăng theo số lượng thành phần tham gia. Đây là lý do Ring AllReduce mở rộng tốt về băng thông. Ngược lại, thành phần độ trễ tăng theo <span class="math inline">\(2(N-1) \times \alpha\)</span>, khiến độ trễ trở thành nút thắt cổ chai với các thông điệp nhỏ trên các vòng lớn. Sự đánh đổi này thúc đẩy các chiến lược AllReduce phân cấp: dùng Ring AllReduce trong nội bộ nút và Tree AllReduce giữa các nút.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-patarasuk2009" class="csl-entry" role="listitem">
+Patarasuk, Pitch, and Xin Yuan. 2009. <span>“Bandwidth Optimal All-Reduce Algorithms for Clusters of Workstations.”</span> <em>Journal of Parallel and Distributed Computing</em> 69 (2): 117–24. https://doi.org/10.1016/j.jpdc.2008.09.002.
+</div></div></section>
+</section>
+<section id="các-thông-số-về-giao-tiếp" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="các-thông-số-về-giao-tiếp">Các thông số về giao tiếp</h3>
+<p>Giao tiếp xác định ranh giới của tính song song. Các bảng này định lượng băng thông và độ trễ ở mỗi tầng trong phân cấp mạng, từ các liên kết nội bộ nút nhanh nhất đến các kết nối diện rộng chậm nhất. Với bất kỳ phép toán ML phân tán nào, câu hỏi quan trọng là giao tiếp của nó đi qua tầng mạng nào.</p>
+<p><a href="#tbl-fleet-bandwidth-hierarchy" class="quarto-xref">Table&nbsp;3</a> liệt kê các mức băng thông, giúp xác định nơi lưu lượng tensor, pipeline và kiểu song song theo dữ liệu nên được giữ cục bộ.</p>
+<div id="tbl-fleet-bandwidth-hierarchy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fleet-bandwidth-hierarchy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: <strong>Phân cấp băng thông giao tiếp</strong>: Băng thông mỗi chiều giảm khoảng 9× khi chuyển từ kết nối nội bộ nút (NVLink) sang kết nối giữa các nút (InfiniBand). Tỷ lệ này so sánh tốc độ một chiều của NVLink H100 với một cổng InfiniBand NDR, từ đó giúp xác định cách bố trí song song.
+</figcaption>
+<div aria-describedby="tbl-fleet-bandwidth-hierarchy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 43%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Kết nối liên mạng</strong></th>
+<th style="text-align: center;"><strong>Băng thông</strong></th>
+<th style="text-align: left;"><strong>Vai trò điển hình</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>NVLink 4.0 (H100)</strong></td>
+<td style="text-align: center;">450 GB/s</td>
+<td style="text-align: left;">Song song Tensor/pipeline trong một nút</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>TPU v5p ICI</strong></td>
+<td style="text-align: center;">1,200 GB/s</td>
+<td style="text-align: left;">Song song mô hình trong pod (Google)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>PCIe Gen5 x16</strong></td>
+<td style="text-align: center;">64 GB/s</td>
+<td style="text-align: left;">Truyền dữ liệu CPU-GPU, gắn NIC</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>IB GXDR (1.6 Tbps)</strong></td>
+<td style="text-align: center;">200 GB/s</td>
+<td style="text-align: left;">Giữa các nút thế hệ tiếp theo (2026+)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>IB XDR (800 Gbps)</strong></td>
+<td style="text-align: center;">100 GB/s</td>
+<td style="text-align: left;">Tiêu chuẩn giữa các nút (2025+)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>IB NDR (400 Gbps)</strong></td>
+<td style="text-align: center;">50 GB/s</td>
+<td style="text-align: left;">Tiêu chuẩn giữa các nút hiện tại cho các cụm AI</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>IB HDR (200 Gbps)</strong></td>
+<td style="text-align: center;">25 GB/s</td>
+<td style="text-align: left;">Giữa các nút thế hệ trước</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>RoCE v2 (100 GbE)</strong></td>
+<td style="text-align: center;">12.5 GB/s</td>
+<td style="text-align: left;">Cụm giá rẻ, đội suy luận</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Độ trễ một chiều trên các tầng liên kết (<a href="#tbl-fleet-latency-hierarchy" class="quarto-xref">table&nbsp;4</a>) quyết định liệu các phép toán tập thể đồng bộ có khả thi hay không.</p>
+<div id="tbl-fleet-latency-hierarchy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fleet-latency-hierarchy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4: <strong>Phân cấp độ trễ giao tiếp</strong>: Độ trễ quyết định khả năng thực hiện huấn luyện đồng bộ. TCP/IP chậm hơn InfiniBand NDR khoảng 10<span class="math inline">\(\times\)</span>, nên không phù hợp để đồng bộ hóa gradient trong các cụm lớn.
+</figcaption>
+<div aria-describedby="tbl-fleet-latency-hierarchy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 43%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Kết nối liên mạng</strong></th>
+<th style="text-align: center;"><strong>Độ trễ một chiều</strong></th>
+<th style="text-align: left;"><strong>Hàm ý</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>InfiniBand NDR</strong></td>
+<td style="text-align: center;">~5 μs</td>
+<td style="text-align: left;">Đủ thấp cho synchronous AllReduce</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>InfiniBand HDR</strong></td>
+<td style="text-align: center;">~7 μs</td>
+<td style="text-align: left;">Phù hợp cho hầu hết các cấu trúc liên kết huấn luyện</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>RoCE v2</strong></td>
+<td style="text-align: center;">~10 μs</td>
+<td style="text-align: left;">Chấp nhận được cho song song dữ liệu</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>TCP/IP (Ethernet)</strong></td>
+<td style="text-align: center;">~50 μs</td>
+<td style="text-align: left;">Quá chậm cho huấn luyện đồng bộ</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Liên trung tâm dữ liệu</strong></td>
+<td style="text-align: center;">~40,000 <span class="math inline">\(\mu\)</span>s (40 ms)</td>
+<td style="text-align: left;">Giới hạn vật lý; chỉ huấn luyện bất đồng bộ</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Những giới hạn độ trễ này cho thấy vì sao việc đồng bộ gradient theo kiểu đồng bộ đòi hỏi các mạng có độ trễ thấp như InfiniBand hoặc RoCE, trong khi huấn luyện giữa các trung tâm dữ liệu phải dựa vào thực thi bất đồng bộ hoặc các ranh giới của pipeline.</p>
+</section>
+<section id="các-chỉ-số-tính-toán" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="các-chỉ-số-tính-toán">Các chỉ số tính toán</h3>
+<p>Chỉ số FLOP/s đỉnh thô là một thông số cần thiết nhưng có thể gây hiểu lầm khi lập kế hoạch năng lực cho đội máy. Hai yếu tố gây hao hụt theo cấp số nhân—MFU và hiệu suất mở rộng—làm giảm đáng kể thông lượng thực tế. Việc hiểu rõ những hao hụt này sẽ biến quá trình xác định kích thước đội máy từ phỏng đoán thành một quy trình kỹ thuật.</p>
+<p>MFU đo lường tỷ lệ phần trăm hiệu năng FLOP/s tối đa mà một khối lượng công việc (workload) huấn luyện thực tế đạt được. Khi huấn luyện các mô hình lớn được tối ưu hóa tốt trên phần cứng hiện tại, MFU thường đạt 30–50 percent. Sự chênh lệch này xuất phát từ các vấn đề như nghẽn bộ nhớ, chi phí khởi động kernel, bong bóng pipeline và việc hợp nhất toán tử chưa tối ưu. Nếu MFU nằm dưới ngưỡng thấp của khoảng này, điều đó cho thấy có cơ hội để tối ưu hóa; ngược lại, nếu MFU vượt trên ngưỡng cao, điều đó chứng tỏ phần cứng đang được tận dụng rất hiệu quả.</p>
+<p>Hiệu quả mở rộng (<span class="math inline">\(\eta_{\text{scaling}}\)</span>) đo lường lượng tính toán hữu ích vẫn duy trì được khi ta bổ sung thêm các bộ tăng tốc. Hiệu quả mở rộng thực nghiệm (<a href="#tbl-fleet-scaling-efficiency" class="quarto-xref">table&nbsp;5</a>) chỉ ra rằng thông lượng bị giảm sút khi kích thước cụm mở rộng.</p>
+<div id="tbl-fleet-scaling-efficiency" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fleet-scaling-efficiency-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5: <strong>Hiệu quả mở rộng theo kích thước cụm</strong>: Hiệu quả giảm dần gần như theo hàm logarit của kích thước cụm. Các mức hiệu quả này được giả định cho trường hợp song song dữ liệu được tối ưu hóa tốt, kèm theo nén gradient. Các hệ thống được tối ưu hóa kém có thể mất hiệu quả gấp 2–3 lần.
+</figcaption>
+<div aria-describedby="tbl-fleet-scaling-efficiency-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 42%">
+<col style="width: 42%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Kích thước cụm</strong></th>
+<th style="text-align: center;"><strong>Hiệu quả mở rộng (<span class="math inline">\(\eta_{\text{scaling}}\)</span>)</strong></th>
+<th style="text-align: left;"><strong>Hàm ý</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>32 GPUs</strong></td>
+<td style="text-align: center;">~90%</td>
+<td style="text-align: left;">Khả năng mở rộng gần tuyến tính; giao tiếp không đáng kể</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>256 GPUs</strong></td>
+<td style="text-align: center;">~70%</td>
+<td style="text-align: left;">Giao tiếp bắt đầu làm giảm thông lượng</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>1,024 GPUs</strong></td>
+<td style="text-align: center;">~50%</td>
+<td style="text-align: left;">Chi phí đáng kể; tối ưu hóa rất quan trọng</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>8,192 GPUs</strong></td>
+<td style="text-align: center;">~35%</td>
+<td style="text-align: left;">Chế độ quy mô đội ngũ; 65% công suất tính toán là chi phí phát sinh</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Việc hiệu quả bị giảm sút này cho thấy rõ lý do tại sao khi mở rộng quy mô vượt quá hàng nghìn GPU, chúng ta cần phải tối ưu hóa các thuật toán truyền thông tập thể và bố trí tô-pô để duy trì MFU tính toán.</p>
+</section>
+<section id="các-chỉ-số-về-điều-phối" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="các-chỉ-số-về-điều-phối">Các chỉ số về điều phối</h3>
+<p>Ở quy mô đội máy, việc điều phối—bao gồm phục hồi lỗi, checkpoint và bảo trì—tiêu tốn một phần đáng kể thời gian chạy thực tế. Các chỉ số này định lượng chi phí cần thiết để vận hành một cụm lớn.</p>
+<section id="tỷ-lệ-lỗi-theo-kích-thước-cụm" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="tỷ-lệ-lỗi-theo-kích-thước-cụm">Tỷ lệ lỗi theo kích thước cụm</h4>
+<p>Sự thay đổi của MTBF theo quy mô cụm (<a href="#tbl-fleet-mtbf" class="quarto-xref">table&nbsp;6</a>, được tính dựa trên MTTF của mỗi GPU là 50,000 hours) sẽ quyết định tần suất checkpoint cần phải thực hiện.</p>
+<div id="tbl-fleet-mtbf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fleet-mtbf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6: <strong>MTBF và xác suất lỗi theo kích thước cụm</strong>: Mô hình lỗi chỉ xét riêng GPU, với MTTF của mỗi GPU là 50.000 giờ. Các cụm thực tế còn có thể gặp lỗi ở NIC, PSU, cáp và bộ chuyển mạch, nên các ước tính này mang tính thận trọng. Cột xác suất dùng công thức <span class="math inline">\(\Pr(\geq 1\ \text{failure}) = 1 - e^{-T/\text{MTBF}}\)</span> với <span class="math inline">\(T = 24\)</span> giờ.
+</figcaption>
+<div aria-describedby="tbl-fleet-mtbf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 30%">
+<col style="width: 29%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Kích thước cụm</strong></th>
+<th style="text-align: center;"><strong>MTBF (chỉ GPU)</strong></th>
+<th style="text-align: center;"><strong>Phút</strong></th>
+<th style="text-align: center;"><strong><span class="math inline">\(\Pr(\text{failure})\)</span> trong 24 giờ</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>256 GPUs</strong></td>
+<td style="text-align: center;">195.3 h</td>
+<td style="text-align: center;">11,718.8 min</td>
+<td style="text-align: center;">11.6%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>2,048 GPUs</strong></td>
+<td style="text-align: center;">24.4 h</td>
+<td style="text-align: center;">1,464.8 min</td>
+<td style="text-align: center;">62.6%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>8,192 GPUs</strong></td>
+<td style="text-align: center;">6.1 h</td>
+<td style="text-align: center;">366.2 min</td>
+<td style="text-align: center;">98%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>100,000 GPUs</strong></td>
+<td style="text-align: center;">0.50 h</td>
+<td style="text-align: center;">30 min</td>
+<td style="text-align: center;">100%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Ở mức 8.192 GPU trở lên, lỗi không còn là trường hợp hiếm. MTBF chỉ tính riêng GPU là khoảng 366.2 min tại 8.192 GPU, và xác suất xảy ra ít nhất một lỗi GPU trong 24 giờ là 98 percent. Ở quy mô đội máy, khả năng chịu lỗi không phải tùy chọn, mà là điều kiện tiên quyết để hoàn thành bất kỳ bài huấn luyện dài hạn nào. <strong><a href="../07_fault_tolerance/07_fault_tolerance.html#sec-fault-tolerance-reliability">Khả năng chịu lỗi</a></strong> trình bày chi tiết các cơ chế này.</p>
+</section>
+<section id="kích-thước-checkpoint" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="kích-thước-checkpoint">Kích thước checkpoint</h4>
+<p>Checkpointing là cơ chế khôi phục chính, và chi phí của nó phụ thuộc vào kích thước mô hình. <a href="#tbl-fleet-checkpoint-sizes" class="quarto-xref">Table&nbsp;7</a> trình bày kích thước checkpoint cho các checkpoint huấn luyện Adam độ chính xác hỗn hợp thường dùng (14 byte mỗi tham số: 2B cho trọng số BF16 và 12B cho trọng số chính FP32 + momentum + phương sai). Gradient thường là dữ liệu tạm thời và sẽ được tính lại sau khi khôi phục, thay vì được tuần tự hóa và lưu bền trong checkpoint.</p>
+<div id="tbl-fleet-checkpoint-sizes" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fleet-checkpoint-sizes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7: <strong>Kích thước checkpoint theo quy mô mô hình</strong>: Sử dụng 14 byte/tham số cho trạng thái checkpoint Adam độ chính xác hỗn hợp thường dùng. Thời gian ghi giả định băng thông lưu trữ tổng hợp là 100 GB/s. Checkpointing bất đồng bộ (<strong><a href="../07_fault_tolerance/07_fault_tolerance.html#sec-fault-tolerance-reliability">Khả năng chịu lỗi</a></strong>) có thể gối việc ghi lên quá trình huấn luyện, giúp giảm phần chi phí phụ trội thấy được.
+</figcaption>
+<div aria-describedby="tbl-fleet-checkpoint-sizes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 34%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Kích thước mô hình</strong></th>
+<th style="text-align: center;"><strong>Kích thước checkpoint</strong></th>
+<th style="text-align: center;"><strong>Thời gian ghi @ 100 GB/s</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>7B tham số</strong></td>
+<td style="text-align: center;">98 GB</td>
+<td style="text-align: center;">0.98 s</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>70B tham số</strong></td>
+<td style="text-align: center;">980 GB</td>
+<td style="text-align: center;">9.8 s</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>175B tham số</strong></td>
+<td style="text-align: center;">2,450 GB</td>
+<td style="text-align: center;">24.5 s</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>1T tham số</strong></td>
+<td style="text-align: center;">14 TB</td>
+<td style="text-align: center;">2.3 min</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="ngân-sách-chi-phí-phụ-trội" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="ngân-sách-chi-phí-phụ-trội">Ngân sách chi phí phụ trội</h4>
+<p>Khôi phục lỗi và checkpointing chỉ là một phần của tổng thời gian thực tế. Ở quy mô đội máy, <a href="#tbl-fleet-overhead-budgets" class="quarto-xref">table&nbsp;8</a> tách bốn nhóm chi phí phụ trội lặp lại, những phần thời gian không dành cho huấn luyện hữu ích:</p>
+<div id="tbl-fleet-overhead-budgets" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fleet-overhead-budgets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;8: <strong>Ngân sách chi phí phụ trội cho huấn luyện quy mô đội máy</strong>: Đây là các tỷ lệ trên tổng thời gian thực tế. Với hơn 10.000 GPU, khôi phục lỗi chiếm ưu thế. Hiệu ứng tổng hợp là cộng dồn: tỷ lệ thông lượng hữu ích tổng cộng <span class="math inline">\(\approx 1.0 - (0.05 + 0.03 + 0.10 + 0.05) = 0.77 \approx 77\%\)</span>.
+</figcaption>
+<div aria-describedby="tbl-fleet-overhead-budgets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 44%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Danh mục chi phí phát sinh</strong></th>
+<th style="text-align: center;"><strong>Ngân sách điển hình</strong></th>
+<th style="text-align: left;"><strong>Đòn bẩy</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Khoảng trống pipeline</strong></td>
+<td style="text-align: center;">~5%</td>
+<td style="text-align: left;">Tăng microbatch mỗi giai đoạn pipeline</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Tạo checkpoint</strong></td>
+<td style="text-align: center;">~3%</td>
+<td style="text-align: left;">Tạo checkpoint bất đồng bộ, lưu trữ nhanh hơn</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Phục hồi lỗi</strong></td>
+<td style="text-align: center;">~10%</td>
+<td style="text-align: left;">Phát hiện nhanh hơn, lập lịch lại linh hoạt</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Khoảng thời gian bảo trì</strong></td>
+<td style="text-align: center;">~5%</td>
+<td style="text-align: left;">Nâng cấp cuốn chiếu, di chuyển trực tiếp</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="các-chỉ-số-về-công-suất-và-tính-bền-vững" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="các-chỉ-số-về-công-suất-và-tính-bền-vững">Các chỉ số về công suất và tính bền vững</h4>
+<p>Việc lập kế hoạch năng lực và báo cáo bền vững ở quy mô đội máy cần một vài con số về công suất mà mọi kỹ sư đội máy nên biết. Ở quy mô đội máy, các con số then chốt là <strong>Mật độ công suất giá đỡ</strong>, <strong>hiệu quả sử dụng năng lượng (PUE)</strong>, và <strong>Giới hạn làm mát bằng không khí</strong>—chúng quyết định có thể xây dựng ở đâu và mức tải của cơ sở sẽ là bao nhiêu. <a href="#tbl-appendix-fleet-power-cooling-reference" class="quarto-xref">Table&nbsp;9</a> tổng hợp các giá trị tham chiếu này:</p>
+<div id="tbl-appendix-fleet-power-cooling-reference" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-appendix-fleet-power-cooling-reference-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;9: <strong>Các con số tham chiếu về công suất và làm mát</strong>: Mật độ công suất giá đỡ, giới hạn làm mát bằng không khí và các giá trị PUE chi phối việc lập kế hoạch năng lực và báo cáo bền vững ở quy mô đội máy. Mỗi hàng đi kèm một giá trị điển hình và quyết định kỹ thuật mà nó hỗ trợ.
+</figcaption>
+<div aria-describedby="tbl-appendix-fleet-power-cooling-reference-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 24%">
+<col style="width: 64%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Số lượng</strong></th>
+<th style="text-align: center;"><strong>Giá trị điển hình</strong></th>
+<th style="text-align: left;"><strong>Sử dụng</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Tủ rack truyền thống</strong></td>
+<td style="text-align: center;">12 kW</td>
+<td style="text-align: left;">Mức cơ sở cho các trung tâm dữ liệu không dùng AI</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Tủ rack AI (thế hệ hiện tại)</strong></td>
+<td style="text-align: center;">70 kW</td>
+<td style="text-align: left;">Yêu cầu làm mát bằng chất lỏng</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Tủ rack AI (mật độ cao)</strong></td>
+<td style="text-align: center;">100 kW</td>
+<td style="text-align: left;">Chất lỏng làm mát trực tiếp đến chip</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Giới hạn làm mát bằng không khí</strong></td>
+<td style="text-align: center;">~30 kW mỗi tủ rack</td>
+<td style="text-align: left;">Giới hạn vật lý; trên mức này, làm mát bằng chất lỏng là bắt buộc</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>PUE (AI làm mát bằng chất lỏng)</strong></td>
+<td style="text-align: center;">~1.06</td>
+<td style="text-align: left;">Trường hợp tốt nhất: tải trọng cơ sở ≈ tải trọng CNTT</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>PUE (làm mát bằng không khí tốt nhất)</strong></td>
+<td style="text-align: center;">~1.12</td>
+<td style="text-align: left;">Thực tiễn tốt nhất của Hyperscale</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>PUE (trung bình ngành)</strong></td>
+<td style="text-align: center;">~1.40</td>
+<td style="text-align: left;">Kiểm tra tính hợp lý về chi phí/carbon</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>H100 TDP</strong></td>
+<td style="text-align: center;">700 W mỗi GPU</td>
+<td style="text-align: left;">Tải trọng CNTT: 10,000 <span class="math inline">\(\times\)</span> 700 W = 7 MW</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Theo quy tắc chung: Tải CNTT (MW) = (số GPU <span class="math inline">\(\times\)</span> công suất thiết kế nhiệt (TDP) mỗi GPU)/<span class="math inline">\(10^6\)</span>; tải của cơ sở = tải CNTT <span class="math inline">\(\times\)</span> PUE. Một cụm H100 10,000-GPU, với mỗi GPU có TDP 700 W, thì tải CNTT là 7 MW. Với PUE 1.40, tải của cơ sở sẽ là 9.8 MW. Về carbon và chi phí, xem <a href="#sec-appdx-fleet-foundations-thermal-power" class="quarto-xref">section&nbsp;1.4</a> và <strong><a href="../15_sustainable_ai/15_sustainable_ai.html#sec-sustainable-ai">AI bền vững</a></strong>.</p>
+</section>
+</section>
+<section id="tham-chiếu-phần-cứng-hiện-tại-khoảng-20252026" class="level3 unnumbered page-columns page-full">
+<h3 class="unnumbered anchored" data-anchor-id="tham-chiếu-phần-cứng-hiện-tại-khoảng-20252026">Tham chiếu phần cứng hiện tại (khoảng 2025–2026)</h3>
+<p>Các con số này (<a href="#tbl-fleet-hardware-ref" class="quarto-xref">table&nbsp;10</a>) phản ánh thế hệ phần cứng quy mô đội máy hiện tại. Dùng chúng cho các tính toán sơ bộ, nhưng kỳ vọng chúng sẽ cải thiện ~2<span class="math inline">\(\times\)</span> mỗi 2–3 năm.</p>
+<div id="tbl-fleet-hardware-ref" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-tbl figure page-columns page-full">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fleet-hardware-ref-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;10: <strong>Tham chiếu phần cứng quy mô đội máy (khoảng 2025–2026)</strong>: Các thông số theo từng bộ tăng tốc cho các thế hệ 2025–2026. B200, MI300X và TPU v6e (Trillium) đang ở tuyến đầu về mật độ tính toán và băng thông bộ nhớ ở quy mô đội máy.
+</figcaption>
+<div aria-describedby="tbl-fleet-hardware-ref-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 34%">
+<col style="width: 27%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Thông số kỹ thuật</strong></th>
+<th style="text-align: center;"><strong>NVIDIA B200</strong></th>
+<th style="text-align: center;"><strong>AMD MI300X</strong></th>
+<th style="text-align: center;"><strong>Google TPU v6e</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Đỉnh BF16/FP16</strong></td>
+<td style="text-align: center;">2,250 TFLOP/s</td>
+<td style="text-align: center;">1,307 TFLOP/s</td>
+<td style="text-align: center;">918 TFLOP/s</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Băng thông bộ nhớ</strong></td>
+<td style="text-align: center;">8 TB/s</td>
+<td style="text-align: center;">5.30 TB/s</td>
+<td style="text-align: center;">1.64 TB/s</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Dung lượng HBM</strong></td>
+<td style="text-align: center;">180 GB</td>
+<td style="text-align: center;">192 GB</td>
+<td style="text-align: center;">32 GB</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Liên kết trong Node</strong></td>
+<td style="text-align: center;">1,800 GB/s (NVLink 5.0)</td>
+<td style="text-align: center;">~890 GB/s (Infinity Fabric)</td>
+<td style="text-align: center;">800 GB/s hai chiều (ICI) <span class="citation" data-cites="googleCloudTpuV6eDocs">(<a href="#ref-googleCloudTpuV6eDocs" role="doc-biblioref">Google Cloud 2026</a>)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>TDP</strong></td>
+<td style="text-align: center;">1000 W</td>
+<td style="text-align: center;">750 W</td>
+<td style="text-align: center;">~600 W (ước tính)</td>
+</tr>
+</tbody>
+</table>
+<div class="no-row-height column-margin column-container"><div id="ref-googleCloudTpuV6eDocs" class="csl-entry" role="listitem">
+Google Cloud. 2026. <em><span class="nocase">TPU v6e</span></em>.
+</div></div></div>
+</figure>
+</div>
+<p>Để hình dung về quy mô, một DGX H100 SuperPOD bao gồm 32 nút DGX H100 (tương đương 256 GPU H100). Meta đã công bố hai cụm quy mô trung tâm dữ liệu với 24.576 GPU H100, được xây dựng trên nền tảng phần cứng Grand Teton. Các pod TPU v5p của Google có thể mở rộng lên tới 8.960 chip. Tính đến năm 2025, các cụm lớn nhất được công bố đã vượt quá 100.000 bộ tăng tốc.</p>
+<hr>
+</section>
+</section>
+<section id="sec-appdx-fleet-foundations-scaling-physics" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="sec-appdx-fleet-foundations-scaling-physics">Vật lý mở rộng quy mô</h2>
+<p>Các con số trong phần trước cho biết phần cứng có thể làm gì. Vật lý của việc mở rộng mô tả điều gì xảy ra khi ta huy động thêm phần cứng. Lập luận bắt đầu từ trần hiệu suất của một bộ tăng tốc đơn—đường mái (roofline)—rồi hỏi khi thêm thiết bị thì những gì còn giữ được, dưới sự chi phối của ba mô hình: Định luật Amdahl (mở rộng để tính cả chi phí chung của cụm), tỷ lệ giao tiếp-tính toán, và hành vi mở rộng yếu (weak scaling).</p>
+<section id="sec-appdx-fleet-foundations-roofline" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="sec-appdx-fleet-foundations-roofline">Đường mái của một bộ tăng tốc đơn</h3>
+<p>Hiệu suất của cả cụm dựa trên hiệu suất của từng bộ tăng tốc, và một bộ tăng tốc đơn bị giới hạn bởi một trong hai tài nguyên: tốc độ các đơn vị số học duy trì được (đỉnh FLOP/s) hoặc tốc độ bộ nhớ cung cấp toán hạng (băng thông HBM). Yếu tố nào giới hạn một kernel cụ thể phụ thuộc vào <strong>Cường độ số học</strong> <span class="math inline">\(I\)</span> của nó, tức số phép toán hữu ích thực hiện trên mỗi byte được đưa từ bộ nhớ, như <a href="#eq-fleet-arithmetic-intensity" class="quarto-xref">equation&nbsp;2</a> định nghĩa:</p>
+<p><span id="eq-fleet-arithmetic-intensity"><span class="math display">\[ I = \frac{\text{FLOPs}}{\text{bytes moved}}  \tag{2}\]</span></span></p>
+<p>Cường độ là một đặc tính của khối lượng công việc (workload), không phải của phần cứng. Một phép nhân ma trận lớn có cường độ cao vì mỗi trọng số nạp từ bộ nhớ được tái sử dụng nhiều lần trong các phép nhân-tích lũy; còn phép toán theo phần tử, hoặc tạo ra một token đơn lẻ, có cường độ thấp vì mỗi giá trị nạp lên chỉ phục vụ một hai phép trước khi phải nạp giá trị tiếp theo.</p>
+<p><strong>Mô hình Roofline</strong> <span class="citation" data-cites="williams2009">(<a href="#ref-williams2009" role="doc-biblioref">Williams et al. 2009</a>)</span> dùng cường độ để xác định trần hiệu suất. <a href="#eq-fleet-roofline" class="quarto-xref">Equation&nbsp;3</a> cho biết thông lượng có thể đạt được là giá trị nhỏ hơn giữa trần tính toán và độ dốc bị giới hạn bởi băng thông:</p>
+<div class="no-row-height column-margin column-container"><div id="ref-williams2009" class="csl-entry" role="listitem">
+Williams, Samuel, Andrew Waterman, and David Patterson. 2009. <span>“Roofline: An Insightful Visual Performance Model for Multicore Architectures.”</span> <em>Communications of the ACM</em> 52 (4): 65–76. https://doi.org/10.1145/1498765.1498785.
+</div></div><p><span id="eq-fleet-roofline"><span class="math display">\[ R_{\text{attain}} = \min\!\left(R_{\text{peak}},\; I \times \text{BW}\right)  \tag{3}\]</span></span></p>
+<p>Khi vẽ theo cường độ, <a href="#eq-fleet-roofline" class="quarto-xref">equation&nbsp;3</a> tạo thành hình mái nhà: bên trái là đường dốc lên bị giới hạn bởi băng thông, bên phải là trần tính toán phẳng. Hai đường gặp nhau tại <strong>Điểm đỉnh</strong>, tức cường độ mà tại đó một khối lượng công việc (workload) lần đầu bão hòa các đơn vị số học, được định nghĩa bởi <a href="#eq-fleet-ridge-point" class="quarto-xref">equation&nbsp;4</a>:</p>
+<p><span id="eq-fleet-ridge-point"><span class="math display">\[ I_{\text{ridge}} = \frac{R_{\text{peak}}}{\text{BW}}  \tag{4}\]</span></span></p>
+<p>Với <span class="math inline">\(I &lt; I_{\text{ridge}}\)</span>, khối lượng công việc (workload) bị giới hạn bởi bộ nhớ: nó nằm trên đoạn dốc, và việc tăng tốc các đơn vị số học cũng không giúp vì toán hạng không được cung cấp đủ nhanh. Với <span class="math inline">\(I &gt; I_{\text{ridge}}\)</span>, nó bị giới hạn bởi tính toán: nằm dưới phần mái phẳng, bị chính các đơn vị số học giới hạn.</p>
+<p>Đối với một H100—với hiệu năng đỉnh BF16 là 989 TFLOP/s, băng thông HBM là 3.35 TB/s—thì điểm đỉnh là 295.2 FLOP/byte. Một khối lượng công việc (workload) phải thực hiện hàng trăm phép toán trên mỗi byte được nạp về chỉ để giữ cho các đơn vị số học luôn bận rộn.</p>
+<p>Giải mã tự hồi quy còn kém xa so với giới hạn đó, và đây chính là nguyên nhân tạo ra nút thắt cổ chai đặc trưng trong phục vụ (serving). Để tạo ra một token, hệ thống cần đọc tất cả trọng số của mô hình từ HBM đúng một lần—tức 16.1 GB cho một mô hình 8B-tham số ở BF16—để thực hiện khoảng 16.1 GFLOP công việc ma trận, với cường độ 1 FLOP/byte. Mức cường độ này thấp hơn nhiều so với điểm đỉnh, nên giải mã luồng đơn hoàn toàn bị giới hạn bởi băng thông: thông lượng chính là tốc độ đọc trọng số, khoảng 208.6 tokens/s, bất kể bộ tăng tốc quảng cáo bao nhiêu năng lực tính toán. Các hệ thống phục vụ (serving) gom nhiều yêu cầu vào cùng một batch để tăng cường độ này, phân bổ mỗi lần đọc trọng số cho mọi chuỗi trong batch, từ đó đẩy giải mã tiến gần lại trần tính toán.</p>
+<p>Roofline là một nguyên lý cho một bộ tăng tốc đơn lẻ, nhưng logic của nó mới là phần có thể mở rộng. Ở cấp đội máy, băng thông ràng buộc không còn là HBM mà là interconnect, và các byte được truyền đi là gradient và activation qua mạng. Tỷ lệ giữa số byte mạng và phép tính cục bộ chính là tỷ lệ giao tiếp-tính toán (<a href="#sec-appdx-fleet-foundations-comm-compute-ratio" class="quarto-xref">section&nbsp;1.3.3</a>): roofline ở cấp đội máy, cũng là lăng kính mà phần còn lại của mục này sẽ áp dụng.</p>
+<p>Một tác vụ huấn luyện được cấp phát 4,096 GPU chỉ đạt thông lượng bằng 2.5× so với khi chạy với 1,024 GPU. Quan sát này hàm ý hiệu suất mở rộng khoảng 31.2 percent ở quy mô lớn hơn, vì vậy vật lý của bài toán mở rộng cung cấp công cụ chẩn đoán để xác định hệ thống đang vận hành đúng như giới hạn vật lý cho phép hay còn vấn đề kỹ thuật cần khắc phục.</p>
+</section>
+<section id="sec-appdx-fleet-foundations-amdahls-fleet" class="level3">
+<h3 class="anchored" data-anchor-id="sec-appdx-fleet-foundations-amdahls-fleet">Định luật Amdahl ở quy mô đội máy</h3>
+<p>Định luật Amdahl nêu rằng khả năng tăng tốc tối đa của một hệ thống song song bị giới hạn bởi phần công việc tuần tự <span class="math inline">\(s\)</span>. Ở quy mô đội máy, “phần tuần tự” không chỉ là mã chạy tuần tự—mà còn bao gồm mọi thao tác buộc tất cả <span class="math inline">\(N\)</span> GPU phải chờ nhau:</p>
+<ul>
+<li><strong>Đồng bộ hóa AllReduce</strong>: Tất cả các GPU phải hoàn thành tính toán gradient của mình trước khi bất kỳ GPU nào có thể tiếp tục.</li>
+<li><strong>Bong bóng pipeline</strong>: Các pha khởi động (warmup) và hạ nhiệt (cooldown) trong song song theo pipeline khiến các stage bị nhàn rỗi.</li>
+<li><strong>Ghi checkpoint</strong>: Ngay cả các checkpoint bất đồng bộ cũng cạnh tranh băng thông lưu trữ.</li>
+<li><strong>Chi phí ở mức Python</strong>: Các thao tác đơn luồng trong vòng lặp huấn luyện (tải dữ liệu, ghi log số liệu).</li>
+</ul>
+<p>Để thấy tác động ở quy mô đội máy, hãy xét một khối lượng công việc (workload) huấn luyện trong đó 10 percent thời gian đo thực tế dành cho việc đồng bộ, giao tiếp và các chi phí tuần tự khác. Định luật Amdahl cho ra các mức tăng tốc sau:</p>
+<ul>
+<li>Với 32 GPU: mức tăng tốc 7.8× (hiệu suất mở rộng ~24 percent)</li>
+<li>Với 256 GPU: mức tăng tốc 9.7× (bắt đầu xuất hiện lợi ích giảm dần)</li>
+<li>Với 1.024 GPU: mức tăng tốc 9.9× (tiệm cận trần hiệu năng)</li>
+<li>Với 8.192 GPU: mức tăng tốc 10× (gần đạt giới hạn Amdahl)</li>
+<li>Với <span class="math inline">\(N \to \infty\)</span>: giới hạn ở 10×</li>
+</ul>
+<p>Chỉ với 10 percent chi phí tuần tự, dù thêm bao nhiêu phần cứng đi nữa cũng không thể tăng tốc vượt quá 10× cho khối lượng công việc (workload) cố định này. Đây là lý do tại sao huấn luyện ở quy mô đội máy không chỉ đơn giản là thêm GPU cho cùng một bài toán—mà là mở rộng bài toán (mở rộng yếu) để giữ cho phần tuần tự nhỏ so với tổng khối lượng công việc.</p>
+<div id="psp-appendix-fleet-compound-overhead" class="callout callout-perspective" title="Bẫy chi phí chồng chất">
+<p></p><details class="callout-perspective fbx-simplebox fbx-default" open=""><summary><strong>Systems Perspective 1.3: Bẫy chi phí chồng chất</strong></summary><div>Phần tuần tự 10 percent nêu trên là đánh giá hơi lạc quan. Thực tế, chi phí tuần tự ở quy mô cả đội máy tích lũy từ nhiều nguồn: 5 percent bong bóng pipeline + 3 percent checkpoint + 10 percent khôi phục sau lỗi + 5 percent bảo trì. Không phải tất cả các khoản này đều hoàn toàn tuần tự theo nghĩa của Amdahl—một số có thể chồng lấp với tính toán—nhưng chúng cho thấy các chi phí nhỏ ở từng hạng mục có thể nhanh chóng cộng dồn thành tổn thất thông lượng đáng kể.<p></p>
+</div></details>
+</div>
+</section>
+<section id="sec-appdx-fleet-foundations-comm-compute-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="sec-appdx-fleet-foundations-comm-compute-ratio">Tỷ lệ giao tiếp-tính toán</h3>
+<p>Bất kỳ chiến lược huấn luyện phân tán nào cũng phải xác định xem phần tính toán giữa các điểm đồng bộ có đủ dài để che được thời gian giao tiếp hay không. <a href="#eq-comm-compute-ratio" class="quarto-xref">Equation&nbsp;5</a> định nghĩa <strong>tỷ lệ giao tiếp-tính toán</strong> (<span class="math inline">\(\rho\)</span>) để trả lời trực tiếp câu hỏi này:</p>
+<p><span id="eq-comm-compute-ratio"><span class="math display">\[ \rho = \frac{T_{\text{comm}}(N)}{T_{\text{compute}}/N}  \tag{5}\]</span></span></p>
+<p>Khi <span class="math inline">\(\rho &lt; 1\)</span>, tính toán chiếm ưu thế và giao tiếp có thể chồng lấp với tính toán. Khi <span class="math inline">\(\rho &gt; 1\)</span>, hệ thống ở trạng thái <strong>Communication-Bound</strong>—các GPU dành nhiều thời gian chờ dữ liệu hơn là tính toán trên dữ liệu đó.</p>
+<p>Các tỷ lệ giao tiếp-tính toán trên những kịch bản tiêu biểu (<a href="#tbl-fleet-comm-comp" class="quarto-xref">table&nbsp;11</a>) cho thấy vì sao chiến lược song song phải khớp với khối lượng công việc (workload).</p>
+<div id="tbl-fleet-comm-comp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fleet-comm-comp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;11: <strong>Tỷ lệ Giao tiếp-Tính toán (<span class="math inline">\(\rho\)</span>)</strong>: Khi <span class="math inline">\(\rho \ll 1\)</span>, giao tiếp có thể chồng lấp hoàn toàn với tính toán. Khi <span class="math inline">\(\rho \gg 1\)</span>, hệ thống bị giới hạn bởi giao tiếp và các GPU sẽ nhàn rỗi chờ dữ liệu. Dòng NVLink thể hiện cận dưới điểm-tới-điểm chỉ theo băng thông; một collective kiểu tensor-parallel còn chịu thêm chi phí về cấu trúc liên kết, độ trễ và tranh chấp.
+</figcaption>
+<div aria-describedby="tbl-fleet-comm-comp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 30%">
+<col style="width: 22%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Kịch bản</strong></th>
+<th style="text-align: left;"><strong><span class="math inline">\(T_{\text{comm}}(N)\)</span></strong></th>
+<th style="text-align: center;"><strong><span class="math inline">\(T_{\text{compute}}/N\)</span></strong></th>
+<th style="text-align: center;"><strong><span class="math inline">\(\rho\)</span></strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Song song dữ liệu, mô hình 7B, 256</strong></td>
+<td style="text-align: left;">560.4 ms (AllReduce qua IB NDR)</td>
+<td style="text-align: center;">~5 s (fwd+bwd)</td>
+<td style="text-align: center;">0.11</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Data parallel, 350M mô hình, 256</strong></td>
+<td style="text-align: left;">29.6 ms (AllReduce qua IB NDR)</td>
+<td style="text-align: center;">~10 ms (fwd+bwd)</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Truyền tải lý tưởng một chiều 16 MB (NVLink)</strong></td>
+<td style="text-align: left;">~0.04 ms (giới hạn dưới chỉ dựa trên băng thông)</td>
+<td style="text-align: center;">~1 ms (một lớp)</td>
+<td style="text-align: center;">0.036</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Mô hình 7B trên 256 đạt <span class="math inline">\(\rho =\)</span> 0.11—thời gian giao tiếp khoảng 11.2 percent so với thời gian tính toán, có thể chồng lấp một phần. Với mô hình 350M trên cùng cụm, <span class="math inline">\(\rho =\)</span> 3—giao tiếp chiếm ưu thế, khiến cấu hình này bị giới hạn bởi giao tiếp. Giải pháp là dùng ít GPU hơn (giảm <span class="math inline">\(N\)</span> trong AllReduce) hoặc tăng lượng tính toán mỗi bước (ví dụ: tăng kích thước batch, tích lũy gradient).</p>
+<p>Với một payload điểm-tới-điểm duy nhất 16 MB, giới hạn dưới lý tưởng nếu chỉ xét băng thông là <span class="math inline">\(\rho =\)</span> 0.036. Đây không phải là một mô hình collective của tensor-parallel và tự nó không thể xác định liệu một triển khai có bị giới hạn bởi tính toán hay không.</p>
+</section>
+<section id="sec-appdx-fleet-foundations-weak-scaling-fleet" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="sec-appdx-fleet-foundations-weak-scaling-fleet">Mở rộng yếu ở quy mô đội máy</h3>
+<p>Định luật Amdahl đưa ra một bức tranh bi quan vì giả định kích thước bài toán cố định. Trong thực tế, huấn luyện ở quy mô đội máy thường tuân theo <strong>Weak Scaling</strong>: kích thước bài toán (số token, lượng dữ liệu, số tham số mô hình) tăng tỷ lệ thuận với số lượng GPU. Định luật Gustafson phản ánh góc nhìn lạc quan hơn này <span class="citation" data-cites="gustafson1988">(<a href="#ref-gustafson1988" role="doc-biblioref">Gustafson 1988</a>)</span>.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-gustafson1988" class="csl-entry" role="listitem">
+Gustafson, John L. 1988. <span>“Reevaluating Amdahl’s Law.”</span> <em>Communications of the ACM</em> 31 (5): 532–33. https://doi.org/10.1145/42411.42415.
+</div></div><p>Điểm mấu chốt với ML ở quy mô đội máy là mở rộng yếu không chỉ là một tiện lợi toán học—it phản ánh thực tế. Kỹ sư không dùng 8.192 GPU để huấn luyện một mô hình 7B nhanh hơn; họ dùng chúng để huấn luyện mô hình 70B hoặc 700B trong thời gian hợp lý. Khi mô hình và các batch huấn luyện lớn dần, kỹ sư thường tăng lượng tính toán thực hiện giữa các điểm đồng bộ. Với các Transformer dày đặc, lượng tính toán thường được ước tính khoảng 6<span class="math inline">\(\times\)</span> số tham số <span class="math inline">\(\times\)</span> số token, trong khi giao tiếp gradient tỷ lệ với số byte tham số, nên tỷ lệ giao tiếp-tính toán <span class="math inline">\(\rho\)</span> phụ thuộc vào kích thước batch, độ dài chuỗi, tích lũy và cách bố trí song song hơn là chỉ vào số lượng tham số.</p>
+<div id="psp-appendix-fleet-compound-loss-utilization" class="callout callout-perspective" title="Tổn thất tổng hợp của mức độ sử dụng đội máy">
+<p></p><details class="callout-perspective fbx-simplebox fbx-default" open=""><summary><strong>Systems Perspective 1.4: Tổn thất tổng hợp của mức độ sử dụng đội máy</strong></summary><div>Một cụm H100 với 1,024 GPU có thông lượng tổng hợp đỉnh là 1,012,736 TFLOP/s. Cách phân tách minh họa này giữ các yếu tố tách biệt: MFU thể hiện hiệu quả kernel và bộ nhớ trên mỗi thiết bị; hiệu quả mở rộng thể hiện các tổn thất do giao tiếp phân tán và pipeline; còn goodput vận hành bao gồm checkpoint, phục hồi lỗi và bảo trì. Thông lượng hiệu quả là:<p></p>
+<p><span class="math display">\[R_{\text{eff}} = N R_{\text{peak}} \times \text{MFU} \times \eta_{\text{scaling}} \times \eta_{\text{operational}}\]</span></p>
+<p><span class="math display">\[= 1,012,736 TFLOP/s \times 0.50 \times 0.50 \times 0.82 \approx 207,610.9 \text{ TFLOP/s}\]</span></p>
+<p>Cụm này cung cấp 20.5 percent FLOP/s đỉnh của nó dưới dạng công việc huấn luyện hữu ích. Phần 79.5 percent còn lại được giải thích bởi các yếu tố giữ lại là 50 percent MFU, 50 percent hiệu quả mở rộng và 82 percent goodput vận hành.</p>
+<p>Những hao hụt này phản ánh các định luật vật lý của tính toán ở quy mô toàn cụm, không phải lỗi kỹ thuật. Mỗi GPU thêm vào mang lại phần công việc hữu ích tăng thêm ít hơn, nhưng tổng thông lượng vẫn vượt xa một cụm nhỏ hơn. Mục tiêu không phải là đạt mức sử dụng 100 percent; mục tiêu là cho ra mô hình đã huấn luyện nhanh hơn bất kỳ cấu hình nhỏ hơn nào.</p>
+</div></details>
+</div>
+</section>
+</section>
+<section id="sec-appdx-fleet-foundations-thermal-power" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="sec-appdx-fleet-foundations-thermal-power">Vật lý Nhiệt và Công suất</h2>
+<p>Hiệu năng tính toán rốt cuộc biến thành nhiệt, và nhiệt phải được tản đi. Ở quy mô toàn cụm, các ràng buộc về nhiệt và công suất không phải chuyện thứ yếu—chúng quyết định có thể xây ở đâu, đóng gói bộ tăng tốc dày đến mức nào, và chi phí vận hành ra sao. Một cụm có kiến trúc ổn nhưng không khả thi về mặt nhiệt thì không thể xây được.</p>
+<p>Một thiết kế cụm cần 10,000 GPU H100, mỗi chiếc 700 W—tức là tổng tải IT là 7 MW—và PUE là 1.40 sẽ đặt tổng tải của cơ sở ở mức 9.8 MW. Đây là mức điện của một thị trấn nhỏ. Trước khi tối ưu phần mềm, phải chắc rằng việc cấp điện và tản nhiệt là khả thi về mặt vật lý.</p>
+<section id="sec-appdx-fleet-foundations-power-density" class="level3">
+<h3 class="anchored" data-anchor-id="sec-appdx-fleet-foundations-power-density">Giới hạn mật độ công suất</h3>
+<p>Sự chuyển đổi từ khối lượng công việc (workload) trung tâm dữ liệu truyền thống sang huấn luyện AI đã tạo ra một <strong>Khủng hoảng Mật độ Công suất</strong>. Bảng <a href="#tbl-fleet-power-density-fleet" class="quarto-xref">Table&nbsp;12</a> định lượng rõ khoảng cách này.</p>
+<div id="tbl-fleet-power-density-fleet" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fleet-power-density-fleet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;12: <strong>Mật độ Công suất: Khối lượng công việc (workload) truyền thống so với AI</strong>: Các rack AI tiêu thụ khoảng 5.8× lần công suất so với các rack truyền thống. Làm mát bằng không khí không thể tản nhiệt đủ nhanh khi công suất vượt ~30 kW mỗi rack, vì thế làm mát bằng chất lỏng trở thành yêu cầu bắt buộc cho các cụm AI hiện đại.
+</figcaption>
+<div aria-describedby="tbl-fleet-power-density-fleet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 40%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Cấu hình</strong></th>
+<th style="text-align: center;"><strong>Công suất trên mỗi Rack</strong></th>
+<th style="text-align: left;"><strong>Ảnh hưởng của việc làm mát</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Trung tâm dữ liệu truyền thống</strong></td>
+<td style="text-align: center;">12 kW</td>
+<td style="text-align: left;">Làm mát bằng không khí tiêu chuẩn là đủ</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Cụm AI (thế hệ hiện tại)</strong></td>
+<td style="text-align: center;">70 kW</td>
+<td style="text-align: left;">Yêu cầu làm mát bằng chất lỏng</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Cụm AI (mật độ cao)</strong></td>
+<td style="text-align: center;">100 kW</td>
+<td style="text-align: left;">Yêu cầu làm mát bằng chất lỏng trực tiếp đến chip</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Giới hạn làm mát bằng không khí</strong></td>
+<td style="text-align: center;">~30 kW</td>
+<td style="text-align: left;">Giới hạn vật lý đối với đối lưu không khí cưỡng bức</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Mật độ công suất rack tăng 5.8× lần khi chuyển từ các khối lượng công việc (workload) truyền thống sang AI không chỉ là một thách thức kỹ thuật, mà còn là một ràng buộc nền tảng đối với thiết kế trung tâm dữ liệu. Các trung tâm dữ liệu hiện có, vốn được xây dựng cho các rack 12 kW, không thể chỉ “cải tạo” là dùng được phần cứng AI. Hệ thống phân phối điện, hạ tầng làm mát và tải trọng sàn đều phải thiết kế lại. Đây là lý do các trung tâm dữ liệu mới tập trung vào AI được xây dựng từ đầu, với giả định mặc định là làm mát bằng chất lỏng.</p>
+</section>
+<section id="sec-appdx-fleet-foundations-energy-hierarchy" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="sec-appdx-fleet-foundations-energy-hierarchy">Phân cấp năng lượng ở quy mô lớn</h3>
+<p>PUE đo phần phụ phí năng lượng ở cấp cơ sở: tổng năng lượng của cơ sở chia cho năng lượng của thiết bị IT <span class="citation" data-cites="thegreengrid2007pue davis2022uptime">(<a href="#ref-thegreengrid2007pue" role="doc-biblioref">The Green Grid 2007</a>; <a href="#ref-davis2022uptime" role="doc-biblioref">Uptime Institute 2022</a>)</span>. PUE bằng 1.0 nghĩa là toàn bộ năng lượng của cơ sở được cung cấp cho thiết bị IT; các giá trị lớn hơn 1.0 thể hiện phần phụ phí dành cho làm mát, chuyển đổi điện năng, chiếu sáng và các hệ thống cơ sở khác.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-thegreengrid2007pue" class="csl-entry" role="listitem">
+The Green Grid. 2007. <em>Green Grid Data Center Power Efficiency Metrics: <span>PUE</span> and <span>DCIE</span></em>. The Green Grid.
+</div><div id="ref-davis2022uptime" class="csl-entry" role="listitem">
+Uptime Institute. 2022. <em>Uptime Institute Global Data Center Survey 2022</em>. Uptime Institute.
+</div></div><p><a href="#tbl-fleet-pue-fleet" class="quarto-xref">Table&nbsp;13</a> so sánh PUE giữa các thế hệ trung tâm dữ liệu và công nghệ làm mát.</p>
+<div id="tbl-fleet-pue-fleet" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fleet-pue-fleet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;13: <strong>hiệu quả sử dụng công suất (PUE)</strong>: Càng thấp càng tốt. Làm mát bằng chất lỏng đạt PUE gần 1.0 vì nó loại bỏ nhiệt trực tiếp từ chip mà không cần bước trung gian là làm nóng không khí. Chênh lệch giữa hệ thống cũ (1.58) và hệ thống làm mát bằng chất lỏng (1.06) tương ứng mức giảm khoảng 32.9 percent tổng công suất của cơ sở khi tải IT cố định; phần phụ phí ngoài IT giảm từ 0.58 MW xuống 0.06 MW cho mỗi MW tải IT.
+</figcaption>
+<div aria-describedby="tbl-fleet-pue-fleet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 28%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Loại trung tâm dữ liệu</strong></th>
+<th style="text-align: center;"><strong>PUE</strong></th>
+<th style="text-align: center;"><strong>Chi phí phát sinh trên mỗi MW tải IT</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Trung tâm dữ liệu AI làm mát bằng chất lỏng</strong></td>
+<td style="text-align: center;">1.06</td>
+<td style="text-align: center;">60 kW làm mát + cơ sở hạ tầng</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Làm mát bằng không khí tốt nhất trong phân khúc</strong></td>
+<td style="text-align: center;">1.12</td>
+<td style="text-align: center;">120 kW chi phí phát sinh</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Trung bình ngành</strong></td>
+<td style="text-align: center;">1.40</td>
+<td style="text-align: center;">400 kW chi phí phát sinh</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Doanh nghiệp cũ</strong></td>
+<td style="text-align: center;">1.58</td>
+<td style="text-align: center;">580 kW chi phí phát sinh</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Khi tính chi phí ở quy mô lớn, PUE nhân trực tiếp vào hóa đơn điện. Với tải IT 10 MW, một trung tâm dữ liệu cũ (PUE 1.58) cần tổng cộng 15.8 MW, trong khi cùng tải đó ở cơ sở làm mát bằng chất lỏng (PUE 1.06) chỉ cần 10.6 MW—tiết kiệm 5.2 MW. Với giá điện thương mại điển hình, khác biệt này tương đương hàng triệu đô la mỗi năm. <strong><a href="../15_sustainable_ai/15_sustainable_ai.html#sec-sustainable-ai">AI bền vững</a></strong> sẽ trình bày đầy đủ các tác động về bền vững.</p>
+<hr>
+</section>
+</section>
+<section id="tóm-tắt" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="tóm-tắt">Tóm tắt</h2>
+<div id="callout-takeaways*-1.1" class="callout callout-takeaways" title="Quy mô toàn cụm làm thay đổi mọi ràng buộc">
+<details class="callout-takeaways fbx-simplebox fbx-default" open=""><summary><strong>Key Takeaways: Quy mô toàn cụm làm thay đổi mọi ràng buộc</strong></summary><div>
+<ul>
+<li><strong>Ba mô hình, một lai ghép</strong>: Các hệ thống ML kết hợp sự liên kết chặt chẽ của HPC (dùng cho huấn luyện) với khả năng chịu lỗi linh hoạt của WSC (dùng cho suy luận), tạo ra một mô hình kiến trúc mới, không thể áp dụng nguyên vẹn các mẫu hình của hai mô hình tiền nhiệm.</li>
+<li><strong>Chênh lệch băng thông</strong>: NVLink cung cấp băng thông mỗi chiều lớn hơn InfiniBand NDR khoảng ~9× lần. Tỷ lệ không đổi này quyết định cách bố trí song song hóa: song song tensor trong cùng một nút, và song song dữ liệu giữa các nút.</li>
+<li><strong>Lỗi trở nên thường xuyên ở quy mô lớn</strong>: MTBF của cụm tỷ lệ nghịch với <span class="math inline">\(N\)</span>. Với 8.192 GPU, dự kiến một lỗi GPU xảy ra khoảng mỗi 366.2 minutes, với xác suất 98.04 percent trong vòng 24 giờ. Khả năng chịu lỗi không phải là một lựa chọn, mà là điều kiện tiên quyết để hoàn thành bất kỳ tác vụ huấn luyện nào ở quy mô toàn cụm.</li>
+<li><strong>Tổn thất hiệu suất tổng hợp</strong>: Khi các yếu tố riêng lẻ như MFU (~50 percent), hiệu suất mở rộng (~50 percent) và thông lượng vận hành thực tế (~82 percent) được tính gộp lại, một cụm 1.024 GPU chỉ cung cấp khoảng ~20.5 percent của FLOP/s đỉnh dưới dạng công việc hữu ích.</li>
+<li><strong>Mật độ công suất đòi hỏi làm mát bằng chất lỏng</strong>: Các tủ rack AI tiêu thụ công suất gấp 5.8× lần so với các tủ rack truyền thống. Hệ thống làm mát bằng không khí sẽ không còn hiệu quả khi công suất vượt quá ~30 kW mỗi tủ rack, do đó làm mát bằng chất lỏng trở thành một yêu cầu vật lý bắt buộc đối với các cụm AI hiện đại.</li>
+<li><strong>Tỷ lệ giao tiếp-tính toán (<span class="math inline">\(\rho\)</span>) quyết định chiến lược mở rộng</strong>: Khi <span class="math inline">\(\rho &gt; 1\)</span>, các GPU sẽ ở trạng thái nhàn rỗi vì chờ dữ liệu. Trong trường hợp này, cần giảm mức độ song song hóa hoặc tăng khối lượng tính toán cho mỗi bước. Khi <span class="math inline">\(\rho \ll 1\)</span>, quá trình giao tiếp có thể được chồng lấp hoàn toàn.</li>
+<li><strong>Mở rộng yếu là mô hình chủ đạo ở quy mô toàn cụm</strong>: Các kỹ sư không dùng thêm GPU để giải quyết cùng một vấn đề nhanh hơn (đó là <em>mở rộng mạnh</em>). Thay vào đó, họ dùng thêm GPU để giải quyết các vấn đề lớn hơn trong một khoảng thời gian hợp lý. Cách làm này giúp giữ cho phần công việc tuần tự ở mức nhỏ và duy trì hiệu suất sử dụng cao.</li>
+</ul>
+</div></details>
+</div>
+
+
+
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mlsysbook\.ai\/vol2\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../vol2/backmatter/appendix_c3.html" class="pagination-link" aria-label="Phân loại C³">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Phân loại C³</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../vol2/backmatter/appendix_communication.html" class="pagination-link" aria-label="Nền tảng Truyền thông">
+        <span class="nav-page-text">Nền tảng Truyền thông</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2024-2026 Harvard University. Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA 4.0</a><br> <!-- MLSB_BUILD_STAMP --></p>
+</div>   
+    <div class="nav-footer-center">
+<p><a href="../vol1/">← Back to Volume I</a></p>
+</div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+ <span class="release-pill" data-release-pill=""></span>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/harvard-edge/cs249r_book">
+      <i class="bi bi-github" role="img" aria-label="View source on GitHub">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/harvard-edge/cs249r_book">
+      <i class="bi bi-star" role="img" aria-label="Star this repository">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+<!--
+  MLSysBook release-pill — shared footer version chip for Quarto + static sites.
+
+  Renders a small "v0.1.0 · Apr 26, 2026" chip from a deployed
+  release-manifest.json. Best-effort chrome: silent on any fetch failure
+  (manifest missing, offline, CORS). Use at any site that emits a manifest
+  via scripts/version/release.py emit-manifest.
+
+  ── Standardized placement (all MLSysBook sites) ──
+
+  The chip lives in the page-footer, right slot, so it reads as an
+  intentional part of the footer bar (not dangling below the page). Two
+  pieces per site:
+
+  1. This file loads the style + populator script site-wide:
+
+       format:
+         html:
+           include-in-header:
+             - text: |
+                 <meta name="release-manifest" content="/<project-base>/release-manifest.json">
+           include-after-body:
+             - file: ../shared/release/release-pill.html
+
+  2. Each page-footer places the chip span where it should render:
+
+       website:
+         page-footer:
+           right:
+             - text: |
+                 <span class="release-pill" data-release-pill></span>
+             - icon: github
+               href: ...
+
+  The meta tag tells the script where to find the manifest. The script
+  populates every span carrying data-release-pill, so the chip can sit in
+  the footer (canonical), an about page, or anywhere else.
+
+  ── Manifest contract ──
+
+  The manifest is the JSON written by scripts/version/release.py
+  emit-manifest. Required keys: releaseId, releaseHash. Optional but
+  recommended: buildDate, project. Anything else is ignored.
+
+  ── Why runtime fetch instead of build-time templating ──
+
+  Build-time templating would be deterministic but requires per-project
+  Lua/template machinery. Runtime fetch is project-agnostic and works
+  identically across Quarto, Next.js, and plain HTML. The one fetch per
+  page-load is cheap and the chip degrades to nothing on failure.
+-->
+
+<style>
+  /* Fixed muted gray on every site — the chip must look identical regardless of
+     each Quarto theme's accent colors (do NOT inherit --bs-secondary / link color). */
+  .release-pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 0.75rem;
+    line-height: 1;
+    color: var(--release-pill-color, #6c757d);
+  }
+  .release-pill a,
+  .release-pill a:visited,
+  .release-pill-version,
+  .release-pill-date {
+    color: var(--release-pill-color, #6c757d);
+    text-decoration: none;
+  }
+  .release-pill a:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .release-pill-date {
+    opacity: 0.75;
+  }
+</style>
+
+<script>
+  (function () {
+    var pills = document.querySelectorAll('[data-release-pill]');
+    if (!pills.length) return;
+
+    // Manifest URL resolution order:
+    //   1. data-manifest attribute on the pill (per-page override)
+    //   2. <meta name="release-manifest" content="..."> in <head>
+    //   3. './release-manifest.json' relative to current page (fallback)
+    var meta = document.querySelector('meta[name="release-manifest"]');
+    var metaPath = meta && meta.getAttribute('content');
+
+    fetch(metaPath || './release-manifest.json', { cache: 'no-store' })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (m) {
+        if (!m || !m.releaseId || !m.releaseHash) return;
+        var date = m.buildDate
+          ? new Date(m.buildDate).toLocaleDateString('en-US',
+              { year: 'numeric', month: 'short', day: 'numeric' })
+          : '';
+        var shortHash = String(m.releaseHash).slice(0, 7);
+        var title =
+          (m.project ? m.project + ' ' : '') +
+          'v' + m.releaseId +
+          (date ? ' · built ' + date : '') +
+          ' · hash ' + shortHash;
+
+        pills.forEach(function (el) {
+          var rawLink = el.getAttribute('data-link') || '#release';
+          // XSS hardening: allow only anchor, relative, or http(s) links; reject javascript:/data: URLs.
+          var linkHref = /^(?:#|\/|\.{1,2}\/|https?:\/\/)/i.test(rawLink) ? rawLink : '#release';
+          var a = document.createElement('a');
+          a.href = linkHref;
+          a.title = title;
+          a.setAttribute('aria-label',
+            'Release v' + m.releaseId + (date ? ', built ' + date : ''));
+          var v = document.createElement('span');
+          v.className = 'release-pill-version';
+          v.textContent = 'v' + m.releaseId;
+          a.appendChild(v);
+          if (date) {
+            var d = document.createElement('span');
+            d.className = 'release-pill-date';
+            d.textContent = ' · ' + date;
+            a.appendChild(d);
+          }
+          el.innerHTML = '';
+          el.appendChild(a);
+        });
+      })
+      .catch(function () { /* silent: best-effort chrome */ });
+  })();
+</script>
+    <script type="text/javascript">
+    (function(d) {
+      function renderPseudocode() {
+        d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+          let pseudocodeOptions = {
+            indentSize: el.dataset.indentSize,
+            commentDelimiter: " " + el.dataset.commentDelimiter + " ",
+            lineNumber: el.dataset.lineNumber.toLowerCase() === "true",
+            lineNumberPunc: el.dataset.lineNumberPunc,
+            noEnd: el.dataset.noEnd.toLowerCase() === "true",
+            scopeLines: el.dataset.indentLines.toLowerCase() === "true",
+            titlePrefix: el.dataset.captionPrefix,
+          };
+          pseudocode.renderElement(el.querySelector(".pseudocode"), pseudocodeOptions);
+        });
+        d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+          let captionSpan = el.querySelector(".ps-root > .ps-algorithm > .ps-line > .ps-keyword")
+          if (captionSpan !== null) {
+            let captionPrefix = el.dataset.captionPrefix + " ";
+            let captionNumber = "";
+            if (el.dataset.pseudocodeNumber) {
+              captionNumber = el.dataset.pseudocodeNumber + " ";
+              if (el.dataset.chapterLevel) {
+                captionNumber = el.dataset.chapterLevel + "." + captionNumber;
+              }
+            }
+            captionSpan.innerHTML = captionPrefix + captionNumber;
+          }
+        });
+      }
+      // pseudocode.js needs a math backend (KaTeX or MathJax) present *at the
+      // moment* renderElement runs. This book renders math with MathJax loaded
+      // via `defer`, so window.MathJax does not exist yet when this after-body
+      // script executes at parse time — calling renderElement now throws
+      // "No math backend found" and the raw LaTeX source stays on the page.
+      // Wait for the math backend to be ready before rendering: KaTeX if it is
+      // present synchronously, otherwise MathJax's startup promise (available
+      // after the deferred MathJax script has run, by window 'load').
+      function whenMathReady(cb) {
+        if (window.katex) { cb(); return; }
+        var mj = window.MathJax;
+        if (mj && mj.startup && mj.startup.promise) { mj.startup.promise.then(cb); return; }
+        window.addEventListener("load", function() {
+          var m = window.MathJax;
+          if (m && m.startup && m.startup.promise) { m.startup.promise.then(cb); }
+          else { cb(); }
+        });
+      }
+      whenMathReady(renderPseudocode);
+    })(document);
+    </script>
+  
+
+
+
+
+</body></html>

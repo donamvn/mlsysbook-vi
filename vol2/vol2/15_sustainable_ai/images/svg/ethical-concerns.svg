@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" viewBox="0 0 690 490">
+  <rect width="690" height="490" fill="#fff"/>
+  <defs>
+    <marker id="arrow-ec" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- ══════════ Q1: Environmental Justice (top-left) ══════════ -->
+  <rect x="30" y="30" width="295" height="190" fill="#f9d6d5" stroke="#c44" stroke-width="1.5"/>
+
+  <!-- Icon: location pin / people -->
+  <circle cx="60" cy="62" r="18" fill="#fff" stroke="#c44" stroke-width="1.2"/>
+  <text x="60" y="68" text-anchor="middle" font-size="12" fill="#c44">⌂</text>
+
+  <text x="85" y="60" font-size="12" font-weight="700" fill="#a31f34">Công bằng Môi trường</text>
+  <text x="85" y="74" font-size="9.5" fill="#555" font-style="italic">Ai gánh chịu gánh nặng?</text>
+
+  <line x1="42" y1="84" x2="313" y2="84" stroke="#c44" stroke-width="0.8" stroke-opacity="0.4"/>
+
+  <text x="42" y="101" font-size="9.5" fill="#333">Trung tâm dữ liệu tập trung vùng chi phí thấp</text>
+  <text x="42" y="115" font-size="9.5" fill="#333">nơi cộng đồng chịu cạn kiệt nước, hiệu ứng đảo nhiệt</text>
+  <text x="42" y="129" font-size="9.5" fill="#333">và căng thẳng lưới điện, trong khi lợi ích kinh tế</text>
+  <text x="42" y="143" font-size="9.5" fill="#333">chảy về các trung tâm công nghệ xa xôi.</text>
+
+  <rect x="42" y="155" width="271" height="32" fill="#fff" stroke="#c44" stroke-width="0.8"/>
+  <text x="48" y="170" font-size="8.5" font-weight="700" fill="#c44">Tác động:</text>
+  <text x="96" y="170" font-size="8.5" fill="#555">760 tỷ lít nước làm mát/năm; lưới điện</text>
+  <text x="96" y="180" font-size="8.5" fill="#555">cạnh tranh công suất với tải dân dụng và công nghiệp</text>
+
+  <!-- ══════════ Q2: Intergenerational Equity (top-right) ══════════ -->
+  <rect x="365" y="30" width="295" height="190" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+
+  <!-- Icon: clock/future -->
+  <circle cx="395" cy="62" r="18" fill="#fff" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="395" y="68" text-anchor="middle" font-size="12" fill="#c87b2a">⌛</text>
+
+  <text x="420" y="60" font-size="12" font-weight="700" fill="#c87b2a">Công bằng Liên thế hệ</text>
+  <text x="420" y="74" font-size="9.5" fill="#555" font-style="italic">Thế hệ tương lai trả giá gì?</text>
+
+  <line x1="377" y1="84" x2="648" y2="84" stroke="#c87b2a" stroke-width="0.8" stroke-opacity="0.4"/>
+
+  <text x="377" y="101" font-size="9.5" fill="#333">Carbon thải ra hôm nay có tác động khí hậu tích lũy</text>
+  <text x="377" y="115" font-size="9.5" fill="#333">kéo dài hàng thập kỷ. Đua huấn luyện mô hình tiên phong</text>
+  <text x="377" y="129" font-size="9.5" fill="#333">đẩy chi phí môi trường lên các thế hệ tương lai</text>
+  <text x="377" y="143" font-size="9.5" fill="#333">những người không đồng ý với sự đánh đổi.</text>
+
+  <rect x="377" y="155" width="271" height="32" fill="#fff" stroke="#c87b2a" stroke-width="0.8"/>
+  <text x="383" y="170" font-size="8.5" font-weight="700" fill="#c87b2a">Tác động:</text>
+  <text x="431" y="170" font-size="8.5" fill="#555">AI dự kiến 8% công suất toàn cầu vào 2030;</text>
+  <text x="431" y="180" font-size="8.5" fill="#555">CO₂ tích lũy từ huấn luyện tồn tại hàng thế kỷ</text>
+
+  <!-- Center pill — drawn over the gap between the two rows -->
+  <rect x="263" y="212" width="164" height="34" fill="#a31f34"/>
+  <text x="345" y="234" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Tác động Môi trường của AI</text>
+
+  <!-- ══════════ Q3: Resource Competition (bottom-left) ══════════ -->
+  <rect x="30" y="238" width="295" height="190" fill="#cfe2f3" stroke="#4a90c4" stroke-width="1.5"/>
+
+  <!-- Icon: resources -->
+  <circle cx="60" cy="270" r="18" fill="#fff" stroke="#4a90c4" stroke-width="1.2"/>
+  <text x="60" y="276" text-anchor="middle" font-size="12" fill="#4a90c4">☘</text>
+
+  <text x="85" y="268" font-size="12" font-weight="700" fill="#4a90c4">Cạnh tranh Tài nguyên</text>
+  <text x="85" y="282" font-size="9.5" fill="#555" font-style="italic">Những tài nguyên này có thể cung cấp gì khác?</text>
+
+  <line x1="42" y1="292" x2="313" y2="292" stroke="#4a90c4" stroke-width="0.8" stroke-opacity="0.4"/>
+
+  <text x="42" y="309" font-size="9.5" fill="#333">Cơ sở hạ tầng AI cạnh tranh nước, đất,</text>
+  <text x="42" y="323" font-size="9.5" fill="#333">khoáng sản đất hiếm, và công suất lưới điện với</text>
+  <text x="42" y="337" font-size="9.5" fill="#333">sử dụng dân dụng, nông nghiệp, công nghiệp.</text>
+  <text x="42" y="351" font-size="9.5" fill="#333">Sản xuất bán dẫn cần 2.500+ L nước siêu tinh khiết/GPU.</text>
+
+  <rect x="42" y="363" width="271" height="32" fill="#fff" stroke="#4a90c4" stroke-width="0.8"/>
+  <text x="48" y="378" font-size="8.5" font-weight="700" fill="#4a90c4">Tác động:</text>
+  <text x="96" y="378" font-size="8.5" fill="#555">15+ nguyên tố đất hiếm/chip; sản xuất H100 tốn</text>
+  <text x="96" y="388" font-size="8.5" fill="#555">150-200 kg CO₂/đơn vị trước FLOP đầu tiên</text>
+
+  <!-- ══════════ Q4: Transparency Gap (bottom-right) ══════════ -->
+  <rect x="365" y="238" width="295" height="190" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.5"/>
+
+  <!-- Icon: eye/visibility -->
+  <circle cx="395" cy="270" r="18" fill="#fff" stroke="#3d9e5a" stroke-width="1.2"/>
+  <text x="395" y="276" text-anchor="middle" font-size="12" fill="#3d9e5a">◎</text>
+
+  <text x="420" y="268" font-size="12" font-weight="700" fill="#3d9e5a">Khoảng trống Minh bạch</text>
+  <text x="420" y="282" font-size="9.5" fill="#555" font-style="italic">Điều gì còn ẩn khỏi công chúng?</text>
+
+  <line x1="377" y1="292" x2="648" y2="292" stroke="#3d9e5a" stroke-width="0.8" stroke-opacity="0.4"/>
+
+  <text x="377" y="309" font-size="9.5" fill="#333">Hầu hết công ty AI không tiết lộ năng lượng huấn luyện,</text>
+  <text x="377" y="323" font-size="9.5" fill="#333">lượng khí thải carbon, hoặc lượng nước</text>
+  <text x="377" y="337" font-size="9.5" fill="#333">sử dụng mỗi mô hình. Không có báo cáo chuẩn hóa,</text>
+  <text x="377" y="351" font-size="9.5" fill="#333">trách nhiệm giải trình và chính sách sáng suốt là bất khả thi.</text>
+
+  <rect x="377" y="363" width="271" height="32" fill="#fff" stroke="#3d9e5a" stroke-width="0.8"/>
+  <text x="383" y="378" font-size="8.5" font-weight="700" fill="#3d9e5a">Tác động:</text>
+  <text x="431" y="378" font-size="8.5" fill="#555">Năng lượng huấn luyện GPT-4 chưa từng công bố chính thức;</text>
+  <text x="431" y="388" font-size="8.5" fill="#555">chưa có tiêu chuẩn ngành về báo cáo carbon</text>
+
+  <!-- Bottom summary bar -->
+  <rect x="30" y="438" width="630" height="22" fill="#f7f7f7" stroke="#bbb" stroke-width="1"/>
+  <text x="345" y="453" text-anchor="middle" font-size="9.5" fill="#555">AI bền vững đòi hỏi giải quyết đồng thời 4 khía cạnh: công bằng, bình đẳng, tài nguyên, minh bạch.</text>
+</svg>

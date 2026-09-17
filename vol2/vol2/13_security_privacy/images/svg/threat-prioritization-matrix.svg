@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" viewBox="0 0 680 460">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#555"/>
+    </marker>
+  </defs>
+
+  <rect width="680" height="460" fill="#fff"/>
+
+  <!-- ===== Title ===== -->
+  <text x="340" y="26" font-size="12" font-weight="700" fill="#333" text-anchor="middle">Ma trận Ưu tiên Đe dọa</text>
+  <text x="340" y="42" font-size="9" fill="#555" text-anchor="middle">Phân loại rủi ro theo khả năng và tác động tiềm tàng — hướng dẫn ưu tiên đầu tư phòng thủ</text>
+
+  <!-- ===== Matrix area ===== -->
+  <!-- Quadrant boundaries: x 80–580, y 56–400 -->
+  <!-- Midpoint: x=330, y=228 -->
+
+  <!-- Q3: Low Likelihood / High Impact (top-left) — PREPARE (orange) -->
+  <rect x="80" y="56" width="250" height="172" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+  <!-- Q4: High Likelihood / High Impact (top-right) — CRITICAL (red) -->
+  <rect x="330" y="56" width="250" height="172" fill="#f9d6d5" stroke="#c44" stroke-width="2"/>
+  <!-- Q1: Low Likelihood / Low Impact (bottom-left) — MONITOR (green) -->
+  <rect x="80" y="228" width="250" height="172" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.5"/>
+  <!-- Q2: High Likelihood / Low Impact (bottom-right) — MITIGATE (yellow-neutral) -->
+  <rect x="330" y="228" width="250" height="172" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+
+  <!-- Quadrant divider lines -->
+  <line x1="80" y1="228" x2="580" y2="228" stroke="#bbb" stroke-width="1.5"/>
+  <line x1="330" y1="56" x2="330" y2="400" stroke="#bbb" stroke-width="1.5"/>
+
+  <!-- ===== Quadrant Labels ===== -->
+  <!-- PREPARE (top-left) -->
+  <text x="205" y="80" font-size="11" font-weight="700" fill="#c87b2a" text-anchor="middle">CHUẨN BỊ</text>
+  <text x="205" y="95" font-size="8.5" fill="#555" text-anchor="middle">Khả năng thấp, tác động cao</text>
+  <text x="205" y="108" font-size="8.5" fill="#555" text-anchor="middle">Cần kỹ thuật chuyên sâu</text>
+
+  <!-- CRITICAL (top-right) -->
+  <text x="455" y="80" font-size="11" font-weight="700" fill="#a31f34" text-anchor="middle">NGHIÊM TRỌNG</text>
+  <text x="455" y="95" font-size="8.5" fill="#555" text-anchor="middle">Khả năng cao, tác động cao</text>
+  <text x="455" y="108" font-size="8.5" fill="#555" text-anchor="middle">Cần phòng thủ tự động ngay</text>
+
+  <!-- MONITOR (bottom-left) -->
+  <text x="205" y="252" font-size="11" font-weight="700" fill="#3d9e5a" text-anchor="middle">GIÁM SÁT</text>
+  <text x="205" y="267" font-size="8.5" fill="#555" text-anchor="middle">Khả năng thấp, tác động thấp</text>
+  <text x="205" y="280" font-size="8.5" fill="#555" text-anchor="middle">Theo dõi; hoãn đầu tư</text>
+
+  <!-- MITIGATE (bottom-right) -->
+  <text x="455" y="252" font-size="11" font-weight="700" fill="#c87b2a" text-anchor="middle">GIẢM THIỂU</text>
+  <text x="455" y="267" font-size="8.5" fill="#555" text-anchor="middle">Khả năng cao, tác động thấp</text>
+  <text x="455" y="280" font-size="8.5" fill="#555" text-anchor="middle">Giới hạn tốc độ, kiểm soát API, giám sát</text>
+
+  <!-- ===== Threat data points ===== -->
+
+  <!-- CRITICAL quadrant threats -->
+  <!-- Data Poisoning (Fed. Learning) — top-right, high/high -->
+  <circle cx="490" cy="130" r="7" fill="#a31f34" stroke="#c44" stroke-width="1.2"/>
+  <text x="478" y="128" font-size="8.5" font-weight="700" fill="#333" text-anchor="end">Đầu độc dữ liệu</text>
+  <text x="478" y="139" font-size="7.5" fill="#555" text-anchor="end">(Federated Learning)</text>
+
+  <!-- Prompt Injection — critical -->
+  <circle cx="440" cy="160" r="7" fill="#a31f34" stroke="#c44" stroke-width="1.2"/>
+  <text x="452" y="158" font-size="8.5" font-weight="700" fill="#333">Prompt Injection</text>
+  <text x="452" y="169" font-size="7.5" fill="#555">(hệ thống LLM)</text>
+
+  <!-- Adversarial Examples — critical -->
+  <circle cx="380" cy="190" r="7" fill="#a31f34" stroke="#c44" stroke-width="1.2"/>
+  <text x="392" y="188" font-size="8.5" font-weight="700" fill="#333">Ví dụ đối nghịch</text>
+  <text x="392" y="199" font-size="7.5" fill="#555">(API suy luận)</text>
+
+  <!-- PREPARE quadrant threats -->
+  <!-- Hardware Side-channel — low likelihood, high impact -->
+  <circle cx="175" cy="120" r="7" fill="#c87b2a" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="187" y="118" font-size="8.5" font-weight="700" fill="#333">Kênh phụ phần cứng</text>
+  <text x="187" y="129" font-size="7.5" fill="#555">(cần truy cập vật lý)</text>
+
+  <!-- Supply Chain Compromise -->
+  <circle cx="140" cy="175" r="7" fill="#c87b2a" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="152" y="173" font-size="8.5" font-weight="700" fill="#333">Thỏa hiệp chuỗi cung ứng</text>
+  <!-- label shifted to properly align -->
+  <text x="152" y="184" font-size="7.5" fill="#555">(trọng số / firmware có cửa hậu)</text>
+
+  <!-- MITIGATE quadrant threats -->
+  <!-- Model Extraction -->
+  <circle cx="420" cy="315" r="7" fill="#c87b2a" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="432" y="313" font-size="8.5" font-weight="700" fill="#333">Trích xuất mô hình</text>
+  <text x="432" y="324" font-size="7.5" fill="#555">(truy vấn API hộp đen)</text>
+
+  <!-- MONITOR quadrant threats -->
+  <!-- Membership Inference -->
+  <circle cx="190" cy="340" r="7" fill="#3d9e5a" stroke="#2d7a2d" stroke-width="1.2"/>
+  <text x="202" y="338" font-size="8.5" font-weight="700" fill="#333">Suy luận thành viên</text>
+  <text x="202" y="349" font-size="7.5" fill="#555">(cần kỹ năng chuyên biệt)</text>
+
+  <!-- ===== Axes ===== -->
+  <!-- X-axis: Likelihood (bottom label) -->
+  <line x1="80" y1="400" x2="580" y2="400" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="80" y="418" font-size="9" fill="#555">Thấp</text>
+  <text x="330" y="418" font-size="9" font-weight="700" fill="#333" text-anchor="middle">Khả năng</text>
+  <text x="574" y="418" font-size="9" fill="#555">Cao</text>
+
+  <!-- Y-axis: Impact (left label) -->
+  <line x1="80" y1="400" x2="80" y2="56" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="68" y="400" font-size="9" fill="#555" text-anchor="middle">Thấp</text>
+  <text x="22" y="228" font-size="9" font-weight="700" fill="#333" text-anchor="middle" transform="rotate(-90 22 228)">Tác động</text>
+  <text x="68" y="62" font-size="9" fill="#555" text-anchor="middle">Cao</text>
+
+  <!-- ===== Legend ===== -->
+  <circle cx="60" cy="428" r="5" fill="#a31f34"/>
+  <text x="70" y="432" font-size="8.5" fill="#333">Nghiêm trọng</text>
+  <circle cx="130" cy="428" r="5" fill="#c87b2a"/>
+  <text x="140" y="432" font-size="8.5" fill="#333">Chuẩn bị / Giảm thiểu</text>
+  <circle cx="240" cy="428" r="5" fill="#3d9e5a"/>
+  <text x="250" y="432" font-size="8.5" fill="#333">Giám sát</text>
+
+  <!-- Bottom footnote -->
+  <text x="340" y="450" font-size="9" fill="#999" text-anchor="middle" font-style="italic">Đầu tư phòng thủ nên ưu tiên các mối đe dọa ở góc Nghiêm trọng trước; các mối đe dọa Chuẩn bị cần kỹ thuật chuyên sâu dù xác suất thấp hơn.</text>
+</svg>

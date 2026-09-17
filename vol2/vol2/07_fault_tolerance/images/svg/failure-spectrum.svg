@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" viewBox="0 0 800 640">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#333"/>
+    </marker>
+    <marker id="arrow-white" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#fff"/>
+    </marker>
+  </defs>
+
+  <!-- ── Background ── -->
+  <rect width="800" height="640" fill="#fff"/>
+
+  <!-- ── Severity gradient bar (top) ── -->
+  <rect x="30" y="40" width="247" height="10" fill="#d4edda" opacity="0.7"/>
+  <rect x="277" y="40" width="246" height="10" fill="#fdebd0" opacity="0.7"/>
+  <rect x="523" y="40" width="247" height="10" fill="#f9d6d5" opacity="0.7"/>
+  <rect x="30" y="40" width="740" height="10" fill="none" stroke="#bbb" stroke-width="0.8"/>
+
+  <!-- ── Severity label ── -->
+  <text x="30" y="30" font-size="10" fill="#3d9e5a" font-weight="700">Nhanh / Khôi phục được</text>
+  <text x="770" y="30" text-anchor="end" font-size="10" fill="#c44" font-weight="700">Chậm / Vĩnh viễn</text>
+  <text x="400" y="30" text-anchor="middle" font-size="13" fill="#c87b2a" font-weight="700">Gián đoạn</text>
+
+  <!-- ── Connecting arrow across top ── -->
+  <line x1="30" y1="60" x2="760" y2="60" stroke="#555" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="400" y="80" text-anchor="middle" font-size="10" fill="#555">Mức độ nghiêm trọng và khó phát hiện tăng dần</text>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- ── TRANSIENT FAILURES ── -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <rect x="30" y="100" width="220" height="480" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.2"/>
+
+  <!-- Header -->
+  <text x="140" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="#3d9e5a">Tạm thời</text>
+  <text x="140" y="150" text-anchor="middle" font-size="10" fill="#555" font-weight="700">Thời lượng: micro giây đến mili giây</text>
+
+  <!-- Divider -->
+  <line x1="50" y1="160" x2="230" y2="160" stroke="#3d9e5a" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Description -->
+  <text x="140" y="180" text-anchor="middle" font-size="10" fill="#333">Lật bit đơn sự kiện;</text>
+  <text x="140" y="200" text-anchor="middle" font-size="10" fill="#333">xảy ra một lần rồi biến mất.</text>
+  <text x="140" y="220" text-anchor="middle" font-size="10" fill="#333">Phần cứng không hư hại.</text>
+
+  <!-- Divider -->
+  <line x1="50" y1="240" x2="230" y2="240" stroke="#3d9e5a" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Example box -->
+  <rect x="50" y="260" width="180" height="70" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+  <text x="140" y="280" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Ví dụ</text>
+  <text x="140" y="300" text-anchor="middle" font-size="10" fill="#555">Tia vũ trụ SEU lật một bit</text>
+  <text x="140" y="320" text-anchor="middle" font-size="10" fill="#555">trong DRAM hoặc thanh ghi GPU</text>
+
+  <!-- Detection -->
+  <rect x="50" y="350" width="180" height="50" fill="#fff" stroke="#3d9e5a" stroke-width="1.2"/>
+  <text x="140" y="370" text-anchor="middle" font-size="10" font-weight="700" fill="#3d9e5a">Phát hiện</text>
+  <text x="140" y="390" text-anchor="middle" font-size="10" fill="#555">Bộ nhớ ECC, kiểm tra chẵn lẻ</text>
+
+  <!-- Recovery -->
+  <rect x="50" y="420" width="180" height="50" fill="#fff" stroke="#3d9e5a" stroke-width="1.2"/>
+  <text x="140" y="440" text-anchor="middle" font-size="10" font-weight="700" fill="#3d9e5a">Khôi phục</text>
+  <text x="140" y="460" text-anchor="middle" font-size="10" fill="#555">Sửa lỗi ECC tự động</text>
+
+  <!-- Rate -->
+  <rect x="50" y="490" width="180" height="70" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+  <text x="140" y="510" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Tỷ lệ trên 10K GPU</text>
+  <text x="140" y="530" text-anchor="middle" font-size="10" fill="#a31f34">~1 lỗi sửa được / giờ</text>
+  <text x="140" y="550" text-anchor="middle" font-size="10" fill="#555">(hầu hết tự động sửa)</text>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- ── INTERMITTENT FAILURES ── -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <rect x="290" y="100" width="220" height="480" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.2"/>
+
+  <!-- Header -->
+  <text x="400" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="#c87b2a">Gián đoạn</text>
+  <text x="400" y="150" text-anchor="middle" font-size="10" fill="#555" font-weight="700">Thời lượng: giây đến phút</text>
+
+  <!-- Divider -->
+  <line x1="310" y1="160" x2="490" y2="160" stroke="#c87b2a" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Description -->
+  <text x="400" y="180" text-anchor="middle" font-size="10" fill="#333">Tái diễn trong điều kiện</text>
+  <text x="400" y="200" text-anchor="middle" font-size="10" fill="#333">cụ thể (nhiệt, điện áp).</text>
+  <text x="400" y="220" text-anchor="middle" font-size="10" fill="#333">Biến mất khi điều kiện thay đổi.</text>
+
+  <!-- Divider -->
+  <line x1="310" y1="240" x2="490" y2="240" stroke="#c87b2a" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Example box -->
+  <rect x="310" y="260" width="180" height="70" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+  <text x="400" y="280" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Ví dụ</text>
+  <text x="400" y="300" text-anchor="middle" font-size="10" fill="#555">Mỏi mối hàn gây ra</text>
+  <text x="400" y="320" text-anchor="middle" font-size="10" fill="#555">lỗi ở nhiệt độ đỉnh</text>
+
+  <!-- Detection -->
+  <rect x="310" y="350" width="180" height="50" fill="#fff" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="400" y="370" text-anchor="middle" font-size="10" font-weight="700" fill="#c87b2a">Phát hiện</text>
+  <text x="400" y="390" text-anchor="middle" font-size="10" fill="#555">Bất thường chuẩn gradient, nhật ký</text>
+
+  <!-- Recovery -->
+  <rect x="310" y="420" width="180" height="50" fill="#fff" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="400" y="440" text-anchor="middle" font-size="10" font-weight="700" fill="#c87b2a">Khôi phục</text>
+  <text x="400" y="460" text-anchor="middle" font-size="10" fill="#555">Thử lại, điều tiết nhiệt, xả</text>
+
+  <!-- Rate -->
+  <rect x="310" y="490" width="180" height="70" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+  <text x="400" y="510" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Tỷ lệ trên 10K GPU</text>
+  <text x="400" y="530" text-anchor="middle" font-size="10" fill="#a31f34">~1 lỗi gián đoạn / ngày</text>
+  <text x="400" y="550" text-anchor="middle" font-size="10" fill="#555">(khó chẩn đoán nhất)</text>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- ── PERMANENT FAILURES ── -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <rect x="550" y="100" width="220" height="480" fill="#f9d6d5" stroke="#c44" stroke-width="1.2"/>
+
+  <!-- Header -->
+  <text x="660" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="#c44">Vĩnh viễn</text>
+  <text x="660" y="150" text-anchor="middle" font-size="10" fill="#555" font-weight="700">Thời lượng: vĩnh viễn (không thể đảo ngược)</text>
+
+  <!-- Divider -->
+  <line x1="570" y1="160" x2="750" y2="160" stroke="#c44" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Description -->
+  <text x="660" y="180" text-anchor="middle" font-size="10" fill="#333">Hỏng hóc linh kiện vật lý.</text>
+  <text x="660" y="200" text-anchor="middle" font-size="10" fill="#333">Không khôi phục khi thử lại.</text>
+  <text x="660" y="220" text-anchor="middle" font-size="10" fill="#333">Yêu cầu thay thế phần cứng.</text>
+
+  <!-- Divider -->
+  <line x1="570" y1="240" x2="750" y2="240" stroke="#c44" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Example box -->
+  <rect x="570" y="260" width="180" height="70" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+  <text x="660" y="280" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Ví dụ</text>
+  <text x="660" y="300" text-anchor="middle" font-size="10" fill="#555">Lỗi ô DRAM,</text>
+  <text x="660" y="320" text-anchor="middle" font-size="10" fill="#555">Hỏng hóc do điện di GPU</text>
+
+  <!-- Detection -->
+  <rect x="570" y="350" width="180" height="50" fill="#fff" stroke="#c44" stroke-width="1.2"/>
+  <text x="660" y="370" text-anchor="middle" font-size="10" font-weight="700" fill="#c44">Phát hiện</text>
+  <text x="660" y="390" text-anchor="middle" font-size="10" fill="#555">Hết thời gian chờ heartbeat, nhật ký MCE</text>
+
+  <!-- Recovery -->
+  <rect x="570" y="420" width="180" height="50" fill="#fff" stroke="#c44" stroke-width="1.2"/>
+  <text x="660" y="440" text-anchor="middle" font-size="10" font-weight="700" fill="#c44">Khôi phục</text>
+  <text x="660" y="460" text-anchor="middle" font-size="10" fill="#555">Thay phần cứng, checkpoint</text>
+
+  <!-- Rate -->
+  <rect x="570" y="490" width="180" height="70" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+  <text x="660" y="510" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Tỷ lệ trên 10K GPU</text>
+  <text x="660" y="530" text-anchor="middle" font-size="10" fill="#a31f34">~1 GPU hỏng / 5 giờ</text>
+  <text x="660" y="550" text-anchor="middle" font-size="10" fill="#555">(MTBF<tspan baseline-shift="sub" font-size="7">hệ thống</tspan> = MTBF<tspan baseline-shift="sub" font-size="7">linh kiện</tspan> / N)</text>
+
+  <!-- ── Footnote ── -->
+  <text x="400" y="610" text-anchor="middle" font-size="10" fill="#999" font-style="italic">Phân loại lỗi từ nhanh/khôi phục được (trái) đến chậm/vĩnh viễn (phải)</text>
+</svg>

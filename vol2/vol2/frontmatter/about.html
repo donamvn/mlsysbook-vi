@@ -1,0 +1,2832 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Machine Learning Systems at Scale</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../vol2/frontmatter/acknowledgements.html" rel="next">
+<link href="../../vol2/frontmatter/author_note.html" rel="prev">
+<link href="../../shared/assets/images/icons/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-6d8bf5f3a64ff1f58d6d467b13ee33b9.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6d8bf5f3a64ff1f58d6d467b13ee33b9.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-6d8bf5f3a64ff1f58d6d467b13ee33b9.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-f62e4beb15657c5d46d3d9f401234464.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-5d6ec600491f594e73da55aff70b019a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-f62e4beb15657c5d46d3d9f401234464.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/quarto-contrib/foldbox/foldbox.css" rel="stylesheet">
+<script src="../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "/"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-M21L0CBCVN"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-M21L0CBCVN', { 'anonymize_ip': true});
+</script>
+<script type="application/json" class="js-hypothesis-config">
+{
+  "theme": "clean",
+  "openSidebar": false
+}
+</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
+<!-- Shared head includes — MLSysBook ecosystem -->
+
+<!--
+  theme-persist (inline, sync) — applies stored color-scheme before first paint.
+  Inlined deliberately: runs before any other <script>, no extra round-trip,
+  and avoids per-subsite asset path differences. Canonical source:
+  shared/scripts/theme-persist.js (kept identical for documentation/testability).
+  If you change one, mirror the change to the other.
+-->
+<script>
+(function () {
+  'use strict';
+  var STORAGE_KEY = 'quarto-color-scheme';
+  // Quarto's toggle writes 'alternate'/'default' (alternate = dark, the
+  // layered sheet); sibling non-Quarto sites write 'dark'/'light'. Both
+  // hit the same key, so we accept either. Quarto's own startup still
+  // checks `=== 'alternate'`, so we mirror onto <html> rather than rewrite.
+  function normalize(v) {
+    if (v === 'dark' || v === 'alternate') return 'dark';
+    if (v === 'light' || v === 'default') return 'light';
+    return null;
+  }
+  function preferredScheme() {
+    try {
+      var n = normalize(window.localStorage.getItem(STORAGE_KEY));
+      if (n) return n;
+    } catch (e) {}
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  }
+  function apply(scheme) {
+    var html = document.documentElement;
+    if (!html) return;
+    html.setAttribute('data-bs-theme', scheme);
+    html.setAttribute('data-quarto-color-scheme', scheme);
+    html.style.colorScheme = scheme;
+    // Bridge to legacy `.quarto-dark` body class — about.css,
+    // community.css, and newsletter.css key their dark-mode CSS
+    // variables off `.quarto-dark { ... }`. Quarto's own toggle adds
+    // that class on click, but the OS-pref / first-paint path never
+    // does. Mirror the scheme onto body so those CSS variables fire
+    // on every dark path, not just toggle clicks. body may not exist
+    // yet on the first call (this script runs in <head>); a
+    // MutationObserver below catches it as soon as it parses.
+    var body = document.body;
+    if (body) body.classList.toggle('quarto-dark', scheme === 'dark');
+  }
+  apply(preferredScheme());
+  // Catch the FOUC window between <head> apply() and DOMContentLoaded:
+  // <body> may not exist yet at first apply(), but as soon as the
+  // parser appends it we want the legacy class bridge in place so any
+  // CSS keyed on `.quarto-dark` paints correctly on first render.
+  if (!document.body) {
+    var earlyObserver = new MutationObserver(function () {
+      if (document.body) {
+        apply(preferredScheme());
+        earlyObserver.disconnect();
+      }
+    });
+    earlyObserver.observe(document.documentElement, { childList: true });
+  }
+  // Quarto's toggle updates localStorage but not <html>, so wrap it to
+  // mirror the new value onto data-bs-theme; otherwise clicking the toggle
+  // leaves CSS keyed off [data-bs-theme="dark"] rendering against the wrong
+  // stylesheet until the next reload.
+  function syncFromStorage() {
+    try {
+      var n = normalize(window.localStorage.getItem(STORAGE_KEY));
+      if (n) apply(n);
+    } catch (e) {}
+  }
+  function wrapToggle() {
+    var orig = window.quartoToggleColorScheme;
+    if (typeof orig !== 'function' || orig.__mlsbWrapped) return;
+    var wrapped = function () { var r = orig.apply(this, arguments); syncFromStorage(); return r; };
+    wrapped.__mlsbWrapped = true;
+    window.quartoToggleColorScheme = wrapped;
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { wrapToggle(); syncFromStorage(); });
+  } else {
+    wrapToggle(); syncFromStorage();
+  }
+  // Defend the legacy `.quarto-dark` body class against Quarto's own
+  // `toggleBodyColor(mode)`, which runs *after* this script and re-asserts
+  // the body class based on `mode` — and `mode` defaults to 'light' when
+  // there's no stored quarto-color-scheme value, even when the OS / first
+  // paint already resolved to dark via `data-bs-theme`. Without this
+  // observer, on every fresh visit Quarto would clobber our bridge and
+  // restore `.quarto-light`, leaving `.quarto-dark`-keyed CSS variables
+  // (about/community/newsletter pages) at their light-mode defaults
+  // against the dark `data-bs-theme="dark"` background.
+  function bridgeBody() {
+    var body = document.body;
+    if (!body) return;
+    var wantDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+    if (wantDark && !body.classList.contains('quarto-dark')) {
+      body.classList.add('quarto-dark');
+      body.classList.remove('quarto-light');
+    } else if (!wantDark && body.classList.contains('quarto-dark')) {
+      body.classList.remove('quarto-dark');
+      body.classList.add('quarto-light');
+    }
+  }
+  function watchBody() {
+    if (!document.body) return;
+    bridgeBody();
+    var bodyObs = new MutationObserver(bridgeBody);
+    bodyObs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    var htmlObs = new MutationObserver(bridgeBody);
+    htmlObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', watchBody);
+  } else {
+    watchBody();
+  }
+  window.addEventListener('storage', function (ev) {
+    if (ev.key !== STORAGE_KEY) return;
+    var n = normalize(ev.newValue);
+    if (n) apply(n);
+  });
+  if (window.matchMedia) {
+    try {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (ev) {
+        try { if (window.localStorage.getItem(STORAGE_KEY)) return; } catch (e) {}
+        apply(ev.matches ? 'dark' : 'light');
+      });
+    } catch (e) {}
+  }
+})();
+</script>
+
+<!--
+  Build-stamp styling. Tiny, neutral, dark-mode aware. The actual stamp text
+  is injected by shared/scripts/inject-build-stamp.sh into footer markup
+  containing the literal MLSB_BUILD_STAMP HTML-comment token (see that
+  script for the exact pattern — we cannot write it here because HTML
+  comments cannot nest and the inner closer would terminate this block).
+-->
+<style>
+.mlsb-build-stamp {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  font-variant-numeric: tabular-nums;
+}
+[data-bs-theme="dark"] .mlsb-build-stamp { opacity: 0.5; }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link rel="icon" href="https://mlsysbook.ai/vol1/assets/images/icons/favicon.png" type="image/png">
+
+<!--
+  navbar-theme-toggle-relocate — moves the Quarto theme toggle into the
+  navbar's right-side .navbar-nav group at page load, so it collapses into
+  the hamburger menu alongside Subscribe/Star/Support/GitHub at narrow widths
+  instead of being stranded in the middle by Quarto's mx-auto brand layout.
+
+  Why JS: Quarto auto-injects the toggle into .quarto-navbar-tools (outside
+  .navbar-collapse). CSS can't move DOM nodes between containers, and CSS
+  positioning hacks (absolute/right: 50px) fight Bootstrap's responsive
+  layout below 992px. Moving the node once at startup is the standard
+  approach used across Quarto-based sites with the same problem.
+-->
+<script>
+(function () {
+  'use strict';
+  function relocateThemeToggle() {
+    var tools = document.querySelector('.quarto-navbar-tools');
+    if (!tools) return;
+    var toggle = tools.querySelector('.quarto-color-scheme-toggle');
+    if (!toggle) return;
+    var navRight = document.querySelector(
+      '.navbar .navbar-collapse .navbar-nav.ms-auto'
+    ) || document.querySelector(
+      '.navbar .navbar-collapse .navbar-nav:last-of-type'
+    );
+    if (!navRight) return;
+    var li = document.createElement('li');
+    li.className = 'nav-item navbar-theme-toggle-item';
+    toggle.classList.add('nav-link');
+    li.appendChild(toggle);
+    navRight.appendChild(li);
+    tools.style.display = 'none';
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', relocateThemeToggle);
+  } else {
+    relocateThemeToggle();
+  }
+})();
+</script>
+
+<!--
+  navbar-brand-href-fix — force the navbar brand link to the ecosystem root
+  (https://mlsysbook.ai/) on every subsite.
+
+  Quarto sets each subsite's `site-url` to `https://mlsysbook.ai/<subsite>/`
+  and then relativizes any navbar.href value that lives inside the
+  site-url's domain. The shared `href: https://mlsysbook.ai/` in
+  navbar-common.yml therefore gets emitted as `./index.html`, which on
+  vol1/vol2/tinytorch/etc. resolves to *that subsite's* root rather than
+  the ecosystem landing page. Override the brand link href in JS after
+  Quarto's render: this is a one-line user-experience fix that does not
+  fight Quarto's URL machinery.
+-->
+<script>
+(function () {
+  'use strict';
+  function fixBrandHref() {
+    var brand = document.querySelectorAll(
+      '.navbar .navbar-brand, .navbar .navbar-brand-logo'
+    );
+    for (var i = 0; i < brand.length; i++) {
+      brand[i].setAttribute('href', 'https://mlsysbook.ai/');
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixBrandHref);
+  } else {
+    fixBrandHref();
+  }
+})();
+</script>
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="apple-touch-icon" href="../../shared/assets/images/icons/favicon.png">
+<meta name="theme-color" content="#1F407A">
+<!-- Release identity (rendered into the footer pill below).
+     The publish workflow drops release-manifest.json at
+     /vol2/release-manifest.json before deploy. -->
+<meta name="release-manifest" content="/vol2/release-manifest.json">
+<!-- SocratiQ bundle: -->
+<!-- <script type="module" src="/tools/scripts/socratiQ/bundle.js" defer></script> -->
+<script src="../../shared/assets/scripts/sidebar-auto-collapse.js" defer=""></script>
+<script src="../../shared/assets/scripts/version-link.js" defer=""></script>
+<script src="../../shared/assets/scripts/subscribe-modal.js" defer=""></script>
+<style>
+.callout-takeaways {
+  --color1: #FCF4F8;
+  --color2: #9D3C72;
+  --border-color: #9D3C72;
+  --background-color: rgba(157, 60, 114, 0.04);
+  --title-background-color: rgba(157, 60, 114, 0.04);
+  --dark-background-color: rgba(157, 60, 114, 0.12);
+  --dark-title-background-color: rgba(157, 60, 114, 0.12);
+}
+.callout-learning-objectives {
+  --color1: #E8F2EA;
+  --color2: #4A7C59;
+  --border-color: #4A7C59;
+  --background-color: rgba(74, 124, 89, 0.04);
+  --title-background-color: rgba(74, 124, 89, 0.04);
+  --dark-background-color: rgba(74, 124, 89, 0.12);
+  --dark-title-background-color: rgba(74, 124, 89, 0.12);
+}
+.callout-definition {
+  --color1: #F2F7FA;
+  --color2: #4F7396;
+  --border-color: #4F7396;
+  --background-color: rgba(79, 115, 150, 0.04);
+  --title-background-color: rgba(79, 115, 150, 0.04);
+  --dark-background-color: rgba(79, 115, 150, 0.12);
+  --dark-title-background-color: rgba(79, 115, 150, 0.12);
+}
+.callout-colab {
+  --color1: #FFF5E6;
+  --color2: #FF6B35;
+  --border-color: #FF6B35;
+  --background-color: rgba(255, 107, 53, 0.04);
+  --title-background-color: rgba(255, 107, 53, 0.04);
+  --dark-background-color: rgba(255, 107, 53, 0.12);
+  --dark-title-background-color: rgba(255, 107, 53, 0.12);
+}
+.callout-war-story {
+  --color1: #FEF2F2;
+  --color2: #C53030;
+  --border-color: #C53030;
+  --background-color: rgba(197, 48, 48, 0.04);
+  --title-background-color: rgba(197, 48, 48, 0.04);
+  --dark-background-color: rgba(197, 48, 48, 0.12);
+  --dark-title-background-color: rgba(197, 48, 48, 0.12);
+}
+.callout-example {
+  --color1: #F0F8F6;
+  --color2: #148F77;
+  --border-color: #148F77;
+  --background-color: rgba(20, 143, 119, 0.04);
+  --title-background-color: rgba(20, 143, 119, 0.04);
+  --dark-background-color: rgba(20, 143, 119, 0.12);
+  --dark-title-background-color: rgba(20, 143, 119, 0.12);
+}
+.callout-chapter-connection {
+  --color1: #F1F5F9;
+  --color2: #64748B;
+  --border-color: #64748B;
+  --background-color: rgba(100, 116, 139, 0.04);
+  --title-background-color: rgba(100, 116, 139, 0.04);
+  --dark-background-color: rgba(100, 116, 139, 0.12);
+  --dark-title-background-color: rgba(100, 116, 139, 0.12);
+}
+.callout-case-study {
+  --color1: #FEF2F2;
+  --color2: #C53030;
+  --border-color: #C53030;
+  --background-color: rgba(197, 48, 48, 0.04);
+  --title-background-color: rgba(197, 48, 48, 0.04);
+  --dark-background-color: rgba(197, 48, 48, 0.12);
+  --dark-title-background-color: rgba(197, 48, 48, 0.12);
+}
+.callout-resource-videos {
+  --color1: #E0F2F1;
+  --color2: #20B2AA;
+  --border-color: #20B2AA;
+  --background-color: rgba(32, 178, 170, 0.04);
+  --title-background-color: rgba(32, 178, 170, 0.04);
+  --dark-background-color: rgba(32, 178, 170, 0.12);
+  --dark-title-background-color: rgba(32, 178, 170, 0.12);
+}
+.callout-quiz-question {
+  --color1: #F0F0F8;
+  --color2: #5B4B8A;
+  --border-color: #5B4B8A;
+  --background-color: rgba(91, 75, 138, 0.04);
+  --title-background-color: rgba(91, 75, 138, 0.04);
+  --dark-background-color: rgba(91, 75, 138, 0.12);
+  --dark-title-background-color: rgba(91, 75, 138, 0.12);
+}
+.callout-checkpoint {
+  --color1: #F7FEE7;
+  --color2: #4D7C0F;
+  --border-color: #4D7C0F;
+  --background-color: rgba(77, 124, 15, 0.04);
+  --title-background-color: rgba(77, 124, 15, 0.04);
+  --dark-background-color: rgba(77, 124, 15, 0.12);
+  --dark-title-background-color: rgba(77, 124, 15, 0.12);
+}
+.callout-perspective {
+  --color1: #F7F8FA;
+  --color2: #4A5568;
+  --border-color: #4A5568;
+  --background-color: rgba(74, 85, 104, 0.04);
+  --title-background-color: rgba(74, 85, 104, 0.04);
+  --dark-background-color: rgba(74, 85, 104, 0.12);
+  --dark-title-background-color: rgba(74, 85, 104, 0.12);
+}
+.callout-research-questions {
+  --color1: #F0F0F8;
+  --color2: #5B4B8A;
+  --border-color: #5B4B8A;
+  --background-color: rgba(91, 75, 138, 0.04);
+  --title-background-color: rgba(91, 75, 138, 0.04);
+  --dark-background-color: rgba(91, 75, 138, 0.12);
+  --dark-title-background-color: rgba(91, 75, 138, 0.12);
+}
+.callout-code {
+  --color1: #F2F4F8;
+  --color2: #3C4858;
+  --border-color: #3C4858;
+  --background-color: rgba(60, 72, 88, 0.04);
+  --title-background-color: rgba(60, 72, 88, 0.04);
+  --dark-background-color: rgba(60, 72, 88, 0.12);
+  --dark-title-background-color: rgba(60, 72, 88, 0.12);
+}
+.callout-theorem {
+  --color1: #F5F0FA;
+  --color2: #6B46C1;
+  --border-color: #6B46C1;
+  --background-color: rgba(107, 70, 193, 0.04);
+  --title-background-color: rgba(107, 70, 193, 0.04);
+  --dark-background-color: rgba(107, 70, 193, 0.12);
+  --dark-title-background-color: rgba(107, 70, 193, 0.12);
+}
+.callout-quiz-answer {
+  --color1: #E8F2EA;
+  --color2: #4A7C59;
+  --border-color: #4A7C59;
+  --background-color: rgba(74, 124, 89, 0.04);
+  --title-background-color: rgba(74, 124, 89, 0.04);
+  --dark-background-color: rgba(74, 124, 89, 0.12);
+  --dark-title-background-color: rgba(74, 124, 89, 0.12);
+}
+.callout-resource-slides {
+  --color1: #E0F2F1;
+  --color2: #20B2AA;
+  --border-color: #20B2AA;
+  --background-color: rgba(32, 178, 170, 0.04);
+  --title-background-color: rgba(32, 178, 170, 0.04);
+  --dark-background-color: rgba(32, 178, 170, 0.12);
+  --dark-title-background-color: rgba(32, 178, 170, 0.12);
+}
+.callout-notebook {
+  --color1: #F4F7FA;
+  --color2: #3F6077;
+  --border-color: #3F6077;
+  --background-color: rgba(63, 96, 119, 0.04);
+  --title-background-color: rgba(63, 96, 119, 0.04);
+  --dark-background-color: rgba(63, 96, 119, 0.12);
+  --dark-title-background-color: rgba(63, 96, 119, 0.12);
+}
+.callout-principle {
+  --color1: #F3F2FA;
+  --color2: #3D3B8E;
+  --border-color: #3D3B8E;
+  --background-color: rgba(61, 59, 142, 0.04);
+  --title-background-color: rgba(61, 59, 142, 0.04);
+  --dark-background-color: rgba(61, 59, 142, 0.12);
+  --dark-title-background-color: rgba(61, 59, 142, 0.12);
+}
+.callout-lighthouse {
+  --color1: #FDF8E6;
+  --color2: #B8860B;
+  --border-color: #B8860B;
+  --background-color: rgba(184, 134, 11, 0.04);
+  --title-background-color: rgba(184, 134, 11, 0.04);
+  --dark-background-color: rgba(184, 134, 11, 0.12);
+  --dark-title-background-color: rgba(184, 134, 11, 0.12);
+}
+.callout-resource-exercises {
+  --color1: #E0F2F1;
+  --color2: #20B2AA;
+  --border-color: #20B2AA;
+  --background-color: rgba(32, 178, 170, 0.04);
+  --title-background-color: rgba(32, 178, 170, 0.04);
+  --dark-background-color: rgba(32, 178, 170, 0.12);
+  --dark-title-background-color: rgba(32, 178, 170, 0.12);
+}
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  details.callout-takeaways {
+    --text-color: #e6e6e6;
+    --background-color: rgba(157, 60, 114, 0.12);
+    --title-background-color: rgba(157, 60, 114, 0.12);
+    border-color: #9D3C72;
+  }
+  details.callout-takeaways summary,
+  details.callout-takeaways summary strong,
+  details.callout-takeaways > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-takeaways code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-learning-objectives {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+  details.callout-learning-objectives summary,
+  details.callout-learning-objectives summary strong,
+  details.callout-learning-objectives > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-learning-objectives code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-definition {
+    --text-color: #e6e6e6;
+    --background-color: rgba(79, 115, 150, 0.12);
+    --title-background-color: rgba(79, 115, 150, 0.12);
+    border-color: #4F7396;
+  }
+  details.callout-definition summary,
+  details.callout-definition summary strong,
+  details.callout-definition > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-definition code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-colab {
+    --text-color: #e6e6e6;
+    --background-color: rgba(255, 107, 53, 0.12);
+    --title-background-color: rgba(255, 107, 53, 0.12);
+    border-color: #FF6B35;
+  }
+  details.callout-colab summary,
+  details.callout-colab summary strong,
+  details.callout-colab > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-colab code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-war-story {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+  details.callout-war-story summary,
+  details.callout-war-story summary strong,
+  details.callout-war-story > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-war-story code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-example {
+    --text-color: #e6e6e6;
+    --background-color: rgba(20, 143, 119, 0.12);
+    --title-background-color: rgba(20, 143, 119, 0.12);
+    border-color: #148F77;
+  }
+  details.callout-example summary,
+  details.callout-example summary strong,
+  details.callout-example > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-example code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-chapter-connection {
+    --text-color: #e6e6e6;
+    --background-color: rgba(100, 116, 139, 0.12);
+    --title-background-color: rgba(100, 116, 139, 0.12);
+    border-color: #64748B;
+  }
+  details.callout-chapter-connection summary,
+  details.callout-chapter-connection summary strong,
+  details.callout-chapter-connection > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-chapter-connection code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-case-study {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+  details.callout-case-study summary,
+  details.callout-case-study summary strong,
+  details.callout-case-study > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-case-study code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-resource-videos {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+  details.callout-resource-videos summary,
+  details.callout-resource-videos summary strong,
+  details.callout-resource-videos > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-resource-videos code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-quiz-question {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+  details.callout-quiz-question summary,
+  details.callout-quiz-question summary strong,
+  details.callout-quiz-question > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-quiz-question code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-checkpoint {
+    --text-color: #e6e6e6;
+    --background-color: rgba(77, 124, 15, 0.12);
+    --title-background-color: rgba(77, 124, 15, 0.12);
+    border-color: #4D7C0F;
+  }
+  details.callout-checkpoint summary,
+  details.callout-checkpoint summary strong,
+  details.callout-checkpoint > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-checkpoint code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-perspective {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 85, 104, 0.12);
+    --title-background-color: rgba(74, 85, 104, 0.12);
+    border-color: #4A5568;
+  }
+  details.callout-perspective summary,
+  details.callout-perspective summary strong,
+  details.callout-perspective > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-perspective code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-research-questions {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+  details.callout-research-questions summary,
+  details.callout-research-questions summary strong,
+  details.callout-research-questions > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-research-questions code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-code {
+    --text-color: #e6e6e6;
+    --background-color: rgba(60, 72, 88, 0.12);
+    --title-background-color: rgba(60, 72, 88, 0.12);
+    border-color: #3C4858;
+  }
+  details.callout-code summary,
+  details.callout-code summary strong,
+  details.callout-code > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-code code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-theorem {
+    --text-color: #e6e6e6;
+    --background-color: rgba(107, 70, 193, 0.12);
+    --title-background-color: rgba(107, 70, 193, 0.12);
+    border-color: #6B46C1;
+  }
+  details.callout-theorem summary,
+  details.callout-theorem summary strong,
+  details.callout-theorem > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-theorem code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-quiz-answer {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+  details.callout-quiz-answer summary,
+  details.callout-quiz-answer summary strong,
+  details.callout-quiz-answer > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-quiz-answer code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-resource-slides {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+  details.callout-resource-slides summary,
+  details.callout-resource-slides summary strong,
+  details.callout-resource-slides > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-resource-slides code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-notebook {
+    --text-color: #e6e6e6;
+    --background-color: rgba(63, 96, 119, 0.12);
+    --title-background-color: rgba(63, 96, 119, 0.12);
+    border-color: #3F6077;
+  }
+  details.callout-notebook summary,
+  details.callout-notebook summary strong,
+  details.callout-notebook > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-notebook code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-principle {
+    --text-color: #e6e6e6;
+    --background-color: rgba(61, 59, 142, 0.12);
+    --title-background-color: rgba(61, 59, 142, 0.12);
+    border-color: #3D3B8E;
+  }
+  details.callout-principle summary,
+  details.callout-principle summary strong,
+  details.callout-principle > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-principle code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-lighthouse {
+    --text-color: #e6e6e6;
+    --background-color: rgba(184, 134, 11, 0.12);
+    --title-background-color: rgba(184, 134, 11, 0.12);
+    border-color: #B8860B;
+  }
+  details.callout-lighthouse summary,
+  details.callout-lighthouse summary strong,
+  details.callout-lighthouse > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-lighthouse code {
+    color: #e6e6e6 !important;
+  }
+  details.callout-resource-exercises {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+  details.callout-resource-exercises summary,
+  details.callout-resource-exercises summary strong,
+  details.callout-resource-exercises > summary {
+    color: #f0f0f0 !important;
+  }
+  details.callout-resource-exercises code {
+    color: #e6e6e6 !important;
+  }
+}
+body.quarto-dark details.callout-takeaways {
+    --text-color: #e6e6e6;
+    --background-color: rgba(157, 60, 114, 0.12);
+    --title-background-color: rgba(157, 60, 114, 0.12);
+    border-color: #9D3C72;
+  }
+body.quarto-dark details.callout-takeaways summary,
+body.quarto-dark details.callout-takeaways summary strong,
+body.quarto-dark details.callout-takeaways > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-takeaways code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-learning-objectives {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+body.quarto-dark details.callout-learning-objectives summary,
+body.quarto-dark details.callout-learning-objectives summary strong,
+body.quarto-dark details.callout-learning-objectives > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-learning-objectives code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-definition {
+    --text-color: #e6e6e6;
+    --background-color: rgba(79, 115, 150, 0.12);
+    --title-background-color: rgba(79, 115, 150, 0.12);
+    border-color: #4F7396;
+  }
+body.quarto-dark details.callout-definition summary,
+body.quarto-dark details.callout-definition summary strong,
+body.quarto-dark details.callout-definition > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-definition code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-colab {
+    --text-color: #e6e6e6;
+    --background-color: rgba(255, 107, 53, 0.12);
+    --title-background-color: rgba(255, 107, 53, 0.12);
+    border-color: #FF6B35;
+  }
+body.quarto-dark details.callout-colab summary,
+body.quarto-dark details.callout-colab summary strong,
+body.quarto-dark details.callout-colab > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-colab code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-war-story {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+body.quarto-dark details.callout-war-story summary,
+body.quarto-dark details.callout-war-story summary strong,
+body.quarto-dark details.callout-war-story > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-war-story code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-example {
+    --text-color: #e6e6e6;
+    --background-color: rgba(20, 143, 119, 0.12);
+    --title-background-color: rgba(20, 143, 119, 0.12);
+    border-color: #148F77;
+  }
+body.quarto-dark details.callout-example summary,
+body.quarto-dark details.callout-example summary strong,
+body.quarto-dark details.callout-example > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-example code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-chapter-connection {
+    --text-color: #e6e6e6;
+    --background-color: rgba(100, 116, 139, 0.12);
+    --title-background-color: rgba(100, 116, 139, 0.12);
+    border-color: #64748B;
+  }
+body.quarto-dark details.callout-chapter-connection summary,
+body.quarto-dark details.callout-chapter-connection summary strong,
+body.quarto-dark details.callout-chapter-connection > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-chapter-connection code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-case-study {
+    --text-color: #e6e6e6;
+    --background-color: rgba(197, 48, 48, 0.12);
+    --title-background-color: rgba(197, 48, 48, 0.12);
+    border-color: #C53030;
+  }
+body.quarto-dark details.callout-case-study summary,
+body.quarto-dark details.callout-case-study summary strong,
+body.quarto-dark details.callout-case-study > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-case-study code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-resource-videos {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+body.quarto-dark details.callout-resource-videos summary,
+body.quarto-dark details.callout-resource-videos summary strong,
+body.quarto-dark details.callout-resource-videos > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-resource-videos code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-quiz-question {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+body.quarto-dark details.callout-quiz-question summary,
+body.quarto-dark details.callout-quiz-question summary strong,
+body.quarto-dark details.callout-quiz-question > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-quiz-question code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-checkpoint {
+    --text-color: #e6e6e6;
+    --background-color: rgba(77, 124, 15, 0.12);
+    --title-background-color: rgba(77, 124, 15, 0.12);
+    border-color: #4D7C0F;
+  }
+body.quarto-dark details.callout-checkpoint summary,
+body.quarto-dark details.callout-checkpoint summary strong,
+body.quarto-dark details.callout-checkpoint > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-checkpoint code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-perspective {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 85, 104, 0.12);
+    --title-background-color: rgba(74, 85, 104, 0.12);
+    border-color: #4A5568;
+  }
+body.quarto-dark details.callout-perspective summary,
+body.quarto-dark details.callout-perspective summary strong,
+body.quarto-dark details.callout-perspective > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-perspective code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-research-questions {
+    --text-color: #e6e6e6;
+    --background-color: rgba(91, 75, 138, 0.12);
+    --title-background-color: rgba(91, 75, 138, 0.12);
+    border-color: #5B4B8A;
+  }
+body.quarto-dark details.callout-research-questions summary,
+body.quarto-dark details.callout-research-questions summary strong,
+body.quarto-dark details.callout-research-questions > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-research-questions code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-code {
+    --text-color: #e6e6e6;
+    --background-color: rgba(60, 72, 88, 0.12);
+    --title-background-color: rgba(60, 72, 88, 0.12);
+    border-color: #3C4858;
+  }
+body.quarto-dark details.callout-code summary,
+body.quarto-dark details.callout-code summary strong,
+body.quarto-dark details.callout-code > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-code code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-theorem {
+    --text-color: #e6e6e6;
+    --background-color: rgba(107, 70, 193, 0.12);
+    --title-background-color: rgba(107, 70, 193, 0.12);
+    border-color: #6B46C1;
+  }
+body.quarto-dark details.callout-theorem summary,
+body.quarto-dark details.callout-theorem summary strong,
+body.quarto-dark details.callout-theorem > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-theorem code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-quiz-answer {
+    --text-color: #e6e6e6;
+    --background-color: rgba(74, 124, 89, 0.12);
+    --title-background-color: rgba(74, 124, 89, 0.12);
+    border-color: #4A7C59;
+  }
+body.quarto-dark details.callout-quiz-answer summary,
+body.quarto-dark details.callout-quiz-answer summary strong,
+body.quarto-dark details.callout-quiz-answer > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-quiz-answer code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-resource-slides {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+body.quarto-dark details.callout-resource-slides summary,
+body.quarto-dark details.callout-resource-slides summary strong,
+body.quarto-dark details.callout-resource-slides > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-resource-slides code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-notebook {
+    --text-color: #e6e6e6;
+    --background-color: rgba(63, 96, 119, 0.12);
+    --title-background-color: rgba(63, 96, 119, 0.12);
+    border-color: #3F6077;
+  }
+body.quarto-dark details.callout-notebook summary,
+body.quarto-dark details.callout-notebook summary strong,
+body.quarto-dark details.callout-notebook > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-notebook code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-principle {
+    --text-color: #e6e6e6;
+    --background-color: rgba(61, 59, 142, 0.12);
+    --title-background-color: rgba(61, 59, 142, 0.12);
+    border-color: #3D3B8E;
+  }
+body.quarto-dark details.callout-principle summary,
+body.quarto-dark details.callout-principle summary strong,
+body.quarto-dark details.callout-principle > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-principle code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-lighthouse {
+    --text-color: #e6e6e6;
+    --background-color: rgba(184, 134, 11, 0.12);
+    --title-background-color: rgba(184, 134, 11, 0.12);
+    border-color: #B8860B;
+  }
+body.quarto-dark details.callout-lighthouse summary,
+body.quarto-dark details.callout-lighthouse summary strong,
+body.quarto-dark details.callout-lighthouse > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-lighthouse code {
+    color: #e6e6e6 !important;
+  }
+body.quarto-dark details.callout-resource-exercises {
+    --text-color: #e6e6e6;
+    --background-color: rgba(32, 178, 170, 0.12);
+    --title-background-color: rgba(32, 178, 170, 0.12);
+    border-color: #20B2AA;
+  }
+body.quarto-dark details.callout-resource-exercises summary,
+body.quarto-dark details.callout-resource-exercises summary strong,
+body.quarto-dark details.callout-resource-exercises > summary {
+    color: #f0f0f0 !important;
+  }
+body.quarto-dark details.callout-resource-exercises code {
+    color: #e6e6e6 !important;
+  }
+</style>
+<style>
+details.callout-takeaways > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_takeaways.png");
+}
+details.callout-learning-objectives > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_learning_objectives.png");
+}
+details.callout-definition > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_definition.png");
+}
+details.callout-colab > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_colab.png");
+}
+details.callout-war-story > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_case_study.png");
+}
+details.callout-example > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_example.png");
+}
+details.callout-chapter-connection > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_chapter_connection.png");
+}
+details.callout-case-study > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_case_study.png");
+}
+details.callout-resource-videos > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_resource_videos.png");
+}
+details.callout-quiz-question > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_quiz_question.png");
+}
+details.callout-checkpoint > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_checkpoint.png");
+}
+details.callout-perspective > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_perspective.png");
+}
+details.callout-research-questions > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_research_questions.png");
+}
+details.callout-code > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_code.png");
+}
+details.callout-theorem > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_theorem.png");
+}
+details.callout-quiz-answer > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_quiz_answer.png");
+}
+details.callout-resource-slides > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_resource_slides.png");
+}
+details.callout-notebook > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_notebook.png");
+}
+details.callout-principle > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_principle.png");
+}
+details.callout-lighthouse > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_lighthouse.png");
+}
+details.callout-resource-exercises > summary::before {
+  background-image: url("../../shared/assets/images/icons/callouts/icon_callout_resource_exercises.png");
+}
+</style>
+    <style type="text/css">
+    .ps-root .ps-algorithm {
+      border-top: 2px solid;
+      border-bottom: 2px solid;
+    }
+    .pseudocode-container {
+      text-align: left;
+    }
+    </style>
+  
+      <style type="text/css">
+      .ps-algorithm > .ps-line {
+        text-align: left;
+      }
+      </style>
+    
+
+
+<meta property="og:title" content="Machine Learning Systems at Scale">
+<meta property="og:image" content="https://mlsysbook.ai/vol2/vol2/frontmatter/shared/assets/images/covers/cover-hardcover-book-vol2.png">
+<meta property="og:site_name" content="Scaling Machine Learning Systems">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:title" content="Machine Learning Systems at Scale">
+<meta name="twitter:image" content="https://mlsysbook.ai/vol2/vol2/frontmatter/shared/assets/images/covers/cover-hardcover-book-vol2.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed slimcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-xl " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../shared/assets/images/icons/logo-seas-shield.png" alt="" class="navbar-logo light-content">
+    <img src="../../shared/assets/images/icons/logo-seas-shield.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Hệ thống Học máy</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-read" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Read</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-read">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol1/"><i class="bi bi-journal" role="img">
+</i> 
+ <span class="dropdown-text">Volume I: Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol2/"><i class="bi bi-journal" role="img">
+</i> 
+ <span class="dropdown-text">Volume II: Scaling</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/tinytorch/"><i class="bi bi-fire" role="img">
+</i> 
+ <span class="dropdown-text">TinyTorch (Standalone Book)</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol1/assets/downloads/Machine-Learning-Systems-Vol1.pdf" target="_blank"><i class="bi bi-file-pdf" role="img">
+</i> 
+ <span class="dropdown-text">Volume I PDF</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/vol2/assets/downloads/Machine-Learning-Systems-Vol2.pdf" target="_blank"><i class="bi bi-file-pdf" role="img">
+</i> 
+ <span class="dropdown-text">Volume II PDF</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-build" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Build</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-build">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/labs/"><i class="bi bi-sliders" role="img">
+</i> 
+ <span class="dropdown-text">Labs</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/tinytorch/"><i class="bi bi-fire" role="img">
+</i> 
+ <span class="dropdown-text">TinyTorch</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/kits/"><i class="bi bi-cpu" role="img">
+</i> 
+ <span class="dropdown-text">Hardware Kits</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/mlsysim/"><i class="bi bi-calculator" role="img">
+</i> 
+ <span class="dropdown-text">MLSys·im</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-teach" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Teach</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-teach">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/online/ai-engineering-for-leaders/"><i class="bi bi-person-badge" role="img">
+</i> 
+ <span class="dropdown-text">AI Engineering for Leaders (HarvardX)</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/instructors/course-map.html"><i class="bi bi-signpost-split" role="img">
+</i> 
+ <span class="dropdown-text">CS249r Course Map</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/slides/"><i class="bi bi-easel" role="img">
+</i> 
+ <span class="dropdown-text">Lecture Slides</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/instructors/"><i class="bi bi-person-video3" role="img">
+</i> 
+ <span class="dropdown-text">Instructor Hub</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-prepare" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Prepare</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-prepare">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/"><i class="bi bi-mortarboard" role="img">
+</i> 
+ <span class="dropdown-text">StaffML</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/plans"><i class="bi bi-map" role="img">
+</i> 
+ <span class="dropdown-text">Study Plans</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/gauntlet"><i class="bi bi-lightning" role="img">
+</i> 
+ <span class="dropdown-text">Gauntlet Mode</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/staffml/downloads/StaffML-Paper.pdf" target="_blank"><i class="bi bi-file-pdf" role="img">
+</i> 
+ <span class="dropdown-text">StaffML Paper</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-connect" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Connect</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-connect">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/newsletter/"><i class="bi bi-envelope" role="img">
+</i> 
+ <span class="dropdown-text">Newsletter</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/community/"><i class="bi bi-globe" role="img">
+</i> 
+ <span class="dropdown-text">Global Network</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/community/events.html"><i class="bi bi-calendar-event" role="img">
+</i> 
+ <span class="dropdown-text">Workshops &amp; Events</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/community/partners.html"><i class="bi bi-people" role="img">
+</i> 
+ <span class="dropdown-text">Partners &amp; Sponsors</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">About</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/"><i class="bi bi-bullseye" role="img">
+</i> 
+ <span class="dropdown-text">Mission</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/#story"><i class="bi bi-book" role="img">
+</i> 
+ <span class="dropdown-text">Our Story</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/people.html"><i class="bi bi-person-lines-fill" role="img">
+</i> 
+ <span class="dropdown-text">People</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/contributors.html"><i class="bi bi-people" role="img">
+</i> 
+ <span class="dropdown-text">Contributors</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="https://mlsysbook.ai/about/license.html"><i class="bi bi-cc-circle" role="img">
+</i> 
+ <span class="dropdown-text">License</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://mlsysbook.ai/newsletter/"> <i class="bi bi-envelope" role="img">
+</i> 
+<span class="menu-text">Subscribe</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/harvard-edge/cs249r_book" target="_blank"> <i class="bi bi-star" role="img">
+</i> 
+<span class="menu-text">Star</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://opencollective.com/mlsysbook" target="_blank"> <i class="bi bi-heart" role="img">
+</i> 
+<span class="menu-text">Support</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-github" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text">GitHub</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-github">    
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book/discussions" target="_blank"><i class="bi bi-chat" role="img">
+</i> 
+ <span class="dropdown-text">Discussions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book" target="_blank"><i class="bi bi-pencil" role="img">
+</i> 
+ <span class="dropdown-text">Edit this page</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book/issues/new" target="_blank"><i class="bi bi-bug" role="img">
+</i> 
+ <span class="dropdown-text">Report an issue</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/harvard-edge/cs249r_book" target="_blank"><i class="bi bi-code" role="img">
+</i> 
+ <span class="dropdown-text">View source</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../vol2/frontmatter/about.html">Lời nói đầu</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+  <div id="quarto-announcement" data-announcement-id="9162214c8cd5a767bcf26eee1acfa73d" class="alert alert-primary hidden"><i class="bi bi-megaphone quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p>🚀 <strong>Tập II: Quy mô lớn.</strong> Huấn luyện phân tán, vận hành đội máy, và triển khai có trách nhiệm.<br> 📘 <strong>Lần đầu ghé thăm?</strong> Bắt đầu với <a href="https://mlsysbook.ai/vol1/">Tập I: Nền tảng</a> — truy cập mở, miễn phí mãi mãi.<br> 🛠️ <strong>Song hành cùng sách:</strong> <a href="https://mlsysbook.ai/tinytorch/">TinyTorch</a> (xây dựng) · <a href="https://mlsysbook.ai/kits/">Hardware Kits</a> (triển khai) · <a href="https://mlsysbook.ai/mlsysim/">MLSys·im</a> (mô hình hóa) · <a href="https://mlsysbook.ai/labs/">Labs</a> (khám phá) · <a href="https://mlsysbook.ai/staffml/">StaffML</a> (thực hành)<br> 📬 <strong>Bản tin:</strong> Thông tin &amp; cập nhật về ML Systems — <a href="https://mlsysbook.ai/newsletter/">Đăng ký →</a></p>
+</div><i class="bi bi-x-lg quarto-announcement-action"></i></div>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Trang chủ</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/frontmatter/dedication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời đề tặng</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/frontmatter/author_note.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời tác giả</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/frontmatter/about.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Lời nói đầu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/frontmatter/acknowledgements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lời cảm ơn</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/frontmatter/ai_use.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Một lưu ý về hỗ trợ AI</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/frontmatter/notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ký hiệu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../shared/frontmatter/socratiq/socratiq.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SocratiQ AI</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/01_introduction/01_introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Giới thiệu</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../vol2/parts/fleet_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần I: Đội máy (Fleet)</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/02_compute_infrastructure/02_compute_infrastructure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cơ sở hạ tầng tính toán</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/03_network_fabrics/03_network_fabrics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cấu trúc mạng</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/04_data_storage/04_data_storage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lưu trữ dữ liệu</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../vol2/parts/distributed_ml_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần II: ML Phân tán</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/05_distributed_training/05_distributed_training.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Huấn luyện phân tán</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/06_collective_communication/06_collective_communication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Truyền thông tập thể</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/07_fault_tolerance/07_fault_tolerance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Khả năng chịu lỗi</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/08_fleet_orchestration/08_fleet_orchestration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Điều phối cụm máy</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../vol2/parts/deployment_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần III: Triển khai ở Quy mô lớn</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/09_performance_engineering/09_performance_engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kỹ thuật hiệu năng</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/10_inference/10_inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Suy luận ở quy mô lớn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/11_edge_intelligence/11_edge_intelligence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Trí tuệ Edge</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/12_ops_scale/12_ops_scale.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vận hành ML ở quy mô lớn</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../vol2/parts/responsible_fleet_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phần IV: Đội máy Có trách nhiệm</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/13_security_privacy/13_security_privacy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bảo mật &amp; Quyền riêng tư</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/14_robust_ai/14_robust_ai.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI Mạnh Mẽ</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/15_sustainable_ai/15_sustainable_ai.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI bền vững</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/16_responsible_ai/16_responsible_ai.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI có trách nhiệm</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/17_conclusion/17_conclusion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kết luận</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tài liệu tham khảo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Phụ lục</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_dam.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng Một máy (D·A·M)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_c3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phân loại C³</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_fleet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng Đội máy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_communication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng Truyền thông</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_reliability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng Độ tin cậy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nền tảng Suy luận</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/appendix_assumptions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">System Assumptions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../vol2/backmatter/glossary/glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Trên trang này</h2>
+   
+  <ul>
+  <li><a href="#sec-about" id="toc-sec-about" class="nav-link active" data-scroll-target="#sec-about">Lời nói đầu</a>
+  <ul>
+  <li><a href="#sec-vol2-about-audience" id="toc-sec-vol2-about-audience" class="nav-link" data-scroll-target="#sec-vol2-about-audience">Ai nên đọc cuốn sách này</a></li>
+  <li><a href="#sec-vol2-about-why-fleet" id="toc-sec-vol2-about-why-fleet" class="nav-link" data-scroll-target="#sec-vol2-about-why-fleet">Vì sao cần một cuốn sách giáo khoa cấp độ Fleet</a></li>
+  <li><a href="#sec-vol2-about-covers" id="toc-sec-vol2-about-covers" class="nav-link" data-scroll-target="#sec-vol2-about-covers">Nội dung sách này</a></li>
+  <li><a href="#sec-vol2-about-reading-paths" id="toc-sec-vol2-about-reading-paths" class="nav-link" data-scroll-target="#sec-vol2-about-reading-paths">Các lộ trình đọc gợi ý</a></li>
+  <li><a href="#sec-vol2-about-platform" id="toc-sec-vol2-about-platform" class="nav-link" data-scroll-target="#sec-vol2-about-platform">Một nền tảng học tập</a></li>
+  <li><a href="#sec-vol2-about-open-source" id="toc-sec-vol2-about-open-source" class="nav-link" data-scroll-target="#sec-vol2-about-open-source">Sách giáo khoa mã nguồn mở</a></li>
+  <li><a href="#sec-vol2-about-prerequisites" id="toc-sec-vol2-about-prerequisites" class="nav-link" data-scroll-target="#sec-vol2-about-prerequisites">Yêu cầu tiên quyết</a></li>
+  <li><a href="#sec-vol2-about-beyond" id="toc-sec-vol2-about-beyond" class="nav-link" data-scroll-target="#sec-vol2-about-beyond">Ngoài cuốn sách này</a></li>
+  <li><a href="#sec-vol2-about-course" id="toc-sec-vol2-about-course" class="nav-link" data-scroll-target="#sec-vol2-about-course">Sử dụng cuốn sách này trong một khóa học</a></li>
+  <li><a href="#sec-vol2-about-copyright" id="toc-sec-vol2-about-copyright" class="nav-link" data-scroll-target="#sec-vol2-about-copyright">Bản quyền và cấp phép</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+
+<section id="sec-about" class="level1 unnumbered page-columns page-full">
+<h1 class="unnumbered">Lời nói đầu</h1>
+<section id="sec-vol2-about-audience" class="level2">
+<h2 class="anchored" data-anchor-id="sec-vol2-about-audience">Ai nên đọc cuốn sách này</h2>
+<p>Cuốn sách này dành cho bất kỳ ai đã hiểu machine learning trên một máy đơn lẻ và nay phải đối mặt với thách thức vận hành nó ở quy mô lớn. Các vấn đề ở quy mô lớn không chỉ là phóng to vấn đề của một nút đơn. Chúng khác biệt về bản chất: mạng có thể bị chia cắt, hỏng hóc phần cứng là điều chắc chắn về mặt xác suất, và tác động xã hội của mỗi quyết định thiết kế sẽ được khuếch đại bởi hàng triệu người dùng.</p>
+<p>Phạm vi của sách trải từ việc thiết kế nền tảng vật lý cho một trung tâm dữ liệu AI, mở rộng huấn luyện vượt quá giới hạn của một bộ tăng tốc đơn lẻ, cho đến việc lý giải những gì xảy ra khi một hệ thống triển khai quy mô lớn (production fleet) phục vụ người dùng toàn cầu. Xuyên suốt cuốn sách, trọng tâm là vật lý của sự phân tán, những bất biến chi phối mọi hệ thống machine learning ở quy mô lớn, bất kể framework, mô hình hay thời đại nào.</p>
+</section>
+<section id="sec-vol2-about-why-fleet" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="sec-vol2-about-why-fleet">Vì sao cần một cuốn sách giáo khoa cấp độ Fleet</h2>
+<p>Năm 2012, việc huấn luyện AlexNet mất từ năm đến sáu ngày trên hai GPU <span class="citation" data-cites="krizhevsky2012imagenet">(<a href="#ref-krizhevsky2012imagenet" role="doc-biblioref">Krizhevsky et al. 2012</a>)</span>. Đến năm 2023, các ước tính công khai về việc huấn luyện các mô hình tiên tiến thuộc lớp GPT-4 cho thấy cần khoảng 25.000 GPU hoạt động trong khoảng ba tháng <span class="citation" data-cites="semianalysisGPT4">(<a href="#ref-semianalysisGPT4" role="doc-biblioref">Patel and Wong 2023</a>)</span>; OpenAI không công bố cấu hình phần cứng thực tế <span class="citation" data-cites="openai2023gpt4">(<a href="#ref-openai2023gpt4" role="doc-biblioref">OpenAI et al. 2023</a>)</span>. Đây không còn là cùng một vấn đề kỹ thuật ở quy mô lớn hơn nữa, mà là một vấn đề kỹ thuật hoàn toàn khác biệt về bản chất.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-krizhevsky2012imagenet" class="csl-entry" role="listitem">
+Krizhevsky, Alex, Ilya Sutskever, and Geoffrey E. Hinton. 2012. <span>“<span>ImageNet</span> Classification with Deep Convolutional Neural Networks.”</span> <em>Advances in Neural Information Processing Systems (NeurIPS)</em> 25.
+</div><div id="ref-semianalysisGPT4" class="csl-entry" role="listitem">
+Patel, Dylan, and Gerald Wong. 2023. <em><span>GPT</span>-4 Architecture, Infrastructure, Training Dataset, Costs, Vision, <span>MoE</span></em>. SemiAnalysis Blog.
+</div><div id="ref-openai2023gpt4" class="csl-entry" role="listitem">
+OpenAI, Josh Achiam, Steven Adler, Sandhini Agarwal, Lama Ahmad, Ilge Akkaya, Florencia Leoni Aleman, et al. 2023. <span>“<span>GPT</span>-4 Technical Report.”</span> <em>arXiv Preprint arXiv:2303.08774</em>, ahead of print. https://doi.org/10.48550/arXiv.2303.08774.
+</div></div><p>Trên một máy đơn, hiệu suất bị giới hạn bởi <em>bức tường bộ nhớ</em> (memory wall) – khoảng cách giữa tốc độ bộ xử lý và băng thông bộ nhớ. Trong một cụm phân tán, một giới hạn mới xuất hiện: <em>bức tường băng thông phân đôi</em> (bisection bandwidth wall), nơi băng thông mạng tối thiểu khi cắt đôi cụm có thể giới hạn thông lượng của lưu lượng buộc phải đi qua nhát cắt đó. Dữ liệu không còn chỉ đi trong các phân cấp cục bộ; nó còn băng qua các kết nối quang, bị chi phối bởi tốc độ ánh sáng giữa các giá đỡ (rack) và giữa các lục địa. Các lỗi phần cứng, vốn đủ hiếm trên một máy đơn để được coi là ngoại lệ, lại trở thành các sự kiện thống kê thường xuyên ở quy mô toàn hệ thống. Một tác vụ huấn luyện mà không có kế hoạch dự phòng lỗi <em>chắc chắn sẽ</em> thất bại.</p>
+<p>Đây không phải là những phiền toái trong vận hành. Chúng là các ràng buộc vật lý, cơ bản và vĩnh viễn như bức tường bộ nhớ, Định luật Amdahl, hoặc chi phí năng lượng cho việc di chuyển dữ liệu. Chúng đòi hỏi một ngành kỹ thuật riêng, với các bất biến riêng:</p>
+<ul>
+<li><strong>Định lý Băng thông Phân đôi</strong>: Với các kiểu giao tiếp buộc phải đi qua đường phân đôi tối thiểu của hệ thống, thông lượng bị giới hạn bởi băng thông của đường phân đôi đó.</li>
+<li><strong>Định luật Fleet</strong>: Mỗi bước huấn luyện đều chịu một khoản “thuế” giao tiếp tăng theo kích thước cụm, trong khi lượng tính toán trên mỗi nút thì giảm.</li>
+<li><strong>Định luật Checkpoint Young-Daly</strong>: Khoảng thời gian checkpoint tối ưu cân đối giữa chi phí ghi trạng thái và chi phí kỳ vọng do mất phần việc vì sự cố.</li>
+<li><strong>Định luật Chi phí Phục vụ Chiếm ưu thế</strong>: Với các mô hình sản xuất có lưu lượng truy cập cao, tổng chi phí vận hành tích lũy cho suy luận có thể vượt quá chi phí huấn luyện một lần, khiến hiệu quả phục vụ (serving) trở thành mục tiêu tối ưu hóa xuyên suốt vòng đời của mô hình.</li>
+<li><strong>Định luật Bất khả thi về Công bằng</strong>: Ngoại trừ các trường hợp đặc biệt như dự đoán hoàn hảo hoặc tỷ lệ cơ sở bằng nhau, các điểm rủi ro đã được hiệu chỉnh thường không thể đồng thời cân bằng tỷ lệ lỗi giữa các nhóm. Bình đẳng nhân khẩu học là một ràng buộc riêng về tỷ lệ lựa chọn, có thể tạo thêm những đánh đổi.</li>
+</ul>
+<p>Nếu kỹ thuật hệ thống ML trên một máy đơn hỏi <em>“một máy có thể xây dựng được gì?”</em>, thì kỹ thuật hệ thống ML ở quy mô fleet hỏi <em>“một nghìn máy có thể cùng nhau xây dựng được gì, và cái giá phải trả về độ tin cậy, hiệu quả và xã hội là gì?”</em></p>
+<p>Chính vế cuối đó là thứ tạo nên khác biệt cho kỹ thuật ở quy mô fleet. Một máy đơn chỉ ảnh hưởng đến người dùng của nó; còn một fleet ảnh hưởng đến mọi người mà đầu ra của nó chạm tới, qua hàng triệu quyết định mỗi giây. Ở quy mô đó, độ tin cậy, hiệu quả và công bằng không còn là đặc trưng mà trở thành ràng buộc kỹ thuật chặt như băng thông hay công suất. Một hệ thống có thể mở rộng nhưng không đáng tin thì chưa được thiết kế đúng nghĩa. Nó chỉ đơn thuần được mở rộng.</p>
+<p>Cuốn sách này cung cấp nền tảng đó. Nó theo mô hình sư phạm của Hennessy và Patterson, mở rộng cách tiếp cận định lượng, đặt nguyên tắc lên trước cho quy mô phân tán <span class="citation" data-cites="hennessy2011computer hennessy2019 patterson2017hardware">(<a href="#ref-hennessy2011computer" role="doc-biblioref">Hennessy and Patterson 2011</a>; <a href="#ref-hennessy2019" role="doc-biblioref">Hennessy and Patterson 2019</a>, <a href="#ref-patterson2017hardware" role="doc-biblioref">2017</a>)</span>. Tương tự cách công trình của họ đã dạy cả một thế hệ suy luận về hiệu suất bộ xử lý từ các nguyên lý đầu tiên, cuốn sách này dạy người đọc suy luận về hiệu suất của fleet, thay trực giác về hệ thống phân tán bằng đo lường, và thay việc mở rộng tùy tiện bằng kỹ thuật.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-hennessy2011computer" class="csl-entry" role="listitem">
+Hennessy, J. L., and D. A. Patterson. 2011. <em>Computer Architecture: <span>A</span> Quantitative Approach</em>. Morgan Kaufmann.
+</div><div id="ref-hennessy2019" class="csl-entry" role="listitem">
+Hennessy, John L., and David A. Patterson. 2019. <span>“A New Golden Age for Computer Architecture.”</span> <em>Communications of the ACM</em> 62 (2): 48–60. https://doi.org/10.1145/3282307.
+</div><div id="ref-patterson2017hardware" class="csl-entry" role="listitem">
+Hennessy, John L., and David A. Patterson. 2017. <em>Computer Architecture: A Quantitative Approach</em>. 6th ed. Morgan Kaufmann.
+</div></div><p><em>Introduction to Machine Learning Systems</em> đã giới thiệu những viên gạch nền: tensor, kernel, phân cấp bộ nhớ và các vòng lặp tối ưu hóa tạo thành một hệ thống đơn nút. Một fleet không đơn giản là gom thêm nhiều viên gạch. Nó giống một dàn nhạc. Một nhạc sĩ có thể tạo ra âm nhạc tuyệt đẹp, nhưng dàn nhạc không chỉ là nhiều người cùng chơi. Cần có nhạc trưởng, bản tổng phổ, sự đồng bộ chính xác và khả năng khôi phục trơn tru khi có người chơi bỏ lỡ. Âm học của phòng hòa nhạc định hình âm thanh theo những cách mà không nhạc cụ đơn lẻ nào kiểm soát được. Các nguyên tắc chi phối một buổi diễn của dàn nhạc—phối hợp, độ trễ giao tiếp, chịu lỗi và vật lý của không gian biểu diễn—về bản chất khác hẳn những gì chi phối một nghệ sĩ độc tấu. Các fleet machine learning vận hành cũng như vậy. Một cụm huấn luyện, một fleet phục vụ (serving), và một triển khai ở edge là những hệ thống rất khác nhau, nhưng bên dưới đều là các khối nền tảng chung: chiến lược song song hóa, các nguyên thủy giao tiếp tập thể, giao thức checkpoint, thuật toán lập lịch, và các đánh đổi giữa thông lượng, độ trễ, khả năng chịu lỗi và chi phí.</p>
+</section>
+<section id="sec-vol2-about-covers" class="level2">
+<h2 class="anchored" data-anchor-id="sec-vol2-about-covers">Nội dung sách này</h2>
+<p>Cuốn sách này tập trung vào <strong>Machine Learning Fleet</strong>: hệ thống máy tính quy mô trung tâm dữ liệu, nơi mạng chính là bus, mật độ công suất là giới hạn tốc độ, và lỗi không phải ngoại lệ mà là điều chắc chắn về mặt thống kê. Đây là đơn vị tính toán ML hiện đại, nơi các mô hình quá lớn đối với bất kỳ thiết bị đơn lẻ nào được huấn luyện trên hàng nghìn bộ tăng tốc, được phục vụ (serving) cho hàng triệu người dùng, và chịu sự chi phối của các ràng buộc trải rộng từ kỹ thuật, kinh tế đến xã hội.</p>
+<p>Nội dung được tổ chức thành bốn phần:</p>
+<ul>
+<li><strong>Phần I: The Fleet</strong> xây dựng nền tảng vật lý của trung tâm dữ liệu AI từ gốc: bức tranh về các hệ thống ML phân tán, silicon và hệ thống làm mát của hạ tầng tính toán, các kết cấu mạng kết nối hàng nghìn bộ tăng tốc, và lưu trữ dữ liệu có khả năng mở rộng để cấp dữ liệu cho các pipeline huấn luyện.</li>
+<li><strong>Phần II: ML phân tán</strong> thiết lập logic phân tán vượt ra ngoài một máy đơn lẻ: các chiến lược song song hóa (dữ liệu, tensor và pipeline) để huấn luyện các mô hình quá lớn cho một thiết bị đơn, các nguyên thủy giao tiếp tập thể để đồng bộ gradient, các cơ chế chịu lỗi đảm bảo độ tin cậy khi lỗi là chuyện thường xuyên, và các hệ thống điều phối để quản lý fleet.</li>
+<li><strong>Phần III: Triển khai trên quy mô lớn</strong> sẽ đưa mô hình đã huấn luyện từ cụm tính toán ra thế giới: kỹ thuật hiệu năng để tăng hiệu quả, phục vụ (serving) suy luận ở quy mô rất lớn, trí tuệ trên edge cho các thiết bị hạn chế tài nguyên, và vòng đời vận hành cần có để quản lý các hạm đội sản xuất.</li>
+<li><strong>Phần IV: Hạm đội có trách nhiệm</strong> đối mặt với những lực tác động quyết định liệu hạm đội phục vụ người dùng hay gây hại cho họ: bảo mật và quyền riêng tư, thiết kế hệ thống vững chắc, bền vững về môi trường, và kỹ thuật có trách nhiệm – coi đây là những ràng buộc cơ bản như mật độ công suất hay băng thông phân đôi.</li>
+</ul>
+<p>Bốn phần này phác thảo một lộ trình qua <strong>Ngăn xếp Hạm đội</strong> – một cấu trúc trừu tượng dạng lớp, mở rộng ngăn xếp hệ thống ML truyền thống lên quy mô phân tán. Ở dưới cùng, <strong>Cơ sở hạ tầng &amp; Bộ tăng tốc</strong> và <strong>Kết nối &amp; Lưu trữ</strong> tạo nên nền tảng vật lý. Phía trên các lớp này, <strong>Thực thi phân tán</strong> và <strong>Độ tin cậy &amp; Kiểm soát</strong> quản lý các tác vụ song song, giao tiếp, lập lịch và khôi phục sự cố. Ở các lớp cao hơn, <strong>Runtime &amp; Phục vụ</strong> và <strong>Vận hành</strong> đưa mô hình đến người dùng và quản lý vòng đời sản xuất. Ở trên cùng, <strong>Đảm bảo</strong> và <strong>Quản trị &amp; Bền vững</strong> biến các yếu tố như niềm tin, rủi ro, chính sách và chi phí môi trường thành các ràng buộc kỹ thuật. Mỗi lớp cung cấp một trừu tượng cho lớp bên trên và sử dụng lớp bên dưới. Các quyết định kỹ thuật ở các lớp dưới cùng sẽ giới hạn các khả năng ở các lớp trên.</p>
+<p>Xuyên suốt cuốn sách, một hình vẽ ở lề sẽ chỉ ra lớp mà mỗi chương đề cập, giúp người đọc định hướng ngay từ đầu mỗi chương:</p>
+<p>Ngăn xếp đầy đủ ở trên cho thấy từng hàng với phạm vi của nó, được nhóm thành bốn phần của cuốn sách. Các chữ số La Mã (I–IV) đánh dấu các phần đó; cường độ của hàng thể hiện mức độ nhấn mạnh. Ngăn xếp sử dụng một màu nhấn xuyên suốt để sắc độ (độ đậm nhạt), chứ không phải màu sắc, sẽ truyền tải thông tin về trọng tâm của chương.</p>
+<p>Trong các hình vẽ ở lề xuyên suốt cuốn sách, cường độ của mỗi lớp phản ánh mức độ chương tập trung vào lớp đó: sáng hơn (cường độ cao) cho biết đó là trọng tâm chính của chương; mờ hơn (cường độ thấp) cho biết lớp đó có liên quan về mặt ngữ cảnh khi các ràng buộc được truyền lên các lớp trên. Hãy xem xét ba chương sau để minh họa cách trọng tâm thay đổi:</p>
+<p>Trong phần Hạ tầng tính toán, hàng dưới cùng nổi bật nhất vì chương này nói về silicon, công suất, làm mát và triển khai ở mức vật lý. Ở Huấn luyện phân tán, <strong>Thực thi phân tán</strong> là trọng tâm, còn <strong>Độ tin cậy &amp; Kiểm soát</strong> vẫn rất quan trọng vì các đợt huấn luyện lớn phụ thuộc vào lập lịch và khả năng khôi phục. Trong AI có trách nhiệm, <strong>Quản trị &amp; Bền vững</strong> là mũi nhọn, còn <strong>Đảm bảo</strong> vẫn mạnh vì trách nhiệm giải trình đòi hỏi niềm tin có thể đo lường và kiểm soát rủi ro. Cùng một stack, nhưng ba câu chuyện khác nhau: quyết định ở một lớp sẽ dội sang các lớp bên trên và bên dưới.</p>
+<p>Các ghi chú trực quan nhỏ đặt ở lề, giúp người đọc nắm nhanh mối quan hệ bằng mắt. Chúng là công cụ hỗ trợ đọc, không phải hình để trích dẫn sau này. Ở quy mô toàn hệ thống (fleet scale), ngữ pháp trực quan này làm lộ rõ các khoảng trống băng thông, bán kính ảnh hưởng của lỗi, tỷ lệ checkpoint và các đánh đổi năng lượng ở edge mà không làm đứt mạch lập luận. Khi một hình nhỏ dùng thang logarit, điều đó được ghi ngay trong hình.</p>
+<div class="quarto-layout-panel" data-layout-ncol="4">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><a href="../02_compute_infrastructure/images/svg/compute_infrastructure_cxl_bandwidth_gap.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../02_compute_infrastructure/images/svg/compute_infrastructure_cxl_bandwidth_gap.svg" class="img-fluid" alt="Ví dụ trực quan ở lề: một thang đo băng thông theo thang logarit, so sánh HBM3 với CXL3 và ghi chú tỷ lệ."></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><a href="../03_network_fabrics/images/svg/network_fabrics_pfc_pause_blast.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="../03_network_fabrics/images/svg/network_fabrics_pfc_pause_blast.svg" class="img-fluid" alt="Ví dụ trực quan ở lề: một biểu đồ dạng quạt thể hiện bán kính ảnh hưởng, cho thấy một sự kiện tạm dừng lan sang nhiều luồng dữ liệu phụ thuộc."></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><a href="../04_data_storage/images/svg/data_storage_checkpoint_storm_write_time.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="../04_data_storage/images/svg/data_storage_checkpoint_storm_write_time.svg" class="img-fluid" alt="Ví dụ trực quan ở lề: một thang thời gian theo thang logarit, so sánh thời gian ghi checkpoint cách làm đơn giản với thời gian ghi ZeRO-3."></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><a href="../15_sustainable_ai/images/svg/vol2_sustainable_ai_margin_004.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="../15_sustainable_ai/images/svg/vol2_sustainable_ai_margin_004.svg" class="img-fluid" alt="Ví dụ trực quan ở lề: một thang năng lượng cho thấy truyền vô tuyến lớn áp đảo phép tính cục bộ trên thang logarit."></a></p>
+</div>
+</div>
+</div>
+<p>Mỗi phần đều xây trên phần trước, nên khuyến nghị đọc theo thứ tự. Các lộ trình bên dưới gợi ý lựa chọn cho độc giả có mục tiêu cụ thể.</p>
+</section>
+<section id="sec-vol2-about-reading-paths" class="level2">
+<h2 class="anchored" data-anchor-id="sec-vol2-about-reading-paths">Các lộ trình đọc gợi ý</h2>
+<p>Độc giả với nền tảng và mục tiêu khác nhau có thể chọn một trong nhiều lộ trình sau để tiếp cận tài liệu:</p>
+<ul>
+<li><strong>Lộ trình Hoàn chỉnh</strong> (tất cả các chương, theo trình tự): Lần theo chuỗi ràng buộc nhân quả chi phối fleet ML, bắt đầu từ các nguyên lý phân tán cơ bản. Hãy bắt đầu với Phần I, rồi tiếp tục Phần II, III và IV.</li>
+<li><strong>Lộ trình Hạ tầng</strong> (hệ thống vật lý và điều phối): Tập trung vào nền tảng vật lý và vận hành. Tập trung vào Phần I (<strong><a href="../02_compute_infrastructure/02_compute_infrastructure.html#sec-compute-infrastructure">Cơ sở hạ tầng tính toán</a></strong>, <strong><a href="../03_network_fabrics/03_network_fabrics.html#sec-network-fabrics">Cấu trúc mạng</a></strong>, <strong><a href="../04_data_storage/04_data_storage.html#sec-data-storage">Lưu trữ dữ liệu</a></strong>) và <strong><a href="../08_fleet_orchestration/08_fleet_orchestration.html#sec-fleet-orchestration">Điều phối cụm máy</a></strong>.</li>
+<li><strong>Lộ trình Mở rộng quy mô</strong> (chuyên sâu huấn luyện phân tán): Đọc lướt Phần I để nắm các thuật ngữ về hạ tầng, rồi tập trung vào <strong><a href="../05_distributed_training/05_distributed_training.html#sec-distributed-training-systems">Huấn luyện phân tán</a></strong>, <strong><a href="../06_collective_communication/06_collective_communication.html#sec-collective-communication">Truyền thông tập thể</a></strong>, <strong><a href="../07_fault_tolerance/07_fault_tolerance.html#sec-fault-tolerance-reliability">Khả năng chịu lỗi</a></strong> và <strong><a href="../09_performance_engineering/09_performance_engineering.html#sec-performance-engineering">Kỹ thuật hiệu năng</a></strong>.</li>
+<li><strong>Lộ trình Sản xuất</strong> (triển khai và vận hành): Sau phần giới thiệu, tập trung vào <strong><a href="../10_inference/10_inference.html#sec-inference-scale">Suy luận ở quy mô lớn</a></strong>, <strong><a href="../12_ops_scale/12_ops_scale.html#sec-ops-scale">Vận hành ML ở quy mô lớn</a></strong>, <strong><a href="../11_edge_intelligence/11_edge_intelligence.html#sec-edge-intelligence">Trí tuệ Edge</a></strong>, và các chương trong Phần IV Responsible Fleet (<strong><a href="../13_security_privacy/13_security_privacy.html#sec-security-privacy">Bảo mật & Quyền riêng tư</a></strong>, <strong><a href="../14_robust_ai/14_robust_ai.html#sec-robust-ai">AI Mạnh Mẽ</a></strong>, <strong><a href="../15_sustainable_ai/15_sustainable_ai.html#sec-sustainable-ai">AI bền vững</a></strong> và <strong><a href="../16_responsible_ai/16_responsible_ai.html#sec-responsible-ai">AI có trách nhiệm</a></strong>).</li>
+</ul>
+</section>
+<section id="sec-about-conventions-1a2b" class="level2 unlisted">
+<h2 class="unlisted anchored" data-anchor-id="sec-about-conventions-1a2b">Quy ước</h2>
+<p>Cuốn sách này dùng một số quy ước định dạng để cho biết mỗi đoạn văn đang làm gì.</p>
+<section id="sec-about-bold-3c4d" class="level3">
+<h3 class="anchored" data-anchor-id="sec-about-bold-3c4d">Chữ <strong>đậm</strong> đánh dấu định nghĩa đầu tiên</h3>
+<p>Một thuật ngữ in <strong>đậm</strong> trong phần nội dung chính là lần đầu tiên nó được giới thiệu chính thức trong cuốn sách. Mỗi thuật ngữ chỉ được trình bày như vậy đúng một lần. Những lần xuất hiện sau đó sẽ không còn in đậm nữa; khi đó, thuật ngữ đã trở thành một phần của vốn từ vựng mà chương sẽ tiếp tục dùng.</p>
+<blockquote class="blockquote">
+<p>Mọi hệ thống machine learning đều có một <strong>nhiệm vụ kép</strong>: nó phải quản lý đồng thời bất định thống kê và các ràng buộc vật lý.</p>
+</blockquote>
+<p>Việc in đậm là một cam kết: hãy ghi nhớ thuật ngữ này vì nó sẽ xuất hiện nhiều lần. Một mục chỉ mục tương ứng ở cuối sách sẽ dẫn đến lần xuất hiện định nghĩa (trong mục con <code>definition</code>), giúp bạn dễ dàng tra cứu lại. Các thuật ngữ kỹ thuật quan trọng cũng được tổng hợp trong bảng chú giải.</p>
+<p>Chữ đậm cũng xuất hiện trong một vai trò cấu trúc thứ hai: như một nhãn chức năng ở đầu một mục trong hộp chú thích hoặc một gạch đầu dòng tóm tắt—ví dụ, <strong>Khuyến nghị</strong>, <strong>Đánh đổi</strong>, hoặc <strong>Kết quả</strong>. Trong ngữ cảnh đó, chữ đậm là phần khung đỡ chứ không phải là định nghĩa đầu tiên.</p>
+</section>
+<section id="sec-about-italics-5e6f" class="level3">
+<h3 class="anchored" data-anchor-id="sec-about-italics-5e6f">Chữ <em>nghiêng</em> đảm nhiệm các vai trò diễn đạt cụ thể</h3>
+<p>Chữ nghiêng không được dùng để nhấn mạnh chung chung. Mọi đoạn chữ nghiêng trong cuốn sách này đều thực hiện một trong số ít các vai trò cụ thể sau:</p>
+<ul>
+<li><strong>Đối lập trực tiếp</strong>: <em>huấn luyện</em> so với <em>suy luận</em>, <em>logic</em> so với <em>vật lý</em>.</li>
+<li><strong>Điều không thể, được nêu dưới dạng định luật vật lý, toán học hoặc logic</strong>: “các hệ thống có độ trễ dưới 10 ms <em>không thể</em> dùng hạ tầng đám mây ở xa—vật lý không cho phép.”</li>
+<li><strong>Từ được dùng như một từ</strong>: “thuật ngữ <em>gradient</em> chỉ một vector các đạo hàm riêng.”</li>
+<li><strong>Tên tác phẩm</strong>: <em>Computer Architecture: A Quantitative Approach</em>.</li>
+<li><strong>Luận điểm chính</strong>: Một câu in nghiêng duy nhất tóm tắt ý tưởng chủ đạo của một phần, ví dụ <em>Dữ liệu là Mã nguồn.</em></li>
+</ul>
+<p>Một từ được in nghiêng đang thực hiện một trong các vai trò này. Một từ không được in nghiêng không mang nhấn mạnh ngầm định nào.</p>
+</section>
+<section id="sec-about-callouts-7a8b" class="level3">
+<h3 class="anchored" data-anchor-id="sec-about-callouts-7a8b">Các hộp chú thích có đặc điểm hình ảnh phù hợp với chức năng của chúng</h3>
+<p>Các hộp chú thích không phải là vật trang trí. Mỗi loại báo hiệu một kiểu nội dung cụ thể, nên đặc điểm hình ảnh sẽ cho biết hộp chứa gì trước khi người đọc bắt đầu xem.</p>
+<div data-tbl-colwidths="[17,85]">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 83%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ghi chú đặc biệt</th>
+<th style="text-align: left;">Nội dung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Định nghĩa</strong></td>
+<td style="text-align: left;">Định nghĩa chính thức của một thuật ngữ chính, cùng với ý nghĩa, điểm khác biệt so với khái niệm gần nhất và một lỗi thường gặp.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Ví dụ</strong></td>
+<td style="text-align: left;">Trường hợp lịch sử hoặc kịch bản cụ thể, được cấu trúc gồm ngữ cảnh, thông tin chi tiết và bài học về hệ thống.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Góc nhìn Hệ thống</strong></td>
+<td style="text-align: left;">Quan sát phân tích hoặc sắc thái toán học làm phong phú thêm lập luận xung quanh.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Tính toán sơ bộ</strong></td>
+<td style="text-align: left;">Tính toán chi tiết được trình bày từng bước, với các giá trị được tính toán trực tiếp từ các hằng số của sách; các bảng và phương trình trung gian chính là phần toán học.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Checkpoint</strong></td>
+<td style="text-align: left;">Các câu hỏi tự kiểm tra để kiểm tra sự hiểu biết về phần trước đó.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Kinh nghiệm xương máu</strong></td>
+<td style="text-align: left;">Sự cố kỹ thuật được ghi lại với chế độ lỗi có nguồn gốc, được cấu trúc gồm ngữ cảnh, lỗi, hậu quả và bài học.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Trường hợp điển hình</strong></td>
+<td style="text-align: left;">Các khối lượng công việc (workload) lặp lại được đặc trưng bởi một hồ sơ (tham số, FLOPs, ràng buộc chi phối), được sử dụng làm các nghiên cứu điển hình cố định qua nhiều chương.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Nguyên tắc</strong></td>
+<td style="text-align: left;">Nguyên tắc sách chuẩn hoặc bất biến được tham chiếu từ các chương sau.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Định lý</strong></td>
+<td style="text-align: left;">Kết quả hoặc giới hạn chính thức, được hỗ trợ bằng phương trình, được nêu rõ với các điều kiện của nó và được áp dụng trong phân tích định lượng sau này.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Những điểm chính cần ghi nhớ</strong></td>
+<td style="text-align: left;">Bốn đến bảy kết quả quan trọng nhất từ một chương, dưới dạng tóm tắt.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Mục tiêu học tập</strong></td>
+<td style="text-align: left;">Các kỹ năng và khái niệm mà người đọc có thể giải thích hoặc áp dụng sau khi hoàn thành chương.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Tiếp theo là gì</strong></td>
+<td style="text-align: left;">Cầu nối từ chương vừa kết thúc đến chương bắt đầu, nêu tên câu hỏi mở mà chương tiếp theo giải quyết.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Khi một hộp chú thích chứa bảng, hình hoặc phương trình, thì những thành phần đó thuộc đơn vị giảng dạy của chính hộp chú thích, không phải để trang trí. Hình dáng của một ngọn hải đăng <em>chính là</em> đặc điểm nhận dạng của nó. Các bảng trung gian trong hộp tính toán nhanh <em>chính là</em> phần bài toán đã được triển khai. Đọc chúng như những thành phần tách rời sẽ làm đứt mạch giảng dạy. Ngược lại, các bảng tham chiếu độc lập thường nằm giữa các đoạn văn dưới dạng các bảng được đánh số, để người đọc quay lại thông qua tham chiếu chéo. Cả hai hình thức đều đúng; tín hiệu thị giác (hộp chú thích so với bảng độc lập) cho người đọc biết họ đang xem loại nào.</p>
+</section>
+</section>
+<section id="sec-vol2-about-platform" class="level2">
+<h2 class="anchored" data-anchor-id="sec-vol2-about-platform">Một nền tảng học tập</h2>
+<p>Dù độc giả chọn con đường nào, cuốn sách này vẫn là một phần của hệ sinh thái học tập rộng lớn hơn. Toàn bộ nội dung, sổ tay tương tác, slide bài giảng, bài tập, các buổi thực hành lab và tài liệu bổ sung cho mỗi chương đều có sẵn miễn phí tại <a href="https://mlsysbook.ai">mlsysbook.ai</a>.</p>
+</section>
+<section id="sec-vol2-about-open-source" class="level2">
+<h2 class="anchored" data-anchor-id="sec-vol2-about-open-source">Sách giáo khoa mã nguồn mở</h2>
+<p>Cuốn sách này được xây dựng công khai. Toàn bộ nội dung, hình ảnh và hệ thống xây dựng của nó có tại <a href="https://mlsysbook.ai/git">mlsysbook.ai/git</a>, và chúng tôi hoan nghênh đóng góp từ mọi độc giả.</p>
+<p>Đây là một lựa chọn có chủ ý. Nếu kỹ thuật AI trở thành một ngành chung thay vì tập hợp các thực hành rời rạc, thì các tài liệu nền tảng phải tiếp cận được với mọi người. Hệ thống ML là một lĩnh vực được định hình bởi các nhà thực hành trong công nghiệp, giới học thuật và cộng đồng mã nguồn mở trên toàn thế giới. Một cuốn sách giáo khoa về lĩnh vực này cần phản ánh bề rộng đó và sẵn có cho tất cả mọi người, bất kể địa lý hay tổ chức.</p>
+<p>Những đóng góp từ độc giả, dù là sửa lỗi, đề xuất cách giải thích rõ ràng hơn, thêm ví dụ minh họa, hay đề xuất nội dung mới, đều đã cải thiện đáng kể từng chương. Nếu bạn thấy chỗ nào có thể tốt hơn, hãy mở một <em>issue</em> hoặc gửi một <em>pull request</em>. Cuốn sách này tiến bộ vì độc giả cùng tham gia xây dựng.</p>
+</section>
+<section id="sec-vol2-about-prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="sec-vol2-about-prerequisites">Yêu cầu tiên quyết</h2>
+<p>Độc giả cần có nền tảng sau:</p>
+<ul>
+<li><strong>Hệ thống machine learning trên một máy đơn</strong>: Hiểu quy trình làm việc của machine learning, cách huấn luyện mạng nơ-ron, tối ưu hóa mô hình và triển khai trên một máy. Đồng thời, cần thoải mái suy luận về phân cấp bộ nhớ, đồ thị tính toán và cách phần cứng tương tác với phần mềm.</li>
+<li><strong>Lập trình</strong>: Thành thạo Python, bao gồm hàm, lớp và thao tác dữ liệu với NumPy. Quen thuộc với ít nhất một framework machine learning (PyTorch, TensorFlow hoặc JAX).</li>
+<li><strong>Toán học</strong>: Thoải mái với đại số tuyến tính, giải tích cơ bản và xác suất ở mức đại học.</li>
+</ul>
+<p>Các nền tảng sau hữu ích nhưng không bắt buộc:</p>
+<ul>
+<li><strong>Hệ thống phân tán</strong>: Quen thuộc với các khái niệm mạng (TCP/IP, băng thông, độ trễ), tính song song và điện toán phân tán cơ bản sẽ giúp bạn hiểu sâu hơn về hạ tầng fleet (fleet infrastructure) và các chương về huấn luyện.</li>
+<li><strong>Cơ sở hạ tầng đám mây</strong>: Kinh nghiệm với container hóa và điều phối (Docker, Kubernetes) hoặc các bộ lập lịch cụm (Slurm) sẽ cung cấp bối cảnh vận hành hữu ích.</li>
+<li><strong>Kỹ thuật sản xuất</strong>: Hiểu biết về giám sát, khả năng quan sát và các thực hành đảm bảo độ tin cậy hệ thống (site reliability practices) sẽ làm phong phú thêm các chương về triển khai và vận hành.</li>
+</ul>
+</section>
+<section id="sec-vol2-about-beyond" class="level2">
+<h2 class="anchored" data-anchor-id="sec-vol2-about-beyond">Ngoài cuốn sách này</h2>
+<p>Cuốn sách này đề cập đến Machine Learning Fleet như hiện tại: các cụm huấn luyện ở quy mô trung tâm dữ liệu, hạ tầng phục vụ (serving) toàn cầu và những thách thức quản trị khi vận hành ở quy mô lớn. Các chủ đề ở tuyến đầu nghiên cứu (bao gồm quản lý fleet tự động hoàn toàn, liên kết thế hệ mới, neuromorphic computing ở quy mô lớn, và xác minh hình thức các thuộc tính an toàn ở cấp độ fleet) vượt ra ngoài phạm vi này, nhưng đều là những hướng nghiên cứu đang rất sôi động.</p>
+</section>
+<section id="sec-vol2-about-course" class="level2">
+<h2 class="anchored" data-anchor-id="sec-vol2-about-course">Sử dụng cuốn sách này trong một khóa học</h2>
+<p>Cuốn sách này hình thành từ khóa học CS249r tại Đại học Harvard và chương trình <a href="https://www.edx.org/professional-certificate/harvardx-tiny-machine-learning">chứng chỉ chuyên nghiệp TinyML edX</a>. Việc giảng dạy củng cố một nhận định áp dụng được đến quy mô đội máy: cùng một quy luật vật lý chi phối mọi tầng trong hệ thống. Băng thông, năng lượng và lỗi đều đặt giới hạn cho cả vi điều khiển lẫn trung tâm dữ liệu. Khi thay đổi quy mô, không phải vật lý đổi khác, mà là giới hạn nào trở thành ràng buộc chính; và mỗi giới hạn ràng buộc mới là một bài toán kỹ thuật mới. Trên một máy đơn, “bức tường bộ nhớ” (memory wall) là yếu tố chi phối. Ở quy mô đội máy, băng thông chia đôi (bisection bandwidth) và lỗi phần cứng xảy ra thường xuyên trở thành trọng yếu, biến điều từng là ngoại lệ hiếm gặp thành ràng buộc mà cả hệ thống phải thiết kế xoay quanh. Vật lý là liên tục, nhưng kỹ thuật thì không.</p>
+<p>Cuốn sách được thiết kế cho một khóa học nâng cao kéo dài một học kỳ, bao quát toàn bộ ngăn xếp hệ thống ML phân tán. Giảng viên cũng có thể chọn từng phần riêng lẻ để tạo các mô-đun ngắn hơn:</p>
+<ul>
+<li><strong>Phần I–II</strong> (The Fleet và Distributed ML) phù hợp cho một nửa học kỳ nâng cao về hạ tầng huấn luyện phân tán.</li>
+<li><strong>Phần III–IV</strong> (Deployment at Scale và The Responsible Fleet) phù hợp cho một nửa học kỳ ứng dụng về ML trong sản xuất ở quy mô lớn.</li>
+</ul>
+<p>Đối với các khóa học tổng quan hoặc chương trình dành cho lãnh đạo, chỉ riêng phần giới thiệu của bốn phần và các nguyên tắc chi phối của chúng đã cung cấp một cái nhìn tổng quan cô đọng về các quy luật định lượng chi phối các hệ thống ML ở quy mô đội máy.</p>
+<p>Các slide, bài tập và tài liệu dành cho giảng viên của khóa học nâng cao có sẵn tại <a href="https://mlsysbook.ai">mlsysbook.ai</a>.</p>
+</section>
+<section id="sec-vol2-about-copyright" class="level2">
+<h2 class="anchored" data-anchor-id="sec-vol2-about-copyright">Bản quyền và cấp phép</h2>
+<p>© Vijay Janapa Reddi và MIT Press. Tác phẩm này được phân phối theo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0">Giấy phép Quốc tế Creative Commons Ghi công–Phi thương mại–Không phái sinh 4.0 (CC BY-NC-ND 4.0)</a>. Mã nguồn có sẵn tại <a href="https://mlsysbook.ai/git">mlsysbook.ai/git</a>.</p>
+
+
+
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mlsysbook\.ai\/vol2\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../vol2/frontmatter/author_note.html" class="pagination-link" aria-label="Lời tác giả">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lời tác giả</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../vol2/frontmatter/acknowledgements.html" class="pagination-link" aria-label="Lời cảm ơn">
+        <span class="nav-page-text">Lời cảm ơn</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2024-2026 Harvard University. Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA 4.0</a><br> <!-- MLSB_BUILD_STAMP --></p>
+</div>   
+    <div class="nav-footer-center">
+<p><a href="../vol1/">← Back to Volume I</a></p>
+</div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+ <span class="release-pill" data-release-pill=""></span>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/harvard-edge/cs249r_book">
+      <i class="bi bi-github" role="img" aria-label="View source on GitHub">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/harvard-edge/cs249r_book">
+      <i class="bi bi-star" role="img" aria-label="Star this repository">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+<!--
+  MLSysBook release-pill — shared footer version chip for Quarto + static sites.
+
+  Renders a small "v0.1.0 · Apr 26, 2026" chip from a deployed
+  release-manifest.json. Best-effort chrome: silent on any fetch failure
+  (manifest missing, offline, CORS). Use at any site that emits a manifest
+  via scripts/version/release.py emit-manifest.
+
+  ── Standardized placement (all MLSysBook sites) ──
+
+  The chip lives in the page-footer, right slot, so it reads as an
+  intentional part of the footer bar (not dangling below the page). Two
+  pieces per site:
+
+  1. This file loads the style + populator script site-wide:
+
+       format:
+         html:
+           include-in-header:
+             - text: |
+                 <meta name="release-manifest" content="/<project-base>/release-manifest.json">
+           include-after-body:
+             - file: ../shared/release/release-pill.html
+
+  2. Each page-footer places the chip span where it should render:
+
+       website:
+         page-footer:
+           right:
+             - text: |
+                 <span class="release-pill" data-release-pill></span>
+             - icon: github
+               href: ...
+
+  The meta tag tells the script where to find the manifest. The script
+  populates every span carrying data-release-pill, so the chip can sit in
+  the footer (canonical), an about page, or anywhere else.
+
+  ── Manifest contract ──
+
+  The manifest is the JSON written by scripts/version/release.py
+  emit-manifest. Required keys: releaseId, releaseHash. Optional but
+  recommended: buildDate, project. Anything else is ignored.
+
+  ── Why runtime fetch instead of build-time templating ──
+
+  Build-time templating would be deterministic but requires per-project
+  Lua/template machinery. Runtime fetch is project-agnostic and works
+  identically across Quarto, Next.js, and plain HTML. The one fetch per
+  page-load is cheap and the chip degrades to nothing on failure.
+-->
+
+<style>
+  /* Fixed muted gray on every site — the chip must look identical regardless of
+     each Quarto theme's accent colors (do NOT inherit --bs-secondary / link color). */
+  .release-pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 0.75rem;
+    line-height: 1;
+    color: var(--release-pill-color, #6c757d);
+  }
+  .release-pill a,
+  .release-pill a:visited,
+  .release-pill-version,
+  .release-pill-date {
+    color: var(--release-pill-color, #6c757d);
+    text-decoration: none;
+  }
+  .release-pill a:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .release-pill-date {
+    opacity: 0.75;
+  }
+</style>
+
+<script>
+  (function () {
+    var pills = document.querySelectorAll('[data-release-pill]');
+    if (!pills.length) return;
+
+    // Manifest URL resolution order:
+    //   1. data-manifest attribute on the pill (per-page override)
+    //   2. <meta name="release-manifest" content="..."> in <head>
+    //   3. './release-manifest.json' relative to current page (fallback)
+    var meta = document.querySelector('meta[name="release-manifest"]');
+    var metaPath = meta && meta.getAttribute('content');
+
+    fetch(metaPath || './release-manifest.json', { cache: 'no-store' })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (m) {
+        if (!m || !m.releaseId || !m.releaseHash) return;
+        var date = m.buildDate
+          ? new Date(m.buildDate).toLocaleDateString('en-US',
+              { year: 'numeric', month: 'short', day: 'numeric' })
+          : '';
+        var shortHash = String(m.releaseHash).slice(0, 7);
+        var title =
+          (m.project ? m.project + ' ' : '') +
+          'v' + m.releaseId +
+          (date ? ' · built ' + date : '') +
+          ' · hash ' + shortHash;
+
+        pills.forEach(function (el) {
+          var rawLink = el.getAttribute('data-link') || '#release';
+          // XSS hardening: allow only anchor, relative, or http(s) links; reject javascript:/data: URLs.
+          var linkHref = /^(?:#|\/|\.{1,2}\/|https?:\/\/)/i.test(rawLink) ? rawLink : '#release';
+          var a = document.createElement('a');
+          a.href = linkHref;
+          a.title = title;
+          a.setAttribute('aria-label',
+            'Release v' + m.releaseId + (date ? ', built ' + date : ''));
+          var v = document.createElement('span');
+          v.className = 'release-pill-version';
+          v.textContent = 'v' + m.releaseId;
+          a.appendChild(v);
+          if (date) {
+            var d = document.createElement('span');
+            d.className = 'release-pill-date';
+            d.textContent = ' · ' + date;
+            a.appendChild(d);
+          }
+          el.innerHTML = '';
+          el.appendChild(a);
+        });
+      })
+      .catch(function () { /* silent: best-effort chrome */ });
+  })();
+</script>
+    <script type="text/javascript">
+    (function(d) {
+      function renderPseudocode() {
+        d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+          let pseudocodeOptions = {
+            indentSize: el.dataset.indentSize,
+            commentDelimiter: " " + el.dataset.commentDelimiter + " ",
+            lineNumber: el.dataset.lineNumber.toLowerCase() === "true",
+            lineNumberPunc: el.dataset.lineNumberPunc,
+            noEnd: el.dataset.noEnd.toLowerCase() === "true",
+            scopeLines: el.dataset.indentLines.toLowerCase() === "true",
+            titlePrefix: el.dataset.captionPrefix,
+          };
+          pseudocode.renderElement(el.querySelector(".pseudocode"), pseudocodeOptions);
+        });
+        d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+          let captionSpan = el.querySelector(".ps-root > .ps-algorithm > .ps-line > .ps-keyword")
+          if (captionSpan !== null) {
+            let captionPrefix = el.dataset.captionPrefix + " ";
+            let captionNumber = "";
+            if (el.dataset.pseudocodeNumber) {
+              captionNumber = el.dataset.pseudocodeNumber + " ";
+              if (el.dataset.chapterLevel) {
+                captionNumber = el.dataset.chapterLevel + "." + captionNumber;
+              }
+            }
+            captionSpan.innerHTML = captionPrefix + captionNumber;
+          }
+        });
+      }
+      // pseudocode.js needs a math backend (KaTeX or MathJax) present *at the
+      // moment* renderElement runs. This book renders math with MathJax loaded
+      // via `defer`, so window.MathJax does not exist yet when this after-body
+      // script executes at parse time — calling renderElement now throws
+      // "No math backend found" and the raw LaTeX source stays on the page.
+      // Wait for the math backend to be ready before rendering: KaTeX if it is
+      // present synchronously, otherwise MathJax's startup promise (available
+      // after the deferred MathJax script has run, by window 'load').
+      function whenMathReady(cb) {
+        if (window.katex) { cb(); return; }
+        var mj = window.MathJax;
+        if (mj && mj.startup && mj.startup.promise) { mj.startup.promise.then(cb); return; }
+        window.addEventListener("load", function() {
+          var m = window.MathJax;
+          if (m && m.startup && m.startup.promise) { m.startup.promise.then(cb); }
+          else { cb(); }
+        });
+      }
+      whenMathReady(renderPseudocode);
+    })(document);
+    </script>
+  
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>

@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" viewBox="0 0 690 530">
+  <rect width="690" height="530" fill="#fff"/>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#555"/></marker>
+    <marker id="arrow-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#a31f34"/></marker>
+    <marker id="arrow-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3d9e5a"/></marker>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#4a90c4"/></marker>
+    <marker id="arrow-orange" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c87b2a"/></marker>
+    <marker id="arrow-gray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#999"/></marker>
+  </defs>
+
+  <!-- Lifecycle header arrow spanning all stages -->
+  <text x="345" y="40" text-anchor="middle" font-size="12" fill="#555" font-weight="bold">Tác động vòng đời tổng thể = Thiết kế + Sản xuất + Sử dụng + Thải bỏ</text>
+  <path d="M 105 70 L 105 50 L 585 50 L 585 70" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ── STAGE BOXES (horizontal flow) ── -->
+  <!-- Stage 1: Design (green) -->
+  <rect x="30" y="70" width="150" height="170" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.5"/>
+  <text x="105" y="90" text-anchor="middle" font-size="12" font-weight="bold" fill="#3d9e5a">Thiết kế</text>
+  <line x1="40" y1="100" x2="170" y2="100" stroke="#3d9e5a" stroke-width="1.2"/>
+  <text x="105" y="120" text-anchor="middle" font-size="10" fill="#3d9e5a">Lựa chọn kiến trúc</text>
+  <text x="105" y="134" text-anchor="middle" font-size="10" fill="#3d9e5a">Quyết định kích thước mô hình</text>
+  <text x="105" y="148" text-anchor="middle" font-size="10" fill="#3d9e5a">Lựa chọn phần cứng</text>
+  <text x="105" y="162" text-anchor="middle" font-size="10" fill="#3d9e5a">Mục tiêu hiệu quả</text>
+  <text x="105" y="176" text-anchor="middle" font-size="10" fill="#3d9e5a">Lập kế hoạch PUE</text>
+  <text x="105" y="190" text-anchor="middle" font-size="10" fill="#3d9e5a">Vị trí / hỗn hợp lưới điện</text>
+  <text x="105" y="204" text-anchor="middle" font-size="10" fill="#3d9e5a">Chiến lược làm mát</text>
+  <text x="105" y="220" text-anchor="middle" font-size="10" fill="#3d9e5a">Phân tích hồ sơ khối lượng công việc (workload)</text>
+
+  <!-- Stage 2: Manufacture (blue) -->
+  <rect x="190" y="70" width="150" height="170" fill="#cfe2f3" stroke="#4a90c4" stroke-width="1.5"/>
+  <text x="265" y="90" text-anchor="middle" font-size="12" font-weight="bold" fill="#4a90c4">Sản xuất</text>
+  <line x1="200" y1="100" x2="330" y2="100" stroke="#4a90c4" stroke-width="1.2"/>
+  <text x="265" y="120" text-anchor="middle" font-size="10" fill="#4a90c4">Chế tạo chip</text>
+  <text x="265" y="134" text-anchor="middle" font-size="10" fill="#4a90c4">Tiêu tốn nhiều nước &amp; năng lượng</text>
+  <text x="265" y="148" text-anchor="middle" font-size="10" fill="#4a90c4">Quy trình hóa học</text>
+  <text x="265" y="162" text-anchor="middle" font-size="10" fill="#4a90c4">Lắp ráp máy chủ</text>
+  <text x="265" y="176" text-anchor="middle" font-size="10" fill="#4a90c4">Vận chuyển chuỗi cung ứng</text>
+  <text x="265" y="190" text-anchor="middle" font-size="10" fill="#4a90c4">Vật liệu đóng gói</text>
+  <text x="265" y="204" text-anchor="middle" font-size="10" fill="#4a90c4">Kiểm tra chất lượng</text>
+  <text x="265" y="220" text-anchor="middle" font-size="10" fill="#4a90c4">Logistics &amp; giao hàng</text>
+
+  <!-- Stage 3: Use (orange) -->
+  <rect x="350" y="70" width="150" height="170" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+  <text x="425" y="90" text-anchor="middle" font-size="12" font-weight="bold" fill="#c87b2a">Sử dụng</text>
+  <line x1="360" y1="100" x2="490" y2="100" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="425" y="120" text-anchor="middle" font-size="10" fill="#c87b2a">Năng lượng huấn luyện (GPU-h)</text>
+  <text x="425" y="134" text-anchor="middle" font-size="10" fill="#c87b2a">Tiêu thụ công suất suy luận</text>
+  <text x="425" y="148" text-anchor="middle" font-size="10" fill="#c87b2a">Chi phí làm mát (PUE)</text>
+  <text x="425" y="162" text-anchor="middle" font-size="10" fill="#c87b2a">Năng lượng I/O lưu trữ</text>
+  <text x="425" y="176" text-anchor="middle" font-size="10" fill="#c87b2a">Truyền tải mạng</text>
+  <text x="425" y="190" text-anchor="middle" font-size="10" fill="#c87b2a">Chu kỳ huấn luyện lại</text>
+  <text x="425" y="204" text-anchor="middle" font-size="10" fill="#c87b2a">Chi phí giám sát</text>
+  <text x="425" y="220" text-anchor="middle" font-size="10" fill="#c87b2a">Công suất cơ bản khi không tải</text>
+
+  <!-- Stage 4: Disposal (red) -->
+  <rect x="510" y="70" width="150" height="170" fill="#f9d6d5" stroke="#c44" stroke-width="1.5"/>
+  <text x="585" y="90" text-anchor="middle" font-size="12" font-weight="bold" fill="#a31f34">Thải bỏ</text>
+  <line x1="520" y1="100" x2="650" y2="100" stroke="#c44" stroke-width="1.2"/>
+  <text x="585" y="120" text-anchor="middle" font-size="10" fill="#a31f34">Phát sinh rác thải điện tử</text>
+  <text x="585" y="134" text-anchor="middle" font-size="10" fill="#c44">Thu hồi đất hiếm</text>
+  <text x="585" y="148" text-anchor="middle" font-size="10" fill="#c44">Thải bỏ vật liệu độc hại</text>
+  <text x="585" y="162" text-anchor="middle" font-size="10" fill="#c44">Tỷ lệ tái chế (&lt;20%)</text>
+  <text x="585" y="176" text-anchor="middle" font-size="10" fill="#c44">Tân trang / tái sử dụng</text>
+  <text x="585" y="190" text-anchor="middle" font-size="10" fill="#c44">Xuất khẩu sang các nước đang phát triển</text>
+  <text x="585" y="204" text-anchor="middle" font-size="10" fill="#c44">Tác động bãi chôn lấp</text>
+  <text x="585" y="220" text-anchor="middle" font-size="10" fill="#c44">Hủy dữ liệu</text>
+
+  <!-- Flow arrows between stages -->
+  <line x1="180" y1="155" x2="190" y2="155" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="340" y1="155" x2="350" y2="155" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="500" y1="155" x2="510" y2="155" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ── Impact Category Icons (below each stage box) ── -->
+  <rect x="60" y="260" width="90" height="50" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.5"/>
+  <text x="105" y="278" text-anchor="middle" font-size="12" fill="#3d9e5a">⚙</text>
+  <text x="105" y="292" text-anchor="middle" font-size="9" fill="#3d9e5a">Hệ thống</text>
+  <text x="105" y="302" text-anchor="middle" font-size="9" fill="#3d9e5a">Lựa chọn</text>
+
+  <rect x="220" y="260" width="90" height="50" fill="#cfe2f3" stroke="#4a90c4" stroke-width="1.5"/>
+  <text x="265" y="276" text-anchor="middle" font-size="10" fill="#4a90c4" font-weight="bold">Carbon</text>
+  <text x="265" y="288" text-anchor="middle" font-size="10" fill="#4a90c4">Nước</text>
+  <text x="265" y="300" text-anchor="middle" font-size="10" fill="#4a90c4">Hóa chất</text>
+
+  <rect x="380" y="260" width="90" height="50" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+  <text x="425" y="276" text-anchor="middle" font-size="10" fill="#c87b2a" font-weight="bold">Năng lượng (kWh)</text>
+  <text x="425" y="288" text-anchor="middle" font-size="10" fill="#c87b2a">Phát thải CO₂</text>
+  <text x="425" y="300" text-anchor="middle" font-size="10" fill="#c87b2a">Cường độ carbon lưới điện</text>
+
+  <rect x="540" y="260" width="90" height="50" fill="#f9d6d5" stroke="#c44" stroke-width="1.5"/>
+  <text x="585" y="276" text-anchor="middle" font-size="10" fill="#a31f34" font-weight="bold">Rác thải điện tử (kg)</text>
+  <text x="585" y="288" text-anchor="middle" font-size="10" fill="#c44">Chất độc (Pb, Cd)</text>
+  <text x="585" y="300" text-anchor="middle" font-size="10" fill="#c44">Khả năng tái chế</text>
+
+  <!-- Key insight box -->
+  <rect x="30" y="340" width="630" height="50" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+  <text x="345" y="358" text-anchor="middle" font-size="12" font-weight="bold" fill="#c87b2a">Thông tin chính: Carbon ẩn chứa</text>
+  <text x="345" y="374" text-anchor="middle" font-size="11" fill="#c87b2a">Sản xuất một máy chủ GPU phát thải carbon tương đương 1–2 năm sử dụng năng lượng vận hành của nó.</text>
+  <text x="345" y="386" text-anchor="middle" font-size="10" fill="#c87b2a">Kéo dài tuổi thọ phần cứng và tối đa hóa sử dụng là các biện pháp can thiệp bền vững có đòn bẩy cao nhất.</text>
+
+  <!-- Quantitative breakdown bar -->
+  <text x="345" y="420" text-anchor="middle" font-size="11" fill="#555" font-weight="bold">Phân chia carbon vòng đời hệ thống AI điển hình</text>
+  
+  <rect x="30" y="430" width="32" height="20" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.2"/>
+  <text x="46" y="444" text-anchor="middle" font-size="9" fill="#3d9e5a">5%</text>
+  
+  <rect x="62" y="430" width="283" height="20" fill="#cfe2f3" stroke="#4a90c4" stroke-width="1.2"/>
+  <text x="203.5" y="444" text-anchor="middle" font-size="10" font-weight="bold" fill="#4a90c4">45% — Sản xuất</text>
+  
+  <rect x="345" y="430" width="252" height="20" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="471" y="444" text-anchor="middle" font-size="10" font-weight="bold" fill="#c87b2a">40% — Sử dụng</text>
+  
+  <rect x="597" y="430" width="63" height="20" fill="#f9d6d5" stroke="#c44" stroke-width="1.2"/>
+  <text x="628.5" y="444" text-anchor="middle" font-size="9" fill="#a31f34">10%</text>
+
+  <!-- Bottom annotation -->
+  <rect x="30" y="470" width="630" height="20" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+  <text x="345" y="484" text-anchor="middle" font-size="11" fill="#555">Đánh giá vòng đời (LCA) định lượng tổng chi phí môi trường — sản xuất thường chiếm ưu thế trong tổng lượng khí thải carbon</text>
+</svg>

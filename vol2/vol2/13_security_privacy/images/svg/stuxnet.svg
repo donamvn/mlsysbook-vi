@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" viewBox="0 0 1200 560">
+  <defs>
+    <marker id="arr-chain" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#a31f34"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="560" fill="#fff"/>
+
+  <!-- Node 1: USB Drive -->
+  <rect x="50" y="200" width="100" height="100" fill="#f9d6d5" stroke="#a31f34" stroke-width="1.5"/>
+  <rect x="80" y="210" width="40" height="20" fill="#a31f34" opacity="0.25"/>
+  <line x1="90" y1="220" x2="90" y2="230" stroke="#a31f34" stroke-width="1.5"/>
+  <line x1="100" y1="215" x2="100" y2="230" stroke="#a31f34" stroke-width="1.5"/>
+  <line x1="110" y1="220" x2="110" y2="230" stroke="#a31f34" stroke-width="1.5"/>
+  <text x="100" y="260" font-size="11" font-weight="700" fill="#a31f34" text-anchor="middle">Ổ USB</text>
+  <text x="100" y="278" font-size="10" fill="#555" text-anchor="middle">(nhiễm độc)</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="150" y1="250" x2="250" y2="250" stroke="#a31f34" stroke-width="1.5" marker-end="url(#arr-chain)"/>
+  <text x="200" y="235" font-size="10" fill="#c87b2a" text-anchor="middle" font-style="italic">AutoRun</text>
+  <text x="200" y="248" font-size="10" fill="#c87b2a" text-anchor="middle" font-style="italic">khai thác lỗ hổng</text>
+
+  <!-- Node 2: Windows PC -->
+  <rect x="250" y="200" width="100" height="100" fill="#f9d6d5" stroke="#a31f34" stroke-width="1.5"/>
+  <rect x="275" y="210" width="50" height="36" fill="#fff" stroke="#a31f34" stroke-width="1.2"/>
+  <rect x="292" y="246" width="16" height="4" fill="#a31f34" opacity="0.4"/>
+  <text x="300" y="232" font-size="10" fill="#a31f34" text-anchor="middle">WIN</text>
+  <text x="300" y="265" font-size="11" font-weight="700" fill="#a31f34" text-anchor="middle">PC Windows</text>
+  <text x="300" y="280" font-size="10" fill="#555" text-anchor="middle">(máy trạm kỹ sư)</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="350" y1="250" x2="450" y2="250" stroke="#a31f34" stroke-width="1.5" marker-end="url(#arr-chain)"/>
+  <text x="400" y="235" font-size="10" fill="#c87b2a" text-anchor="middle" font-style="italic">phần mềm SCADA</text>
+  <text x="400" y="248" font-size="10" fill="#c87b2a" text-anchor="middle" font-style="italic">tiêm mã</text>
+
+  <!-- Node 3: Siemens Step7 -->
+  <rect x="450" y="200" width="100" height="100" fill="#f9d6d5" stroke="#a31f34" stroke-width="1.5"/>
+  <text x="500" y="225" font-size="11" font-weight="700" fill="#a31f34" text-anchor="middle">Siemens</text>
+  <text x="500" y="240" font-size="11" font-weight="700" fill="#a31f34" text-anchor="middle">Step7 SCADA</text>
+  <text x="500" y="265" font-size="10" fill="#555" text-anchor="middle">lập trình PLC</text>
+  <text x="500" y="280" font-size="10" fill="#555" text-anchor="middle">môi trường</text>
+
+  <!-- Arrow 3→4 -->
+  <line x1="550" y1="250" x2="650" y2="250" stroke="#a31f34" stroke-width="1.5" marker-end="url(#arr-chain)"/>
+  <text x="600" y="235" font-size="10" fill="#c87b2a" text-anchor="middle" font-style="italic">firmware PLC</text>
+  <text x="600" y="248" font-size="10" fill="#c87b2a" text-anchor="middle" font-style="italic">rootkit</text>
+
+  <!-- Node 4: Siemens PLC -->
+  <rect x="650" y="200" width="100" height="100" fill="#f9d6d5" stroke="#a31f34" stroke-width="1.5"/>
+  <text x="700" y="225" font-size="11" font-weight="700" fill="#a31f34" text-anchor="middle">Siemens</text>
+  <text x="700" y="240" font-size="11" font-weight="700" fill="#a31f34" text-anchor="middle">S7-315 PLC</text>
+  <text x="700" y="265" font-size="10" fill="#555" text-anchor="middle">Lập trình được</text>
+  <text x="700" y="280" font-size="10" fill="#555" text-anchor="middle">bộ điều khiển logic</text>
+
+  <!-- Arrow 4→5 -->
+  <line x1="750" y1="250" x2="850" y2="250" stroke="#a31f34" stroke-width="1.5" marker-end="url(#arr-chain)"/>
+  <text x="800" y="235" font-size="10" fill="#c87b2a" text-anchor="middle" font-style="italic">Tần số</text>
+  <text x="800" y="248" font-size="10" fill="#c87b2a" text-anchor="middle" font-style="italic">thao túng</text>
+
+  <!-- Node 5: Centrifuge Motor -->
+  <rect x="850" y="200" width="100" height="100" fill="#f9d6d5" stroke="#a31f34" stroke-width="1.5"/>
+  <text x="900" y="225" font-size="11" font-weight="700" fill="#a31f34" text-anchor="middle">Máy ly tâm</text>
+  <text x="900" y="240" font-size="11" font-weight="700" fill="#a31f34" text-anchor="middle">Điều khiển động cơ</text>
+  <text x="900" y="265" font-size="10" fill="#555" text-anchor="middle">uranium IR-1</text>
+  <text x="900" y="280" font-size="10" fill="#555" text-anchor="middle">làm giàu</text>
+
+  <!-- Arrow 5→6 -->
+  <line x1="950" y1="250" x2="1050" y2="250" stroke="#a31f34" stroke-width="1.5" marker-end="url(#arr-chain)"/>
+  <text x="1000" y="235" font-size="10" fill="#c87b2a" text-anchor="middle" font-style="italic">Cơ học</text>
+  <text x="1000" y="248" font-size="10" fill="#c87b2a" text-anchor="middle" font-style="italic">hỏng hóc</text>
+
+  <!-- Node 6: Physical Damage (Replaced decorative shape with standard rectangle) -->
+  <rect x="1050" y="200" width="100" height="100" fill="#a31f34" stroke="#c44" stroke-width="1.5"/>
+  <text x="1100" y="240" font-size="24" font-weight="700" fill="#fff" text-anchor="middle">!</text>
+  <text x="1100" y="265" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">Vật lý</text>
+  <text x="1100" y="280" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">Hư hại</text>
+
+  <!-- Sensor spoofing annotation -->
+  <rect x="570" y="90" width="260" height="60" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="700" y="110" font-size="11" font-weight="700" fill="#c87b2a" text-anchor="middle">Tránh phát hiện chính: giả mạo cảm biến</text>
+  <text x="700" y="126" font-size="10" fill="#555" text-anchor="middle">Stuxnet báo RPM bình thường cho người vận hành</text>
+  <text x="700" y="140" font-size="10" fill="#555" text-anchor="middle">trong khi bí mật phá hoại máy ly tâm</text>
+  
+  <line x1="700" y1="150" x2="700" y2="200" stroke="#c87b2a" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+  <!-- Timeline label -->
+  <text x="600" y="350" font-size="12" font-weight="700" fill="#555" text-anchor="middle">Phát hiện 2010 — ước tính 1.000 máy ly tâm bị phá hủy tại Natanz, Iran</text>
+
+  <!-- Zero-day count -->
+  <rect x="420" y="375" width="360" height="34" fill="#e8e8e8" stroke="#999" stroke-width="1"/>
+  <text x="600" y="396" font-size="11" fill="#333" text-anchor="middle">Khai thác đồng thời 4 lỗ hổng zero-day của Windows</text>
+
+  <!-- Lesson box -->
+  <rect x="130" y="430" width="940" height="70" fill="#f7f7f7" stroke="#bbb" stroke-width="1"/>
+  <text x="600" y="452" font-size="12" font-weight="700" fill="#333" text-anchor="middle">Bài học hệ thống</text>
+  <text x="600" y="470" font-size="11" fill="#555" text-anchor="middle">Cách ly air-gap không đủ khi phương tiện di động bắc cầu. Firmware trên phần cứng an toàn quan trọng</text>
+  <text x="600" y="486" font-size="11" fill="#555" text-anchor="middle">phải được ký và xác minh bằng mật mã — nguyên tắc tương tự làm nền tảng cho khởi động an toàn trong bộ tăng tốc ML.</text>
+
+  <!-- Bottom annotation -->
+  <text x="600" y="530" font-size="11" fill="#999" text-anchor="middle" font-style="italic">Chuỗi tấn công tiến triển từ vector vật lý (USB) qua các lớp phần mềm để đạt được phá hủy vật lý không thể đảo ngược.</text>
+</svg>

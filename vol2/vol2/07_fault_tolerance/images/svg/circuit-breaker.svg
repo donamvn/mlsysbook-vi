@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" viewBox="0 0 680 500">
+  <defs>
+    <marker id="arrowDark" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="680" height="500" fill="#fff"/>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- STATE: CLOSED (green, top-left) -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="50" y="130" width="160" height="100" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.5"/>
+  <text x="130" y="150" text-anchor="middle" font-size="12" font-weight="700" fill="#3d9e5a">ĐÓNG</text>
+  <text x="130" y="172" text-anchor="middle" font-size="9.5" fill="#3d9e5a">Hoạt động bình thường</text>
+  <text x="130" y="187" text-anchor="middle" font-size="9" fill="#3d9e5a">Yêu cầu đi qua</text>
+  <text x="130" y="202" text-anchor="middle" font-size="9" fill="#3d9e5a">Bộ đếm lỗi hoạt động</text>
+
+  <!-- State indicator dot (green) -->
+  <circle cx="70" cy="146" r="8" fill="#3d9e5a"/>
+  <text x="70" y="149.5" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">✓</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- STATE: OPEN (red, top-right) -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="470" y="130" width="160" height="100" fill="#f9d6d5" stroke="#c44" stroke-width="1.5"/>
+  <text x="550" y="150" text-anchor="middle" font-size="12" font-weight="700" fill="#c44">MỞ</text>
+  <text x="550" y="172" text-anchor="middle" font-size="9.5" fill="#c44">Chế độ Fail-fast</text>
+  <text x="550" y="187" text-anchor="middle" font-size="9" fill="#c44">Yêu cầu bị từ chối ngay</text>
+  <text x="550" y="202" text-anchor="middle" font-size="9" fill="#c44">Không gọi đến downstream</text>
+
+  <!-- State indicator dot (red) -->
+  <circle cx="490" cy="146" r="8" fill="#c44"/>
+  <text x="490" y="150" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">✕</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- STATE: HALF-OPEN (orange, bottom-center) -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="260" y="310" width="160" height="100" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+  <text x="340" y="330" text-anchor="middle" font-size="12" font-weight="700" fill="#c87b2a">NỬA MỞ</text>
+  <text x="340" y="352" text-anchor="middle" font-size="9.5" fill="#c87b2a">Chế độ thăm dò phục hồi</text>
+  <text x="340" y="367" text-anchor="middle" font-size="9" fill="#c87b2a">Cho phép một yêu cầu thăm dò</text>
+  <text x="340" y="382" text-anchor="middle" font-size="9" fill="#c87b2a">Tỷ lệ thành công được giám sát</text>
+
+  <!-- State indicator dot (orange) -->
+  <circle cx="280" cy="326" r="8" fill="#c87b2a"/>
+  <text x="280" y="330" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">?</text>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TRANSITIONS -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <!-- CLOSED → OPEN (top, failure threshold exceeded) -->
+  <path d="M 210,160 L 470,160" fill="none" stroke="#c44" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrowDark)"/>
+  <rect x="260" y="140" width="160" height="40" fill="#f9d6d5" stroke="#c44" stroke-width="0.8"/>
+  <text x="340" y="154" text-anchor="middle" font-size="9.5" fill="#c44" font-weight="700">Vượt ngưỡng lỗi</text>
+  <text x="340" y="168" text-anchor="middle" font-size="8.5" fill="#c44">VD: 5 lỗi trong 30 giây</text>
+
+  <!-- OPEN → HALF-OPEN (right side, timeout expires) -->
+  <path d="M 550,230 L 550,360 L 420,360" fill="none" stroke="#c87b2a" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrowDark)"/>
+  <rect x="490" y="280" width="120" height="30" fill="#fdebd0" stroke="#c87b2a" stroke-width="0.8"/>
+  <text x="550" y="291" text-anchor="middle" font-size="9" fill="#c87b2a" font-weight="700">Hết thời gian chờ</text>
+  <text x="550" y="303" text-anchor="middle" font-size="8" fill="#c87b2a">VD: sau 60 giây</text>
+
+  <!-- HALF-OPEN → CLOSED (left side, probe succeeds) -->
+  <path d="M 300,310 L 300,200 L 210,200" fill="none" stroke="#3d9e5a" stroke-width="1.5" marker-end="url(#arrowDark)"/>
+  <rect x="230" y="220" width="140" height="30" fill="#d4edda" stroke="#3d9e5a" stroke-width="0.8"/>
+  <text x="300" y="231" text-anchor="middle" font-size="9" fill="#3d9e5a" font-weight="700">Thăm dò thành công</text>
+  <text x="300" y="243" text-anchor="middle" font-size="8" fill="#3d9e5a">Mạch đặt lại, lưu lượng bình thường</text>
+
+  <!-- HALF-OPEN → OPEN (bottom, probe fails) -->
+  <path d="M 380,310 L 380,200 L 470,200" fill="none" stroke="#c44" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowDark)"/>
+  <rect x="330" y="260" width="100" height="30" fill="#f9d6d5" stroke="#c44" stroke-width="0.8"/>
+  <text x="380" y="279" text-anchor="middle" font-size="9" fill="#c44" font-weight="700">Thăm dò thất bại</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- LEGEND / CONTEXT BOX -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="50" y="440" width="580" height="40" fill="#f7f7f7" stroke="#bbb" stroke-width="0.8"/>
+  <text x="340" y="456" text-anchor="middle" font-size="9" fill="#555">Bối cảnh hệ thống ML: bao bọc các cuộc gọi đến máy chủ mô hình downstream, kho đặc trưng, hoặc microservice phụ thuộc</text>
+  <text x="340" y="470" text-anchor="middle" font-size="9" fill="#555">Ngăn chặn lỗi dây chuyền lan truyền qua ngăn xếp phục vụ (serving)</text>
+
+  <!-- ML Context labels: what each state means for an ML pipeline -->
+  <text x="130" y="250" text-anchor="middle" font-size="8" fill="#3d9e5a" font-style="italic">ML: đường suy luận đầy đủ hoạt động</text>
+  <text x="550" y="250" text-anchor="middle" font-size="8" fill="#c44" font-style="italic">ML: phục vụ (serving) dự phòng / phản hồi cache</text>
+  <text x="340" y="425" text-anchor="middle" font-size="8" fill="#c87b2a" font-style="italic"/>
+</svg>

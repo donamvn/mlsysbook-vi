@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" viewBox="0 0 680 490">
+  <defs>
+    <marker id="arr-right" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#999"/>
+    </marker>
+    <marker id="arr-right-light" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#bbb"/>
+    </marker>
+  </defs>
+
+  <rect width="680" height="490" fill="#fff"/>
+
+  <!-- Column headers -->
+  <rect x="30" y="30" width="180" height="40" fill="#f9d6d5" stroke="#c44" stroke-width="1.5"/>
+  <text x="120" y="55" font-size="12" font-weight="700" fill="#c44" text-anchor="middle">Mối đe dọa</text>
+
+  <rect x="250" y="30" width="180" height="40" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+  <text x="340" y="55" font-size="12" font-weight="700" fill="#c87b2a" text-anchor="middle">Phương pháp phát hiện</text>
+
+  <rect x="470" y="30" width="180" height="40" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.5"/>
+  <text x="560" y="55" font-size="12" font-weight="700" fill="#3d9e5a" text-anchor="middle">Giảm thiểu</text>
+
+  <!-- Connector arrows in header -->
+  <line x1="210" y1="50" x2="250" y2="50" stroke="#999" stroke-width="1.2" marker-end="url(#arr-right)"/>
+  <line x1="430" y1="50" x2="470" y2="50" stroke="#999" stroke-width="1.2" marker-end="url(#arr-right)"/>
+
+  <!-- Divider line -->
+  <line x1="30" y1="80" x2="650" y2="80" stroke="#bbb" stroke-width="1.2"/>
+
+  <!-- ROW 1: Model Theft -->
+  <rect x="30" y="90" width="180" height="80" fill="#f9d6d5" stroke="#c44" stroke-width="1.2"/>
+  <text x="120" y="118" font-size="11" font-weight="700" fill="#c44" text-anchor="middle">Đánh cắp mô hình</text>
+  <text x="120" y="134" font-size="9" fill="#555" text-anchor="middle">Kẻ tấn công tái tạo</text>
+  <text x="120" y="147" font-size="9" fill="#555" text-anchor="middle">mô hình độc quyền qua</text>
+  <text x="120" y="160" font-size="9" fill="#555" text-anchor="middle">truy vấn API có hệ thống</text>
+
+  <line x1="210" y1="130" x2="250" y2="130" stroke="#bbb" stroke-width="1.2" marker-end="url(#arr-right-light)"/>
+
+  <rect x="250" y="90" width="180" height="80" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="340" y="118" font-size="11" font-weight="700" fill="#c87b2a" text-anchor="middle">Giám sát tốc độ API</text>
+  <text x="340" y="134" font-size="9" fill="#555" text-anchor="middle">Phát hiện truy vấn bất thường</text>
+  <text x="340" y="147" font-size="9" fill="#555" text-anchor="middle">khối lượng; dấu vân tay</text>
+  <text x="340" y="160" font-size="9" fill="#555" text-anchor="middle">mẫu dò tìm có hệ thống</text>
+
+  <line x1="430" y1="130" x2="470" y2="130" stroke="#bbb" stroke-width="1.2" marker-end="url(#arr-right-light)"/>
+
+  <rect x="470" y="90" width="180" height="80" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.2"/>
+  <text x="560" y="118" font-size="11" font-weight="700" fill="#3d9e5a" text-anchor="middle">Thủy vân</text>
+  <text x="560" y="134" font-size="9" fill="#555" text-anchor="middle">Nhúng chữ ký ẩn;</text>
+  <text x="560" y="147" font-size="9" fill="#555" text-anchor="middle">hạn chế client đáng ngờ;</text>
+  <text x="560" y="160" font-size="9" fill="#555" text-anchor="middle">nhiễu loạn đầu ra</text>
+
+  <!-- ROW 2: Data Poisoning -->
+  <rect x="30" y="180" width="180" height="80" fill="#f9d6d5" stroke="#c44" stroke-width="1.2"/>
+  <text x="120" y="208" font-size="11" font-weight="700" fill="#c44" text-anchor="middle">Đầu độc dữ liệu</text>
+  <text x="120" y="224" font-size="9" fill="#555" text-anchor="middle">Kẻ tấn công tiêm nhiễm</text>
+  <text x="120" y="237" font-size="9" fill="#555" text-anchor="middle">mẫu làm lệch mô hình</text>
+  <text x="120" y="250" font-size="9" fill="#555" text-anchor="middle">hành vi khi suy luận</text>
+
+  <line x1="210" y1="220" x2="250" y2="220" stroke="#bbb" stroke-width="1.2" marker-end="url(#arr-right-light)"/>
+
+  <rect x="250" y="180" width="180" height="80" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="340" y="208" font-size="11" font-weight="700" fill="#c87b2a" text-anchor="middle">Xác thực thống kê</text>
+  <text x="340" y="224" font-size="9" fill="#555" text-anchor="middle">Kiểm tra phân bố nhãn,</text>
+  <text x="340" y="237" font-size="9" fill="#555" text-anchor="middle">phát hiện ngoại lệ, dữ liệu</text>
+  <text x="340" y="250" font-size="9" fill="#555" text-anchor="middle">pipeline chấm điểm chất lượng</text>
+
+  <line x1="430" y1="220" x2="470" y2="220" stroke="#bbb" stroke-width="1.2" marker-end="url(#arr-right-light)"/>
+
+  <rect x="470" y="180" width="180" height="80" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.2"/>
+  <text x="560" y="208" font-size="11" font-weight="700" fill="#3d9e5a" text-anchor="middle">Theo dõi nguồn gốc</text>
+  <text x="560" y="224" font-size="9" fill="#555" text-anchor="middle">Dòng dữ liệu mật mã;</text>
+  <text x="560" y="237" font-size="9" fill="#555" text-anchor="middle">chỉ nguồn đáng tin cậy;</text>
+  <text x="560" y="250" font-size="9" fill="#555" text-anchor="middle">bộ lọc làm sạch</text>
+
+  <!-- ROW 3: Adversarial Examples -->
+  <rect x="30" y="270" width="180" height="80" fill="#f9d6d5" stroke="#c44" stroke-width="1.2"/>
+  <text x="120" y="298" font-size="11" font-weight="700" fill="#c44" text-anchor="middle">Ví dụ đối nghịch</text>
+  <text x="120" y="314" font-size="9" fill="#555" text-anchor="middle">Nhiễu loạn không nhận biết</text>
+  <text x="120" y="327" font-size="9" fill="#555" text-anchor="middle">gây sai phân loại</text>
+  <text x="120" y="340" font-size="9" fill="#555" text-anchor="middle">tại thời điểm suy luận</text>
+
+  <line x1="210" y1="310" x2="250" y2="310" stroke="#bbb" stroke-width="1.2" marker-end="url(#arr-right-light)"/>
+
+  <rect x="250" y="270" width="180" height="80" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="340" y="298" font-size="11" font-weight="700" fill="#c87b2a" text-anchor="middle">Tiền xử lý đầu vào</text>
+  <text x="340" y="314" font-size="9" fill="#555" text-anchor="middle">Ép đặc trưng, đầu vào</text>
+  <text x="340" y="327" font-size="9" fill="#555" text-anchor="middle">làm mịn, chấm điểm bất thường</text>
+  <text x="340" y="340" font-size="9" fill="#555" text-anchor="middle">trước lượt truyền xuôi</text>
+
+  <line x1="430" y1="310" x2="470" y2="310" stroke="#bbb" stroke-width="1.2" marker-end="url(#arr-right-light)"/>
+
+  <rect x="470" y="270" width="180" height="80" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.2"/>
+  <text x="560" y="298" font-size="11" font-weight="700" fill="#3d9e5a" text-anchor="middle">Phòng thủ được chứng nhận</text>
+  <text x="560" y="314" font-size="9" fill="#555" text-anchor="middle">Làm mịn ngẫu nhiên;</text>
+  <text x="560" y="327" font-size="9" fill="#555" text-anchor="middle">huấn luyện đối nghịch trên</text>
+  <text x="560" y="340" font-size="9" fill="#555" text-anchor="middle">mẫu tấn công tăng cường</text>
+
+  <!-- ROW 4: Membership Inference -->
+  <rect x="30" y="360" width="180" height="80" fill="#f9d6d5" stroke="#c44" stroke-width="1.2"/>
+  <text x="120" y="388" font-size="11" font-weight="700" fill="#c44" text-anchor="middle">Suy luận thành viên</text>
+  <text x="120" y="404" font-size="9" fill="#555" text-anchor="middle">Xác định liệu bản ghi</text>
+  <text x="120" y="417" font-size="9" fill="#555" text-anchor="middle">có trong tập huấn luyện bằng</text>
+  <text x="120" y="430" font-size="9" fill="#555" text-anchor="middle">cách dò điểm tin cậy</text>
+
+  <line x1="210" y1="400" x2="250" y2="400" stroke="#bbb" stroke-width="1.2" marker-end="url(#arr-right-light)"/>
+
+  <rect x="250" y="360" width="180" height="80" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="340" y="388" font-size="11" font-weight="700" fill="#c87b2a" text-anchor="middle">Nhiễu loạn đầu ra</text>
+  <text x="340" y="404" font-size="9" fill="#555" text-anchor="middle">Thêm nhiễu đã hiệu chỉnh vào</text>
+  <text x="340" y="417" font-size="9" fill="#555" text-anchor="middle">điểm tin cậy; giới hạn</text>
+  <text x="340" y="430" font-size="9" fill="#555" text-anchor="middle">độ chính xác đầu ra top-k</text>
+
+  <line x1="430" y1="400" x2="470" y2="400" stroke="#bbb" stroke-width="1.2" marker-end="url(#arr-right-light)"/>
+
+  <rect x="470" y="360" width="180" height="80" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.2"/>
+  <text x="560" y="388" font-size="11" font-weight="700" fill="#3d9e5a" text-anchor="middle">Quyền riêng tư vi sai</text>
+  <text x="560" y="404" font-size="9" fill="#555" text-anchor="middle">DP-SGD giới hạn rò rỉ</text>
+  <text x="560" y="417" font-size="9" fill="#555" text-anchor="middle">thông tin trên mỗi bản ghi;</text>
+  <text x="560" y="430" font-size="9" fill="#555" text-anchor="middle">ngân sách quyền riêng tư (ε, δ) đặt</text>
+
+  <!-- Bottom annotation -->
+  <text x="340" y="470" font-size="9" fill="#999" text-anchor="middle" font-style="italic">Mỗi mối đe dọa cần phát hiện ở lớp API và giảm thiểu tích hợp vào kiến trúc huấn luyện hoặc phục vụ (serving); không cái nào đủ riêng lẻ.</text>
+</svg>

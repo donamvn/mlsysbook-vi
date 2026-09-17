@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" viewBox="0 0 720 520">
+  <!-- Background and Outer Boundary -->
+  <rect width="720" height="520" fill="#fff"/>
+
+  <defs>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#4a90c4"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#3d9e5a"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#c44"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#c87b2a"/>
+    </marker>
+  </defs>
+
+  <!-- Title Annotation -->
+  <text x="360" y="46" text-anchor="middle" font-size="12" fill="#999" font-style="italic">Chu trình nước nhà máy bán dẫn — từ Lấy vào đến Tái sử dụng</text>
+
+  <!-- PROCESS FLOW: ROW 1 -->
+  <!-- Box 1: Raw Water Intake (Blue) -->
+  <rect x="50" y="90" width="150" height="100" fill="#cfe2f3" stroke="#4a90c4" stroke-width="1.5"/>
+  <text x="125" y="115" text-anchor="middle" font-size="12" font-weight="bold" fill="#4a90c4">Nước thô</text>
+  <text x="125" y="131" text-anchor="middle" font-size="12" font-weight="bold" fill="#4a90c4">Lấy vào</text>
+  <text x="125" y="155" text-anchor="middle" font-size="10" fill="#4a90c4">Sông / đô thị</text>
+  <text x="125" y="169" text-anchor="middle" font-size="10" fill="#4a90c4">nguồn cung cấp</text>
+
+  <!-- Box 2: UPW Treatment (Blue) -->
+  <rect x="240" y="90" width="150" height="100" fill="#cfe2f3" stroke="#4a90c4" stroke-width="1.5"/>
+  <text x="315" y="115" text-anchor="middle" font-size="12" font-weight="bold" fill="#4a90c4">Nước siêu tinh khiết</text>
+  <text x="315" y="131" text-anchor="middle" font-size="12" font-weight="bold" fill="#4a90c4">Xử lý (UPW)</text>
+  <text x="315" y="152" text-anchor="middle" font-size="10" fill="#4a90c4">Khử ion</text>
+  <text x="315" y="165" text-anchor="middle" font-size="10" fill="#4a90c4">Lọc · Tiệt trùng UV</text>
+  <text x="315" y="178" text-anchor="middle" font-size="10" fill="#4a90c4">Độ tinh khiết ppb yêu cầu</text>
+
+  <!-- Box 3: Fab Processing (Orange) -->
+  <rect x="430" y="90" width="150" height="100" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+  <text x="505" y="115" text-anchor="middle" font-size="12" font-weight="bold" fill="#c87b2a">Xử lý tại nhà máy</text>
+  <text x="505" y="133" text-anchor="middle" font-size="10" fill="#c87b2a">Làm sạch wafer</text>
+  <text x="505" y="146" text-anchor="middle" font-size="10" fill="#c87b2a">Hóa-cơ</text>
+  <text x="505" y="159" text-anchor="middle" font-size="10" fill="#c87b2a">làm phẳng (CMP)</text>
+  <text x="505" y="172" text-anchor="middle" font-size="10" fill="#c87b2a">Rửa bể hóa chất</text>
+
+  <!-- Evaporation Box (Red Accent) -->
+  <rect x="620" y="90" width="70" height="70" fill="#f9d6d5" stroke="#c44" stroke-width="1.2"/>
+  <text x="655" y="115" text-anchor="middle" font-size="11" font-weight="bold" fill="#a31f34">Thất thoát</text>
+  <text x="655" y="132" text-anchor="middle" font-size="10" fill="#c44">20–40%</text>
+  <text x="655" y="145" text-anchor="middle" font-size="10" fill="#c44">bay hơi</text>
+
+  <!-- PROCESS FLOW: ROW 2 -->
+  <!-- Box 4: Wastewater Treatment (Green) -->
+  <rect x="360" y="250" width="220" height="100" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.5"/>
+  <text x="470" y="275" text-anchor="middle" font-size="12" font-weight="bold" fill="#3d9e5a">Xử lý nước thải</text>
+  <text x="470" y="292" text-anchor="middle" font-size="10" fill="#3d9e5a">Trung hòa hóa chất</text>
+  <text x="470" y="305" text-anchor="middle" font-size="10" fill="#3d9e5a">Lọc + lắng</text>
+  <text x="470" y="318" text-anchor="middle" font-size="10" fill="#3d9e5a">Kiểm tra chất lượng trước tái sử dụng</text>
+  <text x="470" y="331" text-anchor="middle" font-size="10" fill="#3d9e5a">Loại bỏ chất gây ô nhiễm</text>
+
+  <!-- PRIMARY FLOW ARROWS (Orthogonal and Border-Touching) -->
+  <line x1="200" y1="140" x2="240" y2="140" stroke="#4a90c4" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="390" y1="140" x2="430" y2="140" stroke="#4a90c4" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="505" y1="190" x2="505" y2="250" stroke="#3d9e5a" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+  <line x1="580" y1="140" x2="620" y2="140" stroke="#c44" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#arrow-red)"/>
+
+  <!-- RECYCLE FLOW PATH (Orthogonal Routing) -->
+  <path d="M 360 300 H 270" fill="none" stroke="#3d9e5a" stroke-width="1.5"/>
+  <path d="M 120 300 H 30 V 220 H 125 V 190" fill="none" stroke="#3d9e5a" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+  
+  <!-- Recycle Label Overlay -->
+  <rect x="120" y="282" width="150" height="36" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.2"/>
+  <text x="195" y="298" text-anchor="middle" font-size="10" font-weight="bold" fill="#3d9e5a">60–80% tái chế /</text>
+  <text x="195" y="311" text-anchor="middle" font-size="10" fill="#3d9e5a">thu hồi tại chỗ</text>
+
+  <!-- INFORMATION PANELS (Bottom) -->
+  <!-- Industry Stats (Neutral) -->
+  <rect x="50" y="380" width="300" height="65" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+  <text x="200" y="400" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">benchmark ngành:</text>
+  <text x="200" y="416" text-anchor="middle" font-size="11" fill="#555">1–3 gallon trên cm² silicon được xử lý</text>
+  <text x="200" y="432" text-anchor="middle" font-size="10" fill="#999">Nhà máy hiện đại: chương trình thu hồi nước đáng kể</text>
+
+  <!-- Purity Info (Routing Orange) -->
+  <rect x="370" y="380" width="300" height="65" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.2"/>
+  <text x="520" y="400" text-anchor="middle" font-size="11" font-weight="bold" fill="#c87b2a">Tại sao nước siêu tinh khiết quan trọng:</text>
+  <text x="520" y="416" text-anchor="middle" font-size="11" fill="#c87b2a">Ion vết phá hủy transistor dưới nm</text>
+  <text x="520" y="432" text-anchor="middle" font-size="10" fill="#c87b2a">Mục tiêu điện trở suất: 18.2 MΩ·cm</text>
+
+  <!-- Footer Annotation (Neutral) -->
+  <rect x="50" y="465" width="620" height="25" fill="#f7f7f7" stroke="#bbb" stroke-width="0.8"/>
+  <text x="360" y="481" text-anchor="middle" font-size="10" fill="#555">Sản xuất chip thâm dụng nước — quản lý nước là chỉ số bền vững chính cho chuỗi cung ứng phần cứng AI</text>
+</svg>

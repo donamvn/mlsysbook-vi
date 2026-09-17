@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" viewBox="0 0 680 490">
+  <defs>
+    <marker id="prod-arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#4a90c4"/>
+    </marker>
+    <marker id="shadow-arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#bbb"/>
+    </marker>
+    <marker id="canary-arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#3d9e5a"/>
+    </marker>
+    <marker id="traffic-arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#555"/>
+    </marker>
+  </defs>
+
+  <rect width="680" height="490" fill="#fff"/>
+
+  <!-- Section A: Shadow Deployment -->
+  <text x="340" y="30" text-anchor="middle" font-size="14" font-weight="700" fill="#333">(a) Triển khai Shadow: Xác thực không rủi ro</text>
+
+  <!-- Production Traffic -->
+  <rect x="30" y="80" width="100" height="40" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+  <text x="80" y="96" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Sản xuất</text>
+  <text x="80" y="110" text-anchor="middle" font-size="10" fill="#555">Lưu lượng</text>
+
+  <!-- Arrow: Traffic -> LB -->
+  <line x1="130" y1="100" x2="170" y2="100" stroke="#555" stroke-width="1.5" marker-end="url(#traffic-arr)"/>
+  <text x="150" y="94" text-anchor="middle" font-size="10" fill="#555">100%</text>
+
+  <!-- Load Balancer -->
+  <rect x="170" y="60" width="80" height="80" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+  <text x="210" y="90" text-anchor="middle" font-size="10" font-weight="700" fill="#c87b2a">Tải</text>
+  <text x="210" y="104" text-anchor="middle" font-size="10" font-weight="700" fill="#c87b2a">Cân bằng</text>
+  <text x="210" y="120" text-anchor="middle" font-size="9" fill="#c87b2a">nhân bản</text>
+
+  <!-- Production Model -->
+  <rect x="290" y="50" width="140" height="40" fill="#cfe2f3" stroke="#4a90c4" stroke-width="1.5"/>
+  <text x="360" y="66" text-anchor="middle" font-size="10" font-weight="700" fill="#4a90c4">Mô hình Sản xuất</text>
+  <text x="360" y="80" text-anchor="middle" font-size="9" fill="#555">v1.3 (ổn định)</text>
+
+  <!-- Arrow: LB -> Production -->
+  <line x1="250" y1="70" x2="290" y2="70" stroke="#4a90c4" stroke-width="1.5" marker-end="url(#prod-arr)"/>
+  <text x="270" y="64" text-anchor="middle" font-size="10" fill="#4a90c4" font-weight="600">100%</text>
+
+  <!-- Shadow Model -->
+  <rect x="290" y="110" width="140" height="40" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="360" y="126" text-anchor="middle" font-size="10" font-weight="700" fill="#bbb">Mô hình Shadow</text>
+  <text x="360" y="140" text-anchor="middle" font-size="9" fill="#bbb">v2.0 (ứng viên)</text>
+
+  <!-- Arrow: LB -> Shadow -->
+  <line x1="250" y1="130" x2="290" y2="130" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#shadow-arr)"/>
+  <text x="270" y="124" text-anchor="middle" font-size="10" fill="#bbb">bản sao</text>
+
+  <!-- User Response -->
+  <rect x="470" y="50" width="80" height="40" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.5"/>
+  <text x="510" y="66" text-anchor="middle" font-size="10" font-weight="700" fill="#3d9e5a">Người dùng</text>
+  <text x="510" y="80" text-anchor="middle" font-size="9" fill="#555">Phản hồi</text>
+
+  <!-- Arrow: Production -> User -->
+  <line x1="430" y1="70" x2="470" y2="70" stroke="#4a90c4" stroke-width="1.5" marker-end="url(#prod-arr)"/>
+
+  <!-- Discarded -->
+  <rect x="470" y="110" width="80" height="40" fill="#f9d6d5" stroke="#c44" stroke-width="1.5"/>
+  <text x="510" y="134" text-anchor="middle" font-size="10" font-weight="700" fill="#c44">Bị loại bỏ</text>
+
+  <!-- Arrow: Shadow -> Discarded -->
+  <line x1="430" y1="130" x2="470" y2="130" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#shadow-arr)"/>
+
+  <!-- Quality Comparison -->
+  <rect x="580" y="60" width="80" height="80" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+  <text x="620" y="90" text-anchor="middle" font-size="10" font-weight="700" fill="#c87b2a">Chất lượng</text>
+  <text x="620" y="104" text-anchor="middle" font-size="10" font-weight="700" fill="#c87b2a">So sánh</text>
+  <text x="620" y="120" text-anchor="middle" font-size="9" fill="#c87b2a">v1.3 vs v2.0</text>
+
+  <!-- Lines to Comparison -->
+  <line x1="550" y1="70" x2="580" y2="70" stroke="#c87b2a" stroke-width="1.2"/>
+  <line x1="550" y1="130" x2="580" y2="130" stroke="#c87b2a" stroke-width="1.2"/>
+
+  <!-- Divider -->
+  <line x1="30" y1="180" x2="650" y2="180" stroke="#bbb" stroke-width="1.5"/>
+
+  <!-- Section B: Canary Deployment -->
+  <text x="340" y="200" text-anchor="middle" font-size="14" font-weight="700" fill="#333">(b) Triển khai Canary: Chuyển lưu lượng dần</text>
+
+  <!-- Production Traffic -->
+  <rect x="30" y="250" width="100" height="40" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+  <text x="80" y="266" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Sản xuất</text>
+  <text x="80" y="280" text-anchor="middle" font-size="10" fill="#555">Lưu lượng</text>
+
+  <!-- Traffic Splitter -->
+  <rect x="170" y="230" width="80" height="80" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.5"/>
+  <text x="210" y="260" text-anchor="middle" font-size="10" font-weight="700" fill="#c87b2a">Lưu lượng</text>
+  <text x="210" y="274" text-anchor="middle" font-size="10" font-weight="700" fill="#c87b2a">Bộ chia</text>
+  <text x="210" y="290" text-anchor="middle" font-size="9" fill="#c87b2a">có trọng số</text>
+
+  <!-- Arrow: Traffic -> Splitter -->
+  <line x1="130" y1="270" x2="170" y2="270" stroke="#555" stroke-width="1.5" marker-end="url(#traffic-arr)"/>
+
+  <!-- Current Model -->
+  <rect x="290" y="220" width="140" height="40" fill="#cfe2f3" stroke="#4a90c4" stroke-width="1.5"/>
+  <text x="360" y="236" text-anchor="middle" font-size="10" font-weight="700" fill="#4a90c4">Mô hình Hiện tại</text>
+  <text x="360" y="250" text-anchor="middle" font-size="9" fill="#555">v1.3 (ổn định)</text>
+
+  <!-- Canary Model -->
+  <rect x="290" y="280" width="140" height="40" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.5"/>
+  <text x="360" y="296" text-anchor="middle" font-size="10" font-weight="700" fill="#3d9e5a">Mô hình Canary</text>
+  <text x="360" y="310" text-anchor="middle" font-size="9" fill="#555">v2.0 (ứng viên)</text>
+
+  <!-- Arrow: Splitter -> Current -->
+  <line x1="250" y1="240" x2="290" y2="240" stroke="#4a90c4" stroke-width="1.5" marker-end="url(#prod-arr)"/>
+  <text x="270" y="234" text-anchor="middle" font-size="10" fill="#4a90c4" font-weight="600">95%</text>
+
+  <!-- Arrow: Splitter -> Canary -->
+  <line x1="250" y1="300" x2="290" y2="300" stroke="#3d9e5a" stroke-width="1.5" marker-end="url(#canary-arr)"/>
+  <text x="270" y="294" text-anchor="middle" font-size="10" fill="#3d9e5a" font-weight="600">5%</text>
+
+  <!-- Canary Progression -->
+  <text x="470" y="230" font-size="10" font-weight="700" fill="#555">Tiến trình Canary:</text>
+  
+  <text x="470" y="250" text-anchor="middle" font-size="9" fill="#999">t=0</text>
+  <text x="510" y="250" text-anchor="middle" font-size="9" fill="#999">+1h</text>
+  <text x="550" y="250" text-anchor="middle" font-size="9" fill="#999">+6h</text>
+  <text x="590" y="250" text-anchor="middle" font-size="9" fill="#999">+24h</text>
+  <text x="630" y="250" text-anchor="middle" font-size="9" fill="#999">+48h</text>
+
+  <line x1="470" y1="260" x2="630" y2="260" stroke="#bbb" stroke-width="1.5"/>
+  
+  <circle cx="470" cy="260" r="4" fill="#3d9e5a"/>
+  <circle cx="510" cy="260" r="4" fill="#3d9e5a"/>
+  <circle cx="550" cy="260" r="4" fill="#3d9e5a"/>
+  <circle cx="590" cy="260" r="4" fill="#3d9e5a"/>
+  <circle cx="630" cy="260" r="4" fill="#3d9e5a" stroke="#3d9e5a" stroke-width="1.5"/>
+
+  <text x="470" y="284" text-anchor="middle" font-size="9" fill="#555">5%</text>
+  <text x="510" y="284" text-anchor="middle" font-size="9" fill="#555">10%</text>
+  <text x="550" y="284" text-anchor="middle" font-size="9" fill="#555">25%</text>
+  <text x="590" y="284" text-anchor="middle" font-size="9" fill="#555">50%</text>
+  <text x="630" y="284" text-anchor="middle" font-size="9" font-weight="700" fill="#3d9e5a">100%</text>
+
+  <!-- Rollback indicator -->
+  <line x1="550" y1="290" x2="550" y2="310" stroke="#c44" stroke-width="1.5"/>
+  <text x="550" y="324" text-anchor="middle" font-size="9" fill="#c44" font-style="italic">tự động hoàn tác</text>
+  <text x="550" y="336" text-anchor="middle" font-size="9" fill="#c44" font-style="italic">nếu chỉ số giảm</text>
+
+  <!-- Comparison box -->
+  <rect x="30" y="350" width="320" height="60" fill="#fff" stroke="#bbb" stroke-width="1.2"/>
+  <text x="190" y="370" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Shadow vs Canary</text>
+  <text x="50" y="386" font-size="10" fill="#555">Shadow: không rủi ro, không phản hồi người dùng thực</text>
+  <text x="50" y="400" font-size="10" fill="#555">Canary: lưu lượng thực, giới hạn phạm vi ảnh hưởng</text>
+
+  <!-- Bottom callout -->
+  <rect x="100" y="430" width="480" height="40" fill="#fff" stroke="#a31f34" stroke-width="1.5"/>
+  <text x="340" y="446" text-anchor="middle" font-size="10" font-weight="700" fill="#a31f34">Triển khai an toàn cần cả hai: shadow xác thực đúng, canary xác thực hiệu suất</text>
+  <text x="340" y="460" text-anchor="middle" font-size="9" fill="#555">Tự động hoàn tác nếu tỷ lệ lỗi, độ trễ, hoặc chỉ số kinh doanh vượt ngưỡng</text>
+</svg>

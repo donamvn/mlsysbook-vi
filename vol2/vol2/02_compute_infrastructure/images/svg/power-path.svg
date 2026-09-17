@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" viewBox="0 0 740 460">
+  <defs>
+    <marker id="pwr-arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#c87b2a"/>
+    </marker>
+  </defs>
+
+  <rect width="740" height="460" fill="#fff"/>
+
+  <!-- Stage 1: Utility Grid -->
+  <g transform="translate(20, 60)">
+    <rect x="0" y="0" width="100" height="70" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+    <text x="50" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Lưới điện</text>
+    <line x1="10" y1="30" x2="90" y2="30" stroke="#bbb" stroke-width="0.8" opacity="0.5"/>
+    <text x="50" y="44" text-anchor="middle" font-size="9" fill="#555">Điện áp cao</text>
+    <text x="50" y="58" text-anchor="middle" font-size="9" fill="#555">AC (13 kV+)</text>
+  </g>
+
+  <!-- Arrow 1 -->
+  <line x1="120" y1="95" x2="140" y2="95" stroke="#c87b2a" stroke-width="1.5" marker-end="url(#pwr-arr)"/>
+
+  <!-- Stage 2: Transformer -->
+  <g transform="translate(140, 60)">
+    <rect x="0" y="0" width="100" height="70" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.2"/>
+    <text x="50" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#c87b2a">Máy biến áp</text>
+    <line x1="10" y1="30" x2="90" y2="30" stroke="#c87b2a" stroke-width="0.8" opacity="0.4"/>
+    <text x="50" y="44" text-anchor="middle" font-size="9" fill="#555">Hạ áp xuống</text>
+    <text x="50" y="58" text-anchor="middle" font-size="9" fill="#555">480V AC</text>
+  </g>
+  <text x="190" y="150" text-anchor="middle" font-size="8" fill="#a31f34" font-weight="600">~5% tổn thất</text>
+
+  <!-- Arrow 2 -->
+  <line x1="240" y1="95" x2="260" y2="95" stroke="#c87b2a" stroke-width="1.5" marker-end="url(#pwr-arr)"/>
+
+  <!-- Stage 3: UPS / Generator -->
+  <g transform="translate(260, 60)">
+    <rect x="0" y="0" width="100" height="70" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.2"/>
+    <text x="50" y="18" text-anchor="middle" font-size="10" font-weight="700" fill="#3d9e5a">UPS /</text>
+    <text x="50" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#3d9e5a">Máy phát điện</text>
+    <line x1="10" y1="38" x2="90" y2="38" stroke="#3d9e5a" stroke-width="0.8" opacity="0.4"/>
+    <text x="50" y="52" text-anchor="middle" font-size="9" fill="#555">Pin dự phòng</text>
+    <text x="50" y="64" text-anchor="middle" font-size="9" fill="#555">480V AC</text>
+  </g>
+  <text x="310" y="150" text-anchor="middle" font-size="8" fill="#a31f34" font-weight="600">~3% tổn thất</text>
+
+  <!-- Arrow 3 -->
+  <line x1="360" y1="95" x2="380" y2="95" stroke="#c87b2a" stroke-width="1.5" marker-end="url(#pwr-arr)"/>
+
+  <!-- Stage 4: PDU -->
+  <g transform="translate(380, 60)">
+    <rect x="0" y="0" width="100" height="70" fill="#cfe2f3" stroke="#4a90c4" stroke-width="1.2"/>
+    <text x="50" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#4a90c4">PDU</text>
+    <line x1="10" y1="30" x2="90" y2="30" stroke="#4a90c4" stroke-width="0.8" opacity="0.4"/>
+    <text x="50" y="44" text-anchor="middle" font-size="9" fill="#555">Phân phối công suất</text>
+    <text x="50" y="58" text-anchor="middle" font-size="9" fill="#555">đến tủ rack: 240V</text>
+  </g>
+  <text x="430" y="150" text-anchor="middle" font-size="8" fill="#a31f34" font-weight="600">~3% tổn thất</text>
+
+  <!-- Arrow 4 -->
+  <line x1="480" y1="95" x2="500" y2="95" stroke="#c87b2a" stroke-width="1.5" marker-end="url(#pwr-arr)"/>
+
+  <!-- Stage 5: Server PSU -->
+  <g transform="translate(500, 60)">
+    <rect x="0" y="0" width="100" height="70" fill="#cfe2f3" stroke="#4a90c4" stroke-width="1.2"/>
+    <text x="50" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#4a90c4">PSU máy chủ</text>
+    <line x1="10" y1="30" x2="90" y2="30" stroke="#4a90c4" stroke-width="0.8" opacity="0.4"/>
+    <text x="50" y="44" text-anchor="middle" font-size="9" fill="#555">AC sang 12V DC</text>
+    <text x="50" y="58" text-anchor="middle" font-size="9" fill="#555">chuyển đổi</text>
+  </g>
+  <text x="550" y="150" text-anchor="middle" font-size="8" fill="#a31f34" font-weight="600">~5% tổn thất</text>
+
+  <!-- Arrow 5 -->
+  <line x1="600" y1="95" x2="620" y2="95" stroke="#c87b2a" stroke-width="1.5" marker-end="url(#pwr-arr)"/>
+
+  <!-- Stage 6: GPU Die -->
+  <g transform="translate(620, 60)">
+    <rect x="0" y="0" width="100" height="70" fill="#f9d6d5" stroke="#c44" stroke-width="1.5"/>
+    <text x="50" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#c44">GPU Die</text>
+    <line x1="10" y1="30" x2="90" y2="30" stroke="#c44" stroke-width="0.8" opacity="0.4"/>
+    <text x="50" y="44" text-anchor="middle" font-size="9" fill="#555">VRM đến</text>
+    <text x="50" y="58" text-anchor="middle" font-size="9" fill="#555">&lt;1V DC</text>
+  </g>
+  <text x="670" y="150" text-anchor="middle" font-size="8" fill="#a31f34" font-weight="600">~8% tổn thất</text>
+
+  <!-- Summary: Power delivery losses -->
+  <rect x="40" y="180" width="660" height="60" fill="#fff" stroke="#bbb" stroke-width="1.2"/>
+  <text x="370" y="200" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Tổng chi phí phân phối công suất</text>
+  <text x="370" y="216" text-anchor="middle" font-size="9.5" fill="#555">Để tính toán 1 MW GPU, rút ~1.2 MW từ lưới (~20% tổn thất phân phối)</text>
+  <text x="370" y="228" text-anchor="middle" font-size="9" fill="#999">Tổn thất tích lũy ở mỗi giai đoạn: máy biến áp, UPS, PDU, PSU, VRM</text>
+
+  <!-- PUE section -->
+  <rect x="40" y="260" width="320" height="90" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+  <text x="200" y="282" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Công thức PUE</text>
+  <text x="200" y="302" text-anchor="middle" font-size="10" fill="#555">PUE = Tổng công suất cơ sở / Công suất thiết bị CNTT</text>
+  <text x="200" y="322" text-anchor="middle" font-size="9" fill="#555">Bao gồm: làm mát, chiếu sáng, chi phí mạng</text>
+  <text x="200" y="338" text-anchor="middle" font-size="9" fill="#999" font-style="italic">PUE lý tưởng = 1.0 (toàn bộ công suất cho tính toán)</text>
+
+  <!-- PUE comparison bars -->
+  <g transform="translate(380, 260)">
+    <rect x="0" y="0" width="320" height="90" fill="#f7f7f7" stroke="#bbb" stroke-width="1.2"/>
+    <text x="160" y="22" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Giá trị PUE điển hình</text>
+
+    <!-- Efficient -->
+    <rect x="20" y="30" width="180" height="16" fill="#d4edda" stroke="#3d9e5a" stroke-width="1.2"/>
+    <text x="28" y="42" font-size="8.5" fill="#3d9e5a" font-weight="600">Hiệu quả (Google): PUE 1.1</text>
+
+    <!-- Average -->
+    <rect x="20" y="50" width="220" height="16" fill="#fdebd0" stroke="#c87b2a" stroke-width="1.2"/>
+    <text x="28" y="62" font-size="8.5" fill="#c87b2a" font-weight="600">Trung bình ngành: PUE 1.3</text>
+
+    <!-- Poor -->
+    <rect x="20" y="70" width="260" height="16" fill="#f9d6d5" stroke="#c44" stroke-width="1.2"/>
+    <text x="28" y="82" font-size="8.5" fill="#c44" font-weight="600">Trung tâm dữ liệu cũ: PUE 1.5+</text>
+  </g>
+
+  <!-- Bottom cost callout -->
+  <rect x="40" y="370" width="660" height="50" fill="#fff" stroke="#a31f34" stroke-width="1.2"/>
+  <text x="370" y="394" text-anchor="middle" font-size="9.5" fill="#a31f34" font-weight="700">Chi phí: với $0.07/kWh, cụm 10.000 GPU (10 MW)</text>
+  <text x="370" y="410" text-anchor="middle" font-size="9.5" fill="#555">tốn ~$6.1M/năm chỉ riêng điện (PUE 1.0), tăng lên ~$9.2M với PUE 1.5</text>
+</svg>
